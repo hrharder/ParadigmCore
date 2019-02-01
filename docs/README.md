@@ -44,4 +44,8 @@ ParadigmCore is under active development, and at this point should not be consid
 
 If you encounter errors setting up or running setting up ParadigmCore, feel free to reach out on [our chat server.](https://chat.paradigm.market/)
 
-ParadigmCore is open source software, and we encourage the suggestion of improvements and enhancements to the protocol. If you have a suggestion or specification, please submit a [Paradigm Improvement Proposal](https://github.com/paradigmfoundation/pips) (PIP). 
+## License
+
+ParadigmCore is public domain software, licensed under CC0.
+
+Proposals for improvements and enhancements to the protocol are highly encouraged. If you have a suggestion or specification, please submit a [Paradigm Improvement Proposal](https://github.com/paradigmfoundation/pips) (PIP). 
