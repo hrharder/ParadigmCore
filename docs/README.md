@@ -28,6 +28,7 @@ Non-exhaustive list of ParadigmCore functionality.
 ## Features in-progress
 
 - Dynamic validator set curation based on the [`ValidatorRegistry` contract](https://github.com/ParadigmFoundation/ParadigmContracts/blob/master/internal)
+- More expansive WebSocket API allowing full access to the state and valid orders
 - Self-administered error resolution for various network errors
 - Segregated-witness style `order` transaction separation (conserves blockchain space)
 - Dockerfile for ParadigmCore
@@ -46,6 +47,6 @@ If you encounter errors setting up or running setting up ParadigmCore, feel free
 
 ## License
 
-ParadigmCore is public domain software, licensed under CC0.
+ParadigmCore granted to the public domain, under a [CC0 license.](https://www.github.com/paradigmfoundation/paradigmcore/blob/master/LICENSE)
 
 Proposals for improvements and enhancements to the protocol are highly encouraged. If you have a suggestion or specification, please submit a [Paradigm Improvement Proposal](https://github.com/paradigmfoundation/pips) (PIP). 
