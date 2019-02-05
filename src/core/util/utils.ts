@@ -25,6 +25,7 @@ import { cloneDeep, isInteger } from "lodash";
 import { createHash } from "crypto";
 import { Verify } from "ed25519";
 import { bigIntReplacer } from "../../util/static/bigIntUtils";
+import { pubToAddr } from "./valFunctions";
 
 /**
  * Verify validator signature, and confirm transaction originated from an
@@ -37,24 +38,26 @@ export function preVerifyTx(tx: SignedTransaction, state: State): boolean {
     // result of verification
     let isValid: boolean;
 
+    // computed hex nodeID from validator tx
+    let valNodeId: string;
+
     // attempt to verify
     try {
         const msg = Buffer.from(JSON.stringify(tx.data), "utf8");
         const sig = Buffer.from(tx.proof.signature, "hex");
-        const pub = Buffer.from(tx.proof.from, "hex");
+        const pub = Buffer.from(tx.proof.valPubKey, "hex");
 
         // verify message
         isValid = Verify(msg, sig, pub);
 
-        // verify computed id matches reported "fromAddr"
-        const idRaw = createHash("sha256").update(pub).digest("hex").slice(0, 40);
-        if (idRaw !== tx.proof.fromAddr) return false;
+        // compute nodeId
+        valNodeId = pubToAddr(pub).toString("hex");
     } catch (error) {
         return false;
     }
 
     // check that signing party is an active validator
-    if (!state.validators.hasOwnProperty(tx.proof.fromAddr)) {
+    if (!state.validators.hasOwnProperty(valNodeId)) {
         return false;
     }
 

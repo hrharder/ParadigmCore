@@ -98,8 +98,7 @@ interface SignedStreamTx extends SignedTransaction {
  * transaction origin.
  */
 interface Proof {
-    from:       string;
-    fromAddr:   string;
+    valPubKey:  string; // base64 decoded bytes
     signature:  string;
 }
 

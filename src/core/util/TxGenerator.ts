@@ -190,44 +190,9 @@ export class TxGenerator {
         return {
             ...rawTx,
             proof: {
-                from: this.pubKey.toString(this.encoding),
-                fromAddr: this.address.toString(this.encoding),
+                valPubKey: this.pubKey.toString(this.encoding),
                 signature: signature.toString(this.encoding),
             },
         };
-    }
-
-    /**
-     * Returns true if a Tx's signature object is valid (i.e. message matches
-     * signature, and "from" address matches recovered signature.).
-     *
-     * @param tx    {SignedTransaction} (unencoded) transaction object.
-     */
-    public verify(tx: SignedTransaction): boolean {
-        let isValid: boolean; // Result of verification
-
-        try {
-            // Buffer and encode message, signature, and public key
-            const msg = Buffer.from(JSON.stringify(tx.data), "utf8");
-            const sig = Buffer.from(tx.proof.signature, this.encoding);
-            const pub = Buffer.from(tx.proof.from, this.encoding);
-
-            // Verify signature
-            isValid = Verify(msg, sig, pub);
-
-            // Check that "fromAddr" matches public key hash
-            const a = hash("sha256").update(pub).digest("hex").slice(0, 40);
-            if (Buffer.from(a, "hex").toString(this.encoding) !== tx.proof.fromAddr) {
-                isValid = false;
-            }
-        } catch (err) {
-            return false;
-        }
-
-        // Confirm Verify() function returns boolean
-        if (typeof(isValid) !== "boolean") { return false; }
-
-        // Otherwise, return result
-        return isValid;
     }
 }
