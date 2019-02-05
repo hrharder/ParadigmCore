@@ -15,7 +15,6 @@
  */
 
 // ParadigmCore classes
-import { OrderTracker } from "../../async/OrderTracker";
 import { Hasher } from "../../crypto/Hasher";
 import { err, log, warn } from "../../util/log";
 import { Vote } from "../util/Vote";
@@ -74,7 +73,7 @@ export function checkOrder(tx: SignedOrderTx, state: State, Order) {
  * @param state {State}         current round state
  * @param q     {OrderTracker}  valid order queue
  */
-export function deliverOrder(tx: SignedOrderTx, state: State, q: OrderTracker, Order) {
+export function deliverOrder(tx: SignedOrderTx, state: State, Order) {
     let order: Order;   // Paradigm order object
     let poster: string; // Recovered poster address from signature
     let tags: KVPair[] = [];
@@ -102,11 +101,11 @@ export function deliverOrder(tx: SignedOrderTx, state: State, q: OrderTracker, O
         state.orderCounter += 1;
         // End state modification
 
-        // Add order to block's broadcast queue
-        q.add(orderCopy);
-
-        // add tags
-        tags.push({ key: "order", value: orderCopy.id });
+        // add tags (for stream/search)
+        tags.push({
+            key: Buffer.from("order.id"),
+            value: Buffer.from(orderCopy.id)
+        });
 
         log("state", msg.abci.messages.verified);
         return Vote.valid(`orderID: ${orderCopy.id}`, tags);

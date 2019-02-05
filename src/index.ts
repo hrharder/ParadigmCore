@@ -77,6 +77,7 @@ let node;                       // tendermint node child process instance
     try {
         // todo: define options object
         let options: any  = {
+            moniker: env.MONIKER,
             rpc: {
                 laddr: `tcp://${env.ABCI_HOST}:${env.ABCI_RPC_PORT}`,
             },

@@ -36,7 +36,6 @@ import { deliverRebalance } from "./handlers/rebalance";
 export function deliverTxWrapper(
     state: State,
     msg: LogTemplates,
-    tracker: OrderTracker,
     Order: any
 ): (r) => ResponseDeliverTx {
     return (request) => {
@@ -62,13 +61,13 @@ export function deliverTxWrapper(
         switch (tx.type) {
             // sumbission of an 'order' tx (external)
             case "order": {
-                return deliverOrder(tx as SignedOrderTx, state, tracker, Order);
+                return deliverOrder(tx as SignedOrderTx, state, Order);
             }
 
             // sumbission of a 'stream' tx (external)
             // @TODO implement
             case "stream": {
-                return deliverStream(tx, state, tracker);
+                return deliverStream(tx as SignedStreamTx, state);
             }
 
             // validator reporting witness to Ethereum event (internal)

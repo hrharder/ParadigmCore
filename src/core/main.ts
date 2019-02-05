@@ -87,7 +87,7 @@ export async function start(options: ParadigmCoreOptions): Promise<null> {
 
             // roundstep: [ beginBlock, deliverTx[, ...], endBlock, commit ]
             beginBlock: beginBlockWrapper(dState),
-            deliverTx: deliverTxWrapper(dState, templates, tracker, Order),
+            deliverTx: deliverTxWrapper(dState, templates, Order),
             endBlock: endBlockWrapper(dState),
             commit: commitWrapper(dState, cState, tracker, templates, witness),
         };

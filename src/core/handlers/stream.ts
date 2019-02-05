@@ -20,7 +20,6 @@
 import * as Paradigm from "paradigm-connect";
 
 // ParadigmCore classes
-import { OrderTracker } from "../../async/OrderTracker";
 import { Vote } from "../util/Vote";
 
 /**
@@ -40,6 +39,6 @@ export function checkStream(tx: SignedStreamTx, state: State) {
  * @param tx    {object} decoded transaction body
  * @param state {object} current round state
  */
-export function deliverStream(tx: SignedStreamTx, state: State, tracker: OrderTracker) {
+export function deliverStream(tx: SignedStreamTx, state: State) {
     return Vote.invalid();
 }
