@@ -19,13 +19,11 @@ require("dotenv").config();
 import * as Paradigm from "paradigm-connect";
 
 // Standard lib and 3rd party NPM modules
-import { EventEmitter } from "events";
 import Web3 = require("web3");
 import * as tendermint from "../lib/tendermint";
 
 // ParadigmCore classes
-import { OrderTracker } from "./async/OrderTracker";
-import { Witness } from "./async/Witness";
+import { Witness } from "./witness/Witness";
 import { TxBroadcaster } from "./core/util/TxBroadcaster";
 import { TxGenerator } from "./core/util/TxGenerator";
 
@@ -39,15 +37,13 @@ import { start as startAPIserver } from "./api/post/HttpServer";
 import { start as startMain } from "./core/main";
 
 // General utilities and misc.
-import { err, log, logStart, warn } from "./util/log";
-import { messages as msg } from "./util/static/messages";
+import { err, log, logStart, warn } from "./common/log";
+import { messages as msg } from "./common/static/messages";
 
 // "Globals"
 let witness: Witness;           // implements peg-zone and Ethereum SSM
-let emitter: EventEmitter;      // emitter to track order/stream events
 let broadcaster: TxBroadcaster; // internal ABCI transaction broadcaster
 let generator: TxGenerator;     // signs and builds ABCI tx's
-// let tracker: OrderTracker;      // uses emitter to track order/stream txs
 let web3: Web3;                 // web3 instance
 let paradigm;                   // paradigm instance (paradigm-connect)
 let node;                       // tendermint node child process instance
@@ -141,14 +137,9 @@ let node;                       // tendermint node child process instance
     }
 
     // order tracker and order-stream server
-    logStart("starting order tracker and websocket server...");
+    logStart("starting JSONRPC/WS server...");
     try {
-        // Create a "parent" EventEmitter
-        emitter = new EventEmitter();
-        // tracker = new OrderTracker(emitter);
-
-        // Start OrderStream WebSocket server
-        // startStreamServer(parseInt(env.WS_PORT, 10), emitter);
+        // start wss here
     } catch (error) {
         err("api", "failed initializing websocket server.");
         err("start", error.message);
@@ -157,7 +148,7 @@ let node;                       // tendermint node child process instance
     }
 
     // post server
-    logStart("starting http api server...");
+    logStart("starting REST API server...");
     try {
         const options = {
             // Paradigm instance
@@ -214,7 +205,6 @@ let node;                       // tendermint node child process instance
         const options = {
             // Paradigm instance, order tracker, and witness component
             paradigm,
-            // tracker,
             witness,
 
             // ABCI configuration options

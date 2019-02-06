@@ -19,7 +19,7 @@ import { EventEmitter } from "events";
 
 // ParadigmCore classes/functions
 import { PayloadCipher } from "../../crypto/PayloadCipher";
-import { err } from "../../util/log";
+import { err } from "../../common/log";
 
 /**
  * Delivers transactions to the ABCI application. Implements a queue to support

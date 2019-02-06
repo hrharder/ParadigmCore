@@ -14,11 +14,10 @@
 
 // custom typings
 import { ResponseDeliverTx } from "../typings/abci";
-import { OrderTracker } from "../async/OrderTracker";
 
 // util functions
 import { Vote } from "./util/Vote";
-import { warn } from "../util/log";
+import { warn } from "../common/log";
 import { decodeTx, preVerifyTx } from "./util/utils";
 
 // tx handlers

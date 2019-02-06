@@ -25,8 +25,8 @@ import * as helmet from "helmet";
 // ParadigmCore classes and imports
 import { TxBroadcaster } from "../../core/util/TxBroadcaster";
 import { TxGenerator } from "../../core/util/TxGenerator";
-import { err, log, logStart, warn } from "../../util/log";
-import { messages as msg } from "../../util/static/messages";
+import { err, log, logStart, warn } from "../../common/log";
+import { messages as msg } from "../../common/static/messages";
 import { HttpMessage as Message } from "./HttpMessage";
 
 // Type defs

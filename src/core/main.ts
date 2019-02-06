@@ -17,8 +17,8 @@
 const abci: any = require("abci");
 
 // general utilities
-import { log } from "../util/log";
-import { messages as templates } from "../util/static/messages";
+import { log } from "../common/log";
+import { messages as templates } from "../common/static/messages";
 
 // abci handler implementations
 import { beginBlockWrapper } from "./beginBlock";

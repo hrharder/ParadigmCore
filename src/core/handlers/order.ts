@@ -16,11 +16,11 @@
 
 // ParadigmCore classes
 import { Hasher } from "../../crypto/Hasher";
-import { err, log, warn } from "../../util/log";
 import { Vote } from "../util/Vote";
 
 // ParadigmCore utilities
-import { messages as msg } from "../../util/static/messages";
+import { err, log, warn } from "../../common/log";
+import { messages as msg } from "../../common/static/messages";
 import { verifyOrder } from "../util/utils";
 
 /**

@@ -20,7 +20,7 @@ import { createHash as hash } from "crypto";
 import { Sign, Verify } from "ed25519";
 
 // ParadigmCore utilities
-import { bigIntReplacer } from "../../util/static/bigIntUtils";
+import { bigIntReplacer } from "../../common/static/bigIntUtils";
 
 /**
  * Generates and signs ABCI transactions from validators.

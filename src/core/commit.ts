@@ -13,8 +13,7 @@
 */
 
 // paradigmcore classes/types
-import { OrderTracker } from "../async/OrderTracker";
-import { Witness } from "../async/Witness";
+import { Witness } from "../witness/Witness";
 import { Hasher } from "../crypto/Hasher";
 
 // custom typings
@@ -22,8 +21,8 @@ import { ResponseCommit } from "../typings/abci";
 
 // util functions
 import { syncStates } from "./util/utils";
-import { log, err, warn } from "../util/log";
-import { bigIntReplacer } from "../util/static/bigIntUtils";
+import { log, err, warn } from "../common/log";
+import { bigIntReplacer } from "../common/static/bigIntUtils";
 
 /**
  * Persist application state, synchronize commit and deliver states, and
@@ -58,7 +57,7 @@ export function commitWrapper(
                     const newEnd = deliverState.round.endsAt;
 
                     // Synchronize staking period parameters
-                    // todo: this can't be a functino call from within SM
+                    // todo: this can't be a function call from within SM
                     witness.synchronize(newRound, newStart, newEnd);
 
                     // Temporary

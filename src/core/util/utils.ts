@@ -15,7 +15,7 @@
 
 // ParadigmCore classes
 import { PayloadCipher } from "../../crypto/PayloadCipher";
-import { err, log, warn } from "../../util/log";
+
 
 // ParadigmCore types
 import { ParsedWitnessData } from "src/typings/abci";
@@ -24,7 +24,7 @@ import { ParsedWitnessData } from "src/typings/abci";
 import { cloneDeep, isInteger } from "lodash";
 import { createHash } from "crypto";
 import { Verify } from "ed25519";
-import { bigIntReplacer } from "../../util/static/bigIntUtils";
+import { err, log, warn } from "../../common/log";
 import { pubToAddr } from "./valFunctions";
 
 /**

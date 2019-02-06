@@ -19,7 +19,7 @@
 import * as hash from "object-hash";
 
 // ParadigmCore utility
-import { bigIntReplacer } from "../util/static/bigIntUtils";
+import { bigIntReplacer } from "../common/static/bigIntUtils";
 
 export class Hasher {
 

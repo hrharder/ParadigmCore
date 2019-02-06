@@ -17,8 +17,8 @@ import { ResponseBeginBlock } from "../typings/abci";
 
 // util functions
 import { computeConf } from "./util/utils";
-import { bigIntReplacer } from "../util/static/bigIntUtils";
-import { log } from "../util/log";
+import { bigIntReplacer } from "../common/static/bigIntUtils";
+import { log } from "../common/log";
 import { doForEachValidator } from "./util/valFunctions";
 
 /**

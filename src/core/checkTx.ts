@@ -17,9 +17,9 @@ import { ResponseCheckTx } from "../typings/abci";
 
 // utils
 import { Vote } from "./util/Vote";
-import { warn } from "../util/log";
+import { warn } from "../common/log";
 import { decodeTx, preVerifyTx } from "./util/utils";
-import { messages as msg } from "../util/static/messages"
+import { messages as msg } from "../common/static/messages"
 
 // tx handlers
 import { checkOrder } from "./handlers/order";

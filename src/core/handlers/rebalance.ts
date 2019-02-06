@@ -21,8 +21,8 @@ import { isEqual } from "lodash";
 import { Vote } from "../util/Vote";
 
 // ParadigmCore utilities
-import { log, warn } from "../../util/log";
-import { messages as msg } from "../../util/static/messages";
+import { log, warn } from "../../common/log";
+import { messages as msg } from "../../common/static/messages";
 import { genLimits } from "../util/utils";
 
 /**
