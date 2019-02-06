@@ -1,3 +1,15 @@
+/*
+NOTES:
+1. Should store latest data in memory
+2. Trigger events for new blocks to update connected clients
+3. Check if block.txs !== null, if so parse and process
+4. Update necessary clients with new orders
+5. To start, have two subscribe options:
+  - New Blocks (and just header data: height, hash, etc.)
+  - Orders (will transmit upon each non-empty block)
+6. Look into heartbeat message
+*/
+
 import * as WebSocket from "ws";
 import { EventEmitter } from "events";
 import { log } from "src/util/log";
