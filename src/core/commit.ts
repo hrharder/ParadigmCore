@@ -34,7 +34,6 @@ import { bigIntReplacer } from "../util/static/bigIntUtils";
 export function commitWrapper(
     deliverState: State,
     commitState: State,
-    tracker: OrderTracker,
     msg: LogTemplates,
     witness: Witness
 ): () => ResponseCommit {
@@ -80,10 +79,6 @@ export function commitWrapper(
             // Generate new state hash and update
             stateHash = Hasher.hashState(deliverState);
             deliverState.lastBlockAppHash = stateHash;
-
-            // Trigger broadcast of orders and streams
-            // todo: this can't be a function call from SM
-            tracker.triggerBroadcast();
 
             // Synchronize commit state from delivertx state
             syncStates(deliverState, commitState);

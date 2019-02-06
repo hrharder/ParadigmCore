@@ -10,7 +10,7 @@ import { Vote } from "src/core/util/Vote";
  */
 interface ParadigmCoreOptions {
     version:            string;
-    tracker:            OrderTracker;
+    //tracker:            OrderTracker;
     witness:            Witness;
     deliverState:       State;
     commitState:        State;

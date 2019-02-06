@@ -61,7 +61,7 @@ export async function start(options: ParadigmCoreOptions): Promise<null> {
         let cState = options.commitState;
 
         // Queue for valid broadcast transactions (order/stream)
-        let tracker = options.tracker;
+        // let tracker = options.tracker;
 
         // witness instance
         let witness = options.witness;
@@ -89,7 +89,7 @@ export async function start(options: ParadigmCoreOptions): Promise<null> {
             beginBlock: beginBlockWrapper(dState),
             deliverTx: deliverTxWrapper(dState, templates, Order),
             endBlock: endBlockWrapper(dState),
-            commit: commitWrapper(dState, cState, tracker, templates, witness),
+            commit: commitWrapper(dState, cState, templates, witness),
         };
 
         // Start ABCI server (connection to Tendermint core)

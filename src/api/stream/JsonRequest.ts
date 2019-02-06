@@ -1,5 +1,5 @@
 /**
- * JSON-RPC 2.0
+* JSON-RPC 2.0
  * 
  * https://www.jsonrpc.org/specification
  */

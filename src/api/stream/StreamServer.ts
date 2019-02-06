@@ -11,71 +11,69 @@ NOTES:
 */
 
 import * as WebSocket from "ws";
-import { EventEmitter } from "events";
-import { log } from "src/util/log";
+import { setInterval } from "timers";
 
 export class StreamServer {
     // connection to abci ws server
     private abciConn: WebSocket;
     private abciURL: URL;
 
-    // ws server
-    // private server: WebSocket.Server;
-
-    // emitters
-    // private newBlockEmiter: EventEmitter;
-    // private newOrderEmitter: EventEmitter;
-
     // config
     private retryTimeout: number;
+    private retryCounter: number;
 
     constructor(options: StreamServerOptions) {
         this.abciURL = new URL(options.abciURL);
 
         // set number of times to try to reconnect ABCI WS
         this.retryTimeout = 5; // || options.maxRetry
+        this.retryCounter = 0;
     }
 
     private connectAbci(timeout: number): Promise<string> {
-        console.log(`Attempting to connect for ${Math.floor(timeout/1000)} seconds...`);
+        console.log(`Attempting to connect ${timeout} time(s)...`);
         
         // attempt to connect until timeout reached
         return new Promise((resolve, reject) => {
             // reject if fails within timeout
-            setTimeout(() => {
-                reject("Connection timeout.");
-            }, timeout);
-
-            // count the number of attempts
-            let counter = 0;
-
-            // the "attempt to connect" function
-            const attempt = () => {
-                counter++;
-                console.log("attempt no: ", counter);
-                this.abciConn = new WebSocket(this.abciURL.href);
-                this.abciConn.removeAllListeners();
-
-                // attach one-off open handler to resolve upon connect
-                this.abciConn.once("open", () => {
-                    // attach new handlers, and re-subscribe
-                    this.attachHandlers();
-                    this.subscribeToNewBlock();
-                    
-                    // resolve upon success
-                    resolve(`Connected after ${counter} attempts.`);
-                });
-
-                // if it fails just try again (until timeout)
-                this.abciConn.once("error", (e) => { attempt(); });
-            };
+            const timer = setInterval(() => {
+                if (this.retryCounter++ > timeout) {
+                    reject("Connection timeout.");
+                }
+                this.attemptConnection(resolve, reject, timer);
+            }, 500);
 
             // start the recursive connect attempts
-            attempt();
         });
     }
 
-    private attachHandlers(timeout: number = 15000): void {
+    private attemptConnection(resolve: Function, reject: Function, timer): void {
+        this.retryCounter++;
+        this.abciConn = new WebSocket(this.abciURL.href);
+        this.abciConn.removeAllListeners();
+
+        // attach one-off open handler to resolve upon connect
+        this.abciConn.once("open", () => {
+            // attach new handlers, and re-subscribe
+            this.attachHandlers();
+            this.subscribeToNewBlock();
+            
+            // resolve upon success
+            clearInterval(timer);
+            resolve(`Connected after ${this.retryCounter} attempts.`);
+            this.retryCounter = 0;
+        });
+
+        // if it fails just try again (until timeout)
+        this.abciConn.once("error", (e) => { 
+            this.attemptConnection(resolve, reject, timer);
+        });
+    }
+
+    private attachHandlers(timeout: number = 2000): void {
+        // clear listeners
+        this.abciConn.removeAllListeners();
+
         // general error handler
         this.abciConn.on("error", this.clientErrorHandler);
 
@@ -85,7 +83,11 @@ export class StreamServer {
         });
 
         // close connection handler wrapper
-        this.abciConn.once("close", async () => {
+        this.abciConn.once("close", this.fatalCloseHandlerWrapper(timeout));
+    }
+
+    private fatalCloseHandlerWrapper(timeout: number): () => void {
+        return async () => {
             try {
                 console.log(`Connection lost, attempting to reconnect...`)
                 await this.connectAbci(timeout); // todo make configurable
@@ -93,7 +95,7 @@ export class StreamServer {
                 console.log("Fatal, failed to reconnect to ABCI server.");
                 process.exit(1);
             }
-        });
+        }
     }
 
     private clientErrorHandler(msg: string): void {
@@ -159,10 +161,8 @@ export class StreamServer {
     }
 
     public subscribeToNewBlock(): void {
-        if (this.abciConn.readyState !== 1) {
-            console.log("readyState is not 1");
-            return;
-        }
+        // return if not ready to receive data
+        if (this.abciConn.readyState !== 1) return;
 
         // subscribe options
         const subscribeOptions = {
@@ -185,12 +185,12 @@ export class StreamServer {
         return this.abciConn.readyState;
     }
 
-    public async start(timeout: number = 5000): Promise<void> {
+    public async start(timeout: number = 2000): Promise<void> {
         try {
             const res = await this.connectAbci(timeout);
             console.log(`Connected Response: ${res}`);
         } catch (err) {
-            throw new Error(`Failed to start: ${err.message}`);
+            throw new Error(`Failed to start: ${err}`);
         }
         return;
     }
