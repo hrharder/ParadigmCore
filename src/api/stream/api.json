@@ -1,0 +1,85 @@
+{
+    "methods": {
+        "subscribe": {
+            "request": {
+                "params": [
+                    {
+                        "name": "event",
+                        "required": false,
+                        "type": "string",
+                        "default": "block",
+                        "options": [
+                            "order",
+                            "block",
+                            "rebalance"
+                        ]
+                    },
+                    {
+                        "name": "filter",
+                        "required": false,
+                        "type": "object",
+                        "options": [
+                            {
+                                "key": "subContract",
+                                "valRegEx": "/^0x[0-9a-f]{40}$/"
+                            },
+                            {
+                                "key": "maker",
+                                "valRegEx": "/^0x[0-9a-f]{40}$/"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "response": {
+                "ok": {
+                    "result": {
+                        "eventType": {
+                            "type": "string",
+                            "options": [
+                                "order",
+                                "block",
+                                "rebalance"
+                            ]
+                        },
+                        "data": {
+                            "type": "object",
+                            "options": [
+                                {
+                                    "key": "orders",
+                                    "valType": "array"                                    
+                                },
+                                {
+                                    "key": "block",
+                                    "valType": "object"
+                                },
+                                {
+                                    "key": "rebalance",
+                                    "valType": "object"
+                                }
+                            ]
+                        }
+                    }
+                },
+                "fail": {
+                    "error": {
+                        "code": {
+                            "type": "string",
+                            "options": [
+                                "-32700",
+                                "-32600",
+                                "-32601",
+                                "-32602",
+                                "-32603",
+                                "-32000"
+                            ]
+                        },
+                        "message": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

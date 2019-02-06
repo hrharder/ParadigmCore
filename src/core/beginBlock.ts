@@ -42,7 +42,7 @@ export function beginBlockWrapper(state: State): (r) => ResponseBeginBlock {
                 const nodeId = vote.validator.address.toString("hex");
                 const power = Number(vote.validator.power);
 
-                // TODO: sould we check for new validators here?
+                // TODO: should we check for new validators here?
 
                 // update vote and height trackers
                 if (vote.signedLastBlock) {

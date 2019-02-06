@@ -71,7 +71,7 @@ export class TxGenerator {
                     typeof(txData.block) !== "number" ||
                     typeof(txData.address) !== "string"
                 ) {
-                    console.log("\n\n (txgenerator): bad witness event data\n");
+                    console.log("\n\n (txGenerator): bad witness event data\n");
                     return false;
                 } else {
                     return true;

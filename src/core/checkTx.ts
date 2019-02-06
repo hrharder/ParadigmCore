@@ -65,12 +65,12 @@ export function checkTxWrapper(
 
         // select the proper handler verification logic based on the tx type
         switch (tx.type) {
-            // sumbission of an 'order' tx (external)
+            // sumbmission of an 'order' tx (external)
             case "order": {
                 return checkOrder(tx as SignedOrderTx, state, Order);
             }
 
-            // sumbission of a 'stream' tx (external)
+            // sumbmission of a 'stream' tx (external)
             // @TODO implement
             case "stream": {
                 return checkStream(tx as SignedStreamTx, state);
