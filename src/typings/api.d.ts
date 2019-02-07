@@ -1,18 +1,19 @@
 interface StreamServerOptions {
     abciURL: string;
-    maxRetry: number;
+    retryInterval?: number;
+    retryTimeout?: number;
     port: number;
     host?: string;
 }
 
-interface ClientMap {
+interface ClientMap extends Object {
     [id: string]: Client;
 }
 
 interface Client {} 
 
 interface IResponseOptions {
-    id: string;
+    id?: string;
     result?: any;
     error?: any;
 }
@@ -69,4 +70,11 @@ interface ICodes {
 interface ICodeInfo {
     name: string;
     info: string;
+}
+
+interface IJsonResponse {
+    jsonrpc: string;
+    id: string,
+    error?: ValidationError;
+    result?: any;
 }

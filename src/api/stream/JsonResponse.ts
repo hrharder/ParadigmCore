@@ -19,7 +19,7 @@ export class JsonResponse {
         this.error = options.error || undefined;
     }
 
-    public toJSON() {
+    public toJSON(): IJsonResponse {
         const res = { jsonrpc: "2.0", id: this.id };
         if (this.result && !this.error) {
             return { ...res, result: this.result };
