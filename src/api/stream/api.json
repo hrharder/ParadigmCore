@@ -72,24 +72,24 @@
         ]
     },
     "codes": {
-        "PARSE": {
-            "code": "-32700",
+        "-32700": {
+            "name": "PARSE",
             "info": "Parse error: "
         },
-        "REQUEST": {
-            "code": "-32600",
+        "-32600": {
+            "name": "REQUEST",
             "info": "Invalid request: "
         },
-        "METHOD": {
-            "code": "-32601",
+        "-32601": {
+            "name": "METHOD",
             "info": "Method not found: "
         },
-        "PARAM": {
-            "code": "-32602",
+        "-32602": {
+            "name": "PARAM",
             "info": "Invalid param: "
         },
-        "INTERNAL": {
-            "code": "-32603",
+        "-32603": {
+            "name": "INTERNAL",
             "info": "Internal error: please try again later."
         }
     }

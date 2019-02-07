@@ -1,45 +1,32 @@
+/**
+ * ===========================
+ * ParadigmCore: Blind Star
+ * @name JsonRequest.ts
+ * @module src/api/stream
+ * ===========================
+ *
+ * @author Henry Harder
+ * @date (initial)  05-February-2019
+ * @date (modified) 06-February-2018
+ * 
+ * TODO: fix this local version
+**/
+
 // request/response schemas
 import * as api from "./api.json";
 
 /**
- * ## Class: `JsonRequest`
+ * JSON-RPC 2.0 compliant implementation of the Stream API request messages.
  * 
- * JSON-RPC 2.0 compliant implementation of the Stream API.
+ * A work in progress as of 06 Feb. 2019
  * 
- * A work in progress as of 06 Februrary 2019
- * 
- * https://www.jsonrpc.org/specification
+ * See: https://www.jsonrpc.org/specification
  */
 export class JsonRequest {
     /**
      * Stream API definition JSON.
      */
     private static api: IStreamAPI = api;
-
-    /**
-     * Error code for parsing failures.
-     */
-    public static PARSE:       string = "-32700";
-    
-    /**
-     * Error code for general bad requests.
-     */
-    public static REQUEST:     string = "-32600";
-    
-    /**
-     * Error code for bad method in request.
-     */
-    public static METHOD:      string = "-32601";
-
-    /**
-     * Error code for parsing failures.
-     */
-    public static PARAM:       string = "-32602";
-
-    /**
-     * Any non-specific internally caught error.
-     */
-    public static INTERNAL:    string = "-32603"; 
 
     /**
      * Raw input string, deleted after parsing.
@@ -52,9 +39,9 @@ export class JsonRequest {
     private parsed: IParsedRequest;
 
     /**
-     * Array of any validation errors encountered.
+     * The first validation error encountered, if any.
      */
-    private errs:   ValidationError[];
+    private err:   ValidationError;
 
     /**
      * Set to true or false depending on result of `JsonRequest.prototype.
@@ -69,7 +56,7 @@ export class JsonRequest {
      */
     constructor(input: string) {
         this.raw = input;
-        this.errs = [];
+        this.err = null;
         this.valid = null; // null until set by `validate()` 
     }
 
@@ -86,7 +73,9 @@ export class JsonRequest {
      * 
      * @todo expand doc of this function.
      */
-    public validate(): ValidationError[] {
+    public validate(): ValidationError {
+        // return immediately if already validated
+        if (this.valid !== null) return;
         // shortcut to request property definitions
         const reqDef = JsonRequest.api.request;
 
@@ -96,16 +85,21 @@ export class JsonRequest {
             this.parsed = { jsonrpc, id, method, params };
             this.raw = undefined;
         } catch (err) {
-            this.addValErr("PARSE", err.message);
-            return this.errs;
+            this.addValErr("-32700", err.message); // parse error code
         }
 
-        for (let i = 0; i < reqDef.properties.length; i++){
-            this.validateRequestProperties(reqDef.properties[i]);
+        try {
+            // check request based on JSON definition
+            for (let i = 0; i < reqDef.properties.length; i++){
+                this.validateRequestProperties(reqDef.properties[i]);
+            }
+        } catch (err) {
+            this.addValErr("-32603");
         }
 
-        this.close(this.errs);
-        return this.errs;
+        // return validation error (if any)
+        if (this.valid === null) { this.close(); }
+        return this.err;
     }
 
     /**
@@ -130,28 +124,26 @@ export class JsonRequest {
         // check for missing requirements
         if (required && !req[key]) {
             this.addValErr(code, `missing required '${key}' field.`);
-            this.close(this.errs);
         }
 
         // validate properties
         if (typeof req[key] !== type) {
-            this.addValErr("REQUEST", `incorrect type for '${key}' option.`);
-            this.close(this.errs);
+            this.addValErr(code, `incorrect type for '${key}' option.`);
         }
         
         // validate top-level request
         if (req[key] && regExp && !arr) {
             this.validateExpParam(key, regExp, code, info);
         } else if (req[key] && !regExp && arr) {
-            this.validateOptionParam(arr, req[key])
+            this.validateOptionParam(code, arr, req[key]);
         } else if (req[key] && !regExp && !arr) {
             if (typeof req[key] === "object" && key === "params") {
                 this.validateMethodParams();
             }
         } else {
-            this.addValErr("REQUEST", `malformed parameters.`);
-            this.close(this.errs);
+            this.addValErr(code, `malformed parameters.`);
         }
+        return;
     }
 
     /**
@@ -160,9 +152,7 @@ export class JsonRequest {
      * @param method 
      * @param params 
      */
-    public validateMethodParams(method?: string, params?: IParam) {
-        console.log(`Number of methods: ${Object.keys(this.parsed.params).length}`);
-    }
+    public validateMethodParams(method?: string, params?: IParam) {}
 
     /**
      * Validate params that can be validated via regular expression testing.
@@ -187,9 +177,9 @@ export class JsonRequest {
      * @param options array of possible string values
      * @param query the string key included in the request
      */
-    public validateOptionParam(options: string[], query: string) {
+    public validateOptionParam(code: string, options: string[], query: string) {
         if (options.indexOf(query) !== 0) {
-            this.addValErr("PARAM", `invalid option '${query}'.`);
+            this.addValErr(code, `invalid option '${query}'.`);
         } else {
             return;
         }
@@ -198,14 +188,14 @@ export class JsonRequest {
     /**
      * Add a newly detected validation error to the array of detected errors.
      * 
-     * @param code error code of detected validation error
+     * @param key error code key of detected validation error
      * @param msg the additional validation error log
      */
     public addValErr(code: string, msg?: string) {
-        if (this.valid === false || this.valid === true) return;
+        if (this.valid !== null) return;
         const suffix = msg ? msg : "";
-        const info = `${api.codes[code].info}${suffix}`;
-        this.errs.push({ code, info });
+        const info = `${JsonRequest.api.codes[code].info}${suffix}`;
+        this.close({ code, info });
         return;
     }
 
@@ -214,12 +204,14 @@ export class JsonRequest {
      * 
      * @param errs the final set of validation errors
      */
-    public close(errs: ValidationError[]): any {
-        if (errs.length > 0) {
+    public close(err?: ValidationError): any {
+        if (err !== undefined && err !== null) {
             this.valid = false;
+            this.err = err;
         } else {
+            this.err = null;
             this.valid = true;
         }
-        return errs;
+        return;
     }
 }
