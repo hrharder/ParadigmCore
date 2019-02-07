@@ -10,8 +10,14 @@ NOTES:
 6. Look into heartbeat message
 */
 
+// request class
+import { JsonRequest as Request } from "./JsonRequest";
+import { JsonResponse as Response } from "./JsonResponse";
+
 // request/response schemas
 import * as api from "./api.json";
+
+// third-party and stdlib imports
 import * as WebSocket from "ws";
 import { setInterval } from "timers";
 
@@ -23,9 +29,15 @@ export class StreamServer {
     private abciConn: WebSocket;
     private abciURL: URL;
 
-    // config
+    // client config
     private retryTimeout: number;
     private retryCounter: number;
+
+    // server options
+    private server: WebSocket.Server;
+    private port: number;
+    private host: string;
+    public clients: Set<any>;
 
     constructor(options: StreamServerOptions) {
         this.abciURL = new URL(options.abciURL);
@@ -33,6 +45,54 @@ export class StreamServer {
         // set number of times to try to reconnect ABCI WS
         this.retryTimeout = 5; // || options.maxRetry
         this.retryCounter = 0;
+
+        // server options
+        this.port = options.port;
+        this.host = options.host || "localhost";
+    }
+
+    public async start(timeout: number = 2000): Promise<void> {
+        try {
+            // connect to ABCI server over WS
+            //const res = await this.connectAbci(timeout);
+            //console.log(`Connected Response: ${res}`);
+
+            // start stream server
+            const options = {
+                host: this.host,
+                port: this.port,
+            };
+
+            this.setupServer(options);
+            
+        } catch (err) {
+            throw new Error(`Failed to start: ${err}`);
+        }
+        return;
+    }
+
+    private setupServer(options) {
+        this.server = new WebSocket.Server(options);
+        this.server.on("connection", this.newConnHandlerWrapper());
+    }
+
+    private newConnHandlerWrapper(): (c: WebSocket) => void {
+        return (conn: WebSocket) => {
+            conn.once("message", (msg) => {
+                const req = new Request(msg);
+                const error = req.validate();
+                const result = error ? null : "welcome!";
+
+                const res = new Response({
+                    id: req.toJSON().id || null,
+                    error,
+                    result
+                })
+
+                conn.send(JSON.stringify(res));
+                conn.close();
+            });
+        }
     }
 
     private connectAbci(timeout: number): Promise<string> {
@@ -154,7 +214,6 @@ export class StreamServer {
             lastBlockHeight,
             lastBlockUnixTime,
             lastBlockAppHash,
-            //clear
             lastBlockDataHash,
             lastBlockProposer,
             txCount,
@@ -189,19 +248,4 @@ export class StreamServer {
     public getAbciReadyState(): number {
         return this.abciConn.readyState;
     }
-
-    public async start(timeout: number = 2000): Promise<void> {
-        try {
-            const res = await this.connectAbci(timeout);
-            console.log(`Connected Response: ${res}`);
-        } catch (err) {
-            throw new Error(`Failed to start: ${err}`);
-        }
-        return;
-    }
-}
-
-interface StreamServerOptions {
-    abciURL: string;
-    maxRetry: number;
 }

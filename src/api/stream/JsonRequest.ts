@@ -63,7 +63,7 @@ export class JsonRequest {
     /**
      * Generate valid JSON object only will necessary params.
      */
-    public toJSON(): object {
+    public toJSON(): IParsedRequest {
         const { jsonrpc, id, method, params } = this.parsed;
         return { jsonrpc, id, method, params };
     }
@@ -194,8 +194,8 @@ export class JsonRequest {
     public addValErr(code: string, msg?: string) {
         if (this.valid !== null) return;
         const suffix = msg ? msg : "";
-        const info = `${JsonRequest.api.codes[code].info}${suffix}`;
-        this.close({ code, info });
+        const message = `${JsonRequest.api.codes[code].info}${suffix}`;
+        this.close({ code, message });
         return;
     }
 

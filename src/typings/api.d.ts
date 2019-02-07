@@ -1,3 +1,24 @@
+interface StreamServerOptions {
+    abciURL: string;
+    maxRetry: number;
+    port: number;
+    host?: string;
+}
+
+interface ClientMap {
+    [id: string]: Client;
+}
+
+interface Client {} 
+
+interface IResponseOptions {
+    id: string;
+    result?: any;
+    error?: any;
+}
+
+// STREAM API DEFS BELOW
+
 interface IStreamAPI {
     request?: IStreamRequest;
     // response?: IStreamResponse;
@@ -27,7 +48,7 @@ interface IRequestMethod {
 
 interface ValidationError {
     code:   string;
-    info:   string;
+    message:   string;
 }
 
 interface IParsedRequest {
