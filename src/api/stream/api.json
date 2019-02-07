@@ -14,7 +14,7 @@
                 "key": "id",
                 "required": true,
                 "type": "string",
-                "valRegEx": "/^[a-zA-Z][a-zA-Z0-9]{0,31}$/",
+                "valRegEx": "/^[a-zA-Z0-9]{1,32}$/",
                 "valArr": null,
                 "errCode": "-32600",
                 "errInfo":  "the 'id' string must be alphanumeric, sub 32 chars."
