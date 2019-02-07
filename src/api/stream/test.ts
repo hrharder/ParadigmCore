@@ -14,7 +14,7 @@ export const test: IStreamAPI = {
                 "key": "id",
                 "required": true,
                 "type": "string",
-                "valRegEx": "/^[a-zA-Z][a-zA-Z0-9]{0,31}$/",
+                "valRegEx": "^[a-zA-Z0-9]{1,32}$",
                 "valArr": null,
                 "errCode": "-32600",
                 "errInfo":  "the 'id' string must be alphanumeric, sub 32 chars."
@@ -72,10 +72,25 @@ export const test: IStreamAPI = {
         ]
     },
     "codes": {
-        "-32700": "Parse error: ",
-        "-32600": "Invalid request: ",
-        "-32601": "Method not found: ",
-        "-32602": "Invalid param: ",
-        "-32603": "Internal error: please try again later."
+        "PARSE": {
+            "code": "-32700",
+            "info": "Parse error: "
+        },
+        "REQUEST": {
+            "code": "-32600",
+            "info": "Invalid request: "
+        },
+        "METHOD": {
+            "code": "-32601",
+            "info": "Method not found: "
+        },
+        "PARAM": {
+            "code": "-32602",
+            "info": "Invalid param: "
+        },
+        "INTERNAL": {
+            "code": "-32603",
+            "info": "Internal error: please try again later."
+        }
     }
 }

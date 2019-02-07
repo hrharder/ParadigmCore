@@ -42,5 +42,10 @@ interface IParam {
 }
 
 interface ICodes {
-    [key: string]: string;
+    [name: string]: ICodeInfo;
+}
+
+interface ICodeInfo {
+    code: string;
+    info: string;
 }

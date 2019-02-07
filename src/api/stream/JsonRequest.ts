@@ -1,14 +1,5 @@
 // request/response schemas
 import * as api from "./api.json";
-import { StreamServer } from "./StreamServer.js";
-
-//todo: move to api.json
-const
-    PARSE =      "-32700",
-    REQUEST =    "-32600",
-    METHOD =     "-32600",
-    PARAM =      "-32600",
-    INTERNAL =   "-32600";
 
 /**
 * JSON-RPC 2.0
@@ -16,24 +7,39 @@ const
  * https://www.jsonrpc.org/specification
  */
 export class JsonRequest {
-
     // accepted params
     private static api: IStreamAPI = api;
 
+    // error codes
+    public static PARSE:       string = "-32700";     
+    public static REQUEST:     string = "-32600"; 
+    public static METHOD:      string = "-32601";
+    public static PARAM:       string = "-32602"; 
+    public static INTERNAL:    string = "-32603"; 
+
     // raw and parsed input
-    private raw: string;
+    private raw:    string;
     private parsed: IParsedRequest;
 
     // validation errors (if any)
-    private errs: ValidationError[];
-    private valid: boolean;
+    private errs:   ValidationError[];
+    private valid:  boolean;
 
     private result: ValidationError[];
 
     constructor(input: string) {
         this.raw = input;
         this.errs = [];
-        this.valid = null; // null until set by `validate()`
+
+        // assign error codes
+        Object.keys(api.codes).forEach((codeName) => {
+            if (this[codeName] === null) {
+                this[codeName] = api.codes[codeName].code;
+            }
+        });
+
+        // null until set by `validate()`
+        this.valid = null; 
     }
 
     public toJSON(): object {
@@ -43,22 +49,18 @@ export class JsonRequest {
 
     public validate(): ValidationError[] {
         // err codes (todo: move to api.json)
-        const PARSE =      "-32700";
-        const REQUEST =    "-32600";
-        const METHOD =     "-32600";
-        const PARAM =      "-32600";
-        const INTERNAL =   "-32600";
 
         // check valid json by parsing
         try {
-            this.parsed = JSON.parse(this.raw);
+            const { jsonrpc, id, method, params } = JSON.parse(this.raw);
+            this.parsed = { jsonrpc, id, method, params };
         } catch (err) {
-            this.addValErr(PARSE, err.message);
+            this.addValErr(JsonRequest.PARSE, err.message);
             return this.errs;
         }
 
         JsonRequest.api.request.properties.forEach(prop => {
-            // destructure values
+            // destructure values from property definitions
             const {
                 key,
                 required,
@@ -79,7 +81,7 @@ export class JsonRequest {
 
             // validate properties
             if (typeof req[key] !== type) {
-                this.addValErr(REQUEST, `incorrect type for '${key}' option.`);
+                this.addValErr(JsonRequest.REQUEST, `incorrect type for '${key}' option.`);
                 this.close(this.errs);
             }
             
@@ -93,24 +95,23 @@ export class JsonRequest {
                     this.validateMethodParams();
                 }
             } else {
-                this.addValErr(REQUEST, `malformed parameters.`);
+                this.addValErr(JsonRequest.REQUEST, `malformed parameters.`);
                 this.close(this.errs);
             }
         });
-
+        this.close(this.errs);
         return this.errs;
     }
 
     public validateRequest(prop: IRequestProperty) {}
 
     public validateMethodParams(method?: string, params?: IParam) {
-        console.log(`will validate method params here`);
+        console.log(`Number of methods: ${Object.keys(this.parsed.params).length}`);
     }
 
     public validateExpParam(key: string, rgxp: string, code: string, log: string) {
         const req = this.parsed;
         const regexp = new RegExp(rgxp);
-        console.log(key, rgxp, code, log);
 
         // TODO: why is this failing for ID parameter?
         if (!regexp.test(req[key])) {
@@ -122,7 +123,7 @@ export class JsonRequest {
     
     public validateOptionParam(options: string[], query: string) {
         if (options.indexOf(query) !== 0) {
-            this.addValErr(PARAM, `invalid option '${query}'.`);
+            this.addValErr(JsonRequest.PARAM, `invalid option '${query}'.`);
         } else {
             return;
         }
@@ -139,8 +140,9 @@ export class JsonRequest {
     public close(errs: ValidationError[]): any {
         if (errs.length > 0) {
             this.valid = false;
+        } else {
+            this.valid = true;
         }
-        this.valid = true;
         return errs;
     }
 }
