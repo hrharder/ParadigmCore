@@ -43,7 +43,7 @@ export class JsonRequest {
             this.parsed = { jsonrpc, id, method, params };
             delete this.raw;
         } catch (err) {
-            this.addValErr(JsonRequest.PARSE, err.message);
+            this.addValErr("PARSE", err.message);
             return this.errs;
         }
 
@@ -69,7 +69,7 @@ export class JsonRequest {
 
             // validate properties
             if (typeof req[key] !== type) {
-                this.addValErr(JsonRequest.REQUEST, `incorrect type for '${key}' option.`);
+                this.addValErr("REQUEST", `incorrect type for '${key}' option.`);
                 this.close(this.errs);
             }
             
@@ -83,7 +83,7 @@ export class JsonRequest {
                     this.validateMethodParams();
                 }
             } else {
-                this.addValErr(JsonRequest.REQUEST, `malformed parameters.`);
+                this.addValErr("REQUEST", `malformed parameters.`);
                 this.close(this.errs);
             }
         });
@@ -108,7 +108,7 @@ export class JsonRequest {
     
     public validateOptionParam(options: string[], query: string) {
         if (options.indexOf(query) !== 0) {
-            this.addValErr(JsonRequest.PARAM, `invalid option '${query}'.`);
+            this.addValErr("PARAM", `invalid option '${query}'.`);
         } else {
             return;
         }
@@ -117,7 +117,7 @@ export class JsonRequest {
     public addValErr(code: string, msg?: string) {
         if (this.valid === false || this.valid === true) return;
         const suffix = msg ? msg : "";
-        const info = `${api.codes[code]}${suffix}`;
+        const info = `${api.codes[code].info}${suffix}`;
         this.errs.push({ code, info });
         return;
     }
