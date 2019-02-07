@@ -25,21 +25,10 @@ export class JsonRequest {
     private errs:   ValidationError[];
     private valid:  boolean;
 
-    private result: ValidationError[];
-
     constructor(input: string) {
         this.raw = input;
         this.errs = [];
-
-        // assign error codes
-        Object.keys(api.codes).forEach((codeName) => {
-            if (this[codeName] === null) {
-                this[codeName] = api.codes[codeName].code;
-            }
-        });
-
-        // null until set by `validate()`
-        this.valid = null; 
+        this.valid = null; // null until set by `validate()` 
     }
 
     public toJSON(): object {
@@ -48,12 +37,11 @@ export class JsonRequest {
     }
 
     public validate(): ValidationError[] {
-        // err codes (todo: move to api.json)
-
         // check valid json by parsing
         try {
             const { jsonrpc, id, method, params } = JSON.parse(this.raw);
             this.parsed = { jsonrpc, id, method, params };
+            delete this.raw;
         } catch (err) {
             this.addValErr(JsonRequest.PARSE, err.message);
             return this.errs;
@@ -112,10 +100,7 @@ export class JsonRequest {
     public validateExpParam(key: string, rgxp: string, code: string, log: string) {
         const req = this.parsed;
         const regexp = new RegExp(rgxp);
-
-        // TODO: why is this failing for ID parameter?
         if (!regexp.test(req[key])) {
-            console.log(`Test failed for param ${key}`);
             this.addValErr(code, log);
         }
         return;
