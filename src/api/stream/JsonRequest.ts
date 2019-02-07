@@ -56,14 +56,6 @@ export class JsonRequest {
             this.addValErr(PARSE, err.message);
             return this.errs;
         }
-        
-        // destructure required input properties
-        const {
-            jsonrpc:    jsonrpcI,
-            id:         idI,
-            method:     methodI,
-            params:     paramsI
-        } = this.parsed;
 
         JsonRequest.api.request.properties.forEach(prop => {
             // destructure values
