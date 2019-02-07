@@ -10,10 +10,15 @@ NOTES:
 6. Look into heartbeat message
 */
 
+// request/response schemas
+import * as api from "./api.json";
 import * as WebSocket from "ws";
 import { setInterval } from "timers";
 
 export class StreamServer {
+    // STATIC
+    public static api: IStreamAPI = api;
+
     // connection to abci ws server
     private abciConn: WebSocket;
     private abciURL: URL;

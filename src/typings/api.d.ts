@@ -1,61 +1,46 @@
-interface StreamApiDefs {
-    methods: MethodDefs;
+interface IStreamAPI {
+    request?: IStreamRequest;
+    // response?: IStreamResponse;
+    codes:  ICodes;
 }
 
-interface MethodDefs {
-    [name: string]: MethodDef;
+interface IStreamRequest {
+    properties: IRequestProperty[];
+    methods:    IRequestMethod[];
 }
 
-interface MethodDef {
-    request: RequestDef;
-    response: ResponseDef;
+interface IRequestProperty {
+    key:        string;
+    required:   boolean;
+    type:       string;
+    errCode:    string;
+    errInfo:    string;
+    valRegEx:   string;
+    valArr:     string[];
 }
 
-interface RequestDef {
-    params: RequestParam[];
+interface IRequestMethod {
+    name:           string;
+    description:    string;
+    params:         IRequestProperty[];
 }
 
-interface ResponseDef {
-    ok: OkResponseDef;
-    fail: FailResponseDef;
+interface ValidationError {
+    code:   string;
+    info:   string;
 }
 
-interface RequestParam {
-    name: string;
-    required: boolean;
-    type: string;
-    options: string[] | ReqParamOption[];
-    default?: string;
+interface IParsedRequest {
+    jsonrpc:    string;
+    id:         string;
+    method:     string;
+    params:     IParam;
 }
 
-interface ReqParamOption {
-    key: string;
-    valRegEx?: string;
+interface IParam {
+    [key: string]: any;
 }
 
-interface ResParamOption {
-    key: string;
-    valType?: string;
-}
-
-interface OkResponseDef {
-    result: ResultDefs;
-}
-
-interface ResultDefs {
-    [name: string]: ResultDef;
-}
-
-interface ResultDef {
-    type: string;
-    options?: string[] | ResParamOption[];
-}
-
-interface FailResponseDef {
-    error: ErrorDefs;
-}
-
-interface ErrorDefs {
-    code: ResultDef,
-    message: ResultDef;
+interface ICodes {
+    [key: string]: string;
 }
