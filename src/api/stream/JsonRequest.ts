@@ -119,6 +119,8 @@ export class JsonRequest {
         const req = this.parsed;
         const regexp = new RegExp(rgxp);
         console.log(key, rgxp, code, log);
+
+        // TODO: why is this failing for ID parameter?
         if (!regexp.test(req[key])) {
             console.log(`Test failed for param ${key}`);
             this.addValErr(code, log);
