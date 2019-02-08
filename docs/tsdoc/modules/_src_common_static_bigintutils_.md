@@ -18,7 +18,7 @@
 
 ▸ **bigIntReplacer**(key: *`string`*, value: *`any`*): `any`
 
-*Defined in [src/common/static/bigIntUtils.ts:18](https://github.com/paradigmfoundation/paradigmcore/blob/9a91704/src/common/static/bigIntUtils.ts#L18)*
+*Defined in [src/common/static/bigIntUtils.ts:18](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/common/static/bigIntUtils.ts#L18)*
 
 \=========================== ParadigmCore: Blind Star
 

@@ -76,17 +76,17 @@ export class TxBroadcaster {
         return this.started;
     }
 
-    /**
-     * @interface `public async send(tx: SignedTransaction): Promise<any>`
+    /** 
+     * @module core
      * 
-     * The `send()` method is the external API for broadcasting local ABCI
-     * transactions. Provide the raw transaction object, and it will be encoded, compressed, and added to
-     * the broadcast queue. 
+     * @description The `send()` method is the external API for broadcasting
+     * local ABCI transactions. Provide the raw transaction object, and it will
+     * be encoded, compressed, and added to the broadcast queue. 
      * 
-     * The promise that is returned by `this.send()`
-     * resolves upon successful ABCI broadcast, with the JSON response. It will
-     * reject or throw an error if the transaction fails to submit, but will
-     * resolve even on a successful but rejected ABCI transaction.
+     * @summary The promise that is returned by `this.send()` resolves upon
+     * successful ABCI broadcast, with the JSON response. It will reject or
+     * throw an error if the transaction fails to submit, but will resolve even
+     * on a successful but rejected ABCI transaction.
      *
      * @param tx    {object}    raw transaction object to enqueue
      */

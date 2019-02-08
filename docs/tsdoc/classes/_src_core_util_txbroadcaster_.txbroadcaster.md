@@ -41,7 +41,7 @@ The `TxBroadcaster` is responsible for executing local ABCI transactions. It imp
 
 ⊕ **new TxBroadcaster**(options: *`any`*): [TxBroadcaster](_src_core_util_txbroadcaster_.txbroadcaster.md)
 
-*Defined in [src/core/util/TxBroadcaster.ts:31](https://github.com/paradigmfoundation/paradigmcore/blob/9a91704/src/core/util/TxBroadcaster.ts#L31)*
+*Defined in [src/core/util/TxBroadcaster.ts:31](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/core/util/TxBroadcaster.ts#L31)*
 
 Create a new TxBroadcaster instance.
 
@@ -63,7 +63,7 @@ ___
 
 **● broadcasting**: *`boolean`*
 
-*Defined in [src/core/util/TxBroadcaster.ts:31](https://github.com/paradigmfoundation/paradigmcore/blob/9a91704/src/core/util/TxBroadcaster.ts#L31)*
+*Defined in [src/core/util/TxBroadcaster.ts:31](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/core/util/TxBroadcaster.ts#L31)*
 
 ___
 <a id="client"></a>
@@ -72,7 +72,7 @@ ___
 
 **● client**: *`any`*
 
-*Defined in [src/core/util/TxBroadcaster.ts:26](https://github.com/paradigmfoundation/paradigmcore/blob/9a91704/src/core/util/TxBroadcaster.ts#L26)*
+*Defined in [src/core/util/TxBroadcaster.ts:26](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/core/util/TxBroadcaster.ts#L26)*
 
 ___
 <a id="queue"></a>
@@ -81,7 +81,7 @@ ___
 
 **● queue**: *`any`[][]*
 
-*Defined in [src/core/util/TxBroadcaster.ts:27](https://github.com/paradigmfoundation/paradigmcore/blob/9a91704/src/core/util/TxBroadcaster.ts#L27)*
+*Defined in [src/core/util/TxBroadcaster.ts:27](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/core/util/TxBroadcaster.ts#L27)*
 
 ___
 <a id="started"></a>
@@ -90,7 +90,7 @@ ___
 
 **● started**: *`boolean`*
 
-*Defined in [src/core/util/TxBroadcaster.ts:30](https://github.com/paradigmfoundation/paradigmcore/blob/9a91704/src/core/util/TxBroadcaster.ts#L30)*
+*Defined in [src/core/util/TxBroadcaster.ts:30](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/core/util/TxBroadcaster.ts#L30)*
 
 ___
 <a id="tracker"></a>
@@ -99,7 +99,7 @@ ___
 
 **● tracker**: *`EventEmitter`*
 
-*Defined in [src/core/util/TxBroadcaster.ts:28](https://github.com/paradigmfoundation/paradigmcore/blob/9a91704/src/core/util/TxBroadcaster.ts#L28)*
+*Defined in [src/core/util/TxBroadcaster.ts:28](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/core/util/TxBroadcaster.ts#L28)*
 
 ___
 
@@ -111,7 +111,7 @@ ___
 
 ▸ **broadcast**(): `Promise`<`void`>
 
-*Defined in [src/core/util/TxBroadcaster.ts:114](https://github.com/paradigmfoundation/paradigmcore/blob/9a91704/src/core/util/TxBroadcaster.ts#L114)*
+*Defined in [src/core/util/TxBroadcaster.ts:114](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/core/util/TxBroadcaster.ts#L114)*
 
 Internal broadcast function. Executes ABCI transactions via a queue.
 
@@ -124,7 +124,7 @@ ___
 
 ▸ **dequeue**(): `any`
 
-*Defined in [src/core/util/TxBroadcaster.ts:180](https://github.com/paradigmfoundation/paradigmcore/blob/9a91704/src/core/util/TxBroadcaster.ts#L180)*
+*Defined in [src/core/util/TxBroadcaster.ts:180](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/core/util/TxBroadcaster.ts#L180)*
 
 Returns the top item from the queue, and removes it.
 
@@ -137,7 +137,7 @@ ___
 
 ▸ **enqueue**(item: *`any`*): `void`
 
-*Defined in [src/core/util/TxBroadcaster.ts:171](https://github.com/paradigmfoundation/paradigmcore/blob/9a91704/src/core/util/TxBroadcaster.ts#L171)*
+*Defined in [src/core/util/TxBroadcaster.ts:171](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/core/util/TxBroadcaster.ts#L171)*
 
 Add an item to the queue.
 
@@ -156,7 +156,7 @@ ___
 
 ▸ **isEmpty**(): `boolean`
 
-*Defined in [src/core/util/TxBroadcaster.ts:162](https://github.com/paradigmfoundation/paradigmcore/blob/9a91704/src/core/util/TxBroadcaster.ts#L162)*
+*Defined in [src/core/util/TxBroadcaster.ts:162](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/core/util/TxBroadcaster.ts#L162)*
 
 Returns true if transaction queue is empty
 
@@ -169,13 +169,13 @@ ___
 
 ▸ **send**(tx: *`SignedTransaction`*): `Promise`<`any`>
 
-*Defined in [src/core/util/TxBroadcaster.ts:93](https://github.com/paradigmfoundation/paradigmcore/blob/9a91704/src/core/util/TxBroadcaster.ts#L93)*
+*Defined in [src/core/util/TxBroadcaster.ts:93](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/core/util/TxBroadcaster.ts#L93)*
 
-*__interface__*: `public async send(tx: SignedTransaction): Promise<any>`
+*__module__*: core
 
-The `send()` method is the external API for broadcasting local ABCI transactions. Provide the raw transaction object, and it will be encoded, compressed, and added to the broadcast queue.
+*__description__*: The `send()` method is the external API for broadcasting local ABCI transactions. Provide the raw transaction object, and it will be encoded, compressed, and added to the broadcast queue.
 
-The promise that is returned by `this.send()` resolves upon successful ABCI broadcast, with the JSON response. It will reject or throw an error if the transaction fails to submit, but will resolve even on a successful but rejected ABCI transaction.
+*__summary__*: The promise that is returned by `this.send()` resolves upon successful ABCI broadcast, with the JSON response. It will reject or throw an error if the transaction fails to submit, but will resolve even on a successful but rejected ABCI transaction.
 
 **Parameters:**
 
@@ -192,7 +192,7 @@ ___
 
 ▸ **start**(): `boolean`
 
-*Defined in [src/core/util/TxBroadcaster.ts:74](https://github.com/paradigmfoundation/paradigmcore/blob/9a91704/src/core/util/TxBroadcaster.ts#L74)*
+*Defined in [src/core/util/TxBroadcaster.ts:74](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/core/util/TxBroadcaster.ts#L74)*
 
 Call once Tendermint is synchronized. No transactions will be broadcast until TxBroadcaster.prototype.start() is called.
 

@@ -18,7 +18,7 @@
 
 ▸ **beginBlockWrapper**(state: *`State`*): `function`
 
-*Defined in [src/core/beginBlock.ts:29](https://github.com/paradigmfoundation/paradigmcore/blob/9a91704/src/core/beginBlock.ts#L29)*
+*Defined in [src/core/beginBlock.ts:29](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/core/beginBlock.ts#L29)*
 
 Called at the beginning of each new block. Updates proposer and block height.
 
