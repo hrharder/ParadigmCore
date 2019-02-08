@@ -8,11 +8,7 @@
  * @author Henry Harder
  * @date (initial)  15-October-2018
  * @date (modified) 21-December-2018
- *
- * This class is responsible for executing local ABCI transactions. It
- * implements a queue, and allows multiple "concurrent" usage of a given
- * instance for local ABCI txs, so only one instance should be used per node.
- */
+**/
 
 // 3rd party and STDLIB imports
 import { EventEmitter } from "events";
@@ -22,8 +18,9 @@ import { PayloadCipher } from "../../crypto/PayloadCipher";
 import { err } from "../../common/log";
 
 /**
- * Delivers transactions to the ABCI application. Implements a queue to support
- * "concurrent" usage of one instance across modules.
+ * The `TxBroadcaster` is responsible for executing local ABCI transactions. It
+ * implements a queue, and allows multiple "concurrent" usage of a given
+ * instance for local ABCI txs, so only one instance should be used per node.
  */
 export class TxBroadcaster {
     private client: any;            // Tendermint RPC client
@@ -80,9 +77,12 @@ export class TxBroadcaster {
     }
 
     /**
-     * The external API for broadcasting local ABCI transactions. Provide the
-     * raw transaction object, and it will be encoded, compressed, and added to
-     * the broadcast queue. The promise that is returned by `this.send()`
+     * @interface `public async send(tx: SignedTransaction): Promise<any>`
+     * The `send()` method is the external API for broadcasting local ABCI
+     * transactions. Provide the raw transaction object, and it will be encoded, compressed, and added to
+     * the broadcast queue. 
+     * 
+     * The promise that is returned by `this.send()`
      * resolves upon successful ABCI broadcast, with the JSON response. It will
      * reject or throw an error if the transaction fails to submit, but will
      * resolve even on a successful but rejected ABCI transaction.

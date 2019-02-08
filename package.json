@@ -11,7 +11,7 @@
     "launch": "tsc && node ./dist/index.js",
     "reset": "./lib/tendermint/bin/tendermint unsafe_reset_all --home ./lib/tendermint",
     "test": "jest",
-    "docs": "typedoc --theme markdown --out ./docs"
+    "docs": "typedoc --theme markdown --out ./docs/tsdoc"
   },
   "repository": {
     "type": "git",
