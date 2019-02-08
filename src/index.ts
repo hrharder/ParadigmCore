@@ -39,11 +39,12 @@ import { start as startMain } from "./core/main";
 // General utilities and misc.
 import { err, log, logStart, warn } from "./common/log";
 import { messages as msg } from "./common/static/messages";
+import { StreamServer } from "./api/stream/StreamServer";
 
-// "Globals"
-let witness: Witness;           // implements peg-zone and Ethereum SSM
-let broadcaster: TxBroadcaster; // internal ABCI transaction broadcaster
-let generator: TxGenerator;     // signs and builds ABCI tx's
+// VALIDATOR MODULES
+let witness:        Witness;
+let broadcaster:    TxBroadcaster;  // internal ABCI transaction broadcaster
+let generator:      TxGenerator;    // construct and sign paradigm-core tx's
 let web3: Web3;                 // web3 instance
 let paradigm;                   // paradigm instance (paradigm-connect)
 let node;                       // tendermint node child process instance
@@ -60,8 +61,7 @@ let node;                       // tendermint node child process instance
     // welcome :)
     logStart();
 
-    // validate environment
-    logStart("checking environment...");
+    // validate startup-environment
     if (!env.npm_package_version) {
         err("start", "paradigm-core should be started with npm or yarn");
         err("start", msg.general.errors.fatal);
@@ -69,7 +69,7 @@ let node;                       // tendermint node child process instance
     }
 
     // tendermint core
-    logStart("starting tendermint core...");
+    log("tm", "starting tendermint core...");
     try {
         // todo: define options object
         let options: any  = {
@@ -90,39 +90,43 @@ let node;                       // tendermint node child process instance
         // if in debug mode, pipe tendermint logs to STDOUT
         if (env.DEBUG) node.stdout.pipe(process.stdout);
     } catch (error) {
-        err("state", "failed starting tendermint.");
-        err("state", "tendermint may not be installed or configured.");
-        err("state", "use `npm i` to configure tendermint and set up paradigmcore.");
-        err("start", error.message);
-        err("start", msg.general.errors.fatal);
-        process.exit(1);
+        err("tm", "tendermint may not be installed or configured.");
+        err("tm", "use `npm i` to configure tendermint and set up paradigmcore.");
+        return { 
+            message: error.message,
+            info: `unable to start tendermint-core`,
+            comp: "tm"
+        };
     }
 
     // paradigm-connect and web3
-    logStart("setting up paradigm-connect and web3 connection...");
+    log("api", "setting up paradigm-connect and web3 connection...");
     try {
         web3 = new Web3(env.WEB3_PROVIDER);
         paradigm = new Paradigm({ provider: web3.currentProvider });
     } catch (error) {
-        err("state", "failed initializing paradigm-connect");
-        err("start", error.message);
-        err("start", msg.general.errors.fatal);
-        process.exit(1);
+        return { 
+            message: error.message,
+            info: "failed creating paradigm-connect instance",
+            comp: "api"
+        };
+        
     }
 
     // local transaction broadcaster
-    logStart("setting up validator transaction broadcaster...");
+    log("tx", "setting up validator transaction broadcaster...");
     try {
         broadcaster = new TxBroadcaster({ client: node.rpc });
     } catch (error) {
-        err("state", "failed initializing connection to abci server");
-        err("start", error.message);
-        err("start", msg.general.errors.fatal);
-        process.exit(1);
+        throw { 
+            message: error.message,
+            info: "failed creating transaction broadcaster instance",
+            comp: "tx"
+        };
+        
     }
 
-    // local transaction signer and generator
-    logStart("setting up validator transaction signer...");
+    log("tx", "setting up validator transaction signer...");
     try {
         generator = new TxGenerator({
             encoding: env.SIG_ENC,
@@ -130,27 +134,27 @@ let node;                       // tendermint node child process instance
             publicKey: env.PUB_KEY,
         });
     } catch (error) {
-        err("tx", "failed to construct transaction generator");
-        err("start", error.message);
-        err("start", msg.general.errors.fatal);
-        process.exit(1);
+        throw { 
+            message: error.message,
+            info: "failed to construct transaction generator",
+            comp: "tx"
+        };
     }
 
-    // order tracker and order-stream server
-    logStart("starting JSONRPC/WS server...");
+    log("api", "starting WS API server...");
     try {
-        // start wss here
+        // create new stream-api server ...
     } catch (error) {
-        err("api", "failed initializing websocket server.");
-        err("start", error.message);
-        err("start", msg.general.errors.fatal);
-        process.exit(1);
+        throw { 
+            message: error.message,
+            info: "failed initializing the stream-api server",
+            comp: "api"
+        };
     }
 
-    // post server
-    logStart("starting REST API server...");
+    log("api", "starting HTTP API server...");
     try {
-        const options = {
+        await startAPIserver({
             // Paradigm instance
             paradigm,
 
@@ -162,24 +166,22 @@ let node;                       // tendermint node child process instance
             rateMax: parseInt(env.WINDOW_MAX, 10),
 
             // API bind port (HTTP)
-            port: parseInt(env.API_PORT, 10)
-        };
-
-        await startAPIserver(options);
+            port: parseInt(env.POST_PORT, 10)
+        });
     } catch (error) {
-        err("api", "failed initializing api server.");
-        err("start", error.message);
-        err("start", msg.general.errors.fatal);
-        process.exit(1);
+        throw { 
+            message: error.message,
+            info: "failed initializing api server.",
+            comp: "api"
+        };
     }
 
-    // create witness (stake-rebalancer)
-    logStart("creating witness instance...");
+    log("witness", "creating witness instance...");
     try {
-        const options = {
+        witness = await Witness.create({
             // Tx generator/broadcaster
             broadcaster,
-            txGenerator: generator,
+            generator,
 
             // web3 provider url and contract config
             provider: env.WEB3_PROVIDER,
@@ -188,21 +190,20 @@ let node;                       // tendermint node child process instance
             finalityThreshold: parseInt(env.FINALITY_THRESHOLD, 10),
             periodLength: parseInt(env.PERIOD_LENGTH, 10),
             periodLimit: parseInt(env.PERIOD_LIMIT, 10),
-        };
-
-        witness = await Witness.create(options);
-        log("witness", "created new idle witness instance.");
+        });
+        log("peg", "waiting to start new witness instance...");
     } catch (error) {
-        err("witness", "failed initializing witness component.");
-        err("start", error.message);
-        err("start", msg.general.errors.fatal);
-        process.exit(1);
+        throw { 
+            message: error.message,
+            info: "failed initializing witness component.",
+            comp: "witness"
+        };
     }
 
     // start main paradigmcore
-    logStart("starting paradigmcore...");
+    log("state", "starting paradigmcore...");
     try {
-        const options = {
+        await startMain({
             // Paradigm instance, order tracker, and witness component
             paradigm,
             witness,
@@ -219,15 +220,12 @@ let node;                       // tendermint node child process instance
             periodLimit: parseInt(env.PERIOD_LIMIT, 10),
             maxOrderBytes: parseInt(env.MAX_ORDER_SIZE, 10),
             txGenerator: generator,
-        };
-
-        // Wait for main ABCI application to start
-        await startMain(options);
-        logStart("waiting for tendermint to synchronize...");
+        });
+        log("tm", "waiting for tendermint to synchronize...");
 
         // Wait for Tendermint to load and synchronize
         await node.synced();
-        log("state", "tendermint initialized and synchronized");
+        log("tm", "tendermint initialized and synchronized");
 
         // Activate transaction broadcaster
         log("tx", "starting validator transaction broadcaster...");
@@ -242,12 +240,19 @@ let node;                       // tendermint node child process instance
         if (witness.start() !== 0) { throw Error("failed to start witness."); }
         log("peg", msg.rebalancer.messages.activated);
     } catch (error) {
-        err("state", "failed initializing abci application");
-        err("start", error.message);
-        err("start", msg.general.errors.fatal);
-        process.exit(1);
+        throw { 
+            message: error.message,
+            info: "failed initializing abci application",
+            comp: "state"
+        };
     }
-
-    // Indicate beginning of new block production
+    return;
+})(process.env).then(() => {
     logStart("paradigm-core startup successfully completed");
-})(process.env);
+}).catch((error) => {
+    err(error.comp, error.info);
+    err("start", error.message);
+    err("start", msg.general.errors.fatal);
+    process.exitCode = 1;
+});
+

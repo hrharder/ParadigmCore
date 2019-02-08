@@ -25,7 +25,7 @@ import * as helmet from "helmet";
 // ParadigmCore classes and imports
 import { TxBroadcaster } from "../../core/util/TxBroadcaster";
 import { TxGenerator } from "../../core/util/TxGenerator";
-import { err, log, logStart, warn } from "../../common/log";
+import { err, log } from "../../common/log";
 import { messages as msg } from "../../common/static/messages";
 import { HttpMessage as Message } from "./HttpMessage";
 
@@ -36,7 +36,6 @@ import { NextFunction, Request, Response } from "express";
 let client: TxBroadcaster;  // Tendermint client for RPC
 let generator: TxGenerator; // Generates and signs ABCI tx's
 let app = express();        // Express.js server
-let paradigm;               // ParadigmConnect driver
 
 /**
  * Start and bind API server.
@@ -54,9 +53,6 @@ export async function start(options) {
         // Store TxBroadcaster and TxGenerator
         client = options.broadcaster;
         generator = options.generator;
-
-        // Paradigm-connect instance
-        paradigm = options.paradigm;
 
         // Setup rate limiting
         const limiter = rateLimit({
@@ -94,23 +90,13 @@ export async function start(options) {
  */
 async function postHandler(req: Request, res: Response, next: NextFunction) {
     // Create transaction object
-    let tx: SignedTransaction;
+    const tx: SignedTransaction = generator.create({ data: req.body, type: "order" });
 
-    // verify order validity before submitting to state machine
-    //const paradigmOrder = new paradigm.Order(req.body);
-    //if (!await paradigmOrder.isValid()) {
-       // warn("api", "invalid order rejected");
-        //Message.staticSendError(res, "submitted order is invalid.", 422);
-    // } else {
-        // create and sign transaction (as validator)
-        tx = generator.create({ data: req.body, type: "order" });
+    // submit transaction to mempool and network
+    const response = await client.send(tx);
 
-        // submit transaction to mempool and network
-        const response = await client.send(tx);
-
-        // send response from application back to client
-        Message.staticSend(res, response);
-    // }
+    // send response from application back to client
+    Message.staticSend(res, response);
 }
 
 /**

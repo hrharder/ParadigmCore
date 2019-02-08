@@ -150,7 +150,7 @@ export class Witness {
 
     // Tendermint ABCI utility classes
     private broadcaster: TxBroadcaster; // ABCI Tx broadcaster and queue
-    private txGenerator: TxGenerator;   // Builds and signs transactions
+    private generatorator: TxGenerator;   // Builds and signs transactions
 
     // Event, balance and limit mappings (out-of-state)
     private events: any;        // Events pending maturity threshold
@@ -177,7 +177,7 @@ export class Witness {
 
         // Local ABCI transaction broadcaster and generator
         this.broadcaster = opts.broadcaster;
-        this.txGenerator = opts.txGenerator;
+        this.generatorator = opts.generator;
 
         // Finality threshold
         this.finalityThreshold = opts.finalityThreshold;
@@ -638,7 +638,7 @@ export class Witness {
         }
 
         // Create and sign transaction object
-        const tx: SignedTransaction = this.txGenerator.create({
+        const tx: SignedTransaction = this.generatorator.create({
             data: {
                 limits: map,
                 round: {
@@ -663,7 +663,7 @@ export class Witness {
     private execEventTx(event: WitnessData): void {
         // Create and sign transaction object
         const { subject, type, amount, block, address, publicKey, id } = event;
-        const tx = this.txGenerator.create({
+        const tx = this.generatorator.create({
             data: {
                 subject,
                 type,

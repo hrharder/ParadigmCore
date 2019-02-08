@@ -42,7 +42,7 @@ import { setInterval } from "timers";
 import { EventEmitter } from "events";
 
 /**
- * ParadigmCore Stream Server, built to be JSONRPC-2.0 compliant.
+ * ParadigmCore Stream Server, built to the JSONRPC-2.0 specification.
  * 
  * Allow access to various state events and blockchain data (WIP).
  */
@@ -457,32 +457,22 @@ export class StreamServer {
         // destructure block data (header and body)
         const { header, data } = res.block;
 
-        // pull values, parse/decode where needed
-        const lastBlockHeight = header.height
-        const lastBlockUnixTime = this.getUnixTimeFromISO(header.time);
-        const lastBlockAppHash = header.app_hash;
-        const lastBlockDataHash = header.data_hash;
-        const lastBlockProposer = header.proposer_address;
-        const txs: Array<any> = data.txs ? this.decodeTxArr(data.txs) : [];
-        const txCount = header.num_txs;
-
         // build response object
-        const outputObject = {
-            lastBlockHeight,
-            lastBlockUnixTime,
-            lastBlockAppHash,
-
-            // below is for when 'block_data' does not change between blocks
-            lastBlockDataHash: lastBlockDataHash ? lastBlockDataHash : null,
-            lastBlockProposer,
-            txCount,
-
-            // array of txs (if present)
-            txs
+        const abciData = {
+            // blockchain data from tendermint
+            lastBlockHeight: header.height,
+            lastBlockUnixTime: this.getUnixTimeFromISO(header.time),
+            lastBlockDataHash: header.data_hash ? header.data_hash : null,
+            lastBlockProposer: header.proposer_address,
+            
+            // paradigm-core data via abci
+            txs: data.txs ? this.decodeTxArr(data.txs) : [],
+            txCount: header.num_txs,
+            lastBlockAppHash: header.app_hash,
         }
 
         // emit event with block data
-        this.newBlockEmitter.emit("newBlock", outputObject);
+        this.newBlockEmitter.emit("newBlock", abciData);
         return;
     }
 

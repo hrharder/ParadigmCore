@@ -5,11 +5,12 @@
         "2":    { "label": "error", "color": "red" }
     },
     "modules": {
-        "start":    { "label": "startup", "color": "green" },
+        "start":    { "label": "startup", "color": "grey" },
         "state":    { "label": "core", "color": "cyan" },
         "mem":      { "label": "mempool", "color": "magenta" },
         "tx":       { "label": "abci", "color": "blue" },
-        "api":      { "label": "api", "color": "green" },
-        "peg":      { "label": "witness", "color": "yellow" }
+        "api":      { "label": "api", "color": "blue" },
+        "peg":      { "label": "witness", "color": "yellow" },
+        "tm":      { "label": "tendermint", "color": "green" }
     }
 }

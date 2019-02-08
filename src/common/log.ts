@@ -20,7 +20,7 @@ export function logStart(msg?) {
     if (msg) {
         print(
             `${c.gray("lvl:")} ${c.bold("info")}\t` +
-            `${c.gray("mod:")} ${c.bold.green("startup")}\t` +
+            `${c.gray("mod:")} ${c.bold.grey("startup")}\t` +
             `${c.gray("msg:")} ${msg}`,
             2
         );
