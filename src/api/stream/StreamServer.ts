@@ -29,8 +29,12 @@ import { JsonResponse as Response } from "./JsonResponse";
 // request/response schemas
 import * as api from "./api.json";
 
+// paradigmcore common imports
+import { log, warn, err } from "../../common/log";
+
 // third-party and stdlib imports
 import * as WebSocket from "ws";
+import * as zlib from "zlib";
 import { setInterval } from "timers";
 import { EventEmitter } from "events";
 
@@ -50,6 +54,9 @@ export class StreamServer {
 
     /** Client connection to the Tendermint ABCI server. */
     private abciConn: WebSocket;
+    
+    /** Session ID string for ABCI WebSocket connection. */
+    private abciSessionId: string;
 
     /** ABCI server URI/L (supplied during construction). */
     private abciURL: URL;
@@ -88,11 +95,15 @@ export class StreamServer {
      * @param options see 'StreamServerOptions' type definition/docs.
      */
     constructor(options: StreamServerOptions) {
+        // validate URL
         this.abciURL = new URL(options.abciURL);
+        this.abciSessionId = null;
 
-        // set number of times to try to reconnect ABCI WS
-        this.retryTimeout = options.retryTimeout || 5; // || options.maxRetry
-        this.retryInterval = 1000; // || options.retryInterval
+        // set number of times to try to reconnect ABCI WS upon conn drop
+        this.retryTimeout = options.retryTimeout || 25;
+
+        // set delay between attempts (in ms)
+        this.retryInterval = options.retryInterval || 1000;
 
         // init counter to o (used during reconnecting processes)
         this.retryCounter = 0;
@@ -127,9 +138,6 @@ export class StreamServer {
 
             // setup emitters
             this.newBlockEmitter = new EventEmitter();
-            this.newBlockEmitter.on("newBlock", (blockData) => {
-                console.log("got new block");
-            });
         } catch (err) {
             throw new Error(`Failed to start: ${err}`);
         }
@@ -153,41 +161,49 @@ export class StreamServer {
      */
     private newConnHandlerWrapper(): (c: WebSocket) => void {
         return (conn: WebSocket) => {
-            conn.once("message", (msg: string) => {
-                let res;
-                const req = new Request(msg);
-                const error = req.validate();
 
-                if (!error) {
-                    const reqJSON = req.toJSON();
-                    this.handleNewClient(conn, reqJSON);
-                } else {
-                    res = new Response({ error });
-                    conn.send(JSON.stringify(res));
-                }
-            });
+            // handles messages from the client
+            conn.on("message", this.handleClientMessageWrapper(conn));
+
+            /*
+            @todo implement following and others (?)
+            conn.on("close"
+            conn.on("error"
+            */
         }
     }
 
-    private handleClientRequest(conn: WebSocket): (m: string) => void {
+    // @todo implement, generalize 'newConnHandlerWrapper' further?
+    private handleClientMessageWrapper(conn: WebSocket): (m: string) => void {
         return (msg: string) => {
             let res;
             const req = new Request(msg);
             const error = req.validate();
 
-            if (!error) {
+            // respond with val error, if present
+            if (error) {
+                res = new Response({ error });
+                this.sendMessageToClientByConn(conn, res);
+            }
+
+            // is new client if ID is not found in mapping already
+            if (!this.clients.hasOwnProperty(req.parsed.id)) {
                 const reqJSON = req.toJSON();
                 this.handleNewClient(conn, reqJSON);
+
+                // @todo remove
+                log("api", `new client added with id: '${req.parsed.id}'`);
             } else {
-                res = new Response({ error });
-                conn.send(JSON.stringify(res));
+
+                //@todo handle 0+nth messages
+                log("api", `request from client with id '${req.parsed.id}'`);
             }
         }
     }
 
     /**
      * Handler for new client connections.
-     * @todo
+     * @todo remove hard-coded stuff
      * 
      * @param conn connection instance
      * @param req connection request object
@@ -207,7 +223,9 @@ export class StreamServer {
                 method,
                 params,
             }
-
+            
+            // @todo remove
+            // temporarily demonstrates functionality
             this.newBlockEmitter.on("newBlock", (blockData) => {
                 const res = new Response({
                     id,
@@ -245,16 +263,23 @@ export class StreamServer {
         
         // attempt to connect until timeout reached
         return new Promise((resolve, reject) => {
+
             // reject if fails within timeoutS
             const timer = setInterval(() => {
-                console.log('trying');
+
+                // attempt to connect to ABCI client 'timeout' times
                 if (this.retryCounter > timeout) {
                     reject("Connection timeout.");
                 }
+
+                // clear old listeners before trying again (avoid dup conn.)
                 if (this.abciConn && this.abciConn.listeners.length > 0) {
                     this.abciConn.removeEventListener("open");
                 }
+
                 this.attemptConnection(resolve, reject, timer);
+
+                // this.retryInterval can be configured upon construction
             }, this.retryInterval);
         });
     }
@@ -276,10 +301,12 @@ export class StreamServer {
 
         // attach one-off open handler to resolve upon connect
         this.abciConn.once("open", () => {
-            console.log("connect");
+
             // attach new handlers, and re-subscribe
             this.attachHandlersABCI();
-            this.subscribeToNewBlock();
+
+            // subscribe to 'NewBlock' Tendermint events
+            this.subscribeToParadigmCoreEvent("NewBlock");
             
             // resolve upon success
             clearInterval(timer);
@@ -302,7 +329,8 @@ export class StreamServer {
         this.abciConn.on("error", this.clientErrorHandler);
 
         // message handler wrapper
-        this.abciConn.on("message", (data) => {
+        // @todo validate message data-type
+        this.abciConn.on("message", (data: string) => {
             this.clientMessageHandlerABCI(data);
         });
 
@@ -328,6 +356,7 @@ export class StreamServer {
                 console.log("Fatal, failed to reconnect to ABCI server.");
 
                 // TODO: don't kill the process from here
+                // @todo remove
                 process.exit(1);
             }
         }
@@ -337,7 +366,7 @@ export class StreamServer {
      * Will be the error handler for client (and ABCI?) errors.
      * @todo implement.
      * 
-     * @param msg error message from client
+     * @param msg error message from client connection
      */
     private clientErrorHandler(msg: string): void {
         console.log(`error from client connection: ${msg}`);
@@ -348,15 +377,21 @@ export class StreamServer {
      * 
      * @param data received data from ABCI WebSocket connection.
      */
-    private clientMessageHandlerABCI(data: any): void {
+    private clientMessageHandlerABCI(data: string): void {
         const parsed = JSON.parse(data);
-        if (parsed.id !== "main#event") { console.log(parsed.id); return; }
+
+        // ignore ABCI messages that are not events (temporary?)
+        // @todo investigate later?
+        if (parsed.id !== `${this.abciSessionId}#event`) {
+            return;
+        }
 
         // general parsing
         const type = parsed.result.data.type
         const res = parsed.result.data.value;
 
         // take action depending on event type
+        // @todo avoid hard-code
         switch (type) {
             case "tendermint/event/NewBlock": {
                 this.newBlockHandler(res);
@@ -364,7 +399,7 @@ export class StreamServer {
             }
 
             default: {
-                console.log("No action.");
+                warn("api", "ABCI response message type not implemented.");
                 break;
             }
         }
@@ -384,19 +419,48 @@ export class StreamServer {
     }
 
     /**
+     * Decode and decompress a raw encoded/compressed tx array.
+     */
+    private decodeTxArr(txs: string[]): string[] {
+         // check if empty
+         if (txs.length <= 0) { return txs; }
+
+         // decode/decompress txs
+         return txs.map((tx) => {
+            let inBuff: Buffer; // input buffer
+            let dcBuff: Buffer; // decompressed buffer
+            let outStr: string; // decoded string
+    
+            try {
+                inBuff = Buffer.from(Buffer.from(tx, "base64").toString("utf8"), "base64");
+                dcBuff = zlib.inflateSync(inBuff);
+                outStr = dcBuff.toString("utf8");
+            } catch (error) {
+                warn("api", "error decoding transaction from block.");
+                return tx;
+            }
+
+            // return json string
+            return outStr;
+         });
+    }
+
+    /**
      * Handler for new block events.
      * 
      * @param data event message/data
      */
-    private newBlockHandler(data: any): void {
-        const { header } = data.block;
+    private newBlockHandler(res: any): void {
+        // destructure block data (header and body)
+        const { header, data } = res.block;
 
-        // pull values
+        // pull values, parse/decode where needed
         const lastBlockHeight = header.height
         const lastBlockUnixTime = this.getUnixTimeFromISO(header.time);
         const lastBlockAppHash = header.app_hash;
         const lastBlockDataHash = header.data_hash;
         const lastBlockProposer = header.proposer_address;
+        const txs: Array<any> = data.txs ? this.decodeTxArr(data.txs) : [];
         const txCount = header.num_txs;
 
         // build response object
@@ -404,36 +468,53 @@ export class StreamServer {
             lastBlockHeight,
             lastBlockUnixTime,
             lastBlockAppHash,
-            lastBlockDataHash,
+
+            // below is for when 'block_data' does not change between blocks
+            lastBlockDataHash: lastBlockDataHash ? lastBlockDataHash : null,
             lastBlockProposer,
             txCount,
+
+            // array of txs (if present)
+            txs
         }
 
-        // emit event with data
+        // emit event with block data
         this.newBlockEmitter.emit("newBlock", outputObject);
-
-        // for now, just log the object
-        // console.log(`\n${JSON.stringify(outputObject, null, 2)}`);
         return;
     }
 
     /**
      * Subscribes to the "NewBlock" event over the ABCI server.
      * 
-     * @todo move subscribe options somewhere else 
+     * @param name the name of the tendermint ABCI event to subscribe to
+     * 
+     * @todo move subscribe options somewhere else
+     * @todo define valid tm event (name param)
      */
-    private subscribeToNewBlock(): void {
+    private subscribeToParadigmCoreEvent(name: string): void {
+        // TEMPORARY
+        // @todo remove line below (eventually)
+        if (name !== "NewBlock") { 
+            console.log("DEV: temporarily ignoring non 'NewBlock' event.");
+            return;
+        }
+
         // return if not ready to receive data
         if (this.abciConn.readyState !== 1) return;
 
+        // pick a random-ism session id that starts with a string
+        this.abciSessionId = `id${Math.floor((Math.random() * 9000) + 1000)}`;
+
         // subscribe options
         const subscribeOptions = {
-            "method":"subscribe",
-            "jsonrpc":"2.0",
-            "params":["tm.event='NewBlock'"],
+            method: "subscribe",
+            jsonrpc: "2.0",
+            params: [
+                `tm.event='${name}'`
+            ],
             
             // indicate primary connection ID
-            "id":"main"
+            id: this.abciSessionId,
         };
 
         // send subscribe message
@@ -441,7 +522,7 @@ export class StreamServer {
         return;
     }
 
-    // public funcs below
+    // PUBLIC FUNCTIONS BELOW
 
     /**
      * Returns the connection state of the ABCI WebSocket connection.

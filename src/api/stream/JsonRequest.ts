@@ -36,7 +36,7 @@ export class JsonRequest {
     /**
      * Parsed request object.
      */
-    private parsed: IParsedRequest;
+    public parsed: IParsedRequest;
 
     /**
      * The first validation error encountered, if any.

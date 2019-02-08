@@ -93,8 +93,7 @@ export function deliverOrder(tx: SignedOrderTx, state: State, Order) {
         state.posters[poster].orderLimit > 0n
     ) {
         // Hash order to generate orderID
-        const orderCopy = order.toJSON();
-        orderCopy.id = Hasher.hashOrder(order);
+        order.id = Hasher.hashOrder(order);
 
         // Begin state modification
         state.posters[poster].orderLimit -= 1;
@@ -104,11 +103,11 @@ export function deliverOrder(tx: SignedOrderTx, state: State, Order) {
         // add tags (for stream/search)
         tags.push({
             key: Buffer.from("order.id"),
-            value: Buffer.from(orderCopy.id)
+            value: Buffer.from(order.id)
         });
 
         log("state", msg.abci.messages.verified);
-        return Vote.valid(`orderID: ${orderCopy.id}`, tags);
+        return Vote.valid(`orderID: ${order.id}`, tags);
     } else {
         // No stake or insufficient quota remaining
         warn("state", msg.abci.messages.noStake);
