@@ -20,6 +20,9 @@ NOTES:
   - New Blocks (and just header data: height, hash, etc.)
   - Orders (will transmit upon each non-empty block)
 6. Look into heartbeat message
+
+7. add filters
+8. add ability to select compressed or uncompressed tx's
 */
 
 // request class
