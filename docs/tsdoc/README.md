@@ -1,6 +1,8 @@
 
-ParadigmCore
+ParadigmContracts
 =================
+
+ParadigmContracts is currently primarily used as in internal repository. In the future this may be used as a mono-repo and/or be more relevant to outside contributors. These contracts are used to support the inner workings of the OrderStream network and transaction routing for the paradigm-connect library. These contracts are still under active development and may change extensively at any time.
 
 ## Index
 

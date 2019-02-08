@@ -32,7 +32,7 @@
 
 ⊕ **new JsonResponse**(options: *`IResponseOptions`*): [JsonResponse](_src_api_stream_jsonresponse_.jsonresponse.md)
 
-*Defined in [src/api/stream/JsonResponse.ts:4](https://github.com/paradigmfoundation/paradigmcore/blob/673c168/src/api/stream/JsonResponse.ts#L4)*
+*Defined in [src/api/stream/JsonResponse.ts:4](https://github.com/paradigmfoundation/paradigmcore/blob/9a91704/src/api/stream/JsonResponse.ts#L4)*
 
 **Parameters:**
 
@@ -52,7 +52,7 @@ ___
 
 **● error**: *`any`* =  null
 
-*Defined in [src/api/stream/JsonResponse.ts:4](https://github.com/paradigmfoundation/paradigmcore/blob/673c168/src/api/stream/JsonResponse.ts#L4)*
+*Defined in [src/api/stream/JsonResponse.ts:4](https://github.com/paradigmfoundation/paradigmcore/blob/9a91704/src/api/stream/JsonResponse.ts#L4)*
 
 ___
 <a id="id"></a>
@@ -61,7 +61,7 @@ ___
 
 **● id**: *`string`* =  null
 
-*Defined in [src/api/stream/JsonResponse.ts:2](https://github.com/paradigmfoundation/paradigmcore/blob/673c168/src/api/stream/JsonResponse.ts#L2)*
+*Defined in [src/api/stream/JsonResponse.ts:2](https://github.com/paradigmfoundation/paradigmcore/blob/9a91704/src/api/stream/JsonResponse.ts#L2)*
 
 ___
 <a id="result"></a>
@@ -70,7 +70,7 @@ ___
 
 **● result**: *`any`* =  null
 
-*Defined in [src/api/stream/JsonResponse.ts:3](https://github.com/paradigmfoundation/paradigmcore/blob/673c168/src/api/stream/JsonResponse.ts#L3)*
+*Defined in [src/api/stream/JsonResponse.ts:3](https://github.com/paradigmfoundation/paradigmcore/blob/9a91704/src/api/stream/JsonResponse.ts#L3)*
 
 ___
 
@@ -82,7 +82,7 @@ ___
 
 ▸ **toJSON**(): `IJsonResponse`
 
-*Defined in [src/api/stream/JsonResponse.ts:22](https://github.com/paradigmfoundation/paradigmcore/blob/673c168/src/api/stream/JsonResponse.ts#L22)*
+*Defined in [src/api/stream/JsonResponse.ts:22](https://github.com/paradigmfoundation/paradigmcore/blob/9a91704/src/api/stream/JsonResponse.ts#L22)*
 
 **Returns:** `IJsonResponse`
 

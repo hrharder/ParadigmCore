@@ -78,6 +78,7 @@ export class TxBroadcaster {
 
     /**
      * @interface `public async send(tx: SignedTransaction): Promise<any>`
+     * 
      * The `send()` method is the external API for broadcasting local ABCI
      * transactions. Provide the raw transaction object, and it will be encoded, compressed, and added to
      * the broadcast queue. 
