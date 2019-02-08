@@ -10,7 +10,8 @@
     "start": "node ./dist/index.js",
     "launch": "tsc && node ./dist/index.js",
     "reset": "./lib/tendermint/bin/tendermint unsafe_reset_all --home ./lib/tendermint",
-    "test": "jest"
+    "test": "jest",
+    "docs": "typedoc --theme markdown --out ./docs"
   },
   "repository": {
     "type": "git",
@@ -65,6 +66,8 @@
   "devDependencies": {
     "@types/jest": "^23.3.9",
     "jest": "^23.6.0",
-    "ts-jest": "^23.10.4"
+    "ts-jest": "^23.10.4",
+    "typedoc": "^0.14.2",
+    "typedoc-plugin-markdown": "^1.1.26"
   }
 }

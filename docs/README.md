@@ -1,52 +1,50 @@
+
+ParadigmContracts
+=================
+
+ParadigmContracts is currently primarily used as in internal repository. In the future this may be used as a mono-repo and/or be more relevant to outside contributors. These contracts are used to support the inner workings of the OrderStream network and transaction routing for the paradigm-connect library. These contracts are still under active development and may change extensively at any time.
+
+## Index
+
+### External modules
+
+* ["node_modules/paradigm-contracts/build/contracts/ParadigmStake"](modules/_node_modules_paradigm_contracts_build_contracts_paradigmstake_.md)
+* ["src/api/post/HttpMessage"](modules/_src_api_post_httpmessage_.md)
+* ["src/api/post/HttpServer"](modules/_src_api_post_httpserver_.md)
+* ["src/api/stream/JsonRequest"](modules/_src_api_stream_jsonrequest_.md)
+* ["src/api/stream/JsonResponse"](modules/_src_api_stream_jsonresponse_.md)
+* ["src/api/stream/StreamServer"](modules/_src_api_stream_streamserver_.md)
+* ["src/api/stream/api"](modules/_src_api_stream_api_.md)
+* ["src/api/stream/test"](modules/_src_api_stream_test_.md)
+* ["src/common/Codes"](modules/_src_common_codes_.md)
+* ["src/common/Queue"](modules/_src_common_queue_.md)
+* ["src/common/log"](modules/_src_common_log_.md)
+* ["src/common/log"](modules/_src_common_log_.md)
+* ["src/common/static/bigIntUtils"](modules/_src_common_static_bigintutils_.md)
+* ["src/common/static/messages"](modules/_src_common_static_messages_.md)
+* ["src/core/beginBlock"](modules/_src_core_beginblock_.md)
+* ["src/core/checkTx"](modules/_src_core_checktx_.md)
+* ["src/core/commit"](modules/_src_core_commit_.md)
+* ["src/core/deliverTx"](modules/_src_core_delivertx_.md)
+* ["src/core/endBlock"](modules/_src_core_endblock_.md)
+* ["src/core/handlers/order"](modules/_src_core_handlers_order_.md)
+* ["src/core/handlers/rebalance"](modules/_src_core_handlers_rebalance_.md)
+* ["src/core/handlers/stream"](modules/_src_core_handlers_stream_.md)
+* ["src/core/handlers/witness"](modules/_src_core_handlers_witness_.md)
+* ["src/core/info"](modules/_src_core_info_.md)
+* ["src/core/initChain"](modules/_src_core_initchain_.md)
+* ["src/core/main"](modules/_src_core_main_.md)
+* ["src/core/util/TxBroadcaster"](modules/_src_core_util_txbroadcaster_.md)
+* ["src/core/util/TxGenerator"](modules/_src_core_util_txgenerator_.md)
+* ["src/core/util/Vote"](modules/_src_core_util_vote_.md)
+* ["src/core/util/utils"](modules/_src_core_util_utils_.md)
+* ["src/core/util/valFunctions"](modules/_src_core_util_valfunctions_.md)
+* ["src/crypto/Hasher"](modules/_src_crypto_hasher_.md)
+* ["src/crypto/PayloadCipher"](modules/_src_crypto_payloadcipher_.md)
+* ["src/index"](modules/_src_index_.md)
+* ["src/state/commitState"](modules/_src_state_commitstate_.md)
+* ["src/state/deliverState"](modules/_src_state_deliverstate_.md)
+* ["src/witness/Witness"](modules/_src_witness_witness_.md)
+
 ---
-title: Overview
----
 
-# ParadigmCore
-
-ParadigmCore is the reference implementation of the OrderStream (OS) network. To read more about OS network and the high-level functionality the software enables, check out the Paradigm Protocol [whitepaper.](https://paradigm.market/whitepaper) An introduction to the protocol as a whole can be found [here](/overview/). Additional documentation and tutorials will be published over the coming weeks and months.
-
-ParadigmCore is built on [Tendermint](https://tendermint.com/), which it uses for networking and BFT consensus.
-
-Jump into ParadigmCore by following one of the links below:
-- [Quick start (install/setup)](./install.md)
-- [Run a full node (tutorial)](./tutorial.md)
-- [Source code (on GitHub)](https://github.com/ParadigmFoundation/ParadigmCore)
-
-## Current features
-
-Non-exhaustive list of ParadigmCore functionality.
-
-- Robust one-way [communication "bridge"](https://github.com/ParadigmFoundation/ParadigmCore/blob/master/spec/ethereum-peg-spec.md) between Ethereum and ParadigmCore
-- Securely and consistently replicate state across node instances
-- Security guaranteed by signatures from all network participants
-- Fully compliant Tendermint ABCI transactional state machine
-- Dynamic setup script for "easy" configuration
-- Event based `order-stream` API served over WS
-- REST API for submitting orders over HTTP to validator nodes
-
-## Features in-progress
-
-- Dynamic validator set curation based on the [`ValidatorRegistry` contract](https://github.com/ParadigmFoundation/ParadigmContracts/blob/master/internal)
-- More expansive WebSocket API allowing full access to the state and valid orders
-- Self-administered error resolution for various network errors
-- Segregated-witness style `order` transaction separation (conserves blockchain space)
-- Dockerfile for ParadigmCore
-- KV based indexing for historical transactions
-- Golang implementation of ParadigmCore
-
-## Order books and storage
-The OrderStream network design follows a partially-synchronous and event-driven architecture, with strong consistency guarantees provided by the underlying Tendermint consensus protocol. The network and client implementations are specifically designed for order message broadcast. As such, ParadigmCore does not include a database interface (by default) or offer query functionality for historical orders. Instead it provides a simple "event stream" that allows for applications to derive order books in real time that can be stored in an out-of-state database.
-
-We have released one database driver so far, [`OrderStream-SRA`](https://github.com/ParadigmFoundation/OrderStream-SRA). It subscribes to a full or validating OrderStream node's WebSocket endpoint, and derives an order book of valid, executable [0x](https://0x.org) order messages. `OrderStream-SRA` serves this order book through a [0x Standard Relayer API](https://github.com/0xProject/standard-relayer-api) compliant interface. You can preview a live version of this software at [sra.zaidan.io/v2/](https://sra.zaidan.io/v2/). 
-
-## Issues and proposals
-ParadigmCore is under active development, and at this point should not be considered stable. If you find a bug, inconsistency, or vulnerability please open an [issue](https://github.com/paradigmfoundation/paradigmcore/issues).
-
-If you encounter errors setting up or running setting up ParadigmCore, feel free to reach out on [our chat server.](https://chat.paradigm.market/)
-
-## License
-
-ParadigmCore granted to the public domain, under a [CC0 license.](https://www.github.com/paradigmfoundation/paradigmcore/blob/master/LICENSE)
-
-Proposals for improvements and enhancements to the protocol are highly encouraged. If you have a suggestion or specification, please submit a [Paradigm Improvement Proposal](https://github.com/paradigmfoundation/pips) (PIP). 

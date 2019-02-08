@@ -28,7 +28,7 @@ const err = m => console.log(`\n\t${c.red.bold(m)}`);
 
 // initially required variables
 const reqVars = [
-    "NODE_TYPE", "WEB3_PROVIDER", "API_PORT", "WS_PORT", "WINDOW_MS", "WINDOW_MAX",
+    "NODE_TYPE", "WEB3_PROVIDER", "POST_PORT", "STREAM_PORT", "WINDOW_MS", "WINDOW_MAX",
     "ABCI_HOST", "ABCI_RPC_PORT", "ABCI_PORT", "PERIOD_LENGTH", "PERIOD_LIMIT",
     "FINALITY_THRESHOLD", "MAX_ORDER_SIZE", "SIG_ENC", "MONIKER"
 ]
