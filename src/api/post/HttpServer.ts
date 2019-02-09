@@ -25,7 +25,7 @@ import * as helmet from "helmet";
 // ParadigmCore classes and imports
 import { TxBroadcaster } from "../../core/util/TxBroadcaster";
 import { TxGenerator } from "../../core/util/TxGenerator";
-import { err, log } from "../../common/log";
+import { err, warn, log } from "../../common/log";
 import { messages as msg } from "../../common/static/messages";
 import { HttpMessage as Message } from "./HttpMessage";
 
@@ -103,7 +103,7 @@ async function postHandler(req: Request, res: Response, next: NextFunction) {
  * General error handler.
  */
 function errorHandler(error: Error, req: Request, res: Response, next: NextFunction) {
-    console.log("in err handler:" + error);
+    warn("api", `POST request failed with: ${error.message}`);
     try {
         Message.staticSendError(res, `request failed with error: ${error.message}`, 500);
     } catch (caughtError) {

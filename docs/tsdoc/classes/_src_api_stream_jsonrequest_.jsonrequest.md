@@ -47,7 +47,7 @@ See: [https://www.jsonrpc.org/specification](https://www.jsonrpc.org/specificati
 
 ⊕ **new JsonRequest**(input: *`string`*): [JsonRequest](_src_api_stream_jsonrequest_.jsonrequest.md)
 
-*Defined in [src/api/stream/JsonRequest.ts:50](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/JsonRequest.ts#L50)*
+*Defined in [src/api/stream/JsonRequest.ts:50](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/api/stream/JsonRequest.ts#L50)*
 
 Create a new JSONRPC request instance.
 
@@ -69,7 +69,7 @@ ___
 
 **● err**: *`ValidationError`*
 
-*Defined in [src/api/stream/JsonRequest.ts:44](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/JsonRequest.ts#L44)*
+*Defined in [src/api/stream/JsonRequest.ts:44](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/api/stream/JsonRequest.ts#L44)*
 
 The first validation error encountered, if any.
 
@@ -80,7 +80,7 @@ ___
 
 **● parsed**: *`IParsedRequest`*
 
-*Defined in [src/api/stream/JsonRequest.ts:39](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/JsonRequest.ts#L39)*
+*Defined in [src/api/stream/JsonRequest.ts:39](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/api/stream/JsonRequest.ts#L39)*
 
 Parsed request object.
 
@@ -91,7 +91,7 @@ ___
 
 **● raw**: *`string`*
 
-*Defined in [src/api/stream/JsonRequest.ts:34](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/JsonRequest.ts#L34)*
+*Defined in [src/api/stream/JsonRequest.ts:34](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/api/stream/JsonRequest.ts#L34)*
 
 Raw input string, deleted after parsing.
 
@@ -102,7 +102,7 @@ ___
 
 **● valid**: *`boolean`*
 
-*Defined in [src/api/stream/JsonRequest.ts:50](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/JsonRequest.ts#L50)*
+*Defined in [src/api/stream/JsonRequest.ts:50](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/api/stream/JsonRequest.ts#L50)*
 
 Set to true or false depending on result of `JsonRequest.prototype. validate()`, and set to `null` beforehand.
 
@@ -113,7 +113,7 @@ ___
 
 **● api**: *`IStreamAPI`* =  api
 
-*Defined in [src/api/stream/JsonRequest.ts:29](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/JsonRequest.ts#L29)*
+*Defined in [src/api/stream/JsonRequest.ts:29](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/api/stream/JsonRequest.ts#L29)*
 
 Stream API definition JSON.
 
@@ -127,7 +127,7 @@ ___
 
 ▸ **addValErr**(code: *`string`*, msg?: *`string`*): `void`
 
-*Defined in [src/api/stream/JsonRequest.ts:194](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/JsonRequest.ts#L194)*
+*Defined in [src/api/stream/JsonRequest.ts:196](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/api/stream/JsonRequest.ts#L196)*
 
 Add a newly detected validation error to the array of detected errors.
 
@@ -147,7 +147,7 @@ ___
 
 ▸ **close**(err?: *`ValidationError`*): `any`
 
-*Defined in [src/api/stream/JsonRequest.ts:207](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/JsonRequest.ts#L207)*
+*Defined in [src/api/stream/JsonRequest.ts:209](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/api/stream/JsonRequest.ts#L209)*
 
 Finish a validation and set the result to prevent future testing.
 
@@ -166,7 +166,7 @@ ___
 
 ▸ **toJSON**(): `IParsedRequest`
 
-*Defined in [src/api/stream/JsonRequest.ts:66](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/JsonRequest.ts#L66)*
+*Defined in [src/api/stream/JsonRequest.ts:66](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/api/stream/JsonRequest.ts#L66)*
 
 Generate valid JSON object only will necessary params.
 
@@ -179,7 +179,7 @@ ___
 
 ▸ **validate**(): `ValidationError`
 
-*Defined in [src/api/stream/JsonRequest.ts:76](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/JsonRequest.ts#L76)*
+*Defined in [src/api/stream/JsonRequest.ts:76](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/api/stream/JsonRequest.ts#L76)*
 
 Trigger validation steps.
 
@@ -194,7 +194,7 @@ ___
 
 ▸ **validateExpParam**(key: *`string`*, rgxp: *`string`*, code: *`string`*, log: *`string`*): `void`
 
-*Defined in [src/api/stream/JsonRequest.ts:165](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/JsonRequest.ts#L165)*
+*Defined in [src/api/stream/JsonRequest.ts:167](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/api/stream/JsonRequest.ts#L167)*
 
 Validate params that can be validated via regular expression testing.
 
@@ -216,7 +216,7 @@ ___
 
 ▸ **validateMethodParams**(method?: *`string`*, params?: *`IParam`*): `void`
 
-*Defined in [src/api/stream/JsonRequest.ts:155](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/JsonRequest.ts#L155)*
+*Defined in [src/api/stream/JsonRequest.ts:157](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/api/stream/JsonRequest.ts#L157)*
 
 Not implemented yet.
 
@@ -236,7 +236,7 @@ ___
 
 ▸ **validateOptionParam**(code: *`string`*, options: *`string`[]*, query: *`string`*): `void`
 
-*Defined in [src/api/stream/JsonRequest.ts:180](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/JsonRequest.ts#L180)*
+*Defined in [src/api/stream/JsonRequest.ts:182](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/api/stream/JsonRequest.ts#L182)*
 
 Validate a param where the possible values are contained within `options`.
 
@@ -257,7 +257,7 @@ ___
 
 ▸ **validateRequestProperties**(prop: *`IRequestProperty`*): `void`
 
-*Defined in [src/api/stream/JsonRequest.ts:110](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/JsonRequest.ts#L110)*
+*Defined in [src/api/stream/JsonRequest.ts:110](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/api/stream/JsonRequest.ts#L110)*
 
 Not implemented yet.
 

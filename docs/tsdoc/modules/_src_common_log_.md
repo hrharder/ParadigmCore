@@ -28,7 +28,7 @@
 
 **● level**: *`number`* =  process.env.LOG_LEVEL ? parseInt(process.env.LOG_LEVEL, 10) : 0
 
-*Defined in [src/common/log.ts:5](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/common/log.ts#L5)*
+*Defined in [src/common/log.ts:5](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/common/log.ts#L5)*
 
 ___
 <a id="version"></a>
@@ -37,7 +37,7 @@ ___
 
 **● version**: *`string`* =  process.env.npm_package_version
 
-*Defined in [src/common/log.ts:6](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/common/log.ts#L6)*
+*Defined in [src/common/log.ts:6](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/common/log.ts#L6)*
 
 ___
 
@@ -49,7 +49,7 @@ ___
 
 ▸ **err**(mod: *`string`*, msg: *`string`*): `void`
 
-*Defined in [src/common/log.ts:69](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/common/log.ts#L69)*
+*Defined in [src/common/log.ts:69](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/common/log.ts#L69)*
 
 **Parameters:**
 
@@ -67,7 +67,7 @@ ___
 
 ▸ **log**(mod: *`string`*, msg: *`string`*, height?: *`number`*, hash?: *`string`*): `void`
 
-*Defined in [src/common/log.ts:39](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/common/log.ts#L39)*
+*Defined in [src/common/log.ts:39](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/common/log.ts#L39)*
 
 **Parameters:**
 
@@ -87,7 +87,7 @@ ___
 
 ▸ **logStart**(msg?: *`any`*): `void`
 
-*Defined in [src/common/log.ts:19](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/common/log.ts#L19)*
+*Defined in [src/common/log.ts:19](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/common/log.ts#L19)*
 
 **Parameters:**
 
@@ -104,7 +104,7 @@ ___
 
 ▸ **print**(msg: *`any`*, lvl: *`any`*): `void`
 
-*Defined in [src/common/log.ts:13](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/common/log.ts#L13)*
+*Defined in [src/common/log.ts:13](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/common/log.ts#L13)*
 
 **Parameters:**
 
@@ -122,7 +122,7 @@ ___
 
 ▸ **ts**(): `string`
 
-*Defined in [src/common/log.ts:8](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/common/log.ts#L8)*
+*Defined in [src/common/log.ts:8](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/common/log.ts#L8)*
 
 **Returns:** `string`
 
@@ -133,7 +133,7 @@ ___
 
 ▸ **warn**(mod: *`string`*, msg: *`string`*): `void`
 
-*Defined in [src/common/log.ts:56](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/common/log.ts#L56)*
+*Defined in [src/common/log.ts:56](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/common/log.ts#L56)*
 
 **Parameters:**
 

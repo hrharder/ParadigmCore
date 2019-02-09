@@ -21,7 +21,7 @@ import { Vote } from "../util/Vote";
 // ParadigmCore utilities
 import { err, log, warn } from "../../common/log";
 import { messages as msg } from "../../common/static/messages";
-import { verifyOrder } from "../util/utils";
+import { verifyOrder, newKVPair } from "../util/utils";
 
 /**
  * Performs light verification of OrderBroadcast transactions before accepting
@@ -101,10 +101,8 @@ export function deliverOrder(tx: SignedOrderTx, state: State, Order) {
         // End state modification
 
         // add tags (for stream/search)
-        tags.push({
-            key: Buffer.from("order.id"),
-            value: Buffer.from(order.id)
-        });
+        const tag = newKVPair("order.id", order.id);
+        tags.push(tag);
 
         log("state", msg.abci.messages.verified);
         return Vote.valid(`orderID: ${order.id}`, tags);

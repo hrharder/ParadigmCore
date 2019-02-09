@@ -137,7 +137,7 @@ export class StreamServer {
      * 
      * @param timeout number of times to attempt ABCI connection.
      */
-    public async start(timeout: number = 2000): Promise<void> {
+    public async start(timeout): Promise<void> {
         try {
             // connect to ABCI server over WS
             const res = await this.connectAbci(timeout);

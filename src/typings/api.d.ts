@@ -16,7 +16,7 @@ interface Client {
 } 
 
 
-interface ConnectionMap {
+type ConnectionMap = {
     [id: string]: any;
 }
 

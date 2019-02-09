@@ -94,6 +94,18 @@ export function decodeTx(raw: Buffer): SignedTransaction {
 }
 
 /**
+ * Returns an ABCI transaction/event tag (as in ResponseDelverTx)
+ * 
+ * @param _key key string (to be encoded)
+ * @param _value value (must be string or number) to be encoded
+ */
+export function newKVPair(_key: string, _value: string | number): KVPair {
+    const key = Buffer.from(_key);
+    const value = Buffer.from(_value.toString());
+    return { key, value };
+}
+
+/**
  * Compute the witness confirmation threshold based on number of active
  * validators.
  *

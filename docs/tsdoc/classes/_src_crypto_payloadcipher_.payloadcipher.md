@@ -34,7 +34,7 @@ Provides static methods for encoding/compressing and decoding/decompressing tran
 
 **● inEncoding**: *`string`* = "utf8"
 
-*Defined in [src/crypto/PayloadCipher.ts:163](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/crypto/PayloadCipher.ts#L163)*
+*Defined in [src/crypto/PayloadCipher.ts:163](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/crypto/PayloadCipher.ts#L163)*
 
 ___
 <a id="outencoding"></a>
@@ -43,7 +43,7 @@ ___
 
 **● outEncoding**: *`string`* = "base64"
 
-*Defined in [src/crypto/PayloadCipher.ts:166](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/crypto/PayloadCipher.ts#L166)*
+*Defined in [src/crypto/PayloadCipher.ts:166](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/crypto/PayloadCipher.ts#L166)*
 
 ___
 
@@ -55,7 +55,7 @@ ___
 
 ▸ **ABCIdecode**(inBuff: *`Buffer`*): `SignedTransaction`
 
-*Defined in [src/crypto/PayloadCipher.ts:155](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/crypto/PayloadCipher.ts#L155)*
+*Defined in [src/crypto/PayloadCipher.ts:155](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/crypto/PayloadCipher.ts#L155)*
 
 ABCIdecode (public static method): Use to decode an incoming Buffer as delivered via Tendermint core.
 
@@ -74,7 +74,7 @@ ___
 
 ▸ **decodeToObject**(input: *`string`*): `SignedTransaction`
 
-*Defined in [src/crypto/PayloadCipher.ts:126](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/crypto/PayloadCipher.ts#L126)*
+*Defined in [src/crypto/PayloadCipher.ts:126](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/crypto/PayloadCipher.ts#L126)*
 
 Construct transaction object from encoded and compressed string.
 
@@ -93,7 +93,7 @@ ___
 
 ▸ **decodeToString**(input: *`string`*): `string`
 
-*Defined in [src/crypto/PayloadCipher.ts:106](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/crypto/PayloadCipher.ts#L106)*
+*Defined in [src/crypto/PayloadCipher.ts:106](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/crypto/PayloadCipher.ts#L106)*
 
 Construct decoded and decompressed output string from encoded and compressed input.
 
@@ -112,7 +112,7 @@ ___
 
 ▸ **encodeFromObject**(payload: *`object`*): `string`
 
-*Defined in [src/crypto/PayloadCipher.ts:62](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/crypto/PayloadCipher.ts#L62)*
+*Defined in [src/crypto/PayloadCipher.ts:62](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/crypto/PayloadCipher.ts#L62)*
 
 encodeFromObject (public static method): Construct encoded and compressed output string from raw input object.
 
@@ -131,7 +131,7 @@ ___
 
 ▸ **encodeFromString**(payload: *`string`*): `string`
 
-*Defined in [src/crypto/PayloadCipher.ts:84](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/crypto/PayloadCipher.ts#L84)*
+*Defined in [src/crypto/PayloadCipher.ts:84](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/crypto/PayloadCipher.ts#L84)*
 
 Construct encoded and compressed output string from raw input string.
 
@@ -150,7 +150,7 @@ ___
 
 ▸ **txEncodeFromObject**(payload: *`object`*): `string`
 
-*Defined in [src/crypto/PayloadCipher.ts:32](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/crypto/PayloadCipher.ts#L32)*
+*Defined in [src/crypto/PayloadCipher.ts:32](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/crypto/PayloadCipher.ts#L32)*
 
 Construct encoded and compressed output string from raw input object. This method implements a replacer to allow serialization of objects containing `bigint` types.
 

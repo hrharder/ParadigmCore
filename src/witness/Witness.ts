@@ -24,6 +24,7 @@ import Web3 = require("web3");
 import { WebsocketProvider } from "web3/providers";
 
 // ParadigmCore modules/classes
+import * as WebSocket from "ws";
 import ParadigmStakeInfo = require("paradigm-contracts/build/contracts/ParadigmStake.json");
 import { TxGenerator } from "src/core/util/TxGenerator";
 import { TxBroadcaster } from "../core/util/TxBroadcaster";
@@ -123,41 +124,88 @@ export class Witness {
      * End static methods.
      *
      * Instance methods and variables below.
-     */
-
-    // Rebalancer instance status
-    private initialized: boolean;   // True if .initialize() successful
-    private started: boolean;       // True if .start() successful
-
-    // Web3 instance variables
-    private web3provider: URL;  // Web3 provider URI
-    private web3: Web3;         // Web3 instance
-
-    // Ethereum related variables
-    private finalityThreshold: number;  // Block maturity threshold
-    private initHeight: number;         // Ethereum height upon initialization
-    private currHeight: number;         // Best known ETH block
-
-    // Staking period parameters
-    private periodNumber: number;   // Incremental period counter
-    private periodLength: number;   // Length of each period in ETH blocks
-    private periodLimit: number;    // Transactions accepted each period
-    private periodStart: number;    // Current period start height
-    private periodEnd: number;      // Current period ending height
-
-    // Staking contract configuration
-    private stakeContract: any;    // Staking contract instance
-
-    // Tendermint ABCI utility classes
-    private broadcaster: TxBroadcaster; // ABCI Tx broadcaster and queue
-    private generatorator: TxGenerator;   // Builds and signs transactions
-
-    // Event, balance and limit mappings (out-of-state)
-    private events: any;        // Events pending maturity threshold
-    private posterBalances: PosterBalances; // The address:stake_amount mapping
+    **/
 
     /**
-     * PRIVATE constructor. Do not use. Create new rebalancers with
+     * Boolean value that indicates weather or not `.initialize()` has been
+     * called sucessfully.
+     */
+    private initialized: boolean;
+
+    /**
+     * Boolean value that indicates if the instance is "listening" and attesting
+     * to (via ABCI transaction) Ethereum events.
+     */
+    private started: boolean;
+
+    /**
+     * URL of the configured `web3` provider.
+     */
+    private web3provider: URL;
+
+    /**
+     * The `web3.js` provider instance, configured when assigned based on
+     * witness configuration options.
+     */
+    private web3: Web3;
+
+    // ETHEREUM-RELATED 
+
+    /**
+     * THe currently agreed up block-maturation threshold for Ethereum events.
+     * This value should be agreed upon by all validators.
+     */
+    private finalityThreshold: number;
+
+    /**
+     * The height of the Ethereum blockchain when this `Witness` instance was 
+     * started. Used to check if historical events (before witness started) are
+     * confirmed or not.
+     */
+    private initHeight: number;
+
+    /** The "best" (highest) known height of the Ethereum blockchain. */
+    private currHeight: number;
+
+    // STAKING PERIOD PARAMETERS
+
+    /** The incremental number tracking the current rebalance period. */
+    private periodNumber: number;   
+
+    /** The length of the current period (in Ethereum blocks). */
+    private periodLength: number;
+    
+    /** The number of transactions accepted in a period. Used for rebalance. */
+    private periodLimit: number;
+
+    /** The block at which the current period ends. */
+    private periodStart: number;
+
+    /** The block at which current period ends. */
+    private periodEnd: number;
+
+    /** 
+     * The `web3.Contract` instance of the EventEmitter contract, used to
+     * interface with the paradigm contract system.
+     * 
+     * @todo update to `EventEmitter` contract
+     */
+    private stakeContract: any;
+
+    /** ABCI transaction broadcaster */
+    private broadcaster: TxBroadcaster;
+
+    /** ABCI transaction generator and signer (for validators). */
+    private generator: TxGenerator;
+
+    /** Mapping that tracks pending events from the Ethereum contracts. */
+    private events: any;
+
+    /** Mapping that tracks poster balances. Used to submit proposals. */
+    private posterBalances: PosterBalances;
+
+    /**
+     * PRIVATE constructor. Do not use. Create new `witness` instances with
      * Witness.create(options)
      *
      * @param opts {object} options object - see .create() docstring
@@ -177,7 +225,7 @@ export class Witness {
 
         // Local ABCI transaction broadcaster and generator
         this.broadcaster = opts.broadcaster;
-        this.generatorator = opts.generator;
+        this.generator = opts.generator;
 
         // Finality threshold
         this.finalityThreshold = opts.finalityThreshold;
@@ -638,7 +686,7 @@ export class Witness {
         }
 
         // Create and sign transaction object
-        const tx: SignedTransaction = this.generatorator.create({
+        const tx: SignedTransaction = this.generator.create({
             data: {
                 limits: map,
                 round: {
@@ -663,7 +711,7 @@ export class Witness {
     private execEventTx(event: WitnessData): void {
         // Create and sign transaction object
         const { subject, type, amount, block, address, publicKey, id } = event;
-        const tx = this.generatorator.create({
+        const tx = this.generator.create({
             data: {
                 subject,
                 type,

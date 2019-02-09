@@ -23,7 +23,7 @@ import { Vote } from "../util/Vote";
 // ParadigmCore utilities
 import { log, warn } from "../../common/log";
 import { messages as msg } from "../../common/static/messages";
-import { genLimits } from "../util/utils";
+import { genLimits, newKVPair } from "../util/utils";
 
 /**
  * Verify a Rebalance proposal before accepting it into the local mempool.
@@ -72,7 +72,9 @@ export function deliverRebalance(
 ) {
     // unpack proposal from transaction
     const proposal: RebalanceData = tx.data;
+    let tags: KVPair[] = [];
 
+    // @todo DRY
     // Main verification switch block
     switch (state.round.number) {
         // Initial rebalance period
@@ -91,12 +93,21 @@ export function deliverRebalance(
                 state.round.limit = proposal.round.limit;
                 // End state modification
 
+                // create tags based on accepted transaction
+                const txType = newKVPair("tx.type", "rebalance");
+                const rNumber = newKVPair("round.number", state.round.number);
+                const rStartBlock = newKVPair("round.start", state.round.startsAt);
+                const rEndBlock = newKVPair("round.end", state.round.endsAt);
+                
+                // add tags to be included in ABCI response
+                tags.push(txType, rNumber, rStartBlock, rEndBlock);
+
                 log("state", msg.rebalancer.messages.iAccept);
-                return Vote.valid();
+                return Vote.valid("proposal accepted.", tags);
             } else {
                 // Reject invalid initial rebalance proposal from mempool
                 warn("state", msg.rebalancer.messages.iReject);
-                return Vote.invalid();
+                return Vote.invalid("proposal rejected.");
             }
         }
 
@@ -127,9 +138,18 @@ export function deliverRebalance(
                     });
                     // End state modification
 
+                    // create tags based on accepted transaction
+                    const txType = newKVPair("tx.type", "rebalance");
+                    const rNumber = newKVPair("round.number", state.round.number);
+                    const rStartBlock = newKVPair("round.start", state.round.startsAt);
+                    const rEndBlock = newKVPair("round.end", state.round.endsAt);
+                    
+                    // add tags to be included in ABCI response
+                    tags.push(txType, rNumber, rStartBlock, rEndBlock);
+
                     // Vote to accept
                     log("state", msg.rebalancer.messages.accept);
-                    return Vote.valid(msg.rebalancer.messages.accept);
+                    return Vote.valid(msg.rebalancer.messages.accept, tags);
                 } else {
                     // Proposal does not match local mapping
                     warn("state", msg.rebalancer.messages.noMatch);

@@ -25,7 +25,7 @@ Contains static methods for responding to checkTx() and deliverTx().
 
 ▸ **invalid**(log?: *`string`*, tags?: *`KVPair`[]*): `object`
 
-*Defined in [src/core/util/Vote.ts:38](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/core/util/Vote.ts#L38)*
+*Defined in [src/core/util/Vote.ts:38](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/core/util/Vote.ts#L38)*
 
 Represents a Tendermint INVALID tx response message.
 
@@ -45,7 +45,7 @@ ___
 
 ▸ **valid**(log?: *`string`*, tags?: *`KVPair`[]*): `object`
 
-*Defined in [src/core/util/Vote.ts:24](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/core/util/Vote.ts#L24)*
+*Defined in [src/core/util/Vote.ts:24](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/core/util/Vote.ts#L24)*
 
 Represents a Tendermint VALID tx response message.
 

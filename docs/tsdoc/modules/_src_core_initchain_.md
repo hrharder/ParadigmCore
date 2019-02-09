@@ -18,7 +18,7 @@
 
 ▸ **initChainWrapper**(deliverState: *`State`*, commitState: *`State`*, params: *`ConsensusParams`*): `function`
 
-*Defined in [src/core/initChain.ts:28](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/core/initChain.ts#L28)*
+*Defined in [src/core/initChain.ts:28](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/core/initChain.ts#L28)*
 
 Called once upon chain initialization. Sets initial validators and consensus parameters.
 

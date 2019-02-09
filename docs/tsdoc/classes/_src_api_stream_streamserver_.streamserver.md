@@ -22,7 +22,9 @@ Allow access to various state events and blockchain data (WIP).
 * [abciSessionId](_src_api_stream_streamserver_.streamserver.md#abcisessionid)
 * [abciURL](_src_api_stream_streamserver_.streamserver.md#abciurl)
 * [clients](_src_api_stream_streamserver_.streamserver.md#clients)
+* [connections](_src_api_stream_streamserver_.streamserver.md#connections)
 * [host](_src_api_stream_streamserver_.streamserver.md#host)
+* [latestAbciData](_src_api_stream_streamserver_.streamserver.md#latestabcidata)
 * [newBlockEmitter](_src_api_stream_streamserver_.streamserver.md#newblockemitter)
 * [port](_src_api_stream_streamserver_.streamserver.md#port)
 * [retryCounter](_src_api_stream_streamserver_.streamserver.md#retrycounter)
@@ -36,17 +38,17 @@ Allow access to various state events and blockchain data (WIP).
 * [attachHandlersABCI](_src_api_stream_streamserver_.streamserver.md#attachhandlersabci)
 * [attemptConnection](_src_api_stream_streamserver_.streamserver.md#attemptconnection)
 * [clientErrorHandler](_src_api_stream_streamserver_.streamserver.md#clienterrorhandler)
-* [clientMessageHandlerABCI](_src_api_stream_streamserver_.streamserver.md#clientmessagehandlerabci)
 * [connectAbci](_src_api_stream_streamserver_.streamserver.md#connectabci)
 * [decodeTxArr](_src_api_stream_streamserver_.streamserver.md#decodetxarr)
 * [fatalCloseHandlerWrapper](_src_api_stream_streamserver_.streamserver.md#fatalclosehandlerwrapper)
 * [getAbciReadyState](_src_api_stream_streamserver_.streamserver.md#getabcireadystate)
 * [getUnixTimeFromISO](_src_api_stream_streamserver_.streamserver.md#getunixtimefromiso)
 * [handleClientMessageWrapper](_src_api_stream_streamserver_.streamserver.md#handleclientmessagewrapper)
-* [handleNewClient](_src_api_stream_streamserver_.streamserver.md#handlenewclient)
+* [handleNewABCIMessage](_src_api_stream_streamserver_.streamserver.md#handlenewabcimessage)
+* [handleNewSession](_src_api_stream_streamserver_.streamserver.md#handlenewsession)
 * [newBlockHandler](_src_api_stream_streamserver_.streamserver.md#newblockhandler)
 * [newConnHandlerWrapper](_src_api_stream_streamserver_.streamserver.md#newconnhandlerwrapper)
-* [sendMessageToClientByConn](_src_api_stream_streamserver_.streamserver.md#sendmessagetoclientbyconn)
+* [sendMessageToClient](_src_api_stream_streamserver_.streamserver.md#sendmessagetoclient)
 * [setupServer](_src_api_stream_streamserver_.streamserver.md#setupserver)
 * [start](_src_api_stream_streamserver_.streamserver.md#start)
 * [subscribeToParadigmCoreEvent](_src_api_stream_streamserver_.streamserver.md#subscribetoparadigmcoreevent)
@@ -61,7 +63,7 @@ Allow access to various state events and blockchain data (WIP).
 
 ⊕ **new StreamServer**(options: *`StreamServerOptions`*): [StreamServer](_src_api_stream_streamserver_.streamserver.md)
 
-*Defined in [src/api/stream/StreamServer.ts:93](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/StreamServer.ts#L93)*
+*Defined in [src/api/stream/StreamServer.ts:103](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/api/stream/StreamServer.ts#L103)*
 
 Instantiate a StreamServer.
 
@@ -83,7 +85,7 @@ ___
 
 **● abciConn**: *`WebSocket`*
 
-*Defined in [src/api/stream/StreamServer.ts:59](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/StreamServer.ts#L59)*
+*Defined in [src/api/stream/StreamServer.ts:59](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/api/stream/StreamServer.ts#L59)*
 
 Client connection to the Tendermint ABCI server.
 
@@ -94,7 +96,7 @@ ___
 
 **● abciSessionId**: *`string`*
 
-*Defined in [src/api/stream/StreamServer.ts:62](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/StreamServer.ts#L62)*
+*Defined in [src/api/stream/StreamServer.ts:62](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/api/stream/StreamServer.ts#L62)*
 
 Session ID string for ABCI WebSocket connection.
 
@@ -105,7 +107,7 @@ ___
 
 **● abciURL**: *`URL`*
 
-*Defined in [src/api/stream/StreamServer.ts:65](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/StreamServer.ts#L65)*
+*Defined in [src/api/stream/StreamServer.ts:65](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/api/stream/StreamServer.ts#L65)*
 
 ABCI server URI/L (supplied during construction).
 
@@ -116,9 +118,18 @@ ___
 
 **● clients**: *`ClientMap`*
 
-*Defined in [src/api/stream/StreamServer.ts:88](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/StreamServer.ts#L88)*
+*Defined in [src/api/stream/StreamServer.ts:96](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/api/stream/StreamServer.ts#L96)*
 
 Client tracking object.
+
+___
+<a id="connections"></a>
+
+### `<Private>` connections
+
+**● connections**: *`ConnectionMap`*
+
+*Defined in [src/api/stream/StreamServer.ts:98](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/api/stream/StreamServer.ts#L98)*
 
 ___
 <a id="host"></a>
@@ -127,9 +138,22 @@ ___
 
 **● host**: *`string`*
 
-*Defined in [src/api/stream/StreamServer.ts:85](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/StreamServer.ts#L85)*
+*Defined in [src/api/stream/StreamServer.ts:93](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/api/stream/StreamServer.ts#L93)*
 
 Host to bind StreamServer to, defaults to 'localhost'
+
+___
+<a id="latestabcidata"></a>
+
+### `<Private>` latestAbciData
+
+**● latestAbciData**: *`any`*
+
+*Defined in [src/api/stream/StreamServer.ts:73](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/api/stream/StreamServer.ts#L73)*
+
+The latest data from the ABCI server, updated each time a new block is committed.
+
+*__todo__*: create interface def.
 
 ___
 <a id="newblockemitter"></a>
@@ -138,7 +162,7 @@ ___
 
 **● newBlockEmitter**: *`EventEmitter`*
 
-*Defined in [src/api/stream/StreamServer.ts:93](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/StreamServer.ts#L93)*
+*Defined in [src/api/stream/StreamServer.ts:103](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/api/stream/StreamServer.ts#L103)*
 
 EventEmitter to track new block messages from ABCI connection.
 
@@ -149,7 +173,7 @@ ___
 
 **● port**: *`number`*
 
-*Defined in [src/api/stream/StreamServer.ts:82](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/StreamServer.ts#L82)*
+*Defined in [src/api/stream/StreamServer.ts:90](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/api/stream/StreamServer.ts#L90)*
 
 Port to serve StreamAPI on.
 
@@ -160,7 +184,7 @@ ___
 
 **● retryCounter**: *`number`*
 
-*Defined in [src/api/stream/StreamServer.ts:71](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/StreamServer.ts#L71)*
+*Defined in [src/api/stream/StreamServer.ts:79](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/api/stream/StreamServer.ts#L79)*
 
 Counts the number of attempts made during re-connection.
 
@@ -171,7 +195,7 @@ ___
 
 **● retryInterval**: *`number`*
 
-*Defined in [src/api/stream/StreamServer.ts:74](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/StreamServer.ts#L74)*
+*Defined in [src/api/stream/StreamServer.ts:82](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/api/stream/StreamServer.ts#L82)*
 
 Interval (in ms) between ABCI reconnect attempts.
 
@@ -182,7 +206,7 @@ ___
 
 **● retryTimeout**: *`number`*
 
-*Defined in [src/api/stream/StreamServer.ts:68](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/StreamServer.ts#L68)*
+*Defined in [src/api/stream/StreamServer.ts:76](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/api/stream/StreamServer.ts#L76)*
 
 Number of times to try to reconnect to ABCI upon closure.
 
@@ -193,7 +217,7 @@ ___
 
 **● server**: *`Server`*
 
-*Defined in [src/api/stream/StreamServer.ts:79](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/StreamServer.ts#L79)*
+*Defined in [src/api/stream/StreamServer.ts:87](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/api/stream/StreamServer.ts#L87)*
 
 WebSocket server instance.
 
@@ -204,7 +228,7 @@ ___
 
 **● api**: *`IStreamAPI`* =  api
 
-*Defined in [src/api/stream/StreamServer.ts:54](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/StreamServer.ts#L54)*
+*Defined in [src/api/stream/StreamServer.ts:54](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/api/stream/StreamServer.ts#L54)*
 
 StreamAPI request/method definitions.
 
@@ -218,7 +242,7 @@ ___
 
 ▸ **attachHandlersABCI**(timeout?: *`number`*): `void`
 
-*Defined in [src/api/stream/StreamServer.ts:327](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/StreamServer.ts#L327)*
+*Defined in [src/api/stream/StreamServer.ts:355](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/api/stream/StreamServer.ts#L355)*
 
 Attach handlers to a successful ABCI socket connection emitter.
 
@@ -235,9 +259,9 @@ ___
 
 ### `<Private>` attemptConnection
 
-▸ **attemptConnection**(resolve: *`Function`*, reject: *`Function`*, timer: *`any`*): `void`
+▸ **attemptConnection**(resolve: *`Function`*, timer: *`any`*): `void`
 
-*Defined in [src/api/stream/StreamServer.ts:297](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/StreamServer.ts#L297)*
+*Defined in [src/api/stream/StreamServer.ts:325](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/api/stream/StreamServer.ts#L325)*
 
 Attempt an individual connection to the ABCI server.
 
@@ -246,7 +270,6 @@ Attempt an individual connection to the ABCI server.
 | Name | Type | Description |
 | ------ | ------ | ------ |
 | resolve | `Function` |  resolve handler from timeout promise |
-| reject | `Function` |  reject handler from timeout promise |
 | timer | `any` |  the interval timer object currently in use |
 
 **Returns:** `void`
@@ -258,7 +281,7 @@ ___
 
 ▸ **clientErrorHandler**(msg: *`string`*): `void`
 
-*Defined in [src/api/stream/StreamServer.ts:374](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/StreamServer.ts#L374)*
+*Defined in [src/api/stream/StreamServer.ts:402](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/api/stream/StreamServer.ts#L402)*
 
 Will be the error handler for client (and ABCI?) errors.
 
@@ -273,32 +296,13 @@ Will be the error handler for client (and ABCI?) errors.
 **Returns:** `void`
 
 ___
-<a id="clientmessagehandlerabci"></a>
-
-### `<Private>` clientMessageHandlerABCI
-
-▸ **clientMessageHandlerABCI**(data: *`string`*): `void`
-
-*Defined in [src/api/stream/StreamServer.ts:383](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/StreamServer.ts#L383)*
-
-Handles incoming data from ABCI WebSocket connection.
-
-**Parameters:**
-
-| Name | Type | Description |
-| ------ | ------ | ------ |
-| data | `string` |  received data from ABCI WebSocket connection. |
-
-**Returns:** `void`
-
-___
 <a id="connectabci"></a>
 
 ### `<Private>` connectAbci
 
 ▸ **connectAbci**(timeout: *`number`*): `Promise`<`string`>
 
-*Defined in [src/api/stream/StreamServer.ts:264](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/StreamServer.ts#L264)*
+*Defined in [src/api/stream/StreamServer.ts:293](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/api/stream/StreamServer.ts#L293)*
 
 Trigger a series of attempts to connect to the WebSocket ABCI endpoint.
 
@@ -317,7 +321,7 @@ ___
 
 ▸ **decodeTxArr**(txs: *`string`[]*): `string`[]
 
-*Defined in [src/api/stream/StreamServer.ts:427](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/StreamServer.ts#L427)*
+*Defined in [src/api/stream/StreamServer.ts:455](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/api/stream/StreamServer.ts#L455)*
 
 Decode and decompress a raw encoded/compressed tx array.
 
@@ -336,7 +340,7 @@ ___
 
 ▸ **fatalCloseHandlerWrapper**(timeout: *`number`*): `function`
 
-*Defined in [src/api/stream/StreamServer.ts:352](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/StreamServer.ts#L352)*
+*Defined in [src/api/stream/StreamServer.ts:380](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/api/stream/StreamServer.ts#L380)*
 
 Handler for a failed n(th) reconnect attempt.
 
@@ -357,7 +361,7 @@ ___
 
 ▸ **getAbciReadyState**(): `number`
 
-*Defined in [src/api/stream/StreamServer.ts:523](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/StreamServer.ts#L523)*
+*Defined in [src/api/stream/StreamServer.ts:552](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/api/stream/StreamServer.ts#L552)*
 
 Returns the connection state of the ABCI WebSocket connection.
 
@@ -370,7 +374,7 @@ ___
 
 ▸ **getUnixTimeFromISO**(isoDate: *`string`*): `string`
 
-*Defined in [src/api/stream/StreamServer.ts:417](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/StreamServer.ts#L417)*
+*Defined in [src/api/stream/StreamServer.ts:445](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/api/stream/StreamServer.ts#L445)*
 
 Convert an ISO date string to a UNIX timestamp string.
 
@@ -387,26 +391,45 @@ ___
 
 ### `<Private>` handleClientMessageWrapper
 
-▸ **handleClientMessageWrapper**(conn: *`WebSocket`*): `function`
+▸ **handleClientMessageWrapper**(ssID: *`string`*): `function`
 
-*Defined in [src/api/stream/StreamServer.ts:180](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/StreamServer.ts#L180)*
+*Defined in [src/api/stream/StreamServer.ts:198](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/api/stream/StreamServer.ts#L198)*
 
 **Parameters:**
 
 | Name | Type |
 | ------ | ------ |
-| conn | `WebSocket` |
+| ssID | `string` |
 
 **Returns:** `function`
 
 ___
-<a id="handlenewclient"></a>
+<a id="handlenewabcimessage"></a>
 
-### `<Private>` handleNewClient
+### `<Private>` handleNewABCIMessage
 
-▸ **handleNewClient**(conn: *`WebSocket`*, req: *`IParsedRequest`*): `void`
+▸ **handleNewABCIMessage**(data: *`string`*): `void`
 
-*Defined in [src/api/stream/StreamServer.ts:214](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/StreamServer.ts#L214)*
+*Defined in [src/api/stream/StreamServer.ts:411](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/api/stream/StreamServer.ts#L411)*
+
+Handles incoming data from ABCI WebSocket connection.
+
+**Parameters:**
+
+| Name | Type | Description |
+| ------ | ------ | ------ |
+| data | `string` |  received data from ABCI WebSocket connection. |
+
+**Returns:** `void`
+
+___
+<a id="handlenewsession"></a>
+
+### `<Private>` handleNewSession
+
+▸ **handleNewSession**(ssID: *`string`*, req: *`IParsedRequest`*): `void`
+
+*Defined in [src/api/stream/StreamServer.ts:248](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/api/stream/StreamServer.ts#L248)*
 
 Handler for new client connections.
 
@@ -416,7 +439,7 @@ Handler for new client connections.
 
 | Name | Type | Description |
 | ------ | ------ | ------ |
-| conn | `WebSocket` |  connection instance |
+| ssID | `string` |  server-side connection id |
 | req | `IParsedRequest` |  connection request object |
 
 **Returns:** `void`
@@ -428,7 +451,7 @@ ___
 
 ▸ **newBlockHandler**(res: *`any`*): `void`
 
-*Defined in [src/api/stream/StreamServer.ts:456](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/StreamServer.ts#L456)*
+*Defined in [src/api/stream/StreamServer.ts:484](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/api/stream/StreamServer.ts#L484)*
 
 Handler for new block events.
 
@@ -447,7 +470,7 @@ ___
 
 ▸ **newConnHandlerWrapper**(): `function`
 
-*Defined in [src/api/stream/StreamServer.ts:165](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/StreamServer.ts#L165)*
+*Defined in [src/api/stream/StreamServer.ts:177](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/api/stream/StreamServer.ts#L177)*
 
 Returns a function to be used as the new connection handler.
 
@@ -456,21 +479,21 @@ Exists as a wrapper to carry over 'this' into handler scope.
 **Returns:** `function`
 
 ___
-<a id="sendmessagetoclientbyconn"></a>
+<a id="sendmessagetoclient"></a>
 
-### `<Private>` sendMessageToClientByConn
+### `<Private>` sendMessageToClient
 
-▸ **sendMessageToClientByConn**(conn: *`WebSocket`*, res: *`Response`*): `void`
+▸ **sendMessageToClient**(ssID: *`string`*, res: *`Response`*): `void`
 
-*Defined in [src/api/stream/StreamServer.ts:252](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/StreamServer.ts#L252)*
+*Defined in [src/api/stream/StreamServer.ts:279](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/api/stream/StreamServer.ts#L279)*
 
-Send a JSON response to a client identified by connection object.
+Send a JSON response to a client identified by server-side ID string.
 
 **Parameters:**
 
 | Name | Type | Description |
 | ------ | ------ | ------ |
-| conn | `WebSocket` |  the socket instance |
+| ssID | `string` |  the server-side client ID string |
 | res | `Response` |  a JsonResponse object |
 
 **Returns:** `void`
@@ -482,7 +505,7 @@ ___
 
 ▸ **setupServer**(options: *`any`*): `void`
 
-*Defined in [src/api/stream/StreamServer.ts:155](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/StreamServer.ts#L155)*
+*Defined in [src/api/stream/StreamServer.ts:167](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/api/stream/StreamServer.ts#L167)*
 
 Setup and configure the StreamAPI WebSocket server (and handlers).
 
@@ -499,17 +522,17 @@ ___
 
 ###  start
 
-▸ **start**(timeout?: *`number`*): `Promise`<`void`>
+▸ **start**(timeout: *`any`*): `Promise`<`void`>
 
-*Defined in [src/api/stream/StreamServer.ts:128](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/StreamServer.ts#L128)*
+*Defined in [src/api/stream/StreamServer.ts:140](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/api/stream/StreamServer.ts#L140)*
 
 Start StreamServer; connect to the ABCI server over WebSocket, and start the StreamAPI server.
 
 **Parameters:**
 
-| Name | Type | Default value | Description |
-| ------ | ------ | ------ | ------ |
-| `Default value` timeout | `number` | 2000 |  number of times to attempt ABCI connection. |
+| Name | Type | Description |
+| ------ | ------ | ------ |
+| timeout | `any` |  number of times to attempt ABCI connection. |
 
 **Returns:** `Promise`<`void`>
 
@@ -520,7 +543,7 @@ ___
 
 ▸ **subscribeToParadigmCoreEvent**(name: *`string`*): `void`
 
-*Defined in [src/api/stream/StreamServer.ts:487](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/StreamServer.ts#L487)*
+*Defined in [src/api/stream/StreamServer.ts:516](https://github.com/paradigmfoundation/paradigmcore/blob/d73b640/src/api/stream/StreamServer.ts#L516)*
 
 Subscribes to the "NewBlock" event over the ABCI server.
 
