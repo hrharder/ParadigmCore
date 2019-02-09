@@ -26,7 +26,8 @@
                 "valRegEx": null,
                 "valArr": [
                     "session.start",
-                    "session.end"
+                    "session.end",
+                    "subscription.start"
                 ],
                 "errCode": "-32600",
                 "errInfo":  "invalid or unknown method."
@@ -48,6 +49,10 @@
             },
             {
                 "name": "session.end",
+                "params": []
+            },
+            {
+                "name": "subscription.start",
                 "params": []
             }
         ]

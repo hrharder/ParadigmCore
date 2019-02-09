@@ -64,6 +64,14 @@ export class StreamServer {
     /** ABCI server URI/L (supplied during construction). */
     private abciURL: URL;
 
+    /** 
+     * The latest data from the ABCI server, updated each time a new block is
+     * committed. 
+     * 
+     * @todo create interface def.
+     **/
+    private latestAbciData: any;
+
     /** Number of times to try to reconnect to ABCI upon closure. */
     private retryTimeout: number;
 
@@ -103,6 +111,7 @@ export class StreamServer {
         // validate URL
         this.abciURL = new URL(options.abciURL);
         this.abciSessionId = null;
+        this.latestAbciData = null;
 
         // set number of times to try to reconnect ABCI WS upon conn drop
         this.retryTimeout = options.retryTimeout || 25;
@@ -169,6 +178,7 @@ export class StreamServer {
         return (conn: WebSocket) => {
 
             // handles messages from the client
+            // @todo - move to method, make more meaningful hash/id etc
             const id = `id${Math.floor((Math.random() * 90000) + 10000)}`
 
             this.connections[id] = conn;
@@ -185,7 +195,7 @@ export class StreamServer {
 
     // @todo implement, generalize 'newConnHandlerWrapper' further?
     // @id is server-side
-    private handleClientMessageWrapper(id: string): (m: string) => void {
+    private handleClientMessageWrapper(ssID: string): (m: string) => void {
         return (msg: string) => {
             let res;
             const req = new Request(msg);
@@ -194,20 +204,31 @@ export class StreamServer {
             // respond with val error, if present
             if (error) {
                 res = new Response({ error });
-                this.sendMessageToClientByConn(this.connections[id], res);
+                this.sendMessageToClient(ssID, res);
                 return;
             } 
 
             // is new client if ID is not found in mapping already
             switch (req.parsed.method) {
                 case "session.start": {
-                    this.handleNewSession(id, req.parsed);
+                    this.handleNewSession(ssID, req.parsed);
                     return;
                 }
                 case "session.end": {
                     // @ todo require the session to have been started
-                    this.connections[id].close();
+                    this.connections[ssID].close();
                     return;
+                }
+
+                // this is an irresponsible hack. make better asap.
+                case "subscription.start": {
+                    this.newBlockEmitter.on("newBlock", (data) => { 
+                        const res = new Response({
+                            id: req.parsed.id,
+                            result: data.txs
+                        });
+                        this.sendMessageToClient(ssID, res);
+                    });
                 }
                 default: {
                     warn("api", `unknown method '${req.parsed.method}' call from: '${req.parsed.id}'`);
@@ -240,16 +261,6 @@ export class StreamServer {
                 method,
                 params,
             }
-            
-            // @todo remove
-            // temporarily demonstrates functionality
-            /*this.newBlockEmitter.on("newBlock", (blockData) => {
-                const res = new Response({
-                    id,
-                    result: blockData
-                });
-                this.sendMessageToClientByConn(conn, res);
-            });*/
 
             const result = `session ${id} starting. End with 'session.end' method.`;
             res = new Response({ id, result });
@@ -262,26 +273,13 @@ export class StreamServer {
     /**
      * Send a JSON response to a client identified by server-side ID string.
      * 
-     * @param id the socket instance
+     * @param ssID the server-side client ID string
      * @param res a JsonResponse object
      */
-    private sendMessageToClient(id: string, res: Response) {
+    private sendMessageToClient(ssID: string, res: Response) {
         // @todo make sure to properly handle disconnects
-        const conn = this.connections[id];
+        const conn = this.connections[ssID];
         if (!conn) return;
-        if(conn.readyState !== conn.OPEN) { return; }
-        conn.send(JSON.stringify(res));
-        return;
-    }
-
-    /**
-     * Send a JSON response to a client identified by connection object.
-     * 
-     * @param conn the socket instance
-     * @param res a JsonResponse object
-     */
-    private sendMessageToClientByConn(conn: WebSocket, res: Response) {
-        // @todo make sure to properly handle disconnects
         if(conn.readyState !== conn.OPEN) { return; }
         conn.send(JSON.stringify(res));
         return;
@@ -311,7 +309,7 @@ export class StreamServer {
                     this.abciConn.removeEventListener("open");
                 }
 
-                this.attemptConnection(resolve, reject, timer);
+                this.attemptConnection(resolve, timer);
 
                 // this.retryInterval can be configured upon construction
             }, this.retryInterval);
@@ -322,10 +320,9 @@ export class StreamServer {
      * Attempt an individual connection to the ABCI server.
      * 
      * @param resolve resolve handler from timeout promise
-     * @param reject reject handler from timeout promise
      * @param timer the interval timer object currently in use
      */
-    private attemptConnection(resolve: Function, reject: Function, timer): void {
+    private attemptConnection(resolve: Function, timer): void {
         this.retryCounter++;
         this.abciConn = new WebSocket(this.abciURL.href);
         // this.abciConn.removeAllListeners();
@@ -365,7 +362,7 @@ export class StreamServer {
         // message handler wrapper
         // @todo validate message data-type
         this.abciConn.on("message", (data: string) => {
-            this.clientMessageHandlerABCI(data);
+            this.handleNewABCIMessage(data);
         });
 
         // close connection handler wrapper
@@ -411,7 +408,7 @@ export class StreamServer {
      * 
      * @param data received data from ABCI WebSocket connection.
      */
-    private clientMessageHandlerABCI(data: string): void {
+    private handleNewABCIMessage(data: string): void {
         const parsed = JSON.parse(data);
 
         // ignore ABCI messages that are not events (temporary?)
@@ -433,7 +430,7 @@ export class StreamServer {
             }
 
             default: {
-                warn("api", "ABCI response message type not implemented.");
+                warn("api", "received non-implemented ABCI response message type.");
                 break;
             }
         }
@@ -503,6 +500,7 @@ export class StreamServer {
         }
 
         // emit event with block data
+        this.latestAbciData = abciData;
         this.newBlockEmitter.emit("newBlock", abciData);
         return;
     }

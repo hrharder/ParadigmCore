@@ -10,8 +10,9 @@ interface ClientMap extends Object {
     [id: string]: Client;
 }
 
+// @todo improve
 interface Client {
-
+    [key: string]: any
 } 
 
 
