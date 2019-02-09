@@ -1,4 +1,4 @@
-[paradigm-contracts](../README.md) > ["src/api/stream/JsonRequest"](../modules/_src_api_stream_jsonrequest_.md)
+[ParadigmCore](../README.md) > ["src/api/stream/JsonRequest"](../modules/_src_api_stream_jsonrequest_.md)
 
 # External module: "src/api/stream/JsonRequest"
 

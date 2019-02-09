@@ -10,7 +10,14 @@ interface ClientMap extends Object {
     [id: string]: Client;
 }
 
-interface Client {} 
+interface Client {
+
+} 
+
+
+interface ConnectionMap {
+    [id: string]: any;
+}
 
 interface IResponseOptions {
     id?: string;
@@ -43,7 +50,7 @@ interface IRequestProperty {
 
 interface IRequestMethod {
     name:           string;
-    description:    string;
+    description?:    string;
     params:         IRequestProperty[];
 }
 

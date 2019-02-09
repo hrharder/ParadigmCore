@@ -1,4 +1,4 @@
-[paradigm-contracts](../README.md) > ["src/core/handlers/stream"](../modules/_src_core_handlers_stream_.md)
+[ParadigmCore](../README.md) > ["src/core/handlers/stream"](../modules/_src_core_handlers_stream_.md)
 
 # External module: "src/core/handlers/stream"
 
@@ -19,7 +19,7 @@
 
 ▸ **checkStream**(tx: *`SignedStreamTx`*, state: *`State`*): `object`
 
-*Defined in [src/core/handlers/stream.ts:31](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/core/handlers/stream.ts#L31)*
+*Defined in [src/core/handlers/stream.ts:31](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/core/handlers/stream.ts#L31)*
 
 Used to perform mempool verification of StreamBroadcast transactions.
 
@@ -39,7 +39,7 @@ ___
 
 ▸ **deliverStream**(tx: *`SignedStreamTx`*, state: *`State`*): `object`
 
-*Defined in [src/core/handlers/stream.ts:42](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/core/handlers/stream.ts#L42)*
+*Defined in [src/core/handlers/stream.ts:42](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/core/handlers/stream.ts#L42)*
 
 Execute StreamBroadcast transactions in full, and perform state modification.
 

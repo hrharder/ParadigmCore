@@ -1,4 +1,4 @@
-[paradigm-contracts](../README.md) > ["src/core/checkTx"](../modules/_src_core_checktx_.md)
+[ParadigmCore](../README.md) > ["src/core/checkTx"](../modules/_src_core_checktx_.md)
 
 # External module: "src/core/checkTx"
 
@@ -18,7 +18,7 @@
 
 ▸ **checkTxWrapper**(state: *`State`*, Order: *`any`*): `function`
 
-*Defined in [src/core/checkTx.ts:42](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/core/checkTx.ts#L42)*
+*Defined in [src/core/checkTx.ts:42](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/core/checkTx.ts#L42)*
 
 Perform light verification on incoming transactions, accept valid transactions to the mempool, and reject invalid ones.
 

@@ -1,7 +1,7 @@
 export class JsonResponse {
     private id: string = null;
     private result: any = null;
-    private error: any = null;
+    private error: ValidationError = null;
 
     constructor(options: IResponseOptions) {
         const { id, result, error } = options;

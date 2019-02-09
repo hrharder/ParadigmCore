@@ -7,7 +7,7 @@
  *
  * @author Henry Harder
  * @date (initial)  05-February-2019
- * @date (modified) 06-February-2018
+ * @date (modified) 08-February-2018
 **/
 
 /*
@@ -87,6 +87,8 @@ export class StreamServer {
     /** Client tracking object. */
     private clients: ClientMap;
 
+    private connections: ConnectionMap;
+
     // EMITTERS, ETC.
 
     /** EventEmitter to track new block messages from ABCI connection. */
@@ -113,6 +115,7 @@ export class StreamServer {
 
         // create empty obj for client map
         this.clients = {};
+        this.connections = {}
 
         // server options
         this.port = options.port;
@@ -166,7 +169,11 @@ export class StreamServer {
         return (conn: WebSocket) => {
 
             // handles messages from the client
-            conn.on("message", this.handleClientMessageWrapper(conn));
+            const id = `id${Math.floor((Math.random() * 90000) + 10000)}`
+
+            this.connections[id] = conn;
+
+            conn.on("message", this.handleClientMessageWrapper(id));
 
             /*
             @todo implement following and others (?)
@@ -177,7 +184,8 @@ export class StreamServer {
     }
 
     // @todo implement, generalize 'newConnHandlerWrapper' further?
-    private handleClientMessageWrapper(conn: WebSocket): (m: string) => void {
+    // @id is server-side
+    private handleClientMessageWrapper(id: string): (m: string) => void {
         return (msg: string) => {
             let res;
             const req = new Request(msg);
@@ -186,20 +194,25 @@ export class StreamServer {
             // respond with val error, if present
             if (error) {
                 res = new Response({ error });
-                this.sendMessageToClientByConn(conn, res);
-            }
+                this.sendMessageToClientByConn(this.connections[id], res);
+                return;
+            } 
 
             // is new client if ID is not found in mapping already
-            if (!this.clients.hasOwnProperty(req.parsed.id)) {
-                const reqJSON = req.toJSON();
-                this.handleNewClient(conn, reqJSON);
-
-                // @todo remove
-                log("api", `new client added with id: '${req.parsed.id}'`);
-            } else {
-
-                //@todo handle 0+nth messages
-                log("api", `request from client with id '${req.parsed.id}'`);
+            switch (req.parsed.method) {
+                case "session.start": {
+                    this.handleNewSession(id, req.parsed);
+                    return;
+                }
+                case "session.end": {
+                    // @ todo require the session to have been started
+                    this.connections[id].close();
+                    return;
+                }
+                default: {
+                    warn("api", `unknown method '${req.parsed.method}' call from: '${req.parsed.id}'`);
+                    return;
+                }
             }
         }
     }
@@ -208,10 +221,10 @@ export class StreamServer {
      * Handler for new client connections.
      * @todo remove hard-coded stuff
      * 
-     * @param conn connection instance
+     * @param ssID server-side connection id
      * @param req connection request object
      */
-    private handleNewClient(conn: WebSocket, req: IParsedRequest): void {
+    private handleNewSession(ssID: string, req: IParsedRequest): void {
         let res;
         const { id, method, params } = req;
         if (this.clients.hasOwnProperty(id)) {
@@ -222,25 +235,43 @@ export class StreamServer {
             res = new Response({ error });
         } else {
             this.clients[id] = {
-                conn, 
+                conn: this.connections[ssID],
+                ssID, 
                 method,
                 params,
             }
             
             // @todo remove
             // temporarily demonstrates functionality
-            this.newBlockEmitter.on("newBlock", (blockData) => {
+            /*this.newBlockEmitter.on("newBlock", (blockData) => {
                 const res = new Response({
                     id,
                     result: blockData
                 });
                 this.sendMessageToClientByConn(conn, res);
-            });
+            });*/
 
-            const result = "session initiated.";
+            const result = `session ${id} starting. End with 'session.end' method.`;
             res = new Response({ id, result });
+            log("api", `new client added with id: '${id}'`);
         }
-        this.sendMessageToClientByConn(conn, res);
+        this.sendMessageToClient(ssID, res);
+    }
+    
+
+    /**
+     * Send a JSON response to a client identified by server-side ID string.
+     * 
+     * @param id the socket instance
+     * @param res a JsonResponse object
+     */
+    private sendMessageToClient(id: string, res: Response) {
+        // @todo make sure to properly handle disconnects
+        const conn = this.connections[id];
+        if (!conn) return;
+        if(conn.readyState !== conn.OPEN) { return; }
+        conn.send(JSON.stringify(res));
+        return;
     }
 
     /**

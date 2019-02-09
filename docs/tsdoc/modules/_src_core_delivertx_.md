@@ -1,4 +1,4 @@
-[paradigm-contracts](../README.md) > ["src/core/deliverTx"](../modules/_src_core_delivertx_.md)
+[ParadigmCore](../README.md) > ["src/core/deliverTx"](../modules/_src_core_delivertx_.md)
 
 # External module: "src/core/deliverTx"
 
@@ -18,7 +18,7 @@
 
 ▸ **deliverTxWrapper**(state: *`State`*, msg: *`LogTemplates`*, Order: *`any`*): `function`
 
-*Defined in [src/core/deliverTx.ts:35](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/core/deliverTx.ts#L35)*
+*Defined in [src/core/deliverTx.ts:35](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/core/deliverTx.ts#L35)*
 
 Execute a transaction in full: perform state modification, and verify transaction validity.
 

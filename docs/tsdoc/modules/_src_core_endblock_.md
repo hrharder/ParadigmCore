@@ -1,4 +1,4 @@
-[paradigm-contracts](../README.md) > ["src/core/endBlock"](../modules/_src_core_endblock_.md)
+[ParadigmCore](../README.md) > ["src/core/endBlock"](../modules/_src_core_endblock_.md)
 
 # External module: "src/core/endBlock"
 
@@ -18,7 +18,7 @@
 
 ▸ **endBlockWrapper**(state: *`State`*): `function`
 
-*Defined in [src/core/endBlock.ts:20](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/core/endBlock.ts#L20)*
+*Defined in [src/core/endBlock.ts:20](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/core/endBlock.ts#L20)*
 
 **Parameters:**
 

@@ -1,4 +1,4 @@
-[paradigm-contracts](../README.md) > ["src/core/util/TxGenerator"](../modules/_src_core_util_txgenerator_.md)
+[ParadigmCore](../README.md) > ["src/core/util/TxGenerator"](../modules/_src_core_util_txgenerator_.md)
 
 # External module: "src/core/util/TxGenerator"
 

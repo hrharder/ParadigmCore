@@ -1,4 +1,4 @@
-[paradigm-contracts](../README.md) > ["src/crypto/Hasher"](../modules/_src_crypto_hasher_.md)
+[ParadigmCore](../README.md) > ["src/crypto/Hasher"](../modules/_src_crypto_hasher_.md)
 
 # External module: "src/crypto/Hasher"
 

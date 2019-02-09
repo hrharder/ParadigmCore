@@ -1,4 +1,4 @@
-[paradigm-contracts](../README.md) > ["src/api/stream/test"](../modules/_src_api_stream_test_.md)
+[ParadigmCore](../README.md) > ["src/api/stream/test"](../modules/_src_api_stream_test_.md)
 
 # External module: "src/api/stream/test"
 
@@ -18,7 +18,7 @@
 
 **test**: *`object`*
 
-*Defined in [src/api/stream/test.ts:1](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/api/stream/test.ts#L1)*
+*Defined in [src/api/stream/test.ts:1](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/test.ts#L1)*
 
 <a id="test.codes"></a>
 
@@ -26,7 +26,7 @@
 
 **codes**: *`object`*
 
-*Defined in [src/api/stream/test.ts:74](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/api/stream/test.ts#L74)*
+*Defined in [src/api/stream/test.ts:74](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/test.ts#L74)*
 
 <a id="test.codes._32600"></a>
 
@@ -34,7 +34,7 @@
 
 **-32600**: *`object`*
 
-*Defined in [src/api/stream/test.ts:79](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/api/stream/test.ts#L79)*
+*Defined in [src/api/stream/test.ts:79](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/test.ts#L79)*
 
 <a id="test.codes._32600.info"></a>
 
@@ -42,7 +42,7 @@
 
 **● info**: *`string`* = "Invalid request: "
 
-*Defined in [src/api/stream/test.ts:81](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/api/stream/test.ts#L81)*
+*Defined in [src/api/stream/test.ts:81](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/test.ts#L81)*
 
 ___
 <a id="test.codes._32600.name"></a>
@@ -51,7 +51,7 @@ ___
 
 **● name**: *`string`* = "REQUEST"
 
-*Defined in [src/api/stream/test.ts:80](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/api/stream/test.ts#L80)*
+*Defined in [src/api/stream/test.ts:80](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/test.ts#L80)*
 
 ___
 
@@ -62,7 +62,7 @@ ___
 
 **-32601**: *`object`*
 
-*Defined in [src/api/stream/test.ts:83](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/api/stream/test.ts#L83)*
+*Defined in [src/api/stream/test.ts:83](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/test.ts#L83)*
 
 <a id="test.codes._32601.info-1"></a>
 
@@ -70,7 +70,7 @@ ___
 
 **● info**: *`string`* = "Method not found: "
 
-*Defined in [src/api/stream/test.ts:85](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/api/stream/test.ts#L85)*
+*Defined in [src/api/stream/test.ts:85](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/test.ts#L85)*
 
 ___
 <a id="test.codes._32601.name-1"></a>
@@ -79,7 +79,7 @@ ___
 
 **● name**: *`string`* = "METHOD"
 
-*Defined in [src/api/stream/test.ts:84](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/api/stream/test.ts#L84)*
+*Defined in [src/api/stream/test.ts:84](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/test.ts#L84)*
 
 ___
 
@@ -90,7 +90,7 @@ ___
 
 **-32602**: *`object`*
 
-*Defined in [src/api/stream/test.ts:87](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/api/stream/test.ts#L87)*
+*Defined in [src/api/stream/test.ts:87](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/test.ts#L87)*
 
 <a id="test.codes._32602.info-2"></a>
 
@@ -98,7 +98,7 @@ ___
 
 **● info**: *`string`* = "Invalid param: "
 
-*Defined in [src/api/stream/test.ts:89](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/api/stream/test.ts#L89)*
+*Defined in [src/api/stream/test.ts:89](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/test.ts#L89)*
 
 ___
 <a id="test.codes._32602.name-2"></a>
@@ -107,7 +107,7 @@ ___
 
 **● name**: *`string`* = "PARAM"
 
-*Defined in [src/api/stream/test.ts:88](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/api/stream/test.ts#L88)*
+*Defined in [src/api/stream/test.ts:88](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/test.ts#L88)*
 
 ___
 
@@ -118,7 +118,7 @@ ___
 
 **-32603**: *`object`*
 
-*Defined in [src/api/stream/test.ts:91](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/api/stream/test.ts#L91)*
+*Defined in [src/api/stream/test.ts:91](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/test.ts#L91)*
 
 <a id="test.codes._32603.info-3"></a>
 
@@ -126,7 +126,7 @@ ___
 
 **● info**: *`string`* = "Internal error: please try again later."
 
-*Defined in [src/api/stream/test.ts:93](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/api/stream/test.ts#L93)*
+*Defined in [src/api/stream/test.ts:93](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/test.ts#L93)*
 
 ___
 <a id="test.codes._32603.name-3"></a>
@@ -135,7 +135,7 @@ ___
 
 **● name**: *`string`* = "INTERNAL"
 
-*Defined in [src/api/stream/test.ts:92](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/api/stream/test.ts#L92)*
+*Defined in [src/api/stream/test.ts:92](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/test.ts#L92)*
 
 ___
 
@@ -146,7 +146,7 @@ ___
 
 **-32700**: *`object`*
 
-*Defined in [src/api/stream/test.ts:75](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/api/stream/test.ts#L75)*
+*Defined in [src/api/stream/test.ts:75](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/test.ts#L75)*
 
 <a id="test.codes._32700.info-4"></a>
 
@@ -154,7 +154,7 @@ ___
 
 **● info**: *`string`* = "Parse error: "
 
-*Defined in [src/api/stream/test.ts:77](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/api/stream/test.ts#L77)*
+*Defined in [src/api/stream/test.ts:77](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/test.ts#L77)*
 
 ___
 <a id="test.codes._32700.name-4"></a>
@@ -163,7 +163,7 @@ ___
 
 **● name**: *`string`* = "PARSE"
 
-*Defined in [src/api/stream/test.ts:76](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/api/stream/test.ts#L76)*
+*Defined in [src/api/stream/test.ts:76](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/test.ts#L76)*
 
 ___
 
@@ -176,7 +176,7 @@ ___
 
 **request**: *`object`*
 
-*Defined in [src/api/stream/test.ts:2](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/api/stream/test.ts#L2)*
+*Defined in [src/api/stream/test.ts:2](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/test.ts#L2)*
 
 <a id="test.request.methods"></a>
 
@@ -213,7 +213,7 @@ ___
             }
         ]
 
-*Defined in [src/api/stream/test.ts:43](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/api/stream/test.ts#L43)*
+*Defined in [src/api/stream/test.ts:43](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/test.ts#L43)*
 
 ___
 <a id="test.request.properties"></a>
@@ -261,7 +261,7 @@ ___
             }
         ]
 
-*Defined in [src/api/stream/test.ts:3](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/api/stream/test.ts#L3)*
+*Defined in [src/api/stream/test.ts:3](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/stream/test.ts#L3)*
 
 ___
 

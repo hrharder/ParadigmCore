@@ -1,4 +1,4 @@
-[paradigm-contracts](../README.md) > ["src/common/Queue"](../modules/_src_common_queue_.md)
+[ParadigmCore](../README.md) > ["src/common/Queue"](../modules/_src_common_queue_.md)
 
 # External module: "src/common/Queue"
 

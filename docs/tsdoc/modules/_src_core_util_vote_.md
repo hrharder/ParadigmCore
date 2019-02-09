@@ -1,4 +1,4 @@
-[paradigm-contracts](../README.md) > ["src/core/util/Vote"](../modules/_src_core_util_vote_.md)
+[ParadigmCore](../README.md) > ["src/core/util/Vote"](../modules/_src_core_util_vote_.md)
 
 # External module: "src/core/util/Vote"
 

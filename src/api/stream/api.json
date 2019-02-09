@@ -25,7 +25,8 @@
                 "type": "string",
                 "valRegEx": null,
                 "valArr": [
-                    "subscribe"
+                    "session.start",
+                    "session.end"
                 ],
                 "errCode": "-32600",
                 "errInfo":  "invalid or unknown method."
@@ -42,32 +43,12 @@
         ],
         "methods": [
             {
-                "name": "subscribe",
-                "description": "Subscribe to a specific event in the blockchain.",
-                "params": [
-                    {
-                        "key": "event",
-                        "required": true,
-                        "type": "string",
-                        "valRegEx": null,
-                        "valArr": [
-                            "newOrder",
-                            "newBlock",
-                            "newRates"
-                        ],
-                        "errCode": "-32602",
-                        "errInfo":  "missing or invalid value for 'event'."
-                    },
-                    {
-                        "key": "filter",
-                        "required": false,
-                        "type": "object",
-                        "valRegEx": null,
-                        "valArr": null,
-                        "errCode": "-32602",
-                        "errInfo":  "mutated or invalid value for 'filter'."
-                    }
-                ]
+                "name": "session.start",
+                "params": []
+            },
+            {
+                "name": "session.end",
+                "params": []
             }
         ]
     },

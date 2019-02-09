@@ -1,4 +1,4 @@
-[paradigm-contracts](../README.md) > ["src/core/handlers/order"](../modules/_src_core_handlers_order_.md)
+[ParadigmCore](../README.md) > ["src/core/handlers/order"](../modules/_src_core_handlers_order_.md)
 
 # External module: "src/core/handlers/order"
 
@@ -19,7 +19,7 @@
 
 ▸ **checkOrder**(tx: *`SignedOrderTx`*, state: *`State`*, Order: *`any`*): `object`
 
-*Defined in [src/core/handlers/order.ts:33](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/core/handlers/order.ts#L33)*
+*Defined in [src/core/handlers/order.ts:33](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/core/handlers/order.ts#L33)*
 
 Performs light verification of OrderBroadcast transactions before accepting to local mempool.
 
@@ -40,7 +40,7 @@ ___
 
 ▸ **deliverOrder**(tx: *`SignedOrderTx`*, state: *`State`*, Order: *`any`*): `object`
 
-*Defined in [src/core/handlers/order.ts:76](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/core/handlers/order.ts#L76)*
+*Defined in [src/core/handlers/order.ts:76](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/core/handlers/order.ts#L76)*
 
 Execute an OrderBroadcast transaction in full, and perform state modification.
 

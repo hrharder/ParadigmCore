@@ -1,4 +1,4 @@
-[paradigm-contracts](../README.md) > ["src/witness/Witness"](../modules/_src_witness_witness_.md) > [Witness](../classes/_src_witness_witness_.witness.md)
+[ParadigmCore](../README.md) > ["src/witness/Witness"](../modules/_src_witness_witness_.md) > [Witness](../classes/_src_witness_witness_.witness.md)
 
 # Class: Witness
 
@@ -64,7 +64,7 @@ See spec for more details.
 
 ⊕ **new Witness**(opts: *`any`*): [Witness](_src_witness_witness_.witness.md)
 
-*Defined in [src/witness/Witness.ts:157](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/witness/Witness.ts#L157)*
+*Defined in [src/witness/Witness.ts:157](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/witness/Witness.ts#L157)*
 
 PRIVATE constructor. Do not use. Create new rebalancers with Witness.create(options)
 
@@ -86,7 +86,7 @@ ___
 
 **● broadcaster**: *[TxBroadcaster](_src_core_util_txbroadcaster_.txbroadcaster.md)*
 
-*Defined in [src/witness/Witness.ts:152](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/witness/Witness.ts#L152)*
+*Defined in [src/witness/Witness.ts:152](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/witness/Witness.ts#L152)*
 
 ___
 <a id="currheight"></a>
@@ -95,7 +95,7 @@ ___
 
 **● currHeight**: *`number`*
 
-*Defined in [src/witness/Witness.ts:139](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/witness/Witness.ts#L139)*
+*Defined in [src/witness/Witness.ts:139](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/witness/Witness.ts#L139)*
 
 ___
 <a id="events"></a>
@@ -104,7 +104,7 @@ ___
 
 **● events**: *`any`*
 
-*Defined in [src/witness/Witness.ts:156](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/witness/Witness.ts#L156)*
+*Defined in [src/witness/Witness.ts:156](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/witness/Witness.ts#L156)*
 
 ___
 <a id="finalitythreshold"></a>
@@ -113,7 +113,7 @@ ___
 
 **● finalityThreshold**: *`number`*
 
-*Defined in [src/witness/Witness.ts:137](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/witness/Witness.ts#L137)*
+*Defined in [src/witness/Witness.ts:137](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/witness/Witness.ts#L137)*
 
 ___
 <a id="generatorator"></a>
@@ -122,7 +122,7 @@ ___
 
 **● generatorator**: *[TxGenerator](_src_core_util_txgenerator_.txgenerator.md)*
 
-*Defined in [src/witness/Witness.ts:153](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/witness/Witness.ts#L153)*
+*Defined in [src/witness/Witness.ts:153](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/witness/Witness.ts#L153)*
 
 ___
 <a id="initheight"></a>
@@ -131,7 +131,7 @@ ___
 
 **● initHeight**: *`number`*
 
-*Defined in [src/witness/Witness.ts:138](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/witness/Witness.ts#L138)*
+*Defined in [src/witness/Witness.ts:138](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/witness/Witness.ts#L138)*
 
 ___
 <a id="initialized"></a>
@@ -140,7 +140,7 @@ ___
 
 **● initialized**: *`boolean`*
 
-*Defined in [src/witness/Witness.ts:129](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/witness/Witness.ts#L129)*
+*Defined in [src/witness/Witness.ts:129](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/witness/Witness.ts#L129)*
 
 End static methods.
 
@@ -153,7 +153,7 @@ ___
 
 **● periodEnd**: *`number`*
 
-*Defined in [src/witness/Witness.ts:146](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/witness/Witness.ts#L146)*
+*Defined in [src/witness/Witness.ts:146](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/witness/Witness.ts#L146)*
 
 ___
 <a id="periodlength"></a>
@@ -162,7 +162,7 @@ ___
 
 **● periodLength**: *`number`*
 
-*Defined in [src/witness/Witness.ts:143](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/witness/Witness.ts#L143)*
+*Defined in [src/witness/Witness.ts:143](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/witness/Witness.ts#L143)*
 
 ___
 <a id="periodlimit"></a>
@@ -171,7 +171,7 @@ ___
 
 **● periodLimit**: *`number`*
 
-*Defined in [src/witness/Witness.ts:144](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/witness/Witness.ts#L144)*
+*Defined in [src/witness/Witness.ts:144](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/witness/Witness.ts#L144)*
 
 ___
 <a id="periodnumber"></a>
@@ -180,7 +180,7 @@ ___
 
 **● periodNumber**: *`number`*
 
-*Defined in [src/witness/Witness.ts:142](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/witness/Witness.ts#L142)*
+*Defined in [src/witness/Witness.ts:142](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/witness/Witness.ts#L142)*
 
 ___
 <a id="periodstart"></a>
@@ -189,7 +189,7 @@ ___
 
 **● periodStart**: *`number`*
 
-*Defined in [src/witness/Witness.ts:145](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/witness/Witness.ts#L145)*
+*Defined in [src/witness/Witness.ts:145](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/witness/Witness.ts#L145)*
 
 ___
 <a id="posterbalances"></a>
@@ -198,7 +198,7 @@ ___
 
 **● posterBalances**: *`PosterBalances`*
 
-*Defined in [src/witness/Witness.ts:157](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/witness/Witness.ts#L157)*
+*Defined in [src/witness/Witness.ts:157](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/witness/Witness.ts#L157)*
 
 ___
 <a id="stakecontract"></a>
@@ -207,7 +207,7 @@ ___
 
 **● stakeContract**: *`any`*
 
-*Defined in [src/witness/Witness.ts:149](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/witness/Witness.ts#L149)*
+*Defined in [src/witness/Witness.ts:149](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/witness/Witness.ts#L149)*
 
 ___
 <a id="started"></a>
@@ -216,7 +216,7 @@ ___
 
 **● started**: *`boolean`*
 
-*Defined in [src/witness/Witness.ts:130](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/witness/Witness.ts#L130)*
+*Defined in [src/witness/Witness.ts:130](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/witness/Witness.ts#L130)*
 
 ___
 <a id="web3"></a>
@@ -225,7 +225,7 @@ ___
 
 **● web3**: *`Web3`*
 
-*Defined in [src/witness/Witness.ts:134](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/witness/Witness.ts#L134)*
+*Defined in [src/witness/Witness.ts:134](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/witness/Witness.ts#L134)*
 
 ___
 <a id="web3provider"></a>
@@ -234,7 +234,7 @@ ___
 
 **● web3provider**: *`URL`*
 
-*Defined in [src/witness/Witness.ts:133](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/witness/Witness.ts#L133)*
+*Defined in [src/witness/Witness.ts:133](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/witness/Witness.ts#L133)*
 
 ___
 
@@ -246,7 +246,7 @@ ___
 
 ▸ **connectWeb3**(): `number`
 
-*Defined in [src/witness/Witness.ts:323](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/witness/Witness.ts#L323)*
+*Defined in [src/witness/Witness.ts:323](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/witness/Witness.ts#L323)*
 
 Used to create web3 instance (based on provider generated in `this.getProvider()` method).
 
@@ -259,7 +259,7 @@ ___
 
 ▸ **execAbciTx**(tx: *`SignedTransaction`*): `number`
 
-*Defined in [src/witness/Witness.ts:694](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/witness/Witness.ts#L694)*
+*Defined in [src/witness/Witness.ts:694](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/witness/Witness.ts#L694)*
 
 Encodes and compresses a transactions, then submits it to Tendermint via the broadcaster connection.
 
@@ -278,7 +278,7 @@ ___
 
 ▸ **execEventTx**(event: *`WitnessData`*): `void`
 
-*Defined in [src/witness/Witness.ts:663](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/witness/Witness.ts#L663)*
+*Defined in [src/witness/Witness.ts:663](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/witness/Witness.ts#L663)*
 
 Generate and send and event witness transaction.
 
@@ -297,7 +297,7 @@ ___
 
 ▸ **genRebalanceTx**(round: *`any`*, start: *`any`*, length: *`any`*): `SignedTransaction`
 
-*Defined in [src/witness/Witness.ts:629](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/witness/Witness.ts#L629)*
+*Defined in [src/witness/Witness.ts:629](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/witness/Witness.ts#L629)*
 
 Generates a rebalance transaction object by computing proportional allocation of transaction throughput based on stake size.
 
@@ -318,7 +318,7 @@ ___
 
 ▸ **getProvider**(): `WebsocketProvider`
 
-*Defined in [src/witness/Witness.ts:274](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/witness/Witness.ts#L274)*
+*Defined in [src/witness/Witness.ts:274](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/witness/Witness.ts#L274)*
 
 Used to connect to Web3 provider. Called during initialization, and if a web3 disconnect is detected.
 
@@ -331,7 +331,7 @@ ___
 
 ▸ **handleBlock**(error: *`any`*, res: *`any`*): `void`
 
-*Defined in [src/witness/Witness.ts:505](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/witness/Witness.ts#L505)*
+*Defined in [src/witness/Witness.ts:505](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/witness/Witness.ts#L505)*
 
 New Ethereum block event handler. Updates balances and executes ABCI transactions at appropriate finality blocks.
 
@@ -351,7 +351,7 @@ ___
 
 ▸ **handleStake**(error: *`any`*, res: *`any`*): `void`
 
-*Defined in [src/witness/Witness.ts:384](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/witness/Witness.ts#L384)*
+*Defined in [src/witness/Witness.ts:384](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/witness/Witness.ts#L384)*
 
 Stake event handler. NOTE: events are indexed by the block they occur in, not the finality block for that event.
 
@@ -371,7 +371,7 @@ ___
 
 ▸ **handleValidator**(error: *`any`*, res: *`any`*): `void`
 
-*Defined in [src/witness/Witness.ts:442](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/witness/Witness.ts#L442)*
+*Defined in [src/witness/Witness.ts:442](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/witness/Witness.ts#L442)*
 
 **Parameters:**
 
@@ -389,7 +389,7 @@ ___
 
 ▸ **initialize**(): `Promise`<`number`>
 
-*Defined in [src/witness/Witness.ts:200](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/witness/Witness.ts#L200)*
+*Defined in [src/witness/Witness.ts:200](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/witness/Witness.ts#L200)*
 
 Initialize rebalancer instance by connecting to a web3 endpoint and instantiating contract instance. Uses error codes.
 
@@ -403,7 +403,7 @@ ___
 
 ▸ **start**(): `number`
 
-*Defined in [src/witness/Witness.ts:238](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/witness/Witness.ts#L238)*
+*Defined in [src/witness/Witness.ts:238](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/witness/Witness.ts#L238)*
 
 Starts rebalancer instance after node synchronization, and connects to local Tendermint instance via ABCI.
 
@@ -417,7 +417,7 @@ ___
 
 ▸ **subscribe**(from?: *`number`*): `number`
 
-*Defined in [src/witness/Witness.ts:344](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/witness/Witness.ts#L344)*
+*Defined in [src/witness/Witness.ts:344](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/witness/Witness.ts#L344)*
 
 Subscribe to relevant Ethereum events and attach handlers.
 
@@ -436,7 +436,7 @@ ___
 
 ▸ **synchronize**(round: *`number`*, startsAt: *`number`*, endsAt: *`number`*): `void`
 
-*Defined in [src/witness/Witness.ts:256](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/witness/Witness.ts#L256)*
+*Defined in [src/witness/Witness.ts:256](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/witness/Witness.ts#L256)*
 
 Use in ABCI commit() to update when a new state is accepted. Updates staking period parameters.
 
@@ -457,7 +457,7 @@ ___
 
 ▸ **updateBalance**(event: *`WitnessData`*): `void`
 
-*Defined in [src/witness/Witness.ts:576](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/witness/Witness.ts#L576)*
+*Defined in [src/witness/Witness.ts:576](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/witness/Witness.ts#L576)*
 
 Perform "state transition" of instance balances. NOTE: this function does not modify the state of the ABCI application, however it implements the same logic as the state machine to ensure balances in state are up-to-date with the instance balances.
 
@@ -476,7 +476,7 @@ ___
 
 ▸ **create**(options: *`any`*): `Promise`<[Witness](_src_witness_witness_.witness.md)>
 
-*Defined in [src/witness/Witness.ts:58](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/witness/Witness.ts#L58)*
+*Defined in [src/witness/Witness.ts:58](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/witness/Witness.ts#L58)*
 
 Static generator to create new rebalancer instances.
 
@@ -496,7 +496,7 @@ ___
 
 ▸ **genLimits**(bals: *`PosterBalances`*, limit: *`number`*): `Limits`
 
-*Defined in [src/witness/Witness.ts:88](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/witness/Witness.ts#L88)*
+*Defined in [src/witness/Witness.ts:88](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/witness/Witness.ts#L88)*
 
 Generates an output address:limit mapping based on a provided address:balance mapping, and a total throughput limit.
 

@@ -1,4 +1,4 @@
-[paradigm-contracts](../README.md) > ["src/witness/Witness"](../modules/_src_witness_witness_.md)
+[ParadigmCore](../README.md) > ["src/witness/Witness"](../modules/_src_witness_witness_.md)
 
 # External module: "src/witness/Witness"
 

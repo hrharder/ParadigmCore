@@ -1,4 +1,4 @@
-[paradigm-contracts](../README.md) > ["src/common/Codes"](../modules/_src_common_codes_.md)
+[ParadigmCore](../README.md) > ["src/common/Codes"](../modules/_src_common_codes_.md)
 
 # External module: "src/common/Codes"
 

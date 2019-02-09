@@ -1,4 +1,4 @@
-[paradigm-contracts](../README.md) > ["src/core/info"](../modules/_src_core_info_.md)
+[ParadigmCore](../README.md) > ["src/core/info"](../modules/_src_core_info_.md)
 
 # External module: "src/core/info"
 
@@ -18,7 +18,7 @@
 
 ▸ **infoWrapper**(state: *`State`*, version: *`string`*): `function`
 
-*Defined in [src/core/info.ts:23](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/core/info.ts#L23)*
+*Defined in [src/core/info.ts:23](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/core/info.ts#L23)*
 
 Return information about the state and software.
 

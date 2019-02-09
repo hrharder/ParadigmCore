@@ -1,4 +1,4 @@
-[paradigm-contracts](../README.md) > ["src/core/initChain"](../modules/_src_core_initchain_.md)
+[ParadigmCore](../README.md) > ["src/core/initChain"](../modules/_src_core_initchain_.md)
 
 # External module: "src/core/initChain"
 
@@ -18,7 +18,7 @@
 
 ▸ **initChainWrapper**(deliverState: *`State`*, commitState: *`State`*, params: *`ConsensusParams`*): `function`
 
-*Defined in [src/core/initChain.ts:28](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/core/initChain.ts#L28)*
+*Defined in [src/core/initChain.ts:28](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/core/initChain.ts#L28)*
 
 Called once upon chain initialization. Sets initial validators and consensus parameters.
 

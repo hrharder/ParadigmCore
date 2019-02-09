@@ -1,4 +1,4 @@
-[paradigm-contracts](../README.md) > ["src/api/post/HttpMessage"](../modules/_src_api_post_httpmessage_.md) > [HttpMessage](../classes/_src_api_post_httpmessage_.httpmessage.md)
+[ParadigmCore](../README.md) > ["src/api/post/HttpMessage"](../modules/_src_api_post_httpmessage_.md) > [HttpMessage](../classes/_src_api_post_httpmessage_.httpmessage.md)
 
 # Class: HttpMessage
 
@@ -38,7 +38,7 @@ Represents response message for HTTP (post) API requests.
 
 ⊕ **new HttpMessage**(response: *`exp.Response`*, message: *`string`*, error: *`number`*): [HttpMessage](_src_api_post_httpmessage_.httpmessage.md)
 
-*Defined in [src/api/post/HttpMessage.ts:55](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/api/post/HttpMessage.ts#L55)*
+*Defined in [src/api/post/HttpMessage.ts:55](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/post/HttpMessage.ts#L55)*
 
 **Parameters:**
 
@@ -60,7 +60,7 @@ ___
 
 **● err**: *`number`*
 
-*Defined in [src/api/post/HttpMessage.ts:52](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/api/post/HttpMessage.ts#L52)*
+*Defined in [src/api/post/HttpMessage.ts:52](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/post/HttpMessage.ts#L52)*
 
 ___
 <a id="json"></a>
@@ -69,7 +69,7 @@ ___
 
 **● json**: *`object`*
 
-*Defined in [src/api/post/HttpMessage.ts:54](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/api/post/HttpMessage.ts#L54)*
+*Defined in [src/api/post/HttpMessage.ts:54](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/post/HttpMessage.ts#L54)*
 
 ___
 <a id="msg"></a>
@@ -78,7 +78,7 @@ ___
 
 **● msg**: *`string`*
 
-*Defined in [src/api/post/HttpMessage.ts:53](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/api/post/HttpMessage.ts#L53)*
+*Defined in [src/api/post/HttpMessage.ts:53](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/post/HttpMessage.ts#L53)*
 
 ___
 <a id="res"></a>
@@ -87,7 +87,7 @@ ___
 
 **● res**: *`exp.Response`*
 
-*Defined in [src/api/post/HttpMessage.ts:55](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/api/post/HttpMessage.ts#L55)*
+*Defined in [src/api/post/HttpMessage.ts:55](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/post/HttpMessage.ts#L55)*
 
 ___
 
@@ -99,7 +99,7 @@ ___
 
 ▸ **send**(): `void`
 
-*Defined in [src/api/post/HttpMessage.ts:69](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/api/post/HttpMessage.ts#L69)*
+*Defined in [src/api/post/HttpMessage.ts:69](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/post/HttpMessage.ts#L69)*
 
 **Returns:** `void`
 
@@ -110,7 +110,7 @@ ___
 
 ▸ **toJSON**(): `object`
 
-*Defined in [src/api/post/HttpMessage.ts:77](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/api/post/HttpMessage.ts#L77)*
+*Defined in [src/api/post/HttpMessage.ts:77](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/post/HttpMessage.ts#L77)*
 
 **Returns:** `object`
 
@@ -121,7 +121,7 @@ ___
 
 ▸ **staticSend**(res: *`exp.Response`*, message: *`string`*): `void`
 
-*Defined in [src/api/post/HttpMessage.ts:37](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/api/post/HttpMessage.ts#L37)*
+*Defined in [src/api/post/HttpMessage.ts:37](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/post/HttpMessage.ts#L37)*
 
 **Parameters:**
 
@@ -139,7 +139,7 @@ ___
 
 ▸ **staticSendError**(res: *`exp.Response`*, message: *`string`*, error: *`number`*): `void`
 
-*Defined in [src/api/post/HttpMessage.ts:23](https://github.com/paradigmfoundation/paradigmcore/blob/86b6b78/src/api/post/HttpMessage.ts#L23)*
+*Defined in [src/api/post/HttpMessage.ts:23](https://github.com/paradigmfoundation/paradigmcore/blob/7d688ae/src/api/post/HttpMessage.ts#L23)*
 
 **Parameters:**
 

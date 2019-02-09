@@ -124,11 +124,13 @@ export class JsonRequest {
         // check for missing requirements
         if (required && !req[key]) {
             this.addValErr(code, `missing required '${key}' field.`);
+            return;
         }
 
         // validate properties
         if (typeof req[key] !== type) {
             this.addValErr(code, `incorrect type for '${key}' option.`);
+            return;
         }
         
         // validate top-level request
@@ -178,7 +180,7 @@ export class JsonRequest {
      * @param query the string key included in the request
      */
     public validateOptionParam(code: string, options: string[], query: string) {
-        if (options.indexOf(query) !== 0) {
+        if (options.indexOf(query) === -1) {
             this.addValErr(code, `invalid option '${query}'.`);
         } else {
             return;

@@ -1,4 +1,4 @@
-[paradigm-contracts](../README.md) > ["src/crypto/PayloadCipher"](../modules/_src_crypto_payloadcipher_.md)
+[ParadigmCore](../README.md) > ["src/crypto/PayloadCipher"](../modules/_src_crypto_payloadcipher_.md)
 
 # External module: "src/crypto/PayloadCipher"
 
