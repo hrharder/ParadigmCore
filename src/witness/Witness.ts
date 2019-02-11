@@ -388,9 +388,7 @@ export class Witness {
             // subscribe to 'StakeMade' events
             this.eventEmitterContract.ParadigmEvent({
                 fromBlock: from,
-            }, this.handleStake);
-
-
+            }, this.handleParadigmEvent);
 
             // subscribe to new blocks
             this.web3.eth.subscribe("newBlockHeaders", this.handleBlock);
@@ -410,46 +408,22 @@ export class Witness {
      * @param error {object}    error object
      * @param res   {object}    event response object
      */
-    private handleStake = (error: any, res: any) => {
+    private handleParadigmEvent = (error: any, res: any) => {
         if (error !== null) {
             err("peg", msg.rebalancer.errors.badStakeEvent);
             return;
         }
-        // event type
-        const eventType = res.event.toLowerCase();
 
-        // Pull event parameters
-        const address = res.returnValues.staker.toLowerCase();
-        const amount = res.returnValues.amount;
+        const decodedEventData = eventDecoder(res.returnValues);
         const block = res.blockNumber;
 
         // will store witness event object
-        let witnessEvent: WitnessData;
+        const witnessEvent: WitnessData = createWitnessEventObject(
+            decodedEventData,
+            block
+        );
 
-        // Generate event object
-        switch (eventType) {
-            case "stakemade": {
-                witnessEvent = createWitnessEventObject(
-                    "poster",
-                    "add",
-                    amount,
-                    block,
-                    address
-                );
-                break;
-            }
-            case "stakeremoved": {
-                witnessEvent = createWitnessEventObject(
-                    "poster",
-                    "remove",
-                    amount,
-                    block,
-                    address
-                );
-                break;
-            }
-            default: { return; }
-        }
+        if(witnessEvent === undefined) return;
 
         // See if this is a historical event that has already matured
         if ((this.initHeight - block) > this.finalityThreshold) {
@@ -468,61 +442,62 @@ export class Witness {
         return;
     }
 
-    private handleValidator = (error: any, res: any) => {
-        if (error !== null) {
-            err("peg", "received bad validator event");
-            return;
-        }
-
-        // unpack necessary values
-        // todo: ensure this matches ValidatorRegistry contract data
-        const block = res.blockNumber;
-        const address = res.returnValues.owner.toLowerCase();
-        const publicKey = res.returnValues.tendermintPublicKey;
-
-        // will store generated witness event object
-        let witnessEvent: WitnessData;
-
-        // handle validator added vs validator removed
-        switch (res.event.toLowerCase()) {
-            case "validatoradded": {
-                const amount = res.returnValues.stake;
-                witnessEvent = createWitnessEventObject(
-                    "validator",
-                    "add",
-                    amount,
-                    block,
-                    address,
-                    publicKey
-                );
-                break;
-            }
-
-            case "validatorremoved": {
-                // TODO: should be -1 (special case) or just 0? or null?
-                const amount = "-1";
-                witnessEvent = createWitnessEventObject(
-                    "validator",
-                    "remove",
-                    amount,
-                    block,
-                    address,
-                    publicKey
-                );
-                break;
-            }
-
-            default: {
-                err("peg", "received unknown validator event type");
-                return;
-            }
-        }
-
-        // apply event if it is historical (already matured)
-        if ((this.initHeight - block) > this.finalityThreshold) {
-            // TODO: implement
-        }
-    }
+    // TODO: The following should be merged into the unified handler above
+    // private handleValidator = (error: any, res: any) => {
+    //     if (error !== null) {
+    //         err("peg", "received bad validator event");
+    //         return;
+    //     }
+    //
+    //     // unpack necessary values
+    //     // todo: ensure this matches ValidatorRegistry contract data
+    //     const block = res.blockNumber;
+    //     const address = res.returnValues.owner.toLowerCase();
+    //     const publicKey = res.returnValues.tendermintPublicKey;
+    //
+    //     // will store generated witness event object
+    //     let witnessEvent: WitnessData;
+    //
+    //     // handle validator added vs validator removed
+    //     switch (res.event.toLowerCase()) {
+    //         case "validatoradded": {
+    //             const amount = res.returnValues.stake;
+    //             witnessEvent = createWitnessEventObject(
+    //                 "validator",
+    //                 "add",
+    //                 amount,
+    //                 block,
+    //                 address,
+    //                 publicKey
+    //             );
+    //             break;
+    //         }
+    //
+    //         case "validatorremoved": {
+    //             // TODO: should be -1 (special case) or just 0? or null?
+    //             const amount = "-1";
+    //             witnessEvent = createWitnessEventObject(
+    //                 "validator",
+    //                 "remove",
+    //                 amount,
+    //                 block,
+    //                 address,
+    //                 publicKey
+    //             );
+    //             break;
+    //         }
+    //
+    //         default: {
+    //             err("peg", "received unknown validator event type");
+    //             return;
+    //         }
+    //     }
+    //
+    //     // apply event if it is historical (already matured)
+    //     if ((this.initHeight - block) > this.finalityThreshold) {
+    //         // TODO: implement
+    //     }
+    // }
 
     /**
      * New Ethereum block event handler. Updates balances and executes ABCI

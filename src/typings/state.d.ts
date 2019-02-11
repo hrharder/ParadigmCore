@@ -153,11 +153,19 @@ interface RoundInfo {
  */
 interface WitnessEvent {
     subject:    string;
-    type:       string;
     amount:     bigint;
     address:    string;
     publicKey:  string;
     conf:       number;
+}
+
+interface ParadigmEvent {
+    eventType: string;
+    poster: string;
+    stake: string;
+    tendermintPublicKey: string;
+    applicationBlockNumber: string;
+    owner: string;
 }
 
 /**
