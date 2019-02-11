@@ -105,14 +105,8 @@ export class Witness {
                 const totNum = parseInt(total.toString());
                 const lim = (balNum / totNum) * limit;
 
-                // Create limit object for each address
-                output[k] = {
-                    // orderLimit is proportional to stake size
-                    orderLimit: parseInt(lim.toString(), 10),
-
-                    // streamLimit is always 1, regardless of stake size
-                    streamLimit: 1,
-                };
+                // Create limit for each address
+                output[k] = parseInt(lim.toString(), 10);
             }
         });
 

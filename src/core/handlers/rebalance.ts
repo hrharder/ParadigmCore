@@ -133,8 +133,8 @@ export function deliverRebalance(
 
                     // copy limits from proposal to each balance
                     Object.keys(propLimits).forEach((i) => {
-                        state.posters[i].orderLimit = propLimits[i].orderLimit;
-                        state.posters[i].streamLimit = propLimits[i].streamLimit;
+                        state.posters[i].orderLimit = propLimits[i];
+                        state.posters[i].streamLimit = 1;
                     });
                     // End state modification
 

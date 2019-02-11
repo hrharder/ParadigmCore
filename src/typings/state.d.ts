@@ -175,7 +175,7 @@ interface PosterBalances {
  * stored in `state.limits`, with stakers Ethereum address as the keys.
  */
 interface Limits {
-    [key: string]:  LimitObject;
+    [key: string]:  number;
 }
 
 /**
