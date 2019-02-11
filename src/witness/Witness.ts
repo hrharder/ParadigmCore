@@ -25,7 +25,7 @@ import { WebsocketProvider } from "web3/providers";
 
 // ParadigmCore modules/classes
 import * as WebSocket from "ws";
-import ParadigmStakeInfo = require("paradigm-contracts/build/contracts/ParadigmStake.json");
+import { contracts, eventDecoder } from "paradigm-contracts";
 import { TxGenerator } from "src/core/util/TxGenerator";
 import { TxBroadcaster } from "../core/util/TxBroadcaster";
 import { createWitnessEventObject } from "../core/util/utils";
@@ -184,7 +184,7 @@ export class Witness {
      * 
      * @todo update to `EventEmitter` contract
      */
-    private stakeContract: any;
+    private eventEmitterContract: any;
 
     /** ABCI transaction broadcaster */
     private broadcaster: TxBroadcaster;
@@ -258,9 +258,9 @@ export class Witness {
 
         // Create staking contract instance
         try {
-            const ParadigmStake = TruffleContract(ParadigmStakeInfo);
-            ParadigmStake.setProvider(this.web3.currentProvider);
-            this.stakeContract = await ParadigmStake.deployed();
+            const EventEmitter = TruffleContract(contracts.EventEmitter);
+            EventEmitter.setProvider(this.web3.currentProvider);
+            this.eventEmitterContract = await EventEmitter.deployed();
         } catch (error) {
             err("peg", error.message);
             return codes.CONTRACT; // Unable to initialize staking contract
@@ -386,24 +386,11 @@ export class Witness {
     private subscribe(from: number = 0): number {
         try {
             // subscribe to 'StakeMade' events
-            this.stakeContract.StakeMade({
+            this.eventEmitterContract.ParadigmEvent({
                 fromBlock: from,
             }, this.handleStake);
 
-            // subscribe to 'StakeRemoved' events
-            this.stakeContract.StakeRemoved({
-                fromBlock: from,
-            }, this.handleStake);
 
-            // subscribe to 'ValidatorAdded' events
-            // this.validatorRegistry.ValidatorAdded({
-            //     fromBlock: from,
-            // }, this.handleValidator);
-
-            // subscribe to 'ValidatorRemoved' events
-            // this.validatorRegistry.ValidatorRemoved({
-            //    fromBlock: from,
-            // }, this.handleValidator);
 
             // subscribe to new blocks
             this.web3.eth.subscribe("newBlockHeaders", this.handleBlock);
