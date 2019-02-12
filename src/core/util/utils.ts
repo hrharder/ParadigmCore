@@ -193,7 +193,7 @@ export function genLimits(posters: PosterInfo, limit: number): Limits {
  */
 export function parseWitness(data: WitnessData): ParsedWitnessData {
     // raw vals
-    const { subject, type, block, amount, publicKey, address, id } = data;
+    const { subject, block, amount, publicKey, address, id } = data;
 
     // parsed vals
     let intAmount, parsedAddress, parsedPublicKey;
@@ -201,11 +201,6 @@ export function parseWitness(data: WitnessData): ParsedWitnessData {
     // validate subject is validator or poster
     if (subject !== "validator" && subject !== "poster") {
         throw new Error("invlalid witness subject");
-    }
-
-    // validate state operation
-    if (type !== "add" && type !== "remove") {
-        throw new Error("invalid witness state operation");
     }
 
     // ensure block is integer number
