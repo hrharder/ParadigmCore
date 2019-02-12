@@ -210,7 +210,7 @@ export function parseWitness(data: WitnessData): ParsedWitnessData {
 
     // ensure amount is an integers, then create bigint
     if (!/^\d*$/.test(amount)) {
-        throw new Error("value for 'amount'");
+        throw new Error("invalid value for 'amount', should be integer");
     }
     intAmount = BigInt(amount);
 
