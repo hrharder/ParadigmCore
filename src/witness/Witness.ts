@@ -416,6 +416,8 @@ export class Witness {
         return codes.OK;
     }
 
+    private handleEvent() {}
+
     /**
      * Stake event handler. NOTE: events are indexed by the block they occur
      * in, not the finality block for that event.
@@ -428,13 +430,14 @@ export class Witness {
             err("peg", msg.rebalancer.errors.badStakeEvent);
             return;
         }
+
         // event type
-        const eventType = res.event.toLowerCase();
+        const eventType: string = res.event.toLowerCase();
 
         // Pull event parameters
-        const address = res.returnValues.staker.toLowerCase();
-        const amount = res.returnValues.amount;
-        const block = res.blockNumber;
+        const address: string = res.returnValues.staker.toLowerCase();
+        const amount: string = res.returnValues.amount;
+        const block: number = res.blockNumber;
 
         // will store witness event object
         let witnessEvent: WitnessData;
@@ -479,62 +482,6 @@ export class Witness {
         // Add event to confirmation queue
         this.events[block][witnessEvent.id] = witnessEvent;
         return;
-    }
-
-    private handleValidator = (error: any, res: any) => {
-        if (error !== null) {
-            err("peg", "received bad validator event");
-            return;
-        }
-
-        // unpack necessary values
-        // todo: ensure this matches ValidatorRegistry contract data
-        const block = res.blockNumber;
-        const address = res.returnValues.owner.toLowerCase();
-        const publicKey = res.returnValues.tendermintPublicKey;
-
-        // will store generated witness event object
-        let witnessEvent: WitnessData;
-
-        // handle validator added vs validator removed
-        switch (res.event.toLowerCase()) {
-            case "validatoradded": {
-                const amount = res.returnValues.stake;
-                witnessEvent = createWitnessEventObject(
-                    "validator",
-                    "add",
-                    amount,
-                    block,
-                    address,
-                    publicKey
-                );
-                break;
-            }
-
-            case "validatorremoved": {
-                // TODO: should be -1 (special case) or just 0? or null?
-                const amount = "-1";
-                witnessEvent = createWitnessEventObject(
-                    "validator",
-                    "remove",
-                    amount,
-                    block,
-                    address,
-                    publicKey
-                );
-                break;
-            }
-
-            default: {
-                err("peg", "received unknown validator event type");
-                return;
-            }
-        }
-
-        // apply event if it is historical (already matured)
-        if ((this.initHeight - block) > this.finalityThreshold) {
-            // TODO: implement
-        }
     }
 
     /**
