@@ -208,8 +208,10 @@ export function parseWitness(data: WitnessData): ParsedWitnessData {
         throw new Error("invalid target block");
     }
 
-    // ensure amount is a bigint
-    // TODO: figure out this check
+    // ensure amount is an integers, then create bigint
+    if (!/^\d*$/.test(amount)) {
+        throw new Error("value for 'amount'");
+    }
     intAmount = BigInt(amount);
 
     // ensure address is valid eth address and remove checksum
@@ -256,8 +258,15 @@ export function addNewEvent(state: State, tx: ParsedWitnessData): boolean {
     // destructure event data
     const { subject, amount, block, address, publicKey, id } = tx;
 
+    // @todo
+    // temporarily ignore validator events
+    if (subject !== "poster") {
+        err("state", "TEMPORARY ignoring unsupported validator event attestation");
+        return false;
+    }
+
     // new events should have block > lastEvent
-    if (state.lastEvent[subject] >= block) {
+    if (state.lastEvent >= block) {
         warn("state", "ignoring new event that may have been applied");
         return false;
     }
@@ -267,7 +276,7 @@ export function addNewEvent(state: State, tx: ParsedWitnessData): boolean {
         subject,
         address,
         amount,
-        publicKey: subject === "validator" ? publicKey : undefined,
+        publicKey: null, // subject === "validator" ? publicKey : null,
         conf: 1
     };
 
@@ -279,12 +288,12 @@ export function addNewEvent(state: State, tx: ParsedWitnessData): boolean {
             case "poster": { 
                 return applyPosterEvent(state, tx);
             }
-    
+
+            // @todo un-comment once implemented
+            /*
             case "validator": {
-                // temporary
-                err("state", "VALIDATOR TYPE NOT SUPPORTED YET");
                 return applyValidatorEvent(state, tx);
-            }
+            }*/
     
             default: {
                 err("state", "unknown witness event subject");
@@ -359,7 +368,7 @@ export function addConfMaybeApplyEvent(
  */
 export function applyPosterEvent(state: State, tx: ParsedWitnessData): boolean {
     // destructure necessary event data
-    const { subject, amount, block, address, id } = tx;
+    const { amount, block, address, id } = tx;
 
     // will be true if event is applied
     let accepted: boolean;
@@ -387,14 +396,14 @@ export function applyPosterEvent(state: State, tx: ParsedWitnessData): boolean {
         accepted = true;
     } else {
         // unexpected case, for now will exit process
-        err("state", "unexpected: no poster account, but requesting withdrawl");
+        err("state", "unexpected: no poster account, but requesting withdrawal");
         accepted = false;
     }
 
     // don't prune events if no event accepted
     if (!accepted) return false;
 
-    // remove the pending event that was just appled
+    // remove the pending event that was just applied
     delete state.events[block][id];
 
     // remove event block if none left pending
@@ -408,7 +417,7 @@ export function applyPosterEvent(state: State, tx: ParsedWitnessData): boolean {
     }
 
     // update latest event, if update was applied
-    if (accepted) state.lastEvent[subject] = block;
+    if (accepted) state.lastEvent = block;
 
     // if reached, accepted should be true
     return accepted;

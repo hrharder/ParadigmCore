@@ -21,10 +21,7 @@ export let commitState: State = {
   },
   events: {},
   posters: {},
-  lastEvent: {
-    add: 0,
-    remove: 0
-  },
+  lastEvent: -1,
   validators: {},
   consensusParams: {
     finalityThreshold: null,

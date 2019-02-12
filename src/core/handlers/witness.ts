@@ -89,7 +89,7 @@ export function deliverWitness(tx: SignedWitnessTx, state: State): Vote {
     let accepted: boolean;
 
     // immediately invalidate if event is older than most recent update
-    if (state.lastEvent[subject] >= block) {
+    if (state.lastEvent >= block) {
         warn("state", "ignoring existing event that may have been applied");
         return Vote.invalid();
     }
