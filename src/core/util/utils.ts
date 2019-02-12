@@ -193,7 +193,7 @@ export function genLimits(posters: PosterInfo, limit: number): Limits {
  */
 export function parseWitness(data: WitnessData): ParsedWitnessData {
     // raw vals
-    const { subject, type, block, amount, publicKey, address, id } = data;
+    const { subject, block, amount, publicKey, address, id } = data;
 
     // parsed vals
     let intAmount, parsedAddress, parsedPublicKey;
@@ -203,18 +203,15 @@ export function parseWitness(data: WitnessData): ParsedWitnessData {
         throw new Error("invlalid witness subject");
     }
 
-    // validate state operation
-    if (type !== "add" && type !== "remove") {
-        throw new Error("invalid witness state operation");
-    }
-
     // ensure block is integer number
     if (!isInteger(block)) {
         throw new Error("invalid target block");
     }
 
-    // ensure amount is a bigint
-    // TODO: figure out this check
+    // ensure amount is an integers, then create bigint
+    if (!/^\d*$/.test(amount)) {
+        throw new Error("invalid value for 'amount', should be integer");
+    }
     intAmount = BigInt(amount);
 
     // ensure address is valid eth address and remove checksum
@@ -242,7 +239,6 @@ export function parseWitness(data: WitnessData): ParsedWitnessData {
     // valid if this point reached
     return {
         subject,
-        type,
         block,
         amount: intAmount,
         address: parsedAddress,
@@ -260,10 +256,17 @@ export function parseWitness(data: WitnessData): ParsedWitnessData {
  */
 export function addNewEvent(state: State, tx: ParsedWitnessData): boolean {
     // destructure event data
-    const { subject, type, amount, block, address, publicKey, id } = tx;
+    const { subject, amount, block, address, publicKey, id } = tx;
+
+    // @todo
+    // temporarily ignore validator events
+    if (subject !== "poster") {
+        err("state", "TEMPORARY ignoring unsupported validator event attestation");
+        return false;
+    }
 
     // new events should have block > lastEvent
-    if (state.lastEvent[type] >= block) {
+    if (state.lastEvent >= block) {
         warn("state", "ignoring new event that may have been applied");
         return false;
     }
@@ -271,10 +274,9 @@ export function addNewEvent(state: State, tx: ParsedWitnessData): boolean {
     // if this is a new accepted event, 1 conf is added (for first report)
     state.events[block][id] = {
         subject,
-        type,
         address,
         amount,
-        publicKey: subject === "validator" ? publicKey : undefined,
+        publicKey: null, // subject === "validator" ? publicKey : null,
         conf: 1
     };
 
@@ -286,12 +288,12 @@ export function addNewEvent(state: State, tx: ParsedWitnessData): boolean {
             case "poster": { 
                 return applyPosterEvent(state, tx);
             }
-    
+
+            // @todo un-comment once implemented
+            /*
             case "validator": {
-                // temporary
-                err("state", "VALIDATOR TYPE NOT SUPPORTED YET");
                 return applyValidatorEvent(state, tx);
-            }
+            }*/
     
             default: {
                 err("state", "unknown witness event subject");
@@ -317,7 +319,7 @@ export function addConfMaybeApplyEvent(
     tx: ParsedWitnessData
 ): boolean {
     // destructure event data
-    const { subject, type, block, id } = tx;
+    const { subject, block, id } = tx;
 
     // will be true if successfully completed transition
     let accepted: boolean;
@@ -366,7 +368,7 @@ export function addConfMaybeApplyEvent(
  */
 export function applyPosterEvent(state: State, tx: ParsedWitnessData): boolean {
     // destructure necessary event data
-    const { type, amount, block, address, id } = tx;
+    const { amount, block, address, id } = tx;
 
     // will be true if event is applied
     let accepted: boolean;
@@ -374,25 +376,12 @@ export function applyPosterEvent(state: State, tx: ParsedWitnessData): boolean {
     // check if poster already has an account
     if (state.posters.hasOwnProperty(address)) {
         // poster already has account, increase or decrease balance
-        switch (type) {
-            case "add": { 
-                state.posters[address].balance += amount;
-                break;
-            }
-            case "remove": {
-                state.posters[address].balance -= amount;
-                break;
-            }
-            default: {
-                err("state", "received unknown type for poster subject");
-                return false; 
-            }
-        }
+        state.posters[address].balance = amount;
 
         // report what was done
         log("state", "confirmed and applied event to state (existing poster)");
         accepted = true;
-    } else if (!state.posters.hasOwnProperty(address) && type === "add") {
+    } else if (!state.posters.hasOwnProperty(address)) {
         // create new account for poster
         state.posters[address] = {
             balance: BigInt(0),
@@ -401,20 +390,20 @@ export function applyPosterEvent(state: State, tx: ParsedWitnessData): boolean {
         };
 
         // add amount from event to balance
-        state.posters[address].balance += amount;
+        state.posters[address].balance = amount;
         // report what was done
         log("state", "confirmed and applied event to state (new poster)");
         accepted = true;
     } else {
         // unexpected case, for now will exit process
-        err("state", "unexpected: no poster account, but requesting withdrawl");
+        err("state", "unexpected: no poster account, but requesting withdrawal");
         accepted = false;
     }
 
     // don't prune events if no event accepted
     if (!accepted) return false;
 
-    // remove the pending event that was just appled
+    // remove the pending event that was just applied
     delete state.events[block][id];
 
     // remove event block if none left pending
@@ -423,12 +412,12 @@ export function applyPosterEvent(state: State, tx: ParsedWitnessData): boolean {
     }
 
     // when removing, also check if balance is now 0
-    if (type === "remove" && state.posters[address].balance === 0n) {
+    if (amount === 0n && state.posters[address].balance === 0n) {
         delete state.posters[address];
     }
 
     // update latest event, if update was applied
-    if (accepted) state.lastEvent[type] = block;
+    if (accepted) state.lastEvent = block;
 
     // if reached, accepted should be true
     return accepted;
@@ -448,7 +437,7 @@ export function applyValidatorEvent(
     tx: ParsedWitnessData
 ): boolean {
     // destructure necessary event data
-    const { type, amount, block, address, id } = tx;
+    const { amount, block, address, id } = tx;
     return false;
 }
 
@@ -459,7 +448,7 @@ export function applyValidatorEvent(
  */
 export function createWitnessEventHash(tx: WitnessData): string {
     const hashVals =
-        `${tx.subject}-${tx.type}-${tx.amount}-${tx.block}-` +
+        `${tx.subject}-${tx.amount}-${tx.block}-` +
         `${tx.address}-${tx.publicKey === null ? "null" : tx.publicKey}`;
     
     // buffer input and create hash
@@ -481,15 +470,12 @@ export function createWitnessEventHash(tx: WitnessData): string {
  * @param publicKey tendermint public key (only for validator witness tx's)
  */
 export function createWitnessEventObject(
-    subject: string,
-    type: string,
-    amount: string,
-    block: number,
-    address: string,
-    publicKey?: string
+    eventData: ParadigmEvent,
+    block: number
 ): WitnessData {
+    const { eventType } = eventData;
     // should never occur where subject is validator and key is blank
-    if (subject === "validator" && publicKey === undefined) {
+    if (eventType === "ValidatorRegistryUpdate" && eventData.tendermintPublicKey === undefined) {
         throw new Error("expected publicKey for validator witness event");
     }
 
@@ -497,27 +483,25 @@ export function createWitnessEventObject(
     let outputEvent: WitnessData;
 
     // check if poster or validator
-    switch (subject) {
-        case "poster": {
+    switch (eventType) {
+        case "PosterRegistryUpdate": {
             outputEvent = {
-                subject,
-                type,
-                amount,
+                subject: "poster",
+                amount: eventData.stake,
                 block,
-                address,
+                address: eventData.poster,
                 publicKey: null
-            }
+            };
             break;
         }
-        case "validator": {
+        case "ValidatorRegistryUpdate": {
             outputEvent = {
-                subject,
-                type,
-                amount,
+                subject: "validator",
+                amount: eventData.stake,
                 block,
-                address,
-                publicKey
-            }
+                address: eventData.owner,
+                publicKey: eventData.tendermintPublicKey
+            };
             break;
         }
         default: { return; }

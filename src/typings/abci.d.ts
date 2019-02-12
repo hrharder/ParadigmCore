@@ -84,7 +84,6 @@ interface PubKey {
 
 interface ParsedWitnessData {
     subject:    string;
-    type:       string;
     amount:     bigint;
     block:      number;
     address:    string;

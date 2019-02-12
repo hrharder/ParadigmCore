@@ -151,7 +151,6 @@ interface OrderPosterSignature {
  */
 interface WitnessData extends TransactionData {
     subject:    string; // 'poster' or 'validator'
-    type:       string; // 'add' or 'remove'
     amount:     string; // stringified bigint
     block:      number; // block number of event
     address:    string; // ethereum address of validator/poster

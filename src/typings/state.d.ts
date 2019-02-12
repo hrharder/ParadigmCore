@@ -42,7 +42,7 @@ interface State {
      * Stores the height of the Ethereum blockchain at which the last event was
      * applied in-state.
      */
-    lastEvent:          EventInfo;
+    lastEvent:          number;
     
     /**
      * Parameters affecting consensus logic (separate from Tendermint consensus
@@ -153,11 +153,19 @@ interface RoundInfo {
  */
 interface WitnessEvent {
     subject:    string;
-    type:       string;
     amount:     bigint;
     address:    string;
     publicKey:  string;
     conf:       number;
+}
+
+interface ParadigmEvent {
+    eventType: string;
+    poster: string;
+    stake: string;
+    tendermintPublicKey: string;
+    applicationBlockNumber: string;
+    owner: string;
 }
 
 /**
@@ -192,6 +200,8 @@ interface LimitObject {
  * The network must keep track of the Ethereum height of the latest event that
  * was applied to the networks state, to avoid replaying events already adopted
  * in-state. 
+ * 
+ * @deprecated as of 0.8
  */
 interface EventInfo {
     add:    number;

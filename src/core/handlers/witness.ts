@@ -83,13 +83,13 @@ export function deliverWitness(tx: SignedWitnessTx, state: State): Vote {
     }
 
     // unpack/parse event data after id is confirmed
-    const { block, id, type } = parsedTx;
+    const { subject, block, id } = parsedTx;
     
     // will be true if transaction is ultimately valid
     let accepted: boolean;
 
     // immediately invalidate if event is older than most recent update
-    if (state.lastEvent[type] >= block) {
+    if (state.lastEvent >= block) {
         warn("state", "ignoring existing event that may have been applied");
         return Vote.invalid();
     }
