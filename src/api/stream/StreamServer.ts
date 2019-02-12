@@ -238,6 +238,12 @@ export class StreamServer {
         }
     }
 
+    private getPseudoRandomSessionId(): string {
+        const msFromTime = Date.now().toString().slice(-4).toString();
+        const randomInts = Math.floor((Math.random() * 9000) + 1000).toString();
+        return `${msFromTime}${randomInts}`
+    }
+
     /**
      * Handler for new client connections.
      * @todo remove hard-coded stuff
@@ -506,17 +512,20 @@ export class StreamServer {
     }
 
     /**
-     * Subscribes to the "NewBlock" event over the ABCI server.
+     * Subscribes to the "NewBlock" event over the ABCI server. The option to
+     * provide a `fullParam` allows subscriptions to arbitrary tags/events in
+     * the Tendermint chain.
      * 
      * @param name the name of the tendermint ABCI event to subscribe to
+     * @param fullQuery if supplied, will replace `params[0]` in JSONRPC req.
      * 
      * @todo move subscribe options somewhere else
      * @todo define valid tm event (name param)
      */
-    private subscribeToParadigmCoreEvent(name: string): void {
+    private subscribeToParadigmCoreEvent(eventName: string, fullParam?: string): void {
         // TEMPORARY
         // @todo remove line below (eventually)
-        if (name !== "NewBlock") { 
+        if (eventName !== "NewBlock") { 
             console.log("DEV: temporarily ignoring non 'NewBlock' event.");
             return;
         }
@@ -524,16 +533,19 @@ export class StreamServer {
         // return if not ready to receive data
         if (this.abciConn.readyState !== 1) return;
 
-        // pick a random-ism session id that starts with a string
-        this.abciSessionId = `id${Math.floor((Math.random() * 9000) + 1000)}`;
+        // pick a random-ism session id string
+        if (this.abciSessionId !== null) {
+            this.abciSessionId = this.getPseudoRandomSessionId();
+        }
+
+        // use fullParam as param if provided
+        const param = fullParam ? fullParam : `tm.event='${eventName}'`;
 
         // subscribe options
         const subscribeOptions = {
             method: "subscribe",
             jsonrpc: "2.0",
-            params: [
-                `tm.event='${name}'`
-            ],
+            params: [param],
             
             // indicate primary connection ID
             id: this.abciSessionId,
