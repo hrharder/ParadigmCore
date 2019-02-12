@@ -1,22 +1,22 @@
 # ParadigmCore `rebalance` overview
 
-This document exists to outline and explain the `rebalance` transaction, its purpose within ParadigmCore, and the mecahnism of it's implementation.
+This document exists to outline and explain the `rebalance` transaction, its purpose within ParadigmCore, and the mechanism of it's implementation.
 
 In this future, this may be adapted into more formal documentation about the subject.
 
 ## Background
 
-Some processess and assertions that must be understood prior to `rebalance` transactions making any sense.
+Some processes and assertions that must be understood prior to `rebalance` transactions making any sense.
 
 1. As part of the Paradigm contract system, there exists the `PosterRegistry` contract which implements the following functionalities:
     - Any valid Ethereum address (a "poster") may "lock" DIGM tokens into the registry at any time.
-    - That same address may "unlock" any amount of tokens at any time, up to thier total "locked" balance.
+    - That same address may "unlock" any amount of tokens at any time, up to their total "locked" balance.
     - Upon a "lock" and "unlock" transaction, a `PosterRegistryUpdate` event is emitted with the poster's address, and their balance.
     - A mapping (`address a => uint balance`) is kept in-state in the `PosterRegistry` contract.
   
 1. The desired functionality (on the OrderStream side) is as follows:
     - Write access to the network - the ability to post orders - is allocated in periods called "rebalance periods".
-    - At the begining of each period, a mapping is generated (`address a => uint limit`) by the OrderStream
+    - At the beginning of each period, a mapping is generated (`address a => uint limit`) by the OrderStream
     - This mapping allocates each "poster" with a number of transactions they are allowed in the period
     - This per-period allowance should be proportional to their "lock" size (their locked balance / total locked balance * `NUM_ORDERS`)
     - `NUM_ORDERS` (not the real name) is a consensus parameter that determines the number of order TXs accepted per rebalance period
@@ -24,7 +24,7 @@ Some processess and assertions that must be understood prior to `rebalance` tran
     
 1. Keeping the above in mind, the goals of the `rebalance` transaction and mechanic are as follows:
     - Deterministically replicate the state of the `PosterRegistry` in the OrderStream's state (handled by the `Witness` mechanic)
-    - At validator-determined intervals based on the Ethereum block height, "snapshot" the `PosterRegistry` mapping, and allocate throughput to posters proportinally (using bandwidth model) based on token "balance" - the amount locked in the regsitry.
+    - At validator-determined intervals based on the Ethereum block height, "snapshot" the `PosterRegistry` mapping, and allocate throughput to posters proportionally (using bandwidth model) based on token "balance" - the amount locked in the registry.
     - Ensure all validators agree upon the limit mapping before it becomes active.
     
 1. A Tendermint consensus round consists of the following steps (functions called by each validator), resulting in the creation of a new block. This assumes no invalid transactions, for simplicity.
@@ -69,19 +69,19 @@ For details about the `Witness` mechanic discussed below, see [this document.](h
 
 1. While a `Witness` process is running by validator, it listens to events from the Paradigm contract system on Ethereum.
     - (In addition to other actions) the `Witness` maintains an in-memory mapping of `PosterRegistry` raw balances (# of tokens)
-    - When a cerain Ethereum block is found (see [notes](#notes)) they submit a `rebalance` transaction with their proposal (see next point). 
+    - When a certain Ethereum block is found (see [notes](#notes)) they submit a `rebalance` transaction with their proposal (see next point). 
     - Keep in mind that **each validator does this** - they all submit `rebalance` transactions at the same (ish) time. 
     
 1. When it is time to submit a `rebalance` transaction (previous `endsAt` Ethereum block has been found) perform the following:
     - Iterate over the in-memory (in Witness process) poster balances. See [here.](https://github.com/ParadigmFoundation/ParadigmCore/blob/tags/src/witness/Witness.ts#L89)
-    - Calcluate the total amount "locked" in the contract (sum of all balances)
+    - Calculate the total amount "locked" in the contract (sum of all balances)
     - For each account with a balance, compute and round `(balance / total) * limit` where `balance` is the accounts balance, `total` is the sum of all balances, and `limit` is the order limit agreed upon by validators. 
     - Generate a new `rebalance` transaction (see above data structure) with the computed mapping, as well as some round meta-data
     - Submit `rebalance` transaction to the network.
     
-1. Based on the mechanics of Tendermint (one block = one proposer) and the rules of the `rebalance` transaction type (see `delverTx` implementaiton for `rebalance`), we can be sure **only one `rebalance` proposal gets accepted per period.**
-    - Usually, the propser will get to select their `rebalance` proposal, since it will be the first one in their mempool.
-    - This fact (only one proposal accepted per period) is additionally enforced by the `ROUNDSTEP` cycle, where the ordering of transactions within a block - and the subsequent order `deliverTx()` gets called, and the contents of a block received from a propser are the same for all validators on the network.
+1. Based on the mechanics of Tendermint (one block = one proposer) and the rules of the `rebalance` transaction type (see `delverTx` implementation for `rebalance`), we can be sure **only one `rebalance` proposal gets accepted per period.**
+    - Usually, the proposer will get to select their `rebalance` proposal, since it will be the first one in their mempool.
+    - This fact (only one proposal accepted per period) is additionally enforced by the `ROUNDSTEP` cycle, where the ordering of transactions within a block - and the subsequent order `deliverTx()` gets called, and the contents of a block received from a proposer are the same for all validators on the network.
     
 ## Notes
 
