@@ -1,13 +1,9 @@
----
-title: StreamAPI Reference
----
-
 # StreamAPI
 
 The StreamAPI enables interaction with the ParadigmCore via ABCI  
 This api follows the json-rpc 2.0 specification. More information available at http://www.jsonrpc.org/specification.
 
-<strong>Version 0.1.0-rc-1</strong>
+<strong>Version 0.1-rc</strong>
 
 ---
 
