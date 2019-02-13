@@ -14,7 +14,7 @@
 import { RpcClient } from "tendermint";
 import { EventEmitter } from "events";
 
-// ParadigmCore local imports
+// ParadigmCore local utilities
 import { log, warn, err } from "./log";
 import { encodeTx } from "../core/util/utils";
 
@@ -155,10 +155,12 @@ export class TendermintRPC extends EventEmitter {
                 this.connected = true;
                 this.shouldRetry = true;
                 this.connecting = false;
+
+                // end cycle and resolve promise
                 log("tm", `connected to server after ${counter} attempts`);
                 resolve();
                 clearInterval(timer);
-            }, intervalMs)
+            }, intervalMs);
         });
     }
 
