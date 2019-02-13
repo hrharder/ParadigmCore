@@ -14,8 +14,8 @@
 import { EventEmitter } from "events";
 
 // ParadigmCore classes/functions
-import { PayloadCipher } from "../../crypto/PayloadCipher";
 import { err } from "../../common/log";
+import { encodeTx } from "./utils";
 
 /**
  * The `TxBroadcaster` is responsible for executing local ABCI transactions. It
@@ -129,7 +129,7 @@ export class TxBroadcaster {
         const txEmitter: EventEmitter = txArr[1];
 
         // Compress and encode Tx
-        const payload = PayloadCipher.txEncodeFromObject(txObject);
+        const payload = encodeTx(txObject);
 
         try {
             // Await ABCI response, and resolve promise

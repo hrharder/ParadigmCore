@@ -15,9 +15,8 @@ import { RpcClient } from "tendermint";
 import { EventEmitter } from "events";
 
 // ParadigmCore local imports
-import { PayloadCipher } from "../crypto/PayloadCipher";
 import { log, warn, err } from "./log";
-import { bigIntReplacer } from "./static/bigIntUtils";
+import { encodeTx } from "../core/util/utils";
 
 /**
  * A wrapper class facilitating a WebSocket connection to the Tendermint RPC 
@@ -328,7 +327,7 @@ export class TendermintRPC extends EventEmitter {
 
         // submit tx
         try {
-            const payload = PayloadCipher.txEncodeFromObject(tx);
+            const payload = encodeTx(tx);
             res = await this.conn[method]({ tx: payload });
         } catch (error) {
             throw Error(`Failed to submit tx: ${error.message}`);

@@ -11,10 +11,11 @@
  *
  * ParadigmCore state machine (ABCI) utility functions – pure and non state-
  * modifying.
- */
+**/
 
-// ParadigmCore classes
-import { PayloadCipher } from "../../crypto/PayloadCipher";
+// ParadigmCore imports
+import { err, log, warn } from "../../common/log";
+import { pubToAddr } from "./valFunctions";
 
 // ParadigmCore types
 import { ParsedWitnessData } from "src/typings/abci";
@@ -23,8 +24,6 @@ import { ParsedWitnessData } from "src/typings/abci";
 import { cloneDeep, isInteger } from "lodash";
 import { createHash } from "crypto";
 import { Verify } from "ed25519";
-import { err, log, warn } from "../../common/log";
-import { pubToAddr } from "./valFunctions";
 import * as zlib from "zlib";
 
 /**
@@ -83,14 +82,14 @@ export function syncStates(source: State, target: State): void {
 }
 
 /**
- * Decode and decompress input transaction. Wrapper for PayloadCipher class.
+ * Decode and decompress input transaction.
  * 
- * @todo implement logic directly in this function
+ * @todo better document
+ * @todo deterministic stringify/buffer
  *
  * @param raw {Buffer} encoded/compressed raw transaction
  */
 export function decodeTx(raw: Buffer): SignedTransaction {
-    // return PayloadCipher.ABCIdecode(raw);
     let dcBuff: Buffer; // decompressed buffer
     let outStr: string; // decoded string
     let outObj: SignedTransaction; // output object
@@ -109,6 +108,38 @@ export function decodeTx(raw: Buffer): SignedTransaction {
     }
 
     return outObj;
+}
+
+/**
+ * Encode and compress input transaction.
+ * 
+ * @todo better document
+ * @todo deterministic stringify/buffer
+ *
+ * @param raw {Buffer} encoded/compressed raw transaction
+ */
+export function encodeTx(raw: SignedTransaction): string {
+    let rawStr: string; // raw input string
+    let inBuff: Buffer; // raw input buffer
+    let cpBuff: Buffer; // compressed buffer
+    let outStr: string; // encoded output string
+
+    try {
+        rawStr = JSON.stringify(raw, (_, v) => {
+            // Replace BigInt with custom strings
+            if (typeof(v) === "bigint") {
+                return `${v.toString()}n`;
+            } else {
+                return v;
+            }
+        });
+        inBuff = Buffer.from(rawStr, "utf8");
+        cpBuff = zlib.deflateSync(inBuff);
+        outStr = cpBuff.toString("base64");
+    } catch (error) {
+        throw new Error(`error encoding payload: ${error.message}`);
+    }
+    return outStr;
 }
 
 /**
