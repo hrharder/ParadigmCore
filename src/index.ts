@@ -179,14 +179,18 @@ let node;                       // tendermint node child process instance
     log("witness", "creating witness instance...");
     try {
         witness = await Witness.create({
-            // Tx generator/broadcaster
-            broadcaster,
+            // validator signer/transaction generator
             generator,
+
+            // tendermint rpc config
+            tendermintRpcUrl: "ws://localhost:26657",
+            reconnAttempts: 20,
+            reconnInterval: 1000,
 
             // web3 provider url and contract config
             provider: env.WEB3_PROVIDER,
 
-            // consensus params
+            // initial consensus params
             finalityThreshold: parseInt(env.FINALITY_THRESHOLD, 10),
             periodLength: parseInt(env.PERIOD_LENGTH, 10),
             periodLimit: parseInt(env.PERIOD_LIMIT, 10),
@@ -237,7 +241,7 @@ let node;                       // tendermint node child process instance
 
         // Start state rebalancer sub-process AFTER sync
         log("peg", "starting witness component...");
-        if (witness.start() !== 0) { throw Error("failed to start witness."); }
+        if (await witness.start() !== 0) { throw Error("failed to start witness."); }
         log("peg", msg.rebalancer.messages.activated);
     } catch (error) {
         throw { 

@@ -16,7 +16,6 @@
 // ParadigmCore classes
 import { PayloadCipher } from "../../crypto/PayloadCipher";
 
-
 // ParadigmCore types
 import { ParsedWitnessData } from "src/typings/abci";
 
@@ -26,6 +25,7 @@ import { createHash } from "crypto";
 import { Verify } from "ed25519";
 import { err, log, warn } from "../../common/log";
 import { pubToAddr } from "./valFunctions";
+import * as zlib from "zlib";
 
 /**
  * Verify validator signature, and confirm transaction originated from an
@@ -90,7 +90,25 @@ export function syncStates(source: State, target: State): void {
  * @param raw {Buffer} encoded/compressed raw transaction
  */
 export function decodeTx(raw: Buffer): SignedTransaction {
-    return PayloadCipher.ABCIdecode(raw);
+    // return PayloadCipher.ABCIdecode(raw);
+    let dcBuff: Buffer; // decompressed buffer
+    let outStr: string; // decoded string
+    let outObj: SignedTransaction; // output object
+
+    try {
+        dcBuff = zlib.inflateSync(raw);
+        outStr = dcBuff.toString("utf8");
+    } catch (error) {
+        throw new Error(`error decoding payload: ${error.message}`);
+    }
+
+    try {
+        outObj = JSON.parse(outStr);
+    } catch (error) {
+        throw new Error(`error parsing json: ${error.message}`);
+    }
+
+    return outObj;
 }
 
 /**

@@ -149,6 +149,7 @@ export class StreamServer {
                 port: this.port,
             };
 
+            // initialize the RPC server (public api)
             this.setupServer(options);
 
             // setup emitters
@@ -158,6 +159,11 @@ export class StreamServer {
         }
         return;
     }
+
+    // ACTUALLY SERVER RELATED
+    //  - Client class
+
+    // ABCI CONNECTION RELATED
 
     /**
      * Setup and configure the StreamAPI WebSocket server (and handlers).

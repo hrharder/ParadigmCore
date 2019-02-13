@@ -32,9 +32,7 @@ import { bigIntReplacer } from "../common/static/bigIntUtils";
  */
 export function commitWrapper(
     deliverState: State,
-    commitState: State,
-    msg: LogTemplates,
-    witness: Witness
+    commitState: State
 ): () => ResponseCommit {
     return () => {
         // store string encoded state hash
@@ -42,42 +40,19 @@ export function commitWrapper(
 
         // perform commit responsibilities
         try {
-            // Calculate difference between cState and dState round height
-            const roundDiff = deliverState.round.number - commitState.round.number;
-
-            switch (roundDiff) {
-                // No rebalance proposal accepted in this round
-                case 0: { break; }
-
-                // Rebalance proposal accepted in this round
-                case 1: {
-                    // Load round parameters from state
-                    const newRound = deliverState.round.number;
-                    const newStart = deliverState.round.startsAt;
-                    const newEnd = deliverState.round.endsAt;
-
-                    // Synchronize staking period parameters
-                    // todo: this can't be a function call from within SM
-                    witness.synchronize(newRound, newStart, newEnd);
-
-                    // Temporary
-                    console.log(`\n... current state: ${JSON.stringify(deliverState, bigIntReplacer)}\n`);
-                    break;
-                }
-
-                default: {
-                    // Commit state is more than 1 round ahead of deliver state
-                    warn("state", msg.abci.messages.roundDiff);
-                    break;
-                }
-            }
-
             // Increase last block height
             deliverState.lastBlockHeight += 1;
 
             // Generate new state hash and update
             stateHash = Hasher.hashState(deliverState);
             deliverState.lastBlockAppHash = stateHash;
+
+            // temporarily log state if a rebalance event occurred
+            // Round diff === 1 means rebalance tx included in block
+            const roundDiff = deliverState.round.number - commitState.round.number;
+            if (roundDiff === 1) {
+                console.log(`\nLATEST STATE:\n${JSON.stringify(deliverState, bigIntReplacer)}\n`);
+            }
 
             // Synchronize commit state from delivertx state
             syncStates(deliverState, commitState);
@@ -91,7 +66,7 @@ export function commitWrapper(
                 stateHash.toString("hex").toUpperCase()
             );
         } catch (error) {
-            err("state", `${msg.abci.errors.broadcast}: ${error.message}`);
+            err("state", `commit failed for block #${deliverState.lastBlockHeight }: ${error.message}`);
         }
 
         // Return state's hash to be included in next block header

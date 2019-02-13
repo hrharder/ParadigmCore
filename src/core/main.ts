@@ -89,7 +89,7 @@ export async function start(options: ParadigmCoreOptions): Promise<null> {
             beginBlock: beginBlockWrapper(dState),
             deliverTx: deliverTxWrapper(dState, templates, Order),
             endBlock: endBlockWrapper(dState),
-            commit: commitWrapper(dState, cState, templates, witness),
+            commit: commitWrapper(dState, cState),
         };
 
         // Start ABCI server (connection to Tendermint core)

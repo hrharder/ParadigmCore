@@ -7,7 +7,7 @@
  *
  * @author Henry Harder
  * @date (initial)  15-October-2018
- * @date (modified) 21-January-2019
+ * @date (modified) 12-February-2019
  *
  * The Witness class implements a one-way (read only) peg to Ethereum,
  * and adds a "finality gadget" via a block maturity requirement for events
@@ -34,6 +34,8 @@ import { createWitnessEventObject } from "../core/util/utils";
 import { default as codes } from "../common/Codes";
 import { err, log } from "../common/log";
 import { messages as msg } from "../common/static/messages";
+import { TendermintRPC } from "../common/TendermintRPC";
+import { EventEmitter } from "events";
 
 /**
  * A Witness supports a one way peg-zone between Ethereum and the OrderStream to
@@ -53,7 +55,7 @@ export class Witness {
      *  - options.periodLimit       {number} max transactions per period
      *  - options.periodLength      {number} staking period length (ETH blocks)
      *  - options.finalityThreshold {number} required block maturity
-     *  - options.broadcaster       {TxBroadcaster} broadcaster instance
+     *  - options.tendermintRpcUrl  {string} url of the local tendermint rpc server
      *  - options.txGenerator       {TxGenerator} tx generator/signer
      */
     public static async create(options: any): Promise<Witness> {
@@ -122,7 +124,7 @@ export class Witness {
 
     /**
      * Boolean value that indicates weather or not `.initialize()` has been
-     * called sucessfully.
+     * called successfully.
      */
     private initialized: boolean;
 
@@ -178,16 +180,30 @@ export class Witness {
     /** The block at which current period ends. */
     private periodEnd: number;
 
+    /**  
+     * Event emitter triggered when a rebalance TX is included in a block.
+     * 
+     * @todo better doc
+     */
+    private rebalanceEmitter: EventEmitter;
+
     /** 
      * The `web3.Contract` instance of the EventEmitter contract, used to
      * interface with the paradigm contract system.
-     * 
-     * @todo update to `EventEmitter` contract
      */
     private eventEmitterContract: any;
 
-    /** ABCI transaction broadcaster */
-    private broadcaster: TxBroadcaster;
+    /** Witness class's connection to the Tendermint RPC server. */
+    private tmRpc: TendermintRPC //TxBroadcaster;
+
+    /** Node URL object of provided Tendermint RPC URl. */
+    private tmRpcUrl: URL;
+
+    /** Number of time to attempt to recover connection to Tendermint RPC. */
+    private reconnAttempts: number;
+
+    /** Interval (in ms) between each attempt to reconnect with the RPC server. */
+    private reconnInterval: number;
 
     /** ABCI transaction generator and signer (for validators). */
     private generator: TxGenerator;
@@ -212,17 +228,34 @@ export class Witness {
             throw new Error("invalid web3 provider URL");
         }
 
+        // validate tendermint rpc url
+        try {
+            this.tmRpcUrl = new URL(opts.tendermintRpcUrl);
+        } catch (error) {
+            throw new Error("invalid tendermint-rpc URL");
+        }
+
+        // Tendermint RPC connection interval/config
+        this.reconnAttempts = opts.reconnAttempts;
+        this.reconnInterval = opts.reconnInterval;
+
+        // Local TX generator (and validator signer)
+        this.generator = opts.generator;
+
+        // Create dedicated Tendermint RPC instance for the Witness instance
+        this.tmRpc = new TendermintRPC(
+            this.tmRpcUrl.href,
+            this.reconnAttempts,
+            this.reconnInterval
+        );
+
+        // Finality threshold
+        this.finalityThreshold = opts.finalityThreshold;
+
         // Staking period parameters
         this.periodLimit = opts.periodLimit;
         this.periodLength = opts.periodLength;
         this.periodNumber = 0;
-
-        // Local ABCI transaction broadcaster and generator
-        this.broadcaster = opts.broadcaster;
-        this.generator = opts.generator;
-
-        // Finality threshold
-        this.finalityThreshold = opts.finalityThreshold;
 
         // Mapping objects
         this.events = {};
@@ -256,7 +289,7 @@ export class Witness {
             return codes.NO_BLOCK; // Unable to get current Ethereum height
         }
 
-        // Create staking contract instance
+        // Create staking contract instance via TruffleContract
         try {
             const EventEmitter = TruffleContract(contracts.EventEmitter);
             EventEmitter.setProvider(this.web3.currentProvider);
@@ -277,8 +310,16 @@ export class Witness {
      *
      * @returns 0 if OK
      */
-    public start(): number {
-        // Subscribe to Ethereum events
+    public async start(): Promise<number> {
+        // start tendermint RPC connection
+        try {
+            await this.tmRpc.connect(this.reconnAttempts, this.reconnInterval);
+        } catch(error) {
+            err("peg", error.message);
+            return codes.NO_ABCI;
+        }
+
+        // Subscribe to Ethereum and ParadigmCore events
         const subCode = this.subscribe();
         if (subCode !== codes.OK) { return subCode; }
 
@@ -299,6 +340,7 @@ export class Witness {
         // Check that new round is the next round
         if (round !== (this.periodNumber + 1)) {
             err("peg", "new round is not one greater than current...");
+            console.log(`round: ${round}, in-mem: ${this.periodNumber}`);
             err("peg", "this node may be out of sync with peers...");
         }
 
@@ -392,16 +434,35 @@ export class Witness {
 
             // subscribe to new blocks
             this.web3.eth.subscribe("newBlockHeaders", this.handleBlock);
+
+            // subscribe to rebalance events on the OrderStream
+            // replaces janky `commit()` event emitter from prev. versions
+            // @todo - cleanup and move to methods
+            // @todo - create type defs for tag-related stuff
+            this.tmRpc.subscribe("tx.type='rebalance'", (data) => {
+                let { tags } = data.TxResult.result;
+                let params: any = {};
+                tags.forEach((tag) => {
+                    const key = Buffer.from(tag["key"], "base64").toString();
+                    const value = Buffer.from(tag["value"], "base64").toString();
+
+                    const [ tagSubject, tagParam ] = key.split(".");
+                    if (tagSubject !== "round") return;
+                    params[tagParam] = value;
+                });
+                const { number, start, end } = params;
+                log("peg", `detected rebalance tx in block, now on round ${number}`);
+                this.synchronize(parseInt(number, 10), start, end);
+            })
         } catch (error) {
             // Unable to subscribe to events
+            console.log(error.message);
             return codes.SUBSCRIBE;
         }
 
         // Success
         return codes.OK;
     }
-
-    private handleEvent() {}
 
     /**
      * Stake event handler. NOTE: events are indexed by the block they occur
@@ -451,7 +512,7 @@ export class Witness {
      * @param error {object}    error object
      * @param res   {object}    event response object
      */
-    private handleBlock = (error: any, res: any) => {
+    private handleBlock = async (error: any, res: any) => {
         if (error !== null) {
             err("peg", msg.rebalancer.errors.badBlockEvent);
             return;
@@ -468,7 +529,7 @@ export class Witness {
             const tx = this.genRebalanceTx(0, res.number, this.periodLength);
 
             // Attempt to submit
-            const code = this.execAbciTx(tx);
+            const code = await this.execAbciTx(tx);
             if (code !== codes.OK) {
                 err("peg", `tx failed with code: ${code}`);
             }
@@ -504,7 +565,7 @@ export class Witness {
             );
 
             // Execute ABCI transaction
-            const code = this.execAbciTx(tx);
+            const code = await this.execAbciTx(tx);
             if (code !== codes.OK) {
                 err("peg", `tx failed with code: ${code}`);
             }
@@ -528,42 +589,15 @@ export class Witness {
             return;
         }
         
-        // If no stake is present, set balance to stake amount
-        const amount: bigint = BigInt(event.amount);
-        const { address, type } = event;
+        // set balance of account to event
+        const { address, amount } = event;
+        this.posterBalances[event.address] = BigInt(amount);
 
-        if (!this.posterBalances.hasOwnProperty(event.address)) {
-            this.posterBalances[event.address] = amount;
-            return;
-        }
-
-        // update balance based on stake event
-        switch (type) {
-            // poster adding to their balance
-            case "add": {
-                this.posterBalances[address] += amount;
-                break;
-            }
-
-            // poster removing from their balance
-            case "remove": {
-                this.posterBalances[address] -= amount;
-                break;
-            }
-
-            // safety - shouldn't be reached
-            default: {
-                err("peg", "received unknown event type");
-                return;
-            }
-        }
-
-        // remove balance entry if it is now 0
+        // prune account if it is now empty
         if (this.posterBalances[address] === BigInt(0)) {
             delete this.posterBalances[address];
         }
 
-        // done
         return;
     }
 
@@ -609,7 +643,7 @@ export class Witness {
      *
      * @param event     {object}    event object
      */
-    private execEventTx(event: WitnessData): void {
+    private async execEventTx(event: WitnessData): Promise<void> {
         // Create and sign transaction object
         const { subject, type, amount, block, address, publicKey, id } = event;
         const tx = this.generator.create({
@@ -626,7 +660,7 @@ export class Witness {
         });
 
         // Execute local ABCI transaction
-        const code = this.execAbciTx(tx);
+        const code = await this.execAbciTx(tx);
         if (code !== 0) {
             err("peg", "failed to send event witness tx");
         }
@@ -640,20 +674,13 @@ export class Witness {
      *
      * @param tx   {object}    raw transaction object
      */
-    private execAbciTx(tx: SignedTransaction): number {
-        // temporary?
-        let errCounter = 0;
-
+    private async execAbciTx(tx: SignedTransaction): Promise<number> {
         // send transaction via broadcaster instance
-        this.broadcaster.send(tx).then(() => {
-            errCounter = 0;
-        }).catch((error) => {
+        try {
+            const res = await this.tmRpc.submitTx(tx);
+        } catch (error) {
             err("peg", `failed to send local abci tx: ${error.message}`);
-            errCounter++;
-
-            // exit if ABCI server is dead (with reasonable certainty)
-            if (errCounter >= 10) process.exit(1);
-        });
+        }
 
         // Will return OK unless ABCI is disconnected
         return codes.OK;
