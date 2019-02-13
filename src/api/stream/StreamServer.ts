@@ -235,6 +235,7 @@ export class StreamServer {
                         });
                         this.sendMessageToClient(ssID, res);
                     });
+                    return;
                 }
                 default: {
                     warn("api", `unknown method '${req.parsed.method}' call from: '${req.parsed.id}'`);

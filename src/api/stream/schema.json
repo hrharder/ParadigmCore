@@ -3,33 +3,15 @@
 	"jrgen": "1.1",
 	"jsonrpc": "2.0",
 	"info": {
-		"title": "StreamAPI",
+		"title": "StreamAPI Reference",
 		"description": [
-            "The StreamAPI enables interaction with the ParadigmCore via ABCI",
-            "This api follows the json-rpc 2.0 specification. More information available at http://www.jsonrpc.org/specification."
+			"The StreamAPI enables interaction with the ParadigmCore via JSONRPC/WebSocket.\n",
+			"The API is served by the `StreamServer`, an optional component included as part of the `api` module in ParadigmCore.\n",
+            "StreamAPI follows the JSONRPC-2.0 specification. More information available at http://www.jsonrpc.org/specification."
         ],
 		"version": "0.1-rc"
 	},
 	"definitions": {
-		"session": {
-            "type": "object",
-            "description": "Values specific to an individual session. End with `.end`.",
-			"properties": {
-				"id": {
-					"description": "The client-provided top-level 'id' used in all session responses/requests.",
-					"default": "sID-23189",
-					"type": "string",
-                    "minLength": 1,
-                    "maxLength": 32
-                },
-                "status": {
-					"description": "The session status. Can be 'CONNECTING', 'CLOSED', or 'OPEN'.",
-					"default": "CONNECTING",
-					"type": "string"
-                }
-			},
-			"required": ["id"]
-        },
         "subscription": {
             "type": "object",
 			"properties": {
@@ -45,30 +27,25 @@
         }
 	},
 	"methods": {
-		"session.start": {
-			"summary": "Start a StreamAPI session.",
-			"description": "The client-provided 'id' will be included in all future responses from the server, and must be included in all requests by the client for the duration of the session.",
-			"tags": [
-                "session"
-			],
-			"result": {
-				"$ref": "#/definitions/session"
-			},
-			"errors": [{
-				"description": "The provided 'id' is invalid, or in use.",
-				"code": 1,
-				"message": "BadSessionID",
-				"data": {}
-			}]
-        },
         "session.end": {
 			"summary": "End a StreamAPI session.",
-			"description": "Terminate a StreamAPI session immediately and cancel all subscriptions.",
+			"description": [
+				"Terminate a StreamAPI session immediately.\n ",
+				"Calling this method will cancel all subscriptions, and immediately close the client/server connection."
+			],
 			"tags": [
                 "session"
 			],
 			"result": {
-				"$ref": "#/definitions/session"
+				"type": "object",
+				"properties": {
+					"response": {
+						"description": "The server's response to the connection-close request.",
+						"default": "Closing connection.",
+						"type": "string"
+					}
+				},
+				"required": ["response"]
 			},
 			"errors": [{
 				"description": "The provided 'id' is invalid, or unused.",
@@ -97,12 +74,25 @@
 				"required": ["event"]
 			},
 			"result": {
-				"$ref": "#/definitions/subscription"
+				"type": "object",
+				"properties": {
+					"response": {
+						"description": "The server's response to the subscription-start request.",
+						"default": "Successfully started subscription",
+						"type": "string"
+					},
+					"eventId": {
+						"description": "A unique ID that can be used for filtering many event subscriptions.",
+						"default": "132162",
+						"type": "string"
+					}
+				},
+				"required": ["response"]
 			},
 			"errors": [{
-				"description": "The provided credentials are invalid.",
+				"description": "The provided parameters are invalid.",
 				"code": 1,
-				"message": "InvalidCredentials",
+				"message": "InvalidParameters",
 				"data": {}
 			}]
         },
@@ -115,22 +105,29 @@
 			"params": {
 				"type": "object",
 				"properties": {
-					"event": {
-						"description": "The name of the event you are subscribing to. Can be 'order' or 'block' currently.",
-						"default": "order",
-						"type": "string",
-						"minLength": 1
+					"eventId": {
+						"description": "A unique ID provided by the server upon an event subscription.",
+						"default": "132162",
+						"type": "string"
 					}
 				},
-				"required": ["event"]
+				"required": ["eventId"]
 			},
 			"result": {
-				"$ref": "#/definitions/subscription"
+				"type": "object",
+				"properties": {
+					"response": {
+						"description": "The server's response to the subscription-end request.",
+						"default": "Successfully ended event subscription.",
+						"type": "string"
+					}
+				},
+				"required": ["response"]
 			},
 			"errors": [{
-				"description": "The provided credentials are invalid.",
+				"description": "The provided parameters are invalid.",
 				"code": 1,
-				"message": "InvalidCredentials",
+				"message": "InvalidParameters",
 				"data": {}
 			}]
 		}
