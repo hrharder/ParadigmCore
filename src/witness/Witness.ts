@@ -242,7 +242,7 @@ export class Witness {
         // Local TX generator (and validator signer)
         this.generator = opts.generator;
 
-        // Create dedicated Tendermint RPC instance for the Witness instance
+        // Create dedicated Tendermint RPC connection for the Witness instance
         this.tmRpc = new TendermintRPC(
             this.tmRpcUrl.href,
             this.reconnAttempts,
@@ -341,7 +341,7 @@ export class Witness {
         if (round !== (this.periodNumber + 1)) {
             err("peg", "new round is not one greater than current...");
             console.log(`round: ${round}, in-mem: ${this.periodNumber}`);
-            err("peg", "this node may be out of sync with peers...");
+            err("peg", "this witness may be out of sync with peers...");
         }
 
         // Update parameters
@@ -426,39 +426,33 @@ export class Witness {
      * @param from  {number}    the block from which to subscribe to events
      */
     private subscribe(from: number = 0): number {
-        try {
-            // subscribe to 'StakeMade' events
-            this.eventEmitterContract.ParadigmEvent({
-                fromBlock: from,
-            }, this.handleParadigmEvent);
+        // subscribe to 'StakeMade' events
+        this.eventEmitterContract.ParadigmEvent({
+            fromBlock: from,
+        }, this.handleParadigmEvent);
 
-            // subscribe to new blocks
-            this.web3.eth.subscribe("newBlockHeaders", this.handleBlock);
+        // subscribe to new blocks
+        this.web3.eth.subscribe("newBlockHeaders", this.handleBlock);
 
-            // subscribe to rebalance events on the OrderStream
-            // replaces janky `commit()` event emitter from prev. versions
-            // @todo - cleanup and move to methods
-            // @todo - create type defs for tag-related stuff
-            this.tmRpc.subscribe("tx.type='rebalance'", (data) => {
-                let { tags } = data.TxResult.result;
-                let params: any = {};
-                tags.forEach((tag) => {
-                    const key = Buffer.from(tag["key"], "base64").toString();
-                    const value = Buffer.from(tag["value"], "base64").toString();
+        // subscribe to rebalance events on the OrderStream
+        // replaces janky `commit()` event emitter from prev. versions
+        // @todo - cleanup and move to methods
+        // @todo - create type defs for tag-related stuff
+        this.tmRpc.subscribe("tx.type='rebalance'", (data) => {
+            let { tags } = data.TxResult.result;
+            let params: any = {};
+            tags.forEach((tag) => {
+                const key = Buffer.from(tag["key"], "base64").toString();
+                const value = Buffer.from(tag["value"], "base64").toString();
 
-                    const [ tagSubject, tagParam ] = key.split(".");
-                    if (tagSubject !== "round") return;
-                    params[tagParam] = value;
-                });
-                const { number, start, end } = params;
-                log("peg", `detected rebalance tx in block, now on round ${number}`);
-                this.synchronize(parseInt(number, 10), start, end);
-            })
-        } catch (error) {
-            // Unable to subscribe to events
-            console.log(error.message);
-            return codes.SUBSCRIBE;
-        }
+                const [ tagSubject, tagParam ] = key.split(".");
+                if (tagSubject !== "round") return;
+                params[tagParam] = value;
+            });
+            const { number, start, end } = params;
+            log("peg", `detected rebalance tx in block, now on round ${number}`);
+            this.synchronize(parseInt(number, 10), start, end);
+        })
 
         // Success
         return codes.OK;
@@ -477,6 +471,7 @@ export class Witness {
             return;
         }
 
+        // use decoder utils from ParadigmContract library
         const decodedEventData = eventDecoder(res.returnValues);
         const block = res.blockNumber;
 
@@ -486,6 +481,7 @@ export class Witness {
             block
         );
 
+        // ignore irrelevant events from contract system
         if(witnessEvent === undefined) return;
 
         // See if this is a historical event that has already matured

@@ -258,4 +258,3 @@ let node;                       // tendermint node child process instance
     err("start", msg.general.errors.fatal);
     process.exitCode = 1;
 });
-

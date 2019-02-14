@@ -2209,7 +2209,7 @@ ed25519-supercop@^1.2.0:
     nan "^2.0.5"
     node-gyp-build "^3.3.0"
 
-ed25519@0.0.4:
+ed25519@^0.0.4:
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/ed25519/-/ed25519-0.0.4.tgz#e56218ace2fc903d259593aef0b2a9639f475beb"
   integrity sha1-5WIYrOL8kD0llZOu8LKpY59HW+s=
