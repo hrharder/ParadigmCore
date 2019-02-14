@@ -19,7 +19,7 @@
 
 ▸ **checkStream**(tx: *`SignedStreamTx`*, state: *`State`*): `object`
 
-*Defined in [core/handlers/stream.ts:31](https://github.com/paradigmfoundation/paradigmcore/blob/a5bd142/src/core/handlers/stream.ts#L31)*
+*Defined in [core/handlers/stream.ts:31](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/core/handlers/stream.ts#L31)*
 
 Used to perform mempool verification of StreamBroadcast transactions.
 
@@ -39,7 +39,7 @@ ___
 
 ▸ **deliverStream**(tx: *`SignedStreamTx`*, state: *`State`*): `object`
 
-*Defined in [core/handlers/stream.ts:42](https://github.com/paradigmfoundation/paradigmcore/blob/a5bd142/src/core/handlers/stream.ts#L42)*
+*Defined in [core/handlers/stream.ts:42](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/core/handlers/stream.ts#L42)*
 
 Execute StreamBroadcast transactions in full, and perform state modification.
 

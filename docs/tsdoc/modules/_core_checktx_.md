@@ -18,7 +18,7 @@
 
 ▸ **checkTxWrapper**(state: *`State`*, Order: *`any`*): `function`
 
-*Defined in [core/checkTx.ts:42](https://github.com/paradigmfoundation/paradigmcore/blob/a5bd142/src/core/checkTx.ts#L42)*
+*Defined in [core/checkTx.ts:42](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/core/checkTx.ts#L42)*
 
 Perform light verification on incoming transactions, accept valid transactions to the mempool, and reject invalid ones.
 

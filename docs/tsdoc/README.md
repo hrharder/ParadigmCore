@@ -198,6 +198,7 @@ Additionally, feel free to open issues and pull requests with bug fixes or enhan
 * ["api/stream/JsonRequest"](modules/_api_stream_jsonrequest_.md)
 * ["api/stream/JsonResponse"](modules/_api_stream_jsonresponse_.md)
 * ["api/stream/StreamServer"](modules/_api_stream_streamserver_.md)
+* ["api/stream/StreamServer-old"](modules/_api_stream_streamserver_old_.md)
 * ["api/stream/api"](modules/_api_stream_api_.md)
 * ["common/Codes"](modules/_common_codes_.md)
 * ["common/Queue"](modules/_common_queue_.md)

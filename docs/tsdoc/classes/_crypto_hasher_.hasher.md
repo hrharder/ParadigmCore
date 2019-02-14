@@ -23,7 +23,7 @@
 
 ▸ **hashOrder**(order: *`Order`*): `string`
 
-*Defined in [crypto/Hasher.ts:31](https://github.com/paradigmfoundation/paradigmcore/blob/a5bd142/src/crypto/Hasher.ts#L31)*
+*Defined in [crypto/Hasher.ts:31](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/crypto/Hasher.ts#L31)*
 
 Generate the hash of an order to be used as the OrderID.
 
@@ -42,7 +42,7 @@ ___
 
 ▸ **hashState**(state: *`State`*): `Buffer`
 
-*Defined in [crypto/Hasher.ts:54](https://github.com/paradigmfoundation/paradigmcore/blob/a5bd142/src/crypto/Hasher.ts#L54)*
+*Defined in [crypto/Hasher.ts:54](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/crypto/Hasher.ts#L54)*
 
 Generate a hash of the state.
 

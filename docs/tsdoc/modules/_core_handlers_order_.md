@@ -19,7 +19,7 @@
 
 ▸ **checkOrder**(tx: *`SignedOrderTx`*, state: *`State`*, Order: *`any`*): `object`
 
-*Defined in [core/handlers/order.ts:33](https://github.com/paradigmfoundation/paradigmcore/blob/a5bd142/src/core/handlers/order.ts#L33)*
+*Defined in [core/handlers/order.ts:33](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/core/handlers/order.ts#L33)*
 
 Performs light verification of OrderBroadcast transactions before accepting to local mempool.
 
@@ -40,7 +40,7 @@ ___
 
 ▸ **deliverOrder**(tx: *`SignedOrderTx`*, state: *`State`*, Order: *`any`*): `object`
 
-*Defined in [core/handlers/order.ts:76](https://github.com/paradigmfoundation/paradigmcore/blob/a5bd142/src/core/handlers/order.ts#L76)*
+*Defined in [core/handlers/order.ts:76](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/core/handlers/order.ts#L76)*
 
 Execute an OrderBroadcast transaction in full, and perform state modification.
 

@@ -26,7 +26,7 @@
 
 **● app**: *`Express`* =  express()
 
-*Defined in [api/post/HttpServer.ts:38](https://github.com/paradigmfoundation/paradigmcore/blob/a5bd142/src/api/post/HttpServer.ts#L38)*
+*Defined in [api/post/HttpServer.ts:38](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/api/post/HttpServer.ts#L38)*
 
 ___
 <a id="client"></a>
@@ -35,7 +35,7 @@ ___
 
 **● client**: *[TxBroadcaster](../classes/_core_util_txbroadcaster_.txbroadcaster.md)*
 
-*Defined in [api/post/HttpServer.ts:36](https://github.com/paradigmfoundation/paradigmcore/blob/a5bd142/src/api/post/HttpServer.ts#L36)*
+*Defined in [api/post/HttpServer.ts:36](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/api/post/HttpServer.ts#L36)*
 
 ___
 <a id="generator"></a>
@@ -44,7 +44,7 @@ ___
 
 **● generator**: *[TxGenerator](../classes/_core_util_txgenerator_.txgenerator.md)*
 
-*Defined in [api/post/HttpServer.ts:37](https://github.com/paradigmfoundation/paradigmcore/blob/a5bd142/src/api/post/HttpServer.ts#L37)*
+*Defined in [api/post/HttpServer.ts:37](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/api/post/HttpServer.ts#L37)*
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 ▸ **errorHandler**(error: *`Error`*, req: *`Request`*, res: *`Response`*, next: *`NextFunction`*): `void`
 
-*Defined in [api/post/HttpServer.ts:105](https://github.com/paradigmfoundation/paradigmcore/blob/a5bd142/src/api/post/HttpServer.ts#L105)*
+*Defined in [api/post/HttpServer.ts:105](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/api/post/HttpServer.ts#L105)*
 
 General error handler.
 
@@ -78,7 +78,7 @@ ___
 
 ▸ **postHandler**(req: *`Request`*, res: *`Response`*, next: *`NextFunction`*): `Promise`<`void`>
 
-*Defined in [api/post/HttpServer.ts:91](https://github.com/paradigmfoundation/paradigmcore/blob/a5bd142/src/api/post/HttpServer.ts#L91)*
+*Defined in [api/post/HttpServer.ts:91](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/api/post/HttpServer.ts#L91)*
 
 Express POST handler for incoming orders (and eventually stream tx's).
 
@@ -99,7 +99,7 @@ ___
 
 ▸ **start**(options: *`any`*): `Promise`<`void`>
 
-*Defined in [api/post/HttpServer.ts:51](https://github.com/paradigmfoundation/paradigmcore/blob/a5bd142/src/api/post/HttpServer.ts#L51)*
+*Defined in [api/post/HttpServer.ts:51](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/api/post/HttpServer.ts#L51)*
 
 Start and bind API server.
 
