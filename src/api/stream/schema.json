@@ -63,7 +63,7 @@
 			"params": {
 				"type": "object",
 				"properties": {
-					"event": {
+					"eventName": {
 						"description": "The name of the event you are subscribing to. Can be 'order' or 'block' currently.",
                         "default": "order",
                         "enum": ["order", "block"],
@@ -71,7 +71,7 @@
 						"minLength": 1
                     }
 				},
-				"required": ["event"]
+				"required": ["eventName"]
 			},
 			"result": {
 				"type": "object",

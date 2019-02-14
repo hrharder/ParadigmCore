@@ -39,7 +39,6 @@ import { start as startMain } from "./core/main";
 // General utilities and misc.
 import { err, log, logStart, warn } from "./common/log";
 import { messages as msg } from "./common/static/messages";
-import { StreamServer } from "./api/stream/StreamServer";
 
 // VALIDATOR MODULES
 let witness:        Witness;

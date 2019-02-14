@@ -1,10 +1,4 @@
-interface StreamServerOptions {
-    abciURL: string;
-    retryInterval?: number;
-    retryTimeout?: number;
-    port: number;
-    host?: string;
-}
+
 
 interface ClientMap extends Object {
     [id: string]: Client;
