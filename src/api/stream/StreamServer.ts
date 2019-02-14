@@ -382,7 +382,7 @@ export class StreamServer extends EventEmitter {
                     warn("api", `Send error message to connection '${connectionId}'`);
                     return;
                 } else {
-                    res = new Response({ result: "yeah this is okay." });
+                    res = new Response({id: "none", result: "yeah this is okay." });
                     this.sendMessageToClient(connectionId, res);
                     log("api", `Send OK message to connection '${connectionId}'`);
                     return;
@@ -391,7 +391,7 @@ export class StreamServer extends EventEmitter {
 
             conn.on("open", () => {
                 console.log("\nya it open bud\n");
-                const res = new Response({ result: "welcome brudda" });
+                const res = new Response({id: "none", result: "welcome brudda" });
                 this.sendMessageToClient(connectionId, res);
                 log("api", `Send open message to connection '${connectionId}'`);
                 return;
@@ -400,7 +400,7 @@ export class StreamServer extends EventEmitter {
             conn.on("error", (error: Error) => {
                 // TEMPORARY
                 warn("api", `Error from connection '${connectionId}': ${error.message}`);
-                const res = new Response({ result: "goodbye, error found." });
+                const res = new Response({id: "none", result: "goodbye, error found." });
                 this.sendMessageToClient(connectionId, res);
                 warn("api", `Send error message to connection '${connectionId}'`);
                 // remove from connection mapping
