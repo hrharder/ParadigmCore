@@ -133,8 +133,7 @@ export function deliverRebalance(
 
                     // copy limits from proposal to each balance
                     Object.keys(propLimits).forEach((i) => {
-                        state.posters[i].orderLimit = propLimits[i];
-                        state.posters[i].streamLimit = 1;
+                        state.posters[i].limit = propLimits[i];
                     });
                     // End state modification
 
@@ -152,6 +151,8 @@ export function deliverRebalance(
                     return Vote.valid(msg.rebalancer.messages.accept, tags);
                 } else {
                     // Proposal does not match local mapping
+                    console.log(`\nProposal: ${JSON.stringify(propLimits)}\n`)
+                    console.log(`\nIn-state: ${JSON.stringify(localLimits)}\n`);
                     warn("state", msg.rebalancer.messages.noMatch);
                     return Vote.invalid(msg.rebalancer.messages.noMatch);
                 }

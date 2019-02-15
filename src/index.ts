@@ -122,7 +122,6 @@ let node;                       // tendermint node child process instance
             info: "failed creating transaction broadcaster instance",
             comp: "tx"
         };
-        
     }
 
     log("tx", "setting up validator transaction signer...");
@@ -229,19 +228,6 @@ let node;                       // tendermint node child process instance
         // Wait for Tendermint to load and synchronize
         await node.synced();
         log("tm", "tendermint initialized and synchronized");
-
-        // Activate transaction broadcaster
-        log("tx", "starting validator transaction broadcaster...");
-        broadcaster.start();
-
-        // activate order tracker
-        log("api", "activating order-stream websocket api...");
-        // tracker.activate();
-
-        // Start state rebalancer sub-process AFTER sync
-        log("peg", "starting witness component...");
-        if (await witness.start() !== 0) { throw Error("failed to start witness."); }
-        log("peg", msg.rebalancer.messages.activated);
     } catch (error) {
         throw { 
             message: error.message,
@@ -250,7 +236,20 @@ let node;                       // tendermint node child process instance
         };
     }
     return;
-})(process.env).then(() => {
+})(process.env).then(async () => {
+     // Start state rebalancer sub-process AFTER sync
+    log("peg", "starting witness component...");
+    const witRes = await witness.start();
+    if (witRes !== 0) {
+        throw Error("failed to start witness.");
+    }
+    log("peg", msg.rebalancer.messages.activated);
+    return;
+}).then(() => {
+    // Activate transaction broadcaster
+    log("tx", "starting validator transaction broadcaster...");
+    broadcaster.start();
+}).then(() => {
     logStart("paradigm-core startup successfully completed");
 }).catch((error) => {
     err(error.comp, error.info);

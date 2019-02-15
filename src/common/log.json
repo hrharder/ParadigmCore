@@ -8,7 +8,7 @@
         "start":    { "label": "startup", "color": "grey" },
         "state":    { "label": "core", "color": "cyan" },
         "mem":      { "label": "mempool", "color": "magenta" },
-        "tx":       { "label": "abci", "color": "blue" },
+        "tx":       { "label": "validator", "color": "cyan" },
         "api":      { "label": "api", "color": "blue" },
         "peg":      { "label": "witness", "color": "yellow" },
         "tm":      { "label": "tendermint", "color": "green" }

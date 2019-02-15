@@ -23,7 +23,6 @@ import { messages as msg } from "../common/static/messages"
 
 // tx handlers
 import { checkOrder } from "./handlers/order";
-import { checkStream } from "./handlers/stream";
 import { checkWitness } from "./handlers/witness";
 import { checkRebalance } from "./handlers/rebalance";
 
@@ -68,12 +67,6 @@ export function checkTxWrapper(
             // sumbmission of an 'order' tx (external)
             case "order": {
                 return checkOrder(tx as SignedOrderTx, state, Order);
-            }
-
-            // sumbmission of a 'stream' tx (external)
-            // @TODO implement
-            case "stream": {
-                return checkStream(tx as SignedStreamTx, state);
             }
 
             // validator reporting witness to Ethereum event (internal)

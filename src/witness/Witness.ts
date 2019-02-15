@@ -32,10 +32,11 @@ import { createWitnessEventObject } from "../core/util/utils";
 
 // ParadigmCore common utils
 import { default as codes } from "../common/Codes";
-import { err, log } from "../common/log";
+import { err, log, warn } from "../common/log";
 import { messages as msg } from "../common/static/messages";
 import { TendermintRPC } from "../common/TendermintRPC";
 import { EventEmitter } from "events";
+import { bigIntReplacer } from "../common/static/bigIntUtils";
 
 /**
  * A Witness supports a one way peg-zone between Ethereum and the OrderStream to
@@ -214,6 +215,10 @@ export class Witness {
     /** Mapping that tracks poster balances. Used to submit proposals. */
     private posterBalances: PosterBalances;
 
+    private txEmitter: EventEmitter;
+
+    private txQueue: SignedTransaction[];
+
     /**
      * PRIVATE constructor. Do not use. Create new `witness` instances with
      * Witness.create(options)
@@ -241,6 +246,8 @@ export class Witness {
 
         // Local TX generator (and validator signer)
         this.generator = opts.generator;
+        this.txEmitter = new EventEmitter();
+        this.txQueue = [];
 
         // Create dedicated Tendermint RPC connection for the Witness instance
         this.tmRpc = new TendermintRPC(
@@ -248,6 +255,15 @@ export class Witness {
             this.reconnAttempts,
             this.reconnInterval
         );
+
+        // attach tx handlers (for interface with TendermintRPC)
+        this.txEmitter.on("tx", (inTx?: SignedTransaction) => {
+            this.tmRpc.submitTx(inTx).then((res: any) => {
+                log("peg", `successfully executed tx: ${res.log}`);
+            }).catch((err) => {
+                warn("peg", `failed sending tx: ${err}`);
+            })
+        });
 
         // Finality threshold
         this.finalityThreshold = opts.finalityThreshold;
@@ -314,6 +330,7 @@ export class Witness {
         // start tendermint RPC connection
         try {
             await this.tmRpc.connect(this.reconnAttempts, this.reconnInterval);
+            log("peg", "connected to the tendermint RPC server");
         } catch(error) {
             err("peg", error.message);
             return codes.NO_ABCI;
@@ -508,7 +525,7 @@ export class Witness {
      * @param error {object}    error object
      * @param res   {object}    event response object
      */
-    private handleBlock = async (error: any, res: any) => {
+    private handleBlock = (error: any, res: any) => {
         if (error !== null) {
             err("peg", msg.rebalancer.errors.badBlockEvent);
             return;
@@ -522,15 +539,7 @@ export class Witness {
             log("peg", "proposing parameters for initial period");
 
             // Prepare proposal tx
-            const tx = this.genRebalanceTx(0, res.number, this.periodLength);
-
-            // Attempt to submit
-            const code = await this.execAbciTx(tx);
-            if (code !== codes.OK) {
-                err("peg", `tx failed with code: ${code}`);
-            }
-
-            // Exit block handler function early on first block
+            this.execRebalanceTx(0, res.number, this.periodLength);
             return;
         }
 
@@ -544,7 +553,7 @@ export class Witness {
         // See if any events have reached finality
         if (this.events.hasOwnProperty(matBlock)) {
             // Update out-of-state balances with newly matured event and submit
-            Object.keys(this.events[matBlock]).forEach((k) => {
+            Object.keys(this.events[matBlock]).forEach(async (k) => {
                 this.updateBalance(this.events[matBlock][k]);
                 this.execEventTx(this.events[matBlock][k]);
             });
@@ -555,16 +564,11 @@ export class Witness {
 
         // See if the round has ended, and submit rebalance tx if so
         if (matBlock >= this.periodEnd) {
-            // Prepare transaction
-            const tx = this.genRebalanceTx(
-                this.periodNumber, this.currHeight, this.periodLength,
+            this.execRebalanceTx(
+                this.periodNumber,
+                this.currHeight,
+                this.periodLength,
             );
-
-            // Execute ABCI transaction
-            const code = await this.execAbciTx(tx);
-            if (code !== codes.OK) {
-                err("peg", `tx failed with code: ${code}`);
-            }
         }
 
         // Return once all tasks complete
@@ -605,7 +609,7 @@ export class Witness {
      * @param start    {number}    period starting ETG block number
      * @param length   {number}    the length of each period in ETH blocks
      */
-    private genRebalanceTx(round, start, length): SignedTransaction {
+    private execRebalanceTx(round, start, length): SignedTransaction {
         let map: Limits;
 
         if (round === 0) {
@@ -630,8 +634,9 @@ export class Witness {
             type: "rebalance",
         });
 
-        // Return constructed transaction object
-        return tx;
+        // trigger broadcast
+        this.txEmitter.emit("tx", tx);
+        return;
     }
 
     /**
@@ -639,10 +644,10 @@ export class Witness {
      *
      * @param event     {object}    event object
      */
-    private async execEventTx(event: WitnessData): Promise<void> {
+    private execEventTx(event: WitnessData): Promise<void> {
         // Create and sign transaction object
         const { subject, type, amount, block, address, publicKey, id } = event;
-        const tx = this.generator.create({
+        const tx: SignedTransaction = this.generator.create({
             data: {
                 subject,
                 type,
@@ -655,30 +660,8 @@ export class Witness {
             type: "witness",
         });
 
-        // Execute local ABCI transaction
-        const code = await this.execAbciTx(tx);
-        if (code !== 0) {
-            err("peg", "failed to send event witness tx");
-        }
-
+        // trigger broadcast
+        this.txEmitter.emit("tx", tx);
         return;
-    }
-
-    /**
-     * Encodes and compresses a transactions, then submits it to Tendermint
-     * via the broadcaster connection.
-     *
-     * @param tx   {object}    raw transaction object
-     */
-    private async execAbciTx(tx: SignedTransaction): Promise<number> {
-        // send transaction via broadcaster instance
-        try {
-            const res = await this.tmRpc.submitTx(tx);
-        } catch (error) {
-            err("peg", `failed to send local abci tx: ${error.message}`);
-        }
-
-        // Will return OK unless ABCI is disconnected
-        return codes.OK;
     }
 }

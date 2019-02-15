@@ -55,7 +55,7 @@ export function checkOrder(tx: SignedOrderTx, state: State, Order) {
     // Does poster have a staked balance?
     if (
         state.posters.hasOwnProperty(poster) &&
-        state.posters[poster].orderLimit > 0n
+        state.posters[poster].limit > 0n
     ) {
         log("mem", msg.abci.messages.mempool);
         return Vote.valid(`(unconfirmed) orderID: ${Hasher.hashOrder(order)}`);
@@ -90,13 +90,13 @@ export function deliverOrder(tx: SignedOrderTx, state: State, Order) {
     // Verify poster balance and modify state
     if (
         state.posters.hasOwnProperty(poster) &&
-        state.posters[poster].orderLimit > 0n
+        state.posters[poster].limit > 0n
     ) {
         // Hash order to generate orderID
         order.id = Hasher.hashOrder(order);
 
         // Begin state modification
-        state.posters[poster].orderLimit -= 1;
+        state.posters[poster].limit -= 1;
         state.orderCounter += 1;
         // End state modification
 

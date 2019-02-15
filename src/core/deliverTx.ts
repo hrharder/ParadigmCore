@@ -22,7 +22,6 @@ import { decodeTx, preVerifyTx } from "./util/utils";
 
 // tx handlers
 import { deliverOrder } from "./handlers/order";
-import { deliverStream } from "./handlers/stream";
 import { deliverWitness } from "./handlers/witness";
 import { deliverRebalance } from "./handlers/rebalance";
 
@@ -61,12 +60,6 @@ export function deliverTxWrapper(
             // sumbmission of an 'order' tx (external)
             case "order": {
                 return deliverOrder(tx as SignedOrderTx, state, Order);
-            }
-
-            // sumbmission of a 'stream' tx (external)
-            // @TODO implement
-            case "stream": {
-                return deliverStream(tx as SignedStreamTx, state);
             }
 
             // validator reporting witness to Ethereum event (internal)

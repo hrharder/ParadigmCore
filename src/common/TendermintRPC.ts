@@ -13,10 +13,33 @@
 // stdlib and third-party imports
 import { RpcClient } from "tendermint";
 import { EventEmitter } from "events";
+import * as uniqueId from "uuid/v4";
 
 // ParadigmCore local utilities
 import { log, warn, err } from "./log";
 import { encodeTx } from "../core/util/utils";
+
+/**
+ * Defines the object passed into `TendermintRPC.prototype.queue`
+ */
+interface TransactionConfig {
+    /** The transaction to submit via RPC */
+    tx: SignedTransaction;
+    
+    /** The broadcast mode to use for this transaction */
+    method: "sync" | "async" | "commit";
+
+    /** Unique ID used to track result */
+    id: string;
+}
+
+interface TxResponse {
+    /** True if no error encountered during RPC */
+    ok: boolean;
+
+    /** The response object (or message) from the server */
+    res: string | object;
+}
 
 /**
  * A wrapper class facilitating a WebSocket connection to the Tendermint RPC 
@@ -83,6 +106,17 @@ export class TendermintRPC extends EventEmitter {
     private connecting: boolean;
 
     /**
+     * The broadcast queue of transactions that need to be sent via RPC.
+     */
+    private queue: TransactionConfig[];
+
+    /**
+     * Boolean status used to track if broadcast via RPC is in progress, or 
+     * completed/not-started.
+     */
+    private sending: boolean;
+
+    /**
      * Create a new Tendermint RPC instance.
      * 
      * @param endpoint 
@@ -95,8 +129,10 @@ export class TendermintRPC extends EventEmitter {
         }
 
         this.connected = false;
+        this.sending = false;
         this.id = null;
         this.latestBlockData = null;
+        this.queue = [];
 
         // reconnect things
         this.connecting = false;
@@ -221,6 +257,34 @@ export class TendermintRPC extends EventEmitter {
     }
 
     /**
+     * (Internal) Submit a transaction to Tendermint via RPC. Use the public 
+     * `TendermintRPC.prototype.submitTx` method to add transactions to the
+     * broadcast queue.
+     */
+    private async internalSubmitTx(): Promise<any> {
+        // don't try to sub if not connected
+        if (!this.connected || this.connecting) throw Error("Not connected to Tendermint RPC.");
+
+        // send every tx in the queue
+        this.sending = true;
+        for (let i = 0; i < this.queue.length; i++) {
+            const { tx, method, id } = this.queue.pop();
+            try {
+                const payload = encodeTx(tx);
+                const res = await this.conn[method]({ tx: payload });
+                this.emit(id, { ok: true, res});
+            } catch (error) {
+                this.emit(id, {
+                    ok: false,
+                    res: `Failed to submit tx: ${error.message}`
+                });
+            }
+        }
+        this.sending = false;
+        return;
+    }
+
+    /**
      * Query the ABCI `info` method.
      * 
      * @description A wrapper for the Tendermint RPC method `abci_info`, for 
@@ -297,7 +361,7 @@ export class TendermintRPC extends EventEmitter {
     }
 
     /**
-     * Submit a transaction to Tendermint via RPC.
+     * Submit
      * 
      * @description Accepts a [SignedTransaction] as the first argument, which 
      * gets compressed/encoded using the [PayloadCipher] class. The second 
@@ -305,16 +369,11 @@ export class TendermintRPC extends EventEmitter {
      * be any of `sync`, `async`, or `commit`. See https://tendermint.com/rpc 
      * for more details.
      * 
-     * @param tx the string of the event to subscribe to.
-     * @param mode an optional mode to use, defaults to `sync`
+     * @param tx 
      */
-    public async submitTx(tx: SignedTransaction, mode?: string): Promise<any> {
-        // don't try to sub if not connected
-        if (!this.connected || this.connecting) throw Error("Not connected to Tendermint RPC.");
-
-        // the default broadcast method
+    public submitTx(tx: SignedTransaction, mode?: "sync" | "async" | "commit") {
+        // use a specific broadcast method for this tx
         let method;
-        let res;
         const methodBuilder = m => `broadcastTx${m}`;
         const parsed = mode ? mode.toLowerCase(): null;
 
@@ -327,18 +386,29 @@ export class TendermintRPC extends EventEmitter {
             method = methodBuilder("Sync");
         }
 
-        // submit tx
-        try {
-            const payload = encodeTx(tx);
-            res = await this.conn[method]({ tx: payload });
-        } catch (error) {
-            throw Error(`Failed to submit tx: ${error.message}`);
-        }
+        // generate unique id string to identify tx
+        const id = uniqueId();
 
-        // resolve to response from Tendermint RPC
-        return res;
+        // async submit to rpc server
+        return new Promise((resolve, reject) => {
+            this.queue.push({ tx, method, id});
+
+            // attach one-off listeners for tx
+            this.once(id, (response: TxResponse) => {
+                const { ok, res } = response;
+                if (ok) {
+                    resolve(res);
+                } else {
+                    reject(res);
+                }
+            });
+
+            // trigger broadcast, if needed
+            if (!this.sending) {
+                this.internalSubmitTx();
+            }
+        });
     }
-
     /**
      * Public getter method to check connection status. 
      * 

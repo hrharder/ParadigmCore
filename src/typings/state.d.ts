@@ -103,9 +103,8 @@ interface PosterInfo {
  * 'stream' transaction limits.
  */
 interface Poster {
-    balance:        bigint;
-    orderLimit:     number;
-    streamLimit:    number;
+    balance:    bigint;
+    limit:      number;
 }
 
 /**
@@ -184,16 +183,6 @@ interface PosterBalances {
  */
 interface Limits {
     [key: string]:  number;
-}
-
-/**
- * Each staker is allocated a network throughput limit (for Order transactions)
- * proportional to stake size, and all stakers are allocated one (1) Stream
- * transaction per period, regardless of stake size.  
- */
-interface LimitObject {
-    orderLimit:     number;
-    streamLimit:    number;
 }
 
 /**

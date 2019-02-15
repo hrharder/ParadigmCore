@@ -434,8 +434,7 @@ export function applyPosterEvent(state: State, tx: ParsedWitnessData): boolean {
         // create new account for poster
         state.posters[address] = {
             balance: BigInt(0),
-            orderLimit: null,
-            streamLimit: null
+            limit: null,
         };
 
         // add amount from event to balance
