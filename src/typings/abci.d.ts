@@ -2,7 +2,6 @@ import { EventEmitter } from "events";
 import { TxGenerator } from "src/core/util/TxGenerator";
 import { TxBroadcaster } from "src/core/util/TxBroadcaster";
 import { Witness } from "src/witness/Witness";
-import { Vote } from "src/core/util/Vote";
 
 /**
  * Configuration options for main ParadigmCore state machine.
@@ -45,14 +44,23 @@ interface ResponseInitChain {}
 interface ResponseBeginBlock {}
 
 /**
+ * Interface that defines the generic tx response type.
+ */
+interface ResponseTx {
+    code?: number;
+    log: string;
+    tags?: KVPair;
+}
+
+/**
  * ABCI response to checkTx() - a vote
  */
-interface ResponseCheckTx extends Vote {}
+interface ResponseCheckTx extends ResponseTx {}
 
 /**
  * ABCI response to deliverTx() - a vote
  */
-interface ResponseDeliverTx extends Vote {}
+interface ResponseDeliverTx extends ResponseTx {}
 
 /**
  * ABCI response to endBlock(), includes validator updates
