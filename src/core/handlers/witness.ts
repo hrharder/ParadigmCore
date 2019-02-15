@@ -16,15 +16,16 @@
 
  // ParadigmCore classes
 import { log, warn, err } from "../../common/log";
-import { Vote } from "../util/Vote";
 
 // ParadigmCore utilities/types
-import { ParsedWitnessData } from "../../typings/abci";
+import { ParsedWitnessData, ResponseCheckTx, ResponseDeliverTx } from "../../typings/abci";
 import {
     parseWitness,
     createWitnessEventHash,
     addNewEvent,
-    addConfMaybeApplyEvent
+    addConfMaybeApplyEvent,
+    validTx, 
+    invalidTx
 } from "../util/utils";
 
 /**
@@ -34,14 +35,14 @@ import {
  * @param tx    {object} decoded transaction body
  * @param state {object} current round state
  */
-export function checkWitness(tx: SignedWitnessTx, state: State): Vote {
+export function checkWitness(tx: SignedWitnessTx, state: State): ResponseCheckTx {
     try {
         parseWitness(tx.data);
         log("mem", "stake witness transaction accepted");
-        return Vote.valid("stake witness transaction accepted");
+        return validTx("stake witness transaction accepted");
     } catch (error) {
         warn("mem", `invalid witness event rejected: ${error.message}`);
-        return Vote.invalid("invalid witness event rejected");
+        return invalidTx("invalid witness event rejected");
     }
 }
 
@@ -52,7 +53,7 @@ export function checkWitness(tx: SignedWitnessTx, state: State): Vote {
  * @param tx    {object} decoded transaction body
  * @param state {object} current round state
  */
-export function deliverWitness(tx: SignedWitnessTx, state: State): Vote {
+export function deliverWitness(tx: SignedWitnessTx, state: State): ResponseDeliverTx {
     // will store parsed event data (after validation)
     let parsedTx: ParsedWitnessData;
     
@@ -79,7 +80,7 @@ export function deliverWitness(tx: SignedWitnessTx, state: State): Vote {
         }
     } catch (error) {
         warn("mem", `invalid witness event rejected: ${error.message}`);
-        return Vote.invalid();
+        return invalidTx();
     }
 
     // unpack/parse event data after id is confirmed
@@ -91,7 +92,7 @@ export function deliverWitness(tx: SignedWitnessTx, state: State): Vote {
     // immediately invalidate if event is older than most recent update
     if (state.lastEvent >= block) {
         warn("state", "ignoring existing event that may have been applied");
-        return Vote.invalid();
+        return invalidTx();
     }
 
     if (state.events.hasOwnProperty(block)) {
@@ -110,13 +111,13 @@ export function deliverWitness(tx: SignedWitnessTx, state: State): Vote {
     // so explicit because of possibility accepted never gets set
     if (accepted === true) {
         log("state", "accepting witness transaction");
-        return Vote.valid();
+        return validTx();
     } else if (accepted === false) {
         log("state", "rejecting witness transaction");
-        return Vote.invalid();
+        return invalidTx();
     } else if (accepted === undefined) {
         // this block is temporary
         warn("state", "no reported status on witness transaction");
-        return Vote.invalid();
+        return invalidTx();
     }
 }

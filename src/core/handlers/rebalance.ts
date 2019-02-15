@@ -17,13 +17,13 @@
 // 3rd party and STDLIB imports
 import { isEqual } from "lodash";
 
-// ParadigmCore classes
-import { Vote } from "../util/Vote";
-
 // ParadigmCore utilities
 import { log, warn } from "../../common/log";
 import { messages as msg } from "../../common/static/messages";
-import { genLimits, newKVPair } from "../util/utils";
+import { genLimits, newKVPair, invalidTx, validTx } from "../util/utils";
+
+// ParadigmCore type defs
+import { ResponseDeliverTx, ResponseCheckTx } from "../../typings/abci";
 
 /**
  * Verify a Rebalance proposal before accepting it into the local mempool.
@@ -31,7 +31,7 @@ import { genLimits, newKVPair } from "../util/utils";
  * @param tx    {SignedRebalanceTx} decoded transaction body
  * @param state {State}             current round state
  */
-export function checkRebalance(tx: SignedRebalanceTx, state: State) {
+export function checkRebalance(tx: SignedRebalanceTx, state: State): ResponseCheckTx {
     // Load proposal from rebalance tx
     const proposal: RebalanceData = tx.data;
 
@@ -40,21 +40,21 @@ export function checkRebalance(tx: SignedRebalanceTx, state: State) {
         if (proposal.round.number === 1) {
             // Accept valid initial rebalance proposal to mempool
             log("mem", msg.rebalancer.messages.iAccept);
-            return Vote.valid();
+            return validTx();
         } else {
             // Reject invalid initial rebalance proposal from mempool
             warn("mem", msg.rebalancer.messages.iReject);
-            return Vote.invalid();
+            return invalidTx();
         }
     } else {
         if ((1 + state.round.number) === proposal.round.number) {
             // Accept valid rebalance proposal to mempool
             log("mem", msg.rebalancer.messages.accept);
-            return Vote.valid(msg.rebalancer.messages.accept);
+            return validTx(msg.rebalancer.messages.accept);
         } else {
             // Reject invalid rebalance proposal from mempool
             warn("mem", msg.rebalancer.messages.reject);
-            return Vote.invalid(msg.rebalancer.messages.reject);
+            return invalidTx(msg.rebalancer.messages.reject);
         }
     }
 }
@@ -66,10 +66,7 @@ export function checkRebalance(tx: SignedRebalanceTx, state: State) {
  * @param state {State}             current round state
  * @param rb    {StakeRebalancer}   the current rebalancer instance
  */
-export function deliverRebalance(
-    tx: SignedRebalanceTx,
-    state: State,
-) {
+export function deliverRebalance(tx: SignedRebalanceTx, state: State): ResponseDeliverTx {
     // unpack proposal from transaction
     const proposal: RebalanceData = tx.data;
     let tags: KVPair[] = [];
@@ -103,11 +100,11 @@ export function deliverRebalance(
                 tags.push(txType, rNumber, rStartBlock, rEndBlock);
 
                 log("state", msg.rebalancer.messages.iAccept);
-                return Vote.valid("proposal accepted.", tags);
+                return validTx("proposal accepted.", tags);
             } else {
                 // Reject invalid initial rebalance proposal from mempool
                 warn("state", msg.rebalancer.messages.iReject);
-                return Vote.invalid("proposal rejected.");
+                return invalidTx("proposal rejected.");
             }
         }
 
@@ -115,7 +112,6 @@ export function deliverRebalance(
         default: {
             if ((1 + state.round.number) === proposal.round.number) {
                 // Limits from proposal
-                // @TODO ensure to change structure in Witness class
                 const propLimits = proposal.limits;
 
                 // Compute limits from in-state balances
@@ -148,24 +144,22 @@ export function deliverRebalance(
 
                     // Vote to accept
                     log("state", msg.rebalancer.messages.accept);
-                    return Vote.valid(msg.rebalancer.messages.accept, tags);
+                    return validTx(msg.rebalancer.messages.accept, tags);
                 } else {
                     // Proposal does not match local mapping
-                    console.log(`\nProposal: ${JSON.stringify(propLimits)}\n`)
-                    console.log(`\nIn-state: ${JSON.stringify(localLimits)}\n`);
                     warn("state", msg.rebalancer.messages.noMatch);
-                    return Vote.invalid(msg.rebalancer.messages.noMatch);
+                    return invalidTx(msg.rebalancer.messages.noMatch);
                 }
 
             // Proposal is for incorrect period
             } else if ((1 + state.round.number) < proposal.round.number) {
                 warn("state", msg.rebalancer.messages.wrongRound);
-                return Vote.invalid(msg.rebalancer.messages.wrongRound);
+                return invalidTx(msg.rebalancer.messages.wrongRound);
 
             // Reject invalid rebalance proposals
             } else {
                 warn("state", msg.rebalancer.messages.reject);
-                return Vote.invalid(msg.rebalancer.messages.reject);
+                return invalidTx(msg.rebalancer.messages.reject);
             }
         }
     }

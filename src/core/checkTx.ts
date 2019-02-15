@@ -16,10 +16,9 @@
 import { ResponseCheckTx } from "../typings/abci";
 
 // utils
-import { Vote } from "./util/Vote";
 import { warn } from "../common/log";
-import { decodeTx, preVerifyTx } from "./util/utils";
-import { messages as msg } from "../common/static/messages"
+import { messages } from "../common/static/messages"
+import { decodeTx, preVerifyTx, invalidTx } from "./util/utils";
 
 // tx handlers
 import { checkOrder } from "./handlers/order";
@@ -38,11 +37,7 @@ import { checkRebalance } from "./handlers/rebalance";
  *
  * @param request {object} raw transaction as delivered by Tendermint core.
  */
-export function checkTxWrapper(
-    state: State,
-    // msg: LogTemplates,
-    Order: any
-): (r) => ResponseCheckTx {
+export function checkTxWrapper(state: State, Order: any): (r) => ResponseCheckTx {
     return (request) => {
         // load transaction from request
         const rawTx: Buffer = request.tx;   // Encoded/compressed tx object
@@ -52,14 +47,14 @@ export function checkTxWrapper(
         try {
             tx = decodeTx(rawTx);
         } catch (error) {
-            warn("mem", msg.abci.errors.decompress);
-            return Vote.invalid(msg.abci.errors.decompress);
+            warn("mem", messages.abci.errors.decompress);
+            return invalidTx(messages.abci.errors.decompress);
         }
 
         // verify the transaction came from a validator
         if (!preVerifyTx(tx, state)) {
-            warn("mem", msg.abci.messages.badSig);
-            return Vote.invalid(msg.abci.messages.badSig);
+            warn("mem", messages.abci.messages.badSig);
+            return invalidTx(messages.abci.messages.badSig);
         }
 
         // select the proper handler verification logic based on the tx type
@@ -81,8 +76,8 @@ export function checkTxWrapper(
 
             // invalid/unknown transaction type
             default: {
-                warn("mem", msg.abci.errors.txType);
-                return Vote.invalid(msg.abci.errors.txType);
+                warn("mem", messages.abci.errors.txType);
+                return invalidTx(messages.abci.errors.txType);
             }
         }
     };

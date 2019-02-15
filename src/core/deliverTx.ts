@@ -15,10 +15,10 @@
 // custom typings
 import { ResponseDeliverTx } from "../typings/abci";
 
-// util functions
-import { Vote } from "./util/Vote";
+// util functions/vars
 import { warn } from "../common/log";
-import { decodeTx, preVerifyTx } from "./util/utils";
+import { decodeTx, preVerifyTx, invalidTx } from "./util/utils";
+import { messages } from "../common/static/messages"
 
 // tx handlers
 import { deliverOrder } from "./handlers/order";
@@ -31,11 +31,7 @@ import { deliverRebalance } from "./handlers/rebalance";
  *
  * @param request {object} raw transaction as delivered by Tendermint core.
  */
-export function deliverTxWrapper(
-    state: State,
-    msg: LogTemplates,
-    Order: any
-): (r) => ResponseDeliverTx {
+export function deliverTxWrapper(state: State, Order: any): (r) => ResponseDeliverTx {
     return (request) => {
         // load transaction from request
         const rawTx: Buffer = request.tx;   // Encoded/compressed tx object
@@ -45,14 +41,14 @@ export function deliverTxWrapper(
         try {
             tx = decodeTx(rawTx);
         } catch (error) {
-            warn("state", msg.abci.errors.decompress);
-            return Vote.invalid(msg.abci.errors.decompress);
+            warn("state", messages.abci.errors.decompress);
+            return invalidTx(messages.abci.errors.decompress);
         }
 
         // verify the transaction came from a validator
         if (!preVerifyTx(tx, state)) {
-            warn("state", msg.abci.messages.badSig);
-            return Vote.invalid(msg.abci.messages.badSig);
+            warn("state", messages.abci.messages.badSig);
+            return invalidTx(messages.abci.messages.badSig);
         }
 
         // select the proper handler verification logic based on the tx type.
@@ -74,8 +70,8 @@ export function deliverTxWrapper(
 
             // invalid/unknown transaction type
             default: {
-                warn("state", msg.abci.errors.txType);
-                return Vote.invalid(msg.abci.errors.txType);
+                warn("state", messages.abci.errors.txType);
+                return invalidTx(messages.abci.errors.txType);
             }
         }
     };

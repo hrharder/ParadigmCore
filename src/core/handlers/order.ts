@@ -16,12 +16,12 @@
 
 // ParadigmCore classes
 import { Hasher } from "../../crypto/Hasher";
-import { Vote } from "../util/Vote";
 
 // ParadigmCore utilities
 import { err, log, warn } from "../../common/log";
 import { messages as msg } from "../../common/static/messages";
-import { verifyOrder, newKVPair } from "../util/utils";
+import { verifyOrder, newKVPair, invalidTx, validTx } from "../util/utils";
+import { ResponseDeliverTx, ResponseCheckTx } from "src/typings/abci";
 
 /**
  * Performs light verification of OrderBroadcast transactions before accepting
@@ -30,7 +30,7 @@ import { verifyOrder, newKVPair } from "../util/utils";
  * @param tx    {SignedOrderTx} decoded transaction body
  * @param state {State}         current round state
  */
-export function checkOrder(tx: SignedOrderTx, state: State, Order) {
+export function checkOrder(tx: SignedOrderTx, state: State, Order): ResponseCheckTx {
     let order: Order;   // Paradigm order object
     let poster: string; // Recovered poster address from signature
 
@@ -42,14 +42,14 @@ export function checkOrder(tx: SignedOrderTx, state: State, Order) {
         // Verify order size
         if (!verifyOrder(order, state)) {
             warn("mem", "rejected order that exceeds maximum size");
-            return Vote.invalid("order exceeds maximum size");
+            return invalidTx("order exceeds maximum size");
         }
 
         // Recover poster address
         poster = order.recoverPoster().toLowerCase();
     } catch (err) {
         warn("mem", msg.abci.errors.format);
-        return Vote.invalid(msg.abci.errors.format);
+        return invalidTx(msg.abci.errors.format);
     }
 
     // Does poster have a staked balance?
@@ -58,10 +58,10 @@ export function checkOrder(tx: SignedOrderTx, state: State, Order) {
         state.posters[poster].limit > 0n
     ) {
         log("mem", msg.abci.messages.mempool);
-        return Vote.valid(`(unconfirmed) orderID: ${Hasher.hashOrder(order)}`);
+        return validTx(`(unconfirmed) orderID: ${Hasher.hashOrder(order)}`);
     } else {
         warn("mem", msg.abci.messages.noStake);
-        return Vote.invalid(msg.abci.messages.noStake);
+        return invalidTx(msg.abci.messages.noStake);
     }
 }
 
@@ -73,7 +73,7 @@ export function checkOrder(tx: SignedOrderTx, state: State, Order) {
  * @param state {State}         current round state
  * @param q     {OrderTracker}  valid order queue
  */
-export function deliverOrder(tx: SignedOrderTx, state: State, Order) {
+export function deliverOrder(tx: SignedOrderTx, state: State, Order): ResponseDeliverTx {
     let order: Order;   // Paradigm order object
     let poster: string; // Recovered poster address from signature
     let tags: KVPair[] = [];
@@ -84,7 +84,7 @@ export function deliverOrder(tx: SignedOrderTx, state: State, Order) {
         poster = order.recoverPoster().toLowerCase();
     } catch (err) {
         warn("state", msg.abci.errors.format);
-        return Vote.invalid(msg.abci.errors.format);
+        return invalidTx(msg.abci.errors.format);
     }
 
     // Verify poster balance and modify state
@@ -104,11 +104,12 @@ export function deliverOrder(tx: SignedOrderTx, state: State, Order) {
         const tag = newKVPair("order.id", order.id);
         tags.push(tag);
 
+        // validate with OK res
         log("state", msg.abci.messages.verified);
-        return Vote.valid(`orderID: ${order.id}`, tags);
+        return validTx(`orderID: ${order.id}`, tags);
     } else {
         // No stake or insufficient quota remaining
         warn("state", msg.abci.messages.noStake);
-        return Vote.invalid(msg.abci.messages.noStake);
+        return invalidTx(msg.abci.messages.noStake);
     }
 }

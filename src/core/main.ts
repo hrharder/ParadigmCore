@@ -37,8 +37,6 @@ import { ParadigmCoreOptions } from "src/typings/abci";
  *
  * @param options {object} Options object with parameters:
  *  - options.version       {string}        paradigmcore version string
- *  - options.tracker       {OrderTracker}  tracks valid orders
- *  - options.witness       {Witness}       witness instance (tracks Ethereum)
  *  - options.deliverState  {object}        deliverTx state object
  *  - options.commitState   {object}        commit state object
  *  - options.abciServPort  {number}        local ABCI server port
@@ -59,12 +57,6 @@ export async function start(options: ParadigmCoreOptions): Promise<null> {
         // Load state objects
         let dState = options.deliverState;
         let cState = options.commitState;
-
-        // Queue for valid broadcast transactions (order/stream)
-        // let tracker = options.tracker;
-
-        // witness instance
-        let witness = options.witness;
 
         // Load initial consensus params
         let consensusParams: ConsensusParams = {
@@ -87,7 +79,7 @@ export async function start(options: ParadigmCoreOptions): Promise<null> {
 
             // roundstep: [ beginBlock, deliverTx[, ...], endBlock, commit ]
             beginBlock: beginBlockWrapper(dState),
-            deliverTx: deliverTxWrapper(dState, templates, Order),
+            deliverTx: deliverTxWrapper(dState, Order),
             endBlock: endBlockWrapper(dState),
             commit: commitWrapper(dState, cState),
         };

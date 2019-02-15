@@ -18,7 +18,7 @@ import { err, log, warn } from "../../common/log";
 import { pubToAddr } from "./valFunctions";
 
 // ParadigmCore types
-import { ParsedWitnessData } from "src/typings/abci";
+import { ParsedWitnessData, ResponseDeliverTx, ResponseCheckTx } from "src/typings/abci";
 
 // Other
 import { cloneDeep, isInteger } from "lodash";
@@ -561,4 +561,67 @@ export function createWitnessEventObject(
 
     // return parsed and completed event object
     return outputEvent;
+}
+
+/**
+ * Generate a response for a valid ABCI tx
+ * 
+ * This function returns an object that conforms to the `ResponseDeliverTx` 
+ * and/or `ResponseCheckTx` interfaces.
+ * 
+ * @param log string output from the tx execution function
+ * @param tags tags to be included in the tendermint chain
+ */
+export function validTx(
+    log?: string,
+    tags?: KVPair[]
+): ResponseDeliverTx | ResponseCheckTx {
+    const res = { code: 0, log, };
+
+    // add tags to response object, if included
+    if (tags && tags.length > 0) {
+        res["tags"] = tags;
+    }
+
+    // return constructed response object
+    return res;
+}
+
+/**
+ * Generate a response for an invalid ABCI tx.
+ * 
+ * This function returns an object that conforms to the `ResponseDeliverTx` 
+ * and/or `ResponseCheckTx` interfaces. 
+ * 
+ * Optionally, pass a third `code` parameter to override the default `invalid`
+ * code (1). If a 0 (the valid code) is passed in, the function will throw.
+ * 
+ * @param log string output from the tx execution function
+ * @param tags tags to be included in the tendermint chain
+ * @param code an optional non-0 code to override the default invalid code with
+ */
+export function invalidTx(
+    log?: string,
+    tags?: KVPair[],
+    code?: number
+): ResponseDeliverTx | ResponseCheckTx {
+    // generate raw transaction object
+    const res = { log };
+
+    // check for custom code
+    if (code && code === 0) {
+        throw Error("Cannot accept code '0' for invalid tx response.");
+    } else if (code && code !== 0) {
+        res["code"] = code;
+    } else {
+        res["code"] = 1;
+    }
+
+    // add tags to response object, if included
+    if (tags && tags.length > 0) {
+        res["tags"] = tags;
+    }
+
+    // return constructed response object
+    return res;
 }
