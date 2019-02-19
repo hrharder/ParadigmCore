@@ -91,7 +91,7 @@ let node;                       // tendermint node child process instance
     } catch (error) {
         err("tm", "tendermint may not be installed or configured.");
         err("tm", "use `npm i` to configure tendermint and set up paradigmcore.");
-        return { 
+        throw { 
             message: error.message,
             info: `unable to start tendermint-core`,
             comp: "tm"
@@ -104,7 +104,7 @@ let node;                       // tendermint node child process instance
         web3 = new Web3(env.WEB3_PROVIDER);
         paradigm = new Paradigm({ provider: web3.currentProvider });
     } catch (error) {
-        return { 
+        throw { 
             message: error.message,
             info: "failed creating paradigm-connect instance",
             comp: "api"
