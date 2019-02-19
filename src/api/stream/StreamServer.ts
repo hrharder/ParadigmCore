@@ -14,8 +14,8 @@
 import * as api from "./api.json";
 
 // request/response objects
-import { JsonRequest as Request } from "./JsonRequest";
-import { JsonResponse as Response } from "./JsonResponse";
+import { JsonRequest as Req } from "./JsonRequest";
+import { JsonResponse as Res } from "./JsonResponse";
 
 // common imports
 import { log, warn, err } from "../../common/log";
@@ -26,6 +26,7 @@ import * as _ from "lodash";
 import { EventEmitter } from "events";
 import * as WebSocket from "ws";
 import { createHash, Hash } from "crypto";
+import { validateMessage, createResponse, createValError } from "./utils.js";
 
 /**
  * Defines the object provided to the `StreamServer` constructor.
@@ -322,7 +323,7 @@ export class StreamServer extends EventEmitter {
      * @param host network host to bind server to
      * @param port network port to bind server to
      */
-    private setupServer(host, port) {
+    private setupServer(host: string, port: number): void {
         // set options and initialize
         const options = { host, port };
         this.server = new WebSocket.Server(options);
@@ -339,7 +340,7 @@ export class StreamServer extends EventEmitter {
      * @todo document better
      */
     private createConnectionHandler(): (conn: WebSocket) => void {
-        return (conn) => {
+        return (conn: WebSocket) => {
             // generate a unique id string for this connection
             const connectionId = StreamServer.generateConnectionId(
                 this.secret,
@@ -356,42 +357,44 @@ export class StreamServer extends EventEmitter {
                 log("api", `Disconnect from connection "id": "${connectionId}"`);
 
                 // remove from connection mapping
-                this.connectionMap[connectionId] = undefined;
+                delete this.connectionMap[connectionId];
             })
 
             // setup message handler
             // @todo revisit, expand, and move
-            conn.on("message", (msg: string) => {
-                // non-string case
-                if (!_.isString(msg)) {
-                    warn("api", `Non-string message from connection '${connectionId}' of type '${typeof msg}'`);
-                    conn.send("strings only pls.");
-                    return;
-                }
+            conn.on("message", (msg: WebSocket.Data) => {
 
                 // TEMPORARY
                 log("api", `Message from connection '${connectionId}': '${msg}'`);
 
-                let res;
-                const req = new Request(msg);
-                const error = req.validate();
+                // scope eventual response/request objects
+                let res: Res, req: Req, error: ValidationError;
+
+                // create request object and validate
+                req = new Req(msg);
+                error = req.validate();
 
                 if (error) {
-                    res = new Response({ error });
-                    this.sendMessageToClient(connectionId, res);
-                    warn("api", `Send error message to connection '${connectionId}'`);
-                    return;
+                    res = createResponse(null, null, error);
+                    warn("api", `Sending error message to connection '${connectionId}'`);
+                } else if (!error && _.isObject(req.parsed)) {
+                    // this is where we will handle the request.
+                    // temporarily send back params
+                    const { params, id } = req.parsed;
+                    res = createResponse(params, id)    
+                    log("api", `Sending OK message to connection '${connectionId}'`);
                 } else {
-                    res = new Response({id: "none", result: "yeah this is okay." });
-                    this.sendMessageToClient(connectionId, res);
-                    log("api", `Send OK message to connection '${connectionId}'`);
-                    return;
+                    const intError = createValError(-32603, "Internal error.");
+                    res = createResponse(null, null, intError);
+                    warn("api", "Sending error message (internal) to client.");
                 }
+                this.sendMessageToClient(connectionId, res);
+                return;
             });
 
             conn.on("open", () => {
                 console.log("\nya it open bud\n");
-                const res = new Response({id: "none", result: "welcome brudda" });
+                const res = new Res({id: "none", result: "welcome brudda" });
                 this.sendMessageToClient(connectionId, res);
                 log("api", `Send open message to connection '${connectionId}'`);
                 return;
@@ -400,7 +403,7 @@ export class StreamServer extends EventEmitter {
             conn.on("error", (error: Error) => {
                 // TEMPORARY
                 warn("api", `Error from connection '${connectionId}': ${error.message}`);
-                const res = new Response({id: "none", result: "goodbye, error found." });
+                const res = new Res({id: "none", result: "goodbye, error found." });
                 this.sendMessageToClient(connectionId, res);
                 warn("api", `Send error message to connection '${connectionId}'`);
                 // remove from connection mapping
@@ -423,7 +426,7 @@ export class StreamServer extends EventEmitter {
      * @param id the server-side client ID string
      * @param res a JsonResponse object
      */
-    private sendMessageToClient(id: string, res: Response) {
+    private sendMessageToClient(id: string, res: Res) {
         // @todo make sure to properly handle disconnects
         const conn = this.connectionMap[id];
         if (!conn) return;

@@ -7,6 +7,7 @@ const _ = require("lodash");
 const events_1 = require("events");
 const WebSocket = require("ws");
 const crypto_1 = require("crypto");
+const utils_js_1 = require("./utils.js");
 class StreamServer extends events_1.EventEmitter {
     static generate32RandomBytes(start) {
         let output;
@@ -63,30 +64,29 @@ class StreamServer extends events_1.EventEmitter {
             this.connectionMap[connectionId] = conn;
             conn.on("close", () => {
                 log_1.log("api", `Disconnect from connection "id": "${connectionId}"`);
-                this.connectionMap[connectionId] = undefined;
+                delete this.connectionMap[connectionId];
             });
             conn.on("message", (msg) => {
-                if (!_.isString(msg)) {
-                    log_1.warn("api", `Non-string message from connection '${connectionId}' of type '${typeof msg}'`);
-                    conn.send("strings only pls.");
-                    return;
-                }
                 log_1.log("api", `Message from connection '${connectionId}': '${msg}'`);
-                let res;
-                const req = new JsonRequest_1.JsonRequest(msg);
-                const error = req.validate();
+                let res, req, error;
+                req = new JsonRequest_1.JsonRequest(msg);
+                error = req.validate();
                 if (error) {
-                    res = new JsonResponse_1.JsonResponse({ error });
-                    this.sendMessageToClient(connectionId, res);
-                    log_1.warn("api", `Send error message to connection '${connectionId}'`);
-                    return;
+                    res = utils_js_1.createResponse(null, null, error);
+                    log_1.warn("api", `Sending error message to connection '${connectionId}'`);
+                }
+                else if (!error && _.isObject(req.parsed)) {
+                    const { params, id } = req.parsed;
+                    res = utils_js_1.createResponse(params, id);
+                    log_1.log("api", `Sending OK message to connection '${connectionId}'`);
                 }
                 else {
-                    res = new JsonResponse_1.JsonResponse({ id: "none", result: "yeah this is okay." });
-                    this.sendMessageToClient(connectionId, res);
-                    log_1.log("api", `Send OK message to connection '${connectionId}'`);
-                    return;
+                    const intError = utils_js_1.createValError(-32603, "Internal error.");
+                    res = utils_js_1.createResponse(null, null, intError);
+                    log_1.warn("api", "Sending error message (internal) to client.");
                 }
+                this.sendMessageToClient(connectionId, res);
+                return;
             });
             conn.on("open", () => {
                 console.log("\nya it open bud\n");

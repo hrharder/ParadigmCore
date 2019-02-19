@@ -34,7 +34,7 @@ let node;
                 laddr: `tcp://${env.ABCI_HOST}:${env.ABCI_RPC_PORT}`,
             },
         };
-        if (env.SEEDS !== "" && env.SEEDS !== undefined) {
+        if (env.SEEDS !== "0" && env.SEEDS !== undefined) {
             options.p2p = {
                 seeds: env.SEEDS
             };
@@ -46,7 +46,7 @@ let node;
     catch (error) {
         log_1.err("tm", "tendermint may not be installed or configured.");
         log_1.err("tm", "use `npm i` to configure tendermint and set up paradigmcore.");
-        return {
+        throw {
             message: error.message,
             info: `unable to start tendermint-core`,
             comp: "tm"
@@ -58,7 +58,7 @@ let node;
         paradigm = new Paradigm({ provider: web3.currentProvider });
     }
     catch (error) {
-        return {
+        throw {
             message: error.message,
             info: "failed creating paradigm-connect instance",
             comp: "api"

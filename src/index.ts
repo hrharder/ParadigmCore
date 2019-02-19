@@ -77,7 +77,7 @@ let node;                       // tendermint node child process instance
                 laddr: `tcp://${env.ABCI_HOST}:${env.ABCI_RPC_PORT}`,
             },
         };
-        if (env.SEEDS !== "" && env.SEEDS !== undefined) {
+        if (env.SEEDS !== "0" && env.SEEDS !== undefined) {
             options.p2p = {
                 seeds: env.SEEDS
             };

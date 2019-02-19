@@ -1,6 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const api = require("./api.json");
+const schema = require("./schema.json");
+const _ = require("lodash");
 class JsonRequest {
     constructor(input) {
         this.raw = input;
@@ -16,28 +18,63 @@ class JsonRequest {
             return;
         const reqDef = JsonRequest.api.request;
         try {
-            const { jsonrpc, id, method, params } = JSON.parse(this.raw);
+            const rawString = this.raw.toString();
+            const { jsonrpc, id, method, params } = JSON.parse(rawString);
             this.parsed = { jsonrpc, id, method, params };
             this.raw = undefined;
         }
         catch (err) {
-            this.addValErr("-32700", err.message);
+            this.addValErr(-32700, err.message);
         }
         try {
-            for (let i = 0; i < reqDef.properties.length; i++) {
-                this.validateRequestProperties(reqDef.properties[i]);
+            const { methods } = JsonRequest.schema;
+            const { method, params, id } = this.parsed;
+            if (_.isUndefined(method) ||
+                _.isUndefined(params) ||
+                _.isUndefined(id)) {
+                this.addValErr(-32600, "check for missing fields.");
+            }
+            else {
+                const { required, properties } = methods[method].params;
+                for (let i = 0; i < required.length; i++) {
+                    const name = required[i];
+                    this.validateRequiredParam(properties[name], params[name], name);
+                }
             }
         }
-        catch (err) {
-            this.addValErr("-32603");
+        catch (error) {
+            console.log("error: " + error);
+            this.addValErr(-32603);
         }
         if (this.valid === null) {
             this.close();
         }
         return this.err;
     }
+    validateRequiredParam(def, param, name) {
+        if (!param) {
+            this.addValErr(-32602, "missing required parameter");
+        }
+        else if (!def) {
+            console.log("no def :(");
+            this.addValErr(-32603);
+        }
+        try {
+            if (typeof param !== def.type) {
+                this.addValErr(-32602, `incorrect type of param '${name}'`);
+            }
+            else if (def.enum && def.enum.indexOf(param) === -1) {
+                this.addValErr(-32602, `invalid option for param '${name}'`);
+            }
+        }
+        catch (error) {
+            this.addValErr(-32603);
+        }
+        return;
+    }
     validateRequestProperties(prop) {
-        const { key, required, type, valRegEx: regExp, valArr: arr, errCode: code, errInfo: info, } = prop;
+        const { key, required, type, valRegEx: regExp, valArr: arr, errInfo: info, } = prop;
+        const code = parseInt(prop.errCode);
         const req = this.parsed;
         if (required && !req[key]) {
             this.addValErr(code, `missing required '${key}' field.`);
@@ -100,5 +137,6 @@ class JsonRequest {
         return;
     }
 }
+JsonRequest.schema = schema;
 JsonRequest.api = api;
 exports.JsonRequest = JsonRequest;
