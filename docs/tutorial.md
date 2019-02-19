@@ -352,10 +352,6 @@ A local Ethereum client is required for OrderStream validators. See previous les
 
 Again, all information required to join the current "blind-star" test network can be [found in its repository here](https://github.com/ParadigmFoundation/blind-star-testnet).
 
-### Add genesis file
-
-Validators and full nodes intending to join the active OrderStream test-network will also need to obtain the [current `genesis.json`](https://github.com/ParadigmFoundation/blind-star-testnet) that the OrderStream testnet was initialized with. You will need to place that file at `lib/tendermint/config/genesis.json` and delete the file generated after the next step.
-
 ## Install dependencies
 After adding the required fields to your configuration file, you can run npm i to perform various configuration steps. It will handle the following primary steps, among other setup and validation.
 
@@ -394,6 +390,10 @@ Start your node with `yarn launch` or `npm run launch`.
 ```
 
 If the output tells you to change something in your environment file, make that change and running npm i again.
+
+## Add genesis file
+
+Validators and full nodes intending to join the active OrderStream test-network will also need to obtain the [current `genesis.json`](https://github.com/ParadigmFoundation/blind-star-testnet) that the OrderStream testnet was initialized with. You will need to place that file at `lib/tendermint/config/genesis.json` and delete the file generated after the next step.
 
 ## Build and run ParadigmCore
 

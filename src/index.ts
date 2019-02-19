@@ -235,21 +235,26 @@ let node;                       // tendermint node child process instance
             comp: "state"
         };
     }
-    return;
-})(process.env).then(async () => {
-     // Start state rebalancer sub-process AFTER sync
+
+    // Start state rebalancer sub-process AFTER sync
     log("peg", "starting witness component...");
     const witRes = await witness.start();
     if (witRes !== 0) {
-        throw Error("failed to start witness.");
+        throw { 
+            message:"failed to start witness.",
+            info: "failed initializing abci application",
+            comp: "peg"
+        };
     }
     log("peg", msg.rebalancer.messages.activated);
-    return;
-}).then(() => {
-    // Activate transaction broadcaster
+
+
+    // start tx broadcaster
+    // TODO: change to TendermintRPC class
     log("tx", "starting validator transaction broadcaster...");
     broadcaster.start();
-}).then(() => {
+    return;
+})(process.env).then(() => {
     logStart("paradigm-core startup successfully completed");
 }).catch((error) => {
     err(error.comp, error.info);
