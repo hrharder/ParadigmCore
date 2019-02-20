@@ -97,7 +97,7 @@ Generalized queue implementation. Currently used in Broadcaster class.
 
 ⊕ **new Queue**(): [Queue](_common_queue_.queue.md)
 
-*Defined in [common/Queue.ts:15](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/common/Queue.ts#L15)*
+*Defined in [common/Queue.ts:15](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/common/Queue.ts#L15)*
 
 **Returns:** [Queue](_common_queue_.queue.md)
 
@@ -166,7 +166,7 @@ ___
 
 ▸ **add**(item: *`any`*): `void`
 
-*Defined in [common/Queue.ts:28](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/common/Queue.ts#L28)*
+*Defined in [common/Queue.ts:28](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/common/Queue.ts#L28)*
 
 Add an item to the queue.
 
@@ -185,7 +185,7 @@ ___
 
 ▸ **allItems**(): `string`
 
-*Defined in [common/Queue.ts:49](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/common/Queue.ts#L49)*
+*Defined in [common/Queue.ts:49](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/common/Queue.ts#L49)*
 
 Returns a string of all items.
 
@@ -655,7 +655,7 @@ ___
 
 ▸ **front**(): `any`
 
-*Defined in [common/Queue.ts:42](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/common/Queue.ts#L42)*
+*Defined in [common/Queue.ts:42](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/common/Queue.ts#L42)*
 
 Returns the first item in the queue.
 
@@ -713,7 +713,7 @@ ___
 
 ▸ **isEmpty**(): `boolean`
 
-*Defined in [common/Queue.ts:56](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/common/Queue.ts#L56)*
+*Defined in [common/Queue.ts:56](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/common/Queue.ts#L56)*
 
 Returns true if queue is empty.
 
@@ -958,7 +958,7 @@ ___
 
 ▸ **remove**(): `any`
 
-*Defined in [common/Queue.ts:35](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/common/Queue.ts#L35)*
+*Defined in [common/Queue.ts:35](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/common/Queue.ts#L35)*
 
 Removes and returns the first item from the queue.
 

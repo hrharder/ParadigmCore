@@ -25,6 +25,7 @@ See: [https://www.jsonrpc.org/specification](https://www.jsonrpc.org/specificati
 * [raw](_api_stream_jsonrequest_.jsonrequest.md#raw)
 * [valid](_api_stream_jsonrequest_.jsonrequest.md#valid)
 * [api](_api_stream_jsonrequest_.jsonrequest.md#api)
+* [schema](_api_stream_jsonrequest_.jsonrequest.md#schema)
 
 ### Methods
 
@@ -36,6 +37,7 @@ See: [https://www.jsonrpc.org/specification](https://www.jsonrpc.org/specificati
 * [validateMethodParams](_api_stream_jsonrequest_.jsonrequest.md#validatemethodparams)
 * [validateOptionParam](_api_stream_jsonrequest_.jsonrequest.md#validateoptionparam)
 * [validateRequestProperties](_api_stream_jsonrequest_.jsonrequest.md#validaterequestproperties)
+* [validateRequiredParam](_api_stream_jsonrequest_.jsonrequest.md#validaterequiredparam)
 
 ---
 
@@ -45,9 +47,9 @@ See: [https://www.jsonrpc.org/specification](https://www.jsonrpc.org/specificati
 
 ###  constructor
 
-⊕ **new JsonRequest**(input: *`string`*): [JsonRequest](_api_stream_jsonrequest_.jsonrequest.md)
+⊕ **new JsonRequest**(input: *`any`*): [JsonRequest](_api_stream_jsonrequest_.jsonrequest.md)
 
-*Defined in [api/stream/JsonRequest.ts:50](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/api/stream/JsonRequest.ts#L50)*
+*Defined in [api/stream/JsonRequest.ts:59](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/api/stream/JsonRequest.ts#L59)*
 
 Create a new JSONRPC request instance.
 
@@ -55,7 +57,7 @@ Create a new JSONRPC request instance.
 
 | Name | Type | Description |
 | ------ | ------ | ------ |
-| input | `string` |  raw input JSONRPC request string. |
+| input | `any` |  raw input JSONRPC request string. |
 
 **Returns:** [JsonRequest](_api_stream_jsonrequest_.jsonrequest.md)
 
@@ -69,7 +71,7 @@ ___
 
 **● err**: *`ValidationError`*
 
-*Defined in [api/stream/JsonRequest.ts:44](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/api/stream/JsonRequest.ts#L44)*
+*Defined in [api/stream/JsonRequest.ts:53](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/api/stream/JsonRequest.ts#L53)*
 
 The first validation error encountered, if any.
 
@@ -80,7 +82,7 @@ ___
 
 **● parsed**: *`IParsedRequest`*
 
-*Defined in [api/stream/JsonRequest.ts:39](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/api/stream/JsonRequest.ts#L39)*
+*Defined in [api/stream/JsonRequest.ts:48](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/api/stream/JsonRequest.ts#L48)*
 
 Parsed request object.
 
@@ -91,7 +93,7 @@ ___
 
 **● raw**: *`string`*
 
-*Defined in [api/stream/JsonRequest.ts:34](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/api/stream/JsonRequest.ts#L34)*
+*Defined in [api/stream/JsonRequest.ts:43](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/api/stream/JsonRequest.ts#L43)*
 
 Raw input string, deleted after parsing.
 
@@ -102,7 +104,7 @@ ___
 
 **● valid**: *`boolean`*
 
-*Defined in [api/stream/JsonRequest.ts:50](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/api/stream/JsonRequest.ts#L50)*
+*Defined in [api/stream/JsonRequest.ts:59](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/api/stream/JsonRequest.ts#L59)*
 
 Set to true or false depending on result of `JsonRequest.prototype. validate()`, and set to `null` beforehand.
 
@@ -113,7 +115,18 @@ ___
 
 **● api**: *`IStreamAPI`* =  api
 
-*Defined in [api/stream/JsonRequest.ts:29](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/api/stream/JsonRequest.ts#L29)*
+*Defined in [api/stream/JsonRequest.ts:38](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/api/stream/JsonRequest.ts#L38)*
+
+Top-level definitions for JSONRPC request/responses.
+
+___
+<a id="schema"></a>
+
+### `<Static>``<Private>` schema
+
+**● schema**: *`IStreamSchema`* =  schema
+
+*Defined in [api/stream/JsonRequest.ts:33](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/api/stream/JsonRequest.ts#L33)*
 
 Stream API definition JSON.
 
@@ -123,11 +136,11 @@ ___
 
 <a id="addvalerr"></a>
 
-###  addValErr
+### `<Private>` addValErr
 
-▸ **addValErr**(code: *`string`*, msg?: *`string`*): `void`
+▸ **addValErr**(code: *`number`*, msg?: *`string`*): `void`
 
-*Defined in [api/stream/JsonRequest.ts:196](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/api/stream/JsonRequest.ts#L196)*
+*Defined in [api/stream/JsonRequest.ts:253](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/api/stream/JsonRequest.ts#L253)*
 
 Add a newly detected validation error to the array of detected errors.
 
@@ -135,7 +148,7 @@ Add a newly detected validation error to the array of detected errors.
 
 | Name | Type | Description |
 | ------ | ------ | ------ |
-| code | `string` |
+| code | `number` |
 | `Optional` msg | `string` |  the additional validation error log |
 
 **Returns:** `void`
@@ -143,11 +156,11 @@ Add a newly detected validation error to the array of detected errors.
 ___
 <a id="close"></a>
 
-###  close
+### `<Private>` close
 
 ▸ **close**(err?: *`ValidationError`*): `any`
 
-*Defined in [api/stream/JsonRequest.ts:209](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/api/stream/JsonRequest.ts#L209)*
+*Defined in [api/stream/JsonRequest.ts:266](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/api/stream/JsonRequest.ts#L266)*
 
 Finish a validation and set the result to prevent future testing.
 
@@ -166,7 +179,7 @@ ___
 
 ▸ **toJSON**(): `IParsedRequest`
 
-*Defined in [api/stream/JsonRequest.ts:66](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/api/stream/JsonRequest.ts#L66)*
+*Defined in [api/stream/JsonRequest.ts:75](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/api/stream/JsonRequest.ts#L75)*
 
 Generate valid JSON object only will necessary params.
 
@@ -179,7 +192,7 @@ ___
 
 ▸ **validate**(): `ValidationError`
 
-*Defined in [api/stream/JsonRequest.ts:76](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/api/stream/JsonRequest.ts#L76)*
+*Defined in [api/stream/JsonRequest.ts:85](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/api/stream/JsonRequest.ts#L85)*
 
 Trigger validation steps.
 
@@ -190,11 +203,11 @@ Trigger validation steps.
 ___
 <a id="validateexpparam"></a>
 
-###  validateExpParam
+### `<Private>` validateExpParam
 
-▸ **validateExpParam**(key: *`string`*, rgxp: *`string`*, code: *`string`*, log: *`string`*): `void`
+▸ **validateExpParam**(key: *`string`*, rgxp: *`string`*, code: *`number`*, log: *`string`*): `void`
 
-*Defined in [api/stream/JsonRequest.ts:167](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/api/stream/JsonRequest.ts#L167)*
+*Defined in [api/stream/JsonRequest.ts:224](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/api/stream/JsonRequest.ts#L224)*
 
 Validate params that can be validated via regular expression testing.
 
@@ -204,7 +217,7 @@ Validate params that can be validated via regular expression testing.
 | ------ | ------ | ------ |
 | key | `string` |  target parameter key string |
 | rgxp | `string` |  regex string to test against |
-| code | `string` |  error code if param failure detected |
+| code | `number` |  error code if param failure detected |
 | log | `string` |  error log message if param failure |
 
 **Returns:** `void`
@@ -216,7 +229,7 @@ ___
 
 ▸ **validateMethodParams**(method?: *`string`*, params?: *`IParam`*): `void`
 
-*Defined in [api/stream/JsonRequest.ts:157](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/api/stream/JsonRequest.ts#L157)*
+*Defined in [api/stream/JsonRequest.ts:214](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/api/stream/JsonRequest.ts#L214)*
 
 Not implemented yet.
 
@@ -232,11 +245,11 @@ Not implemented yet.
 ___
 <a id="validateoptionparam"></a>
 
-###  validateOptionParam
+### `<Private>` validateOptionParam
 
-▸ **validateOptionParam**(code: *`string`*, options: *`string`[]*, query: *`string`*): `void`
+▸ **validateOptionParam**(code: *`number`*, options: *`string`[]*, query: *`string`*): `void`
 
-*Defined in [api/stream/JsonRequest.ts:182](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/api/stream/JsonRequest.ts#L182)*
+*Defined in [api/stream/JsonRequest.ts:239](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/api/stream/JsonRequest.ts#L239)*
 
 Validate a param where the possible values are contained within `options`.
 
@@ -244,7 +257,7 @@ Validate a param where the possible values are contained within `options`.
 
 | Name | Type | Description |
 | ------ | ------ | ------ |
-| code | `string` |
+| code | `number` |
 | options | `string`[] |  array of possible string values |
 | query | `string` |  the string key included in the request |
 
@@ -253,11 +266,11 @@ Validate a param where the possible values are contained within `options`.
 ___
 <a id="validaterequestproperties"></a>
 
-###  validateRequestProperties
+### `<Private>` validateRequestProperties
 
 ▸ **validateRequestProperties**(prop: *`IRequestProperty`*): `void`
 
-*Defined in [api/stream/JsonRequest.ts:110](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/api/stream/JsonRequest.ts#L110)*
+*Defined in [api/stream/JsonRequest.ts:167](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/api/stream/JsonRequest.ts#L167)*
 
 Not implemented yet.
 
@@ -266,6 +279,25 @@ Not implemented yet.
 | Name | Type | Description |
 | ------ | ------ | ------ |
 | prop | `IRequestProperty` |   |
+
+**Returns:** `void`
+
+___
+<a id="validaterequiredparam"></a>
+
+### `<Private>` validateRequiredParam
+
+▸ **validateRequiredParam**(def: *`ISchemaProperty`*, param: *`any`*, name: *`string`*): `void`
+
+*Defined in [api/stream/JsonRequest.ts:141](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/api/stream/JsonRequest.ts#L141)*
+
+**Parameters:**
+
+| Name | Type |
+| ------ | ------ |
+| def | `ISchemaProperty` |
+| param | `any` |
+| name | `string` |
 
 **Returns:** `void`
 

@@ -26,7 +26,9 @@ A wrapper class facilitating a WebSocket connection to the Tendermint RPC server
 * [id](_common_tendermintrpc_.tendermintrpc.md#id)
 * [latestBlockData](_common_tendermintrpc_.tendermintrpc.md#latestblockdata)
 * [maxRetries](_common_tendermintrpc_.tendermintrpc.md#maxretries)
+* [queue](_common_tendermintrpc_.tendermintrpc.md#queue)
 * [retryInterval](_common_tendermintrpc_.tendermintrpc.md#retryinterval)
+* [sending](_common_tendermintrpc_.tendermintrpc.md#sending)
 * [shouldRetry](_common_tendermintrpc_.tendermintrpc.md#shouldretry)
 * [url](_common_tendermintrpc_.tendermintrpc.md#url)
 * [defaultMaxListeners](_common_tendermintrpc_.tendermintrpc.md#defaultmaxlisteners)
@@ -41,6 +43,7 @@ A wrapper class facilitating a WebSocket connection to the Tendermint RPC server
 * [emit](_common_tendermintrpc_.tendermintrpc.md#emit)
 * [eventNames](_common_tendermintrpc_.tendermintrpc.md#eventnames)
 * [getMaxListeners](_common_tendermintrpc_.tendermintrpc.md#getmaxlisteners)
+* [internalSubmitTx](_common_tendermintrpc_.tendermintrpc.md#internalsubmittx)
 * [isConnected](_common_tendermintrpc_.tendermintrpc.md#isconnected)
 * [listenerCount](_common_tendermintrpc_.tendermintrpc.md#listenercount)
 * [listeners](_common_tendermintrpc_.tendermintrpc.md#listeners)
@@ -68,7 +71,7 @@ A wrapper class facilitating a WebSocket connection to the Tendermint RPC server
 
 ⊕ **new TendermintRPC**(endpoint: *`string`*, maxRetries: *`any`*, interval: *`any`*): [TendermintRPC](_common_tendermintrpc_.tendermintrpc.md)
 
-*Defined in [common/TendermintRPC.ts:83](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/common/TendermintRPC.ts#L83)*
+*Defined in [common/TendermintRPC.ts:117](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/common/TendermintRPC.ts#L117)*
 
 Create a new Tendermint RPC instance.
 
@@ -92,7 +95,7 @@ ___
 
 **● conn**: *`RpcClient`*
 
-*Defined in [common/TendermintRPC.ts:47](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/common/TendermintRPC.ts#L47)*
+*Defined in [common/TendermintRPC.ts:70](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/common/TendermintRPC.ts#L70)*
 
 The connection to the Tendermint RPC server over WebSocket is initialized when `WrapABCI.prototype.connect()` is called.
 
@@ -103,7 +106,7 @@ ___
 
 **● connected**: *`boolean`*
 
-*Defined in [common/TendermintRPC.ts:41](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/common/TendermintRPC.ts#L41)*
+*Defined in [common/TendermintRPC.ts:64](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/common/TendermintRPC.ts#L64)*
 
 True if connected to Tendermint RPC server.
 
@@ -114,7 +117,7 @@ ___
 
 **● connecting**: *`boolean`*
 
-*Defined in [common/TendermintRPC.ts:83](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/common/TendermintRPC.ts#L83)*
+*Defined in [common/TendermintRPC.ts:106](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/common/TendermintRPC.ts#L106)*
 
 Only `true` if connection attempts are in progress.
 
@@ -125,7 +128,7 @@ ___
 
 **● id**: *`string`*
 
-*Defined in [common/TendermintRPC.ts:53](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/common/TendermintRPC.ts#L53)*
+*Defined in [common/TendermintRPC.ts:76](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/common/TendermintRPC.ts#L76)*
 
 A pseudo-randomly generated ID string to support a unique client<>server session identifier with Tendermint.
 
@@ -136,7 +139,7 @@ ___
 
 **● latestBlockData**: *`any`*
 
-*Defined in [common/TendermintRPC.ts:72](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/common/TendermintRPC.ts#L72)*
+*Defined in [common/TendermintRPC.ts:95](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/common/TendermintRPC.ts#L95)*
 
 The in-memory representation of the latest block-data that has been received by the instance.
 
@@ -147,9 +150,20 @@ ___
 
 **● maxRetries**: *`number`*
 
-*Defined in [common/TendermintRPC.ts:60](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/common/TendermintRPC.ts#L60)*
+*Defined in [common/TendermintRPC.ts:83](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/common/TendermintRPC.ts#L83)*
 
 The number of times a `TendermintRPC` instance will try to reconnect to the Tendermint RPC server after a connection is lost (following an initially successful connection).
+
+___
+<a id="queue"></a>
+
+### `<Private>` queue
+
+**● queue**: *[TransactionConfig](../interfaces/_common_tendermintrpc_.transactionconfig.md)[]*
+
+*Defined in [common/TendermintRPC.ts:111](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/common/TendermintRPC.ts#L111)*
+
+The broadcast queue of transactions that need to be sent via RPC.
 
 ___
 <a id="retryinterval"></a>
@@ -158,9 +172,20 @@ ___
 
 **● retryInterval**: *`number`*
 
-*Defined in [common/TendermintRPC.ts:66](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/common/TendermintRPC.ts#L66)*
+*Defined in [common/TendermintRPC.ts:89](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/common/TendermintRPC.ts#L89)*
 
 The amount of time (in ms) to wait between each attempt to connect to the Tendermint RPC server.
+
+___
+<a id="sending"></a>
+
+### `<Private>` sending
+
+**● sending**: *`boolean`*
+
+*Defined in [common/TendermintRPC.ts:117](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/common/TendermintRPC.ts#L117)*
+
+Boolean status used to track if broadcast via RPC is in progress, or completed/not-started.
 
 ___
 <a id="shouldretry"></a>
@@ -169,7 +194,7 @@ ___
 
 **● shouldRetry**: *`boolean`*
 
-*Defined in [common/TendermintRPC.ts:78](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/common/TendermintRPC.ts#L78)*
+*Defined in [common/TendermintRPC.ts:101](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/common/TendermintRPC.ts#L101)*
 
 Used to enable re-connections upon connection loss between the instance and the Tendermint RPC server.
 
@@ -180,7 +205,7 @@ ___
 
 **● url**: *`URL`*
 
-*Defined in [common/TendermintRPC.ts:36](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/common/TendermintRPC.ts#L36)*
+*Defined in [common/TendermintRPC.ts:59](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/common/TendermintRPC.ts#L59)*
 
 The URL of the Tendermint RPC (ABCI) server port.
 
@@ -205,7 +230,7 @@ ___
 
 ▸ **abciInfo**(override?: *`boolean`*): `Promise`<`ResponseInfo`>
 
-*Defined in [common/TendermintRPC.ts:229](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/common/TendermintRPC.ts#L229)*
+*Defined in [common/TendermintRPC.ts:293](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/common/TendermintRPC.ts#L293)*
 
 Query the ABCI `info` method.
 
@@ -248,7 +273,7 @@ ___
 
 ▸ **connect**(maxTries: *`number`*, intervalMs: *`number`*): `Promise`<`void`>
 
-*Defined in [common/TendermintRPC.ts:114](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/common/TendermintRPC.ts#L114)*
+*Defined in [common/TendermintRPC.ts:150](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/common/TendermintRPC.ts#L150)*
 
 Initialize connection to Tendermint RPC server.
 
@@ -270,7 +295,7 @@ ___
 
 ▸ **connectionCloseHandler**(_this: *[TendermintRPC](_common_tendermintrpc_.tendermintrpc.md)*): `function`
 
-*Defined in [common/TendermintRPC.ts:203](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/common/TendermintRPC.ts#L203)*
+*Defined in [common/TendermintRPC.ts:239](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/common/TendermintRPC.ts#L239)*
 
 Generate a handler function for connection closure.
 
@@ -293,7 +318,7 @@ ___
 
 ▸ **connectionErrorHandler**(_this: *[TendermintRPC](_common_tendermintrpc_.tendermintrpc.md)*): `function`
 
-*Defined in [common/TendermintRPC.ts:177](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/common/TendermintRPC.ts#L177)*
+*Defined in [common/TendermintRPC.ts:213](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/common/TendermintRPC.ts#L213)*
 
 Generate a handler function for connection closure.
 
@@ -362,13 +387,26 @@ ___
 **Returns:** `number`
 
 ___
+<a id="internalsubmittx"></a>
+
+### `<Private>` internalSubmitTx
+
+▸ **internalSubmitTx**(): `Promise`<`any`>
+
+*Defined in [common/TendermintRPC.ts:264](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/common/TendermintRPC.ts#L264)*
+
+(Internal) Submit a transaction to Tendermint via RPC. Use the public `TendermintRPC.prototype.submitTx` method to add transactions to the broadcast queue.
+
+**Returns:** `Promise`<`any`>
+
+___
 <a id="isconnected"></a>
 
 ###  isConnected
 
 ▸ **isConnected**(): `boolean`
 
-*Defined in [common/TendermintRPC.ts:347](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/common/TendermintRPC.ts#L347)*
+*Defined in [common/TendermintRPC.ts:417](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/common/TendermintRPC.ts#L417)*
 
 Public getter method to check connection status.
 
@@ -617,11 +655,11 @@ ___
 
 ###  submitTx
 
-▸ **submitTx**(tx: *`SignedTransaction`*, mode?: *`string`*): `Promise`<`any`>
+▸ **submitTx**(tx: *`SignedTransaction`*, mode?: *"sync" \| "async" \| "commit"*): `Promise`<`Object`>
 
-*Defined in [common/TendermintRPC.ts:311](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/common/TendermintRPC.ts#L311)*
+*Defined in [common/TendermintRPC.ts:374](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/common/TendermintRPC.ts#L374)*
 
-Submit a transaction to Tendermint via RPC.
+Submit
 
 *__description__*: Accepts a \[SignedTransaction\] as the first argument, which gets compressed/encoded using the \[PayloadCipher\] class. The second (optional) parameter can be used to specify a broadcast mode, which can be any of `sync`, `async`, or `commit`. See [https://tendermint.com/rpc](https://tendermint.com/rpc) for more details.
 
@@ -629,10 +667,10 @@ Submit a transaction to Tendermint via RPC.
 
 | Name | Type | Description |
 | ------ | ------ | ------ |
-| tx | `SignedTransaction` |  the string of the event to subscribe to. |
-| `Optional` mode | `string` |  an optional mode to use, defaults to \`sync\` |
+| tx | `SignedTransaction` |   |
+| `Optional` mode | "sync" \| "async" \| "commit" |
 
-**Returns:** `Promise`<`any`>
+**Returns:** `Promise`<`Object`>
 
 ___
 <a id="subscribe"></a>
@@ -641,7 +679,7 @@ ___
 
 ▸ **subscribe**(eventName: *`string`*, cb: *`Function`*): `Promise`<`void`>
 
-*Defined in [common/TendermintRPC.ts:255](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/common/TendermintRPC.ts#L255)*
+*Defined in [common/TendermintRPC.ts:319](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/common/TendermintRPC.ts#L319)*
 
 Subscribe to an event in the Tendermint chain.
 
@@ -663,7 +701,7 @@ ___
 
 ▸ **unsubscribe**(query: *`string`*): `Promise`<`void`>
 
-*Defined in [common/TendermintRPC.ts:282](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/common/TendermintRPC.ts#L282)*
+*Defined in [common/TendermintRPC.ts:346](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/common/TendermintRPC.ts#L346)*
 
 Unsubscribe from an event in the Tendermint chain.
 

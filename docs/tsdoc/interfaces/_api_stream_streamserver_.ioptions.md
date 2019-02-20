@@ -28,7 +28,7 @@ Defines the object provided to the `StreamServer` constructor.
 
 **● host**: *`string`*
 
-*Defined in [api/stream/StreamServer.ts:47](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/api/stream/StreamServer.ts#L47)*
+*Defined in [api/stream/StreamServer.ts:48](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/api/stream/StreamServer.ts#L48)*
 
 Network host to bind StreamAPI server.
 
@@ -39,7 +39,7 @@ ___
 
 **● port**: *`number`*
 
-*Defined in [api/stream/StreamServer.ts:44](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/api/stream/StreamServer.ts#L44)*
+*Defined in [api/stream/StreamServer.ts:45](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/api/stream/StreamServer.ts#L45)*
 
 Port to bind the StreamAPI server to.
 
@@ -50,7 +50,7 @@ ___
 
 **● retryInterval**: *`number`*
 
-*Defined in [api/stream/StreamServer.ts:38](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/api/stream/StreamServer.ts#L38)*
+*Defined in [api/stream/StreamServer.ts:39](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/api/stream/StreamServer.ts#L39)*
 
 Interval between connection attempts (in ms).
 
@@ -61,7 +61,7 @@ ___
 
 **● retryMax**: *`number`*
 
-*Defined in [api/stream/StreamServer.ts:41](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/api/stream/StreamServer.ts#L41)*
+*Defined in [api/stream/StreamServer.ts:42](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/api/stream/StreamServer.ts#L42)*
 
 The maximum number of times to retry connection before throwing.
 
@@ -72,7 +72,7 @@ ___
 
 **● tendermintRpcUrl**: *`string`*
 
-*Defined in [api/stream/StreamServer.ts:35](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/api/stream/StreamServer.ts#L35)*
+*Defined in [api/stream/StreamServer.ts:36](https://github.com/paradigmfoundation/paradigmcore/blob/4512cec/src/api/stream/StreamServer.ts#L36)*
 
 URL of the local Tendermint RPC server.
 
