@@ -195,10 +195,9 @@ Additionally, feel free to open issues and pull requests with bug fixes or enhan
 
 * ["api/post/HttpMessage"](modules/_api_post_httpmessage_.md)
 * ["api/post/HttpServer"](modules/_api_post_httpserver_.md)
-* ["api/stream/JsonRequest"](modules/_api_stream_jsonrequest_.md)
-* ["api/stream/JsonResponse"](modules/_api_stream_jsonresponse_.md)
+* ["api/stream/Request"](modules/_api_stream_request_.md)
+* ["api/stream/Response"](modules/_api_stream_response_.md)
 * ["api/stream/StreamServer"](modules/_api_stream_streamserver_.md)
-* ["api/stream/StreamServer-old"](modules/_api_stream_streamserver_old_.md)
 * ["api/stream/api"](modules/_api_stream_api_.md)
 * ["api/stream/schema"](modules/_api_stream_schema_.md)
 * ["api/stream/utils"](modules/_api_stream_utils_.md)
