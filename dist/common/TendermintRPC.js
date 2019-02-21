@@ -48,6 +48,7 @@ class TendermintRPC extends events_1.EventEmitter {
                 this.connected = true;
                 this.shouldRetry = true;
                 this.connecting = false;
+                this.emit("open");
                 log_1.log("tm", `connected to server after ${counter} attempts`);
                 resolve();
                 clearInterval(timer);

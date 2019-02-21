@@ -1,13 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const JsonRequest_1 = require("./JsonRequest");
-const JsonResponse_1 = require("./JsonResponse");
+const Request_1 = require("./Request");
+const Response_1 = require("./Response");
 const log_1 = require("../../common/log");
+const TendermintRPC_js_1 = require("../../common/TendermintRPC.js");
+const utils_js_1 = require("./utils.js");
 const _ = require("lodash");
 const events_1 = require("events");
 const WebSocket = require("ws");
 const crypto_1 = require("crypto");
-const utils_js_1 = require("./utils.js");
 class StreamServer extends events_1.EventEmitter {
     static generate32RandomBytes(start) {
         let output;
@@ -40,16 +41,26 @@ class StreamServer extends events_1.EventEmitter {
     constructor(options = {}) {
         super();
         this.secret = StreamServer.generate32RandomBytes();
-        this.retryMax = options.retryMax || 30;
-        this.retryInterval = options.retryInterval || 2000;
         this.subscriptions = [];
         this.connectionMap = {};
         this.streamPort = options.port || 14342;
         this.streamHost = options.host || "localhost";
+        this.retryMax = options.retryMax || 30;
+        this.retryInterval = options.retryInterval || 2000;
+        this.rpcClient = new TendermintRPC_js_1.TendermintRPC(options.tendermintRpcUrl, this.retryMax, this.retryInterval);
         this.started = false;
         return;
     }
     async start() {
+        this.rpcClient.on("open", () => {
+            log_1.log("api", "connected to tendermint rpc server");
+            this.rpcClient.subscribe("tm.event='NewBlock'", (data) => {
+                const { height } = data.block.header;
+                this.latestBlockData.height = parseInt(height, 10);
+                log_1.log("api", `just received tendermint block: ${height}`);
+            });
+        });
+        await this.rpcClient.connect(this.retryMax, this.retryInterval);
         this.setupServer(this.streamHost, this.streamPort);
         return;
     }
@@ -69,7 +80,7 @@ class StreamServer extends events_1.EventEmitter {
             conn.on("message", (msg) => {
                 log_1.log("api", `Message from connection '${connectionId}': '${msg}'`);
                 let res, req, error;
-                req = new JsonRequest_1.JsonRequest(msg);
+                req = new Request_1.Request(msg);
                 error = req.validate();
                 if (error) {
                     res = utils_js_1.createResponse(null, null, error);
@@ -90,14 +101,14 @@ class StreamServer extends events_1.EventEmitter {
             });
             conn.on("open", () => {
                 console.log("\nya it open bud\n");
-                const res = new JsonResponse_1.JsonResponse({ id: "none", result: "welcome brudda" });
+                const res = new Response_1.Response({ id: "none", result: "welcome brudda" });
                 this.sendMessageToClient(connectionId, res);
                 log_1.log("api", `Send open message to connection '${connectionId}'`);
                 return;
             });
             conn.on("error", (error) => {
                 log_1.warn("api", `Error from connection '${connectionId}': ${error.message}`);
-                const res = new JsonResponse_1.JsonResponse({ id: "none", result: "goodbye, error found." });
+                const res = new Response_1.Response({ id: "none", result: "goodbye, error found." });
                 this.sendMessageToClient(connectionId, res);
                 log_1.warn("api", `Send error message to connection '${connectionId}'`);
                 this.connectionMap[connectionId] = undefined;

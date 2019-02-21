@@ -119,9 +119,11 @@ export class TendermintRPC extends EventEmitter {
     /**
      * Create a new Tendermint RPC instance.
      * 
-     * @param endpoint 
+     * @param endpoint the full URI for the target tendermint rpc server
+     * @param maxRetries the maximum number of times to try reconnect before timeout
+     * @param interval the delay (in ms) between each reconnect attempt
      */
-    constructor(endpoint: string, maxRetries, interval) {
+    constructor(endpoint: string, maxRetries: number, interval: number) {
         super();
         this.url = new URL(endpoint);
         if (["ws:", "wss:"].indexOf(this.url.protocol) === -1) {
@@ -192,6 +194,9 @@ export class TendermintRPC extends EventEmitter {
                 this.shouldRetry = true;
                 this.connecting = false;
 
+                // emit open event
+                this.emit("open");
+                
                 // end cycle and resolve promise
                 log("tm", `connected to server after ${counter} attempts`);
                 resolve();

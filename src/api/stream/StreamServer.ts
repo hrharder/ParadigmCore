@@ -7,7 +7,7 @@
  *
  * @author Henry Harder
  * @date (initial)  05-February-2019
- * @date (modified) 13-February-2019
+ * @date (modified) 20-February-2019
 **/
 
 // request/response schemas
@@ -60,7 +60,29 @@ interface IOptions {
  * @todo move to `typings` module
  */
 interface IBlockData {
+    /**
+     * The best known tendermint block (height).
+     */
+    height: number;
+}
 
+/**
+ * Raw block data as delivered over Tendermint JSONRPC (pre-parsing).
+ */
+interface RawBlockData {
+    block: {
+        header: {
+            version: {
+                block: string;
+                app: string;
+            },
+            chain_id: string;
+            height: string;
+            time: string;
+            num_txs: string;
+            total_txs: string;
+        }
+    }
 }
 
 /**
@@ -294,10 +316,6 @@ export class StreamServer extends EventEmitter {
         // generate server secret (used for the duration of the process)
         this.secret = StreamServer.generate32RandomBytes();
 
-        // set params for Tendermint RPC connection
-        this.retryMax = options.retryMax || 30;
-        this.retryInterval = options.retryInterval || 2000;
-
         // setup subscription and connection tracking objects
         this.subscriptions = [];
         this.connectionMap = {};
@@ -306,17 +324,50 @@ export class StreamServer extends EventEmitter {
         this.streamPort = options.port || 14342;
         this.streamHost = options.host || "localhost";
 
+        // set params for Tendermint RPC connection
+        this.retryMax = options.retryMax || 30;
+        this.retryInterval = options.retryInterval || 2000;
+
+        // tendermint rpc connection
+        this.rpcClient = new TendermintRPC(
+            options.tendermintRpcUrl,
+            this.retryMax,
+            this.retryInterval,
+        );
+
         // status
         this.started = false;
         return;
     }
     
+    // BEGIN public methods
+
     public async start(): Promise<void> {
+        // TEMPORARY testing RPC
+        // @todo move elsewhere
+        this.rpcClient.on("open", () => {
+            log("api", "connected to tendermint rpc server");
+
+            // handle each new block
+            this.rpcClient.subscribe("tm.event='NewBlock'", (data: RawBlockData) => {
+                // console.log(`\n${JSON.stringify(data)}\n`);
+
+                // update latest height
+                const { height } = data.block.header;
+                this.latestBlockData.height = parseInt(height, 10);
+
+                // temporary log height
+                log("api", `just received tendermint block: ${height}`);
+            });
+        });
+
+        // connect to tendermint rpc server
+        await this.rpcClient.connect(this.retryMax, this.retryInterval);
+
+        // start listening to client requests
         this.setupServer(this.streamHost, this.streamPort);
         return;
     }
-
-    // BEGIN public methods
 
     // END public methods
 
