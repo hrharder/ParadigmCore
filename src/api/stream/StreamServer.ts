@@ -105,6 +105,13 @@ interface IConnectionMap {
 }
 
 /**
+ * Mapping of methods to method implementations;
+ */
+interface IMethods {
+    [methodName: string]: (params: any) => any;
+}
+
+/**
  * The `StreamServer` class is a TypeScript implementation of the StreamAPI, 
  * intended to be used with JSONRPC(2.0)/WebSocket. 
  * 
@@ -209,6 +216,11 @@ export class StreamServer extends EventEmitter {
      * with the client (as a precaution).
      */
     private secret: Buffer;
+
+    /**
+     * Mapping of method handler functions.
+     */
+    private methods: IMethods;
 
     /**
      * Tendermint RPC client instance.
@@ -320,6 +332,9 @@ export class StreamServer extends EventEmitter {
         this.subscriptions = [];
         this.connectionMap = {};
 
+        // setup methods object
+        this.methods = {};
+
         // setup block data tracker
         this.latestBlockData = {};
 
@@ -345,6 +360,12 @@ export class StreamServer extends EventEmitter {
     
     // BEGIN public methods
 
+    /**
+     * Start the StreamAPI server.
+     * 
+     * An async function that binds the WebSocket server, and connects to the 
+     * local TendermintRPC instance. 
+     */
     public async start(): Promise<void> {
         // TEMPORARY testing RPC
         // @todo move elsewhere
@@ -370,6 +391,13 @@ export class StreamServer extends EventEmitter {
         // start listening to client requests
         this.setupServer(this.streamHost, this.streamPort);
         return;
+    }
+
+    /**
+     * Bind a method to the StreamServer.
+     */
+    public bind(methodName: string, method: (params: any) => any): void {
+        this.methods[methodName] = method;
     }
 
     // END public methods
@@ -432,20 +460,30 @@ export class StreamServer extends EventEmitter {
                 // scope eventual response/request objects
                 let res: Res, req: Req, error: ValidationError;
 
-                // create request object and validate
-                req = new Req(msg);
-                error = req.validate();
+                try {
+                    // create request object and validate
+                    req = new Req(msg);
+                    error = req.validate();
 
-                if (error) {
-                    res = createResponse(null, null, error);
-                    warn("api", `Sending error message to connection '${connectionId}'`);
-                } else if (!error && _.isObject(req.parsed)) {
-                    // this is where we will handle the request.
-                    // temporarily send back params
-                    const { params, id } = req.parsed;
-                    res = createResponse(params, id)    
-                    log("api", `Sending OK message to connection '${connectionId}'`);
-                } else {
+                    if (error) {
+                        res = createResponse(null, null, error);
+                        warn("api", `Sending error message to connection '${connectionId}'`);
+                    } else if (!error && _.isObject(req.parsed)) {
+                        // this is where we will handle the request.
+                        const { params, id, method} = req.parsed;
+
+                        if (!this.methods[method]) {
+                            const methError = createValError(-32601, "method not implemented.");
+                            res = createResponse(null, null, methError);
+                        } else {
+                            log("api", `Executing method for connection '${connectionId}'`);
+                            const result = this.methods[method](params);
+                            res = createResponse(result, id, null);
+                        }
+                    } else {
+                        throw Error();
+                    }                
+                } catch (_) {
                     const intError = createValError(-32603, "Internal error.");
                     res = createResponse(null, null, intError);
                     warn("api", "Sending error message (internal) to client.");

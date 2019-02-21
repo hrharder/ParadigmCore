@@ -110,7 +110,7 @@ export class Request {
                 this.addValErr(-32600, "check for missing fields.");
             } else if (_.isUndefined(methods[method])) {
                 this.addValErr(-32601, "invalid method, please check request.");
-            } else {
+            } else if (methods[method].params) {
                 const { required, properties} = methods[method].params; 
                 // iterate over required params and check
                 for (let i = 0; i < required.length; i++) {

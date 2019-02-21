@@ -43,6 +43,7 @@ class StreamServer extends events_1.EventEmitter {
         this.secret = StreamServer.generate32RandomBytes();
         this.subscriptions = [];
         this.connectionMap = {};
+        this.methods = {};
         this.latestBlockData = {};
         this.streamPort = options.port || 14342;
         this.streamHost = options.host || "localhost";
@@ -65,6 +66,9 @@ class StreamServer extends events_1.EventEmitter {
         this.setupServer(this.streamHost, this.streamPort);
         return;
     }
+    bind(methodName, method) {
+        this.methods[methodName] = method;
+    }
     setupServer(host, port) {
         const options = { host, port };
         this.server = new WebSocket.Server(options);
@@ -81,18 +85,30 @@ class StreamServer extends events_1.EventEmitter {
             conn.on("message", (msg) => {
                 log_1.log("api", `Message from connection '${connectionId}': '${msg}'`);
                 let res, req, error;
-                req = new Request_1.Request(msg);
-                error = req.validate();
-                if (error) {
-                    res = utils_js_1.createResponse(null, null, error);
-                    log_1.warn("api", `Sending error message to connection '${connectionId}'`);
+                try {
+                    req = new Request_1.Request(msg);
+                    error = req.validate();
+                    if (error) {
+                        res = utils_js_1.createResponse(null, null, error);
+                        log_1.warn("api", `Sending error message to connection '${connectionId}'`);
+                    }
+                    else if (!error && _.isObject(req.parsed)) {
+                        const { params, id, method } = req.parsed;
+                        if (!this.methods[method]) {
+                            const methError = utils_js_1.createValError(-32601, "method not implemented.");
+                            res = utils_js_1.createResponse(null, null, methError);
+                        }
+                        else {
+                            log_1.log("api", `Executing method for connection '${connectionId}'`);
+                            const result = this.methods[method](params);
+                            res = utils_js_1.createResponse(result, id, null);
+                        }
+                    }
+                    else {
+                        throw Error();
+                    }
                 }
-                else if (!error && _.isObject(req.parsed)) {
-                    const { params, id } = req.parsed;
-                    res = utils_js_1.createResponse(params, id);
-                    log_1.log("api", `Sending OK message to connection '${connectionId}'`);
-                }
-                else {
+                catch (_) {
                     const intError = utils_js_1.createValError(-32603, "Internal error.");
                     res = utils_js_1.createResponse(null, null, intError);
                     log_1.warn("api", "Sending error message (internal) to client.");

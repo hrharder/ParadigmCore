@@ -37,7 +37,7 @@ class Request {
             else if (_.isUndefined(methods[method])) {
                 this.addValErr(-32601, "invalid method, please check request.");
             }
-            else {
+            else if (methods[method].params) {
                 const { required, properties } = methods[method].params;
                 for (let i = 0; i < required.length; i++) {
                     const name = required[i];
