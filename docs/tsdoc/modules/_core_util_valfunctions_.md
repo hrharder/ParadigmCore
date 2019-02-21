@@ -21,7 +21,7 @@
 
 ▸ **doForEachValidator**(state: *`State`*, cb: *`function`*): `void`
 
-*Defined in [core/util/valFunctions.ts:77](https://github.com/paradigmfoundation/paradigmcore/blob/ca51030/src/core/util/valFunctions.ts#L77)*
+*Defined in [core/util/valFunctions.ts:77](https://github.com/paradigmfoundation/paradigmcore/blob/99f4a81/src/core/util/valFunctions.ts#L77)*
 
 Simple wrapper for Object.keys() to execute a function on each validator that is currently in-state.
 
@@ -41,7 +41,7 @@ ___
 
 ▸ **privToPub**(input: *`Buffer`*): `Buffer`
 
-*Defined in [core/util/valFunctions.ts:44](https://github.com/paradigmfoundation/paradigmcore/blob/ca51030/src/core/util/valFunctions.ts#L44)*
+*Defined in [core/util/valFunctions.ts:44](https://github.com/paradigmfoundation/paradigmcore/blob/99f4a81/src/core/util/valFunctions.ts#L44)*
 
 Derive Tendermint public key from private key (ed25519 type).
 
@@ -60,7 +60,7 @@ ___
 
 ▸ **pubToAddr**(input: *`Buffer`*): `Buffer`
 
-*Defined in [core/util/valFunctions.ts:24](https://github.com/paradigmfoundation/paradigmcore/blob/ca51030/src/core/util/valFunctions.ts#L24)*
+*Defined in [core/util/valFunctions.ts:24](https://github.com/paradigmfoundation/paradigmcore/blob/99f4a81/src/core/util/valFunctions.ts#L24)*
 
 Convert a Tendermint ed25519 public key to nodeID/address.
 
@@ -79,7 +79,7 @@ ___
 
 ▸ **validatorUpdate**(pubKey: *`Buffer`*, power: *`bigint`*): `ValidatorUpdate`
 
-*Defined in [core/util/valFunctions.ts:60](https://github.com/paradigmfoundation/paradigmcore/blob/ca51030/src/core/util/valFunctions.ts#L60)*
+*Defined in [core/util/valFunctions.ts:60](https://github.com/paradigmfoundation/paradigmcore/blob/99f4a81/src/core/util/valFunctions.ts#L60)*
 
 Generates a `ValidatorUpdate` object, intended to be used in the EndBlock handler.
 

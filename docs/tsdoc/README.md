@@ -1,5 +1,5 @@
 
-ParadigmCore [`v0.8.0-rc-1`](https://github.com/ParadigmFoundation/ParadigmCore/pull/38)
+ParadigmCore [`v0.8.1-rc-1`](https://github.com/ParadigmFoundation/ParadigmCore/pull/38)
 ========================================================================================
 
 ParadigmCore is (currently) the reference implementation of the OrderStream, and the first network client. It is built on [Tendermint](https://www.tendermint.com/), which is used for networking and BFT consensus.

@@ -18,7 +18,7 @@
 
 **commitState**: *`object`*
 
-*Defined in [state/commitState.ts:15](https://github.com/paradigmfoundation/paradigmcore/blob/ca51030/src/state/commitState.ts#L15)*
+*Defined in [state/commitState.ts:15](https://github.com/paradigmfoundation/paradigmcore/blob/99f4a81/src/state/commitState.ts#L15)*
 
 \=========================== ParadigmCore: Blind Star
 
@@ -41,7 +41,7 @@ Object representing the post-commit state of the network.
 
 **● events**: *`object`*
 
-*Defined in [state/commitState.ts:22](https://github.com/paradigmfoundation/paradigmcore/blob/ca51030/src/state/commitState.ts#L22)*
+*Defined in [state/commitState.ts:22](https://github.com/paradigmfoundation/paradigmcore/blob/99f4a81/src/state/commitState.ts#L22)*
 
 #### Type declaration
 
@@ -52,7 +52,7 @@ ___
 
 **● lastBlockAppHash**: *`null`* =  null
 
-*Defined in [state/commitState.ts:35](https://github.com/paradigmfoundation/paradigmcore/blob/ca51030/src/state/commitState.ts#L35)*
+*Defined in [state/commitState.ts:35](https://github.com/paradigmfoundation/paradigmcore/blob/99f4a81/src/state/commitState.ts#L35)*
 
 ___
 <a id="commitstate.lastblockheight"></a>
@@ -61,7 +61,7 @@ ___
 
 **● lastBlockHeight**: *`number`* = 0
 
-*Defined in [state/commitState.ts:34](https://github.com/paradigmfoundation/paradigmcore/blob/ca51030/src/state/commitState.ts#L34)*
+*Defined in [state/commitState.ts:34](https://github.com/paradigmfoundation/paradigmcore/blob/99f4a81/src/state/commitState.ts#L34)*
 
 ___
 <a id="commitstate.lastevent"></a>
@@ -70,7 +70,7 @@ ___
 
 **● lastEvent**: *`number`* =  -1
 
-*Defined in [state/commitState.ts:24](https://github.com/paradigmfoundation/paradigmcore/blob/ca51030/src/state/commitState.ts#L24)*
+*Defined in [state/commitState.ts:24](https://github.com/paradigmfoundation/paradigmcore/blob/99f4a81/src/state/commitState.ts#L24)*
 
 ___
 <a id="commitstate.ordercounter"></a>
@@ -79,7 +79,7 @@ ___
 
 **● orderCounter**: *`number`* = 0
 
-*Defined in [state/commitState.ts:33](https://github.com/paradigmfoundation/paradigmcore/blob/ca51030/src/state/commitState.ts#L33)*
+*Defined in [state/commitState.ts:33](https://github.com/paradigmfoundation/paradigmcore/blob/99f4a81/src/state/commitState.ts#L33)*
 
 ___
 <a id="commitstate.posters"></a>
@@ -88,7 +88,7 @@ ___
 
 **● posters**: *`object`*
 
-*Defined in [state/commitState.ts:23](https://github.com/paradigmfoundation/paradigmcore/blob/ca51030/src/state/commitState.ts#L23)*
+*Defined in [state/commitState.ts:23](https://github.com/paradigmfoundation/paradigmcore/blob/99f4a81/src/state/commitState.ts#L23)*
 
 #### Type declaration
 
@@ -99,7 +99,7 @@ ___
 
 **● validators**: *`object`*
 
-*Defined in [state/commitState.ts:25](https://github.com/paradigmfoundation/paradigmcore/blob/ca51030/src/state/commitState.ts#L25)*
+*Defined in [state/commitState.ts:25](https://github.com/paradigmfoundation/paradigmcore/blob/99f4a81/src/state/commitState.ts#L25)*
 
 #### Type declaration
 
@@ -110,7 +110,7 @@ ___
 
 **consensusParams**: *`object`*
 
-*Defined in [state/commitState.ts:26](https://github.com/paradigmfoundation/paradigmcore/blob/ca51030/src/state/commitState.ts#L26)*
+*Defined in [state/commitState.ts:26](https://github.com/paradigmfoundation/paradigmcore/blob/99f4a81/src/state/commitState.ts#L26)*
 
 <a id="commitstate.consensusparams.confirmationthreshold"></a>
 
@@ -118,7 +118,7 @@ ___
 
 **● confirmationThreshold**: *`null`* =  null
 
-*Defined in [state/commitState.ts:31](https://github.com/paradigmfoundation/paradigmcore/blob/ca51030/src/state/commitState.ts#L31)*
+*Defined in [state/commitState.ts:31](https://github.com/paradigmfoundation/paradigmcore/blob/99f4a81/src/state/commitState.ts#L31)*
 
 ___
 <a id="commitstate.consensusparams.finalitythreshold"></a>
@@ -127,7 +127,7 @@ ___
 
 **● finalityThreshold**: *`null`* =  null
 
-*Defined in [state/commitState.ts:27](https://github.com/paradigmfoundation/paradigmcore/blob/ca51030/src/state/commitState.ts#L27)*
+*Defined in [state/commitState.ts:27](https://github.com/paradigmfoundation/paradigmcore/blob/99f4a81/src/state/commitState.ts#L27)*
 
 ___
 <a id="commitstate.consensusparams.maxorderbytes"></a>
@@ -136,7 +136,7 @@ ___
 
 **● maxOrderBytes**: *`null`* =  null
 
-*Defined in [state/commitState.ts:30](https://github.com/paradigmfoundation/paradigmcore/blob/ca51030/src/state/commitState.ts#L30)*
+*Defined in [state/commitState.ts:30](https://github.com/paradigmfoundation/paradigmcore/blob/99f4a81/src/state/commitState.ts#L30)*
 
 ___
 <a id="commitstate.consensusparams.periodlength"></a>
@@ -145,7 +145,7 @@ ___
 
 **● periodLength**: *`null`* =  null
 
-*Defined in [state/commitState.ts:28](https://github.com/paradigmfoundation/paradigmcore/blob/ca51030/src/state/commitState.ts#L28)*
+*Defined in [state/commitState.ts:28](https://github.com/paradigmfoundation/paradigmcore/blob/99f4a81/src/state/commitState.ts#L28)*
 
 ___
 <a id="commitstate.consensusparams.periodlimit"></a>
@@ -154,7 +154,7 @@ ___
 
 **● periodLimit**: *`null`* =  null
 
-*Defined in [state/commitState.ts:29](https://github.com/paradigmfoundation/paradigmcore/blob/ca51030/src/state/commitState.ts#L29)*
+*Defined in [state/commitState.ts:29](https://github.com/paradigmfoundation/paradigmcore/blob/99f4a81/src/state/commitState.ts#L29)*
 
 ___
 
@@ -165,7 +165,7 @@ ___
 
 **round**: *`object`*
 
-*Defined in [state/commitState.ts:16](https://github.com/paradigmfoundation/paradigmcore/blob/ca51030/src/state/commitState.ts#L16)*
+*Defined in [state/commitState.ts:16](https://github.com/paradigmfoundation/paradigmcore/blob/99f4a81/src/state/commitState.ts#L16)*
 
 <a id="commitstate.round.endsat"></a>
 
@@ -173,7 +173,7 @@ ___
 
 **● endsAt**: *`number`* = 0
 
-*Defined in [state/commitState.ts:19](https://github.com/paradigmfoundation/paradigmcore/blob/ca51030/src/state/commitState.ts#L19)*
+*Defined in [state/commitState.ts:19](https://github.com/paradigmfoundation/paradigmcore/blob/99f4a81/src/state/commitState.ts#L19)*
 
 ___
 <a id="commitstate.round.limit"></a>
@@ -182,7 +182,7 @@ ___
 
 **● limit**: *`number`* = 0
 
-*Defined in [state/commitState.ts:20](https://github.com/paradigmfoundation/paradigmcore/blob/ca51030/src/state/commitState.ts#L20)*
+*Defined in [state/commitState.ts:20](https://github.com/paradigmfoundation/paradigmcore/blob/99f4a81/src/state/commitState.ts#L20)*
 
 ___
 <a id="commitstate.round.number"></a>
@@ -191,7 +191,7 @@ ___
 
 **● number**: *`number`* = 0
 
-*Defined in [state/commitState.ts:17](https://github.com/paradigmfoundation/paradigmcore/blob/ca51030/src/state/commitState.ts#L17)*
+*Defined in [state/commitState.ts:17](https://github.com/paradigmfoundation/paradigmcore/blob/99f4a81/src/state/commitState.ts#L17)*
 
 ___
 <a id="commitstate.round.startsat"></a>
@@ -200,7 +200,7 @@ ___
 
 **● startsAt**: *`number`* = 0
 
-*Defined in [state/commitState.ts:18](https://github.com/paradigmfoundation/paradigmcore/blob/ca51030/src/state/commitState.ts#L18)*
+*Defined in [state/commitState.ts:18](https://github.com/paradigmfoundation/paradigmcore/blob/99f4a81/src/state/commitState.ts#L18)*
 
 ___
 

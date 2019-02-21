@@ -26,7 +26,7 @@ Defines the parsed block data from the tendermint `NewBlock` event.
 
 **● height**: *`number`*
 
-*Defined in [api/stream/StreamServer.ts:66](https://github.com/paradigmfoundation/paradigmcore/blob/ca51030/src/api/stream/StreamServer.ts#L66)*
+*Defined in [api/stream/StreamServer.ts:66](https://github.com/paradigmfoundation/paradigmcore/blob/99f4a81/src/api/stream/StreamServer.ts#L66)*
 
 The best known tendermint block (height).
 
