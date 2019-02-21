@@ -2,7 +2,7 @@
  * ===========================
  * ParadigmCore: Blind Star
  * @name StreamServer.ts
- * @module src/api/stream
+ * @module api/stream
  * ===========================
  *
  * @author Henry Harder
@@ -14,19 +14,25 @@
 import * as api from "./api.json";
 
 // request/response objects
-import { JsonRequest as Req } from "./JsonRequest";
-import { JsonResponse as Res } from "./JsonResponse";
+import { Request as Req } from "./Request";
+import { Response as Res } from "./Response";
 
 // common imports
 import { log, warn, err } from "../../common/log";
 import { TendermintRPC } from "../../common/TendermintRPC.js";
+
+// stream server utils
+import {
+    createResponse,
+    createValError
+} from "./utils.js";
 
 // third party/std-lib
 import * as _ from "lodash";
 import { EventEmitter } from "events";
 import * as WebSocket from "ws";
 import { createHash, Hash } from "crypto";
-import { validateMessage, createResponse, createValError } from "./utils.js";
+
 
 /**
  * Defines the object provided to the `StreamServer` constructor.
@@ -53,7 +59,9 @@ interface IOptions {
  * 
  * @todo move to `typings` module
  */
-interface IBlockData {}
+interface IBlockData {
+
+}
 
 /**
  * Defines the object type used to represent an event subscription.

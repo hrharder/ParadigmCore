@@ -1,13 +1,13 @@
 /**
  * ===========================
  * ParadigmCore: Blind Star
- * @name JsonRequest.ts
+ * @name Request.ts
  * @module src/api/stream
  * ===========================
  *
  * @author Henry Harder
  * @date (initial)  05-February-2019
- * @date (modified) 06-February-2018
+ * @date (modified) 20-February-2018
  * 
  * TODO: fix this local version
 **/
@@ -26,7 +26,7 @@ import * as _ from "lodash";
  * 
  * See: https://www.jsonrpc.org/specification
  */
-export class JsonRequest {
+export class Request {
     /**
      * Stream API definition JSON.
      */
@@ -86,7 +86,7 @@ export class JsonRequest {
         // return immediately if already validated
         if (this.valid !== null) return;
         // shortcut to request property definitions
-        const reqDef = JsonRequest.api.request;
+        const reqDef = Request.api.request;
 
         // check valid json by parsing
         try {
@@ -99,7 +99,7 @@ export class JsonRequest {
         }
 
         try {
-            const { methods } = JsonRequest.schema;
+            const { methods } = Request.schema;
             const { method, params, id } = this.parsed;
 
             if (
@@ -253,7 +253,7 @@ export class JsonRequest {
     private addValErr(code: number, msg?: string) {
         if (this.valid !== null) return;
         const suffix = msg ? msg : "";
-        const message = `${JsonRequest.api.codes[code].info}${suffix}`;
+        const message = `${Request.api.codes[code].info}${suffix}`;
         this.close({ code, message });
         return;
     }

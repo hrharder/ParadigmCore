@@ -1,6 +1,22 @@
-import { JsonRequest as Req } from "./JsonRequest";
-import { JsonResponse as Res } from "./JsonResponse";
+/**
+ * ===========================
+ * ParadigmCore: Blind Star
+ * @name utils.ts
+ * @module api/stream
+ * ===========================
+ *
+ * @author Henry Harder
+ * @date (initial)  19-February-2019
+ * @date (modified) 20-February-2019
+ * 
+ * Utility functions for the ParadigmCore JSONRPC server.
+**/
 
+// local imports
+import { Request as Req } from "./Request";
+import { Response as Res } from "./Response";
+
+// third party and stdlib
 import * as WebSocket from "ws";
 import * as _ from "lodash";
 

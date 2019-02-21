@@ -6,13 +6,14 @@ The API is served by the `StreamServer`, an optional component included as part 
 
 StreamAPI follows the JSONRPC-2.0 specification. More information available at http://www.jsonrpc.org/specification.
 
-<strong>Version 0.1-rc</strong>
+<strong>Version 0.1-rc-2</strong>
 
 ---
 
 - [session.end](#session.end)
 - [subscription.start](#subscription.start)
 - [subscription.end](#subscription.end)
+- [block.latestHeight](#block.latestHeight)
 
 ---
 
@@ -77,10 +78,10 @@ Initiate a subscription to an OrderStream node for specific blockchain and state
 
 ### Parameters
 
-| Name         | Type   | Description                                                                        |
-| ------------ | ------ | ---------------------------------------------------------------------------------- |
-| params       | object |                                                                                    |
-| params.event | string | The name of the event you are subscribing to. Can be 'order' or 'block' currently. |
+| Name             | Type   | Description                                                                        |
+| ---------------- | ------ | ---------------------------------------------------------------------------------- |
+| params           | object |                                                                                    |
+| params.eventName | string | The name of the event you are subscribing to. Can be 'order' or 'block' currently. |
 
 ### Result
 
@@ -106,7 +107,7 @@ Initiate a subscription to an OrderStream node for specific blockchain and state
   "id": "1234567890",
   "method": "subscription.start",
   "params": {
-    "event": "order"
+    "eventName": "order"
   }
 }
 ```
@@ -177,6 +178,47 @@ Immediately end a subscription to a certain event, and stop receiving notificati
   "id": "1234567890",
   "result": {
     "response": "Successfully ended event subscription."
+  }
+}
+```
+
+<a name="block.latestHeight"></a>
+
+## block.latestHeight
+
+Return the height of the best known block.
+
+### Description
+
+The `block.latestHeight` method will return the integer height of the latest block committed to the blockchain.
+
+### Result
+
+| Name          | Type   | Description                                       |
+| ------------- | ------ | ------------------------------------------------- |
+| result        | object |                                                   |
+| result.height | number | The integer height of the latest committed block. |
+
+### Examples
+
+#### Request
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": "1234567890",
+  "method": "block.latestHeight"
+}
+```
+
+#### Response
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": "1234567890",
+  "result": {
+    "height": 42341
   }
 }
 ```
