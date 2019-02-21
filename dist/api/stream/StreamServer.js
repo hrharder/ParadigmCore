@@ -43,6 +43,7 @@ class StreamServer extends events_1.EventEmitter {
         this.secret = StreamServer.generate32RandomBytes();
         this.subscriptions = [];
         this.connectionMap = {};
+        this.latestBlockData = {};
         this.streamPort = options.port || 14342;
         this.streamHost = options.host || "localhost";
         this.retryMax = options.retryMax || 30;

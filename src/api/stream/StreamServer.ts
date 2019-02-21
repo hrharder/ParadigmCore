@@ -63,7 +63,7 @@ interface IBlockData {
     /**
      * The best known tendermint block (height).
      */
-    height: number;
+    height?: number;
 }
 
 /**
@@ -319,6 +319,9 @@ export class StreamServer extends EventEmitter {
         // setup subscription and connection tracking objects
         this.subscriptions = [];
         this.connectionMap = {};
+
+        // setup block data tracker
+        this.latestBlockData = {};
 
         // server config
         this.streamPort = options.port || 14342;
