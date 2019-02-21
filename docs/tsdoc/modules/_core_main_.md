@@ -22,7 +22,7 @@
 
 **● abci**: *`any`* =  require("abci")
 
-*Defined in [core/main.ts:17](https://github.com/paradigmfoundation/paradigmcore/blob/6f2b1c7/src/core/main.ts#L17)*
+*Defined in [core/main.ts:17](https://github.com/paradigmfoundation/paradigmcore/blob/ca51030/src/core/main.ts#L17)*
 
 \=========================== ParadigmCore: Blind Star
 
@@ -49,7 +49,7 @@ ___
 
 ▸ **start**(options: *`ParadigmCoreOptions`*): `Promise`<`null`>
 
-*Defined in [core/main.ts:49](https://github.com/paradigmfoundation/paradigmcore/blob/6f2b1c7/src/core/main.ts#L49)*
+*Defined in [core/main.ts:49](https://github.com/paradigmfoundation/paradigmcore/blob/ca51030/src/core/main.ts#L49)*
 
 Initialize and start the ABCI application.
 

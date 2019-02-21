@@ -26,7 +26,7 @@ Defines the object passed into `TendermintRPC.prototype.queue`
 
 **● id**: *`string`*
 
-*Defined in [common/TendermintRPC.ts:33](https://github.com/paradigmfoundation/paradigmcore/blob/6f2b1c7/src/common/TendermintRPC.ts#L33)*
+*Defined in [common/TendermintRPC.ts:33](https://github.com/paradigmfoundation/paradigmcore/blob/ca51030/src/common/TendermintRPC.ts#L33)*
 
 Unique ID used to track result
 
@@ -37,7 +37,7 @@ ___
 
 **● method**: *"sync" \| "async" \| "commit"*
 
-*Defined in [common/TendermintRPC.ts:30](https://github.com/paradigmfoundation/paradigmcore/blob/6f2b1c7/src/common/TendermintRPC.ts#L30)*
+*Defined in [common/TendermintRPC.ts:30](https://github.com/paradigmfoundation/paradigmcore/blob/ca51030/src/common/TendermintRPC.ts#L30)*
 
 The broadcast mode to use for this transaction
 
@@ -48,7 +48,7 @@ ___
 
 **● tx**: *`SignedTransaction`*
 
-*Defined in [common/TendermintRPC.ts:27](https://github.com/paradigmfoundation/paradigmcore/blob/6f2b1c7/src/common/TendermintRPC.ts#L27)*
+*Defined in [common/TendermintRPC.ts:27](https://github.com/paradigmfoundation/paradigmcore/blob/ca51030/src/common/TendermintRPC.ts#L27)*
 
 The transaction to submit via RPC
 

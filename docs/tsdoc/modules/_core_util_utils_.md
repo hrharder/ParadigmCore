@@ -35,7 +35,7 @@
 
 ▸ **addConfMaybeApplyEvent**(state: *`State`*, tx: *`ParsedWitnessData`*): `boolean`
 
-*Defined in [core/util/utils.ts:366](https://github.com/paradigmfoundation/paradigmcore/blob/6f2b1c7/src/core/util/utils.ts#L366)*
+*Defined in [core/util/utils.ts:366](https://github.com/paradigmfoundation/paradigmcore/blob/ca51030/src/core/util/utils.ts#L366)*
 
 Used in `witness` transaction execution. Responsible for increasing the conf counter on pending events, and deterministically applying the event to state if the required confirmation threshold (enough attestations) is reached.
 
@@ -55,7 +55,7 @@ ___
 
 ▸ **addNewEvent**(state: *`State`*, tx: *`ParsedWitnessData`*): `boolean`
 
-*Defined in [core/util/utils.ts:306](https://github.com/paradigmfoundation/paradigmcore/blob/6f2b1c7/src/core/util/utils.ts#L306)*
+*Defined in [core/util/utils.ts:306](https://github.com/paradigmfoundation/paradigmcore/blob/ca51030/src/core/util/utils.ts#L306)*
 
 Add a new witness event to state, or add confirmation to existing
 
@@ -77,7 +77,7 @@ ___
 
 ▸ **applyPosterEvent**(state: *`State`*, tx: *`ParsedWitnessData`*): `boolean`
 
-*Defined in [core/util/utils.ts:418](https://github.com/paradigmfoundation/paradigmcore/blob/6f2b1c7/src/core/util/utils.ts#L418)*
+*Defined in [core/util/utils.ts:418](https://github.com/paradigmfoundation/paradigmcore/blob/ca51030/src/core/util/utils.ts#L418)*
 
 Used in `witness` transaction execution, where `witness.subject` is "poster". This function "applies" a pending, and recently confirmed witness event to state, by updating the poster's balance in-state depending on the event type.
 
@@ -97,7 +97,7 @@ ___
 
 ▸ **applyValidatorEvent**(state: *`State`*, tx: *`ParsedWitnessData`*): `boolean`
 
-*Defined in [core/util/utils.ts:483](https://github.com/paradigmfoundation/paradigmcore/blob/6f2b1c7/src/core/util/utils.ts#L483)*
+*Defined in [core/util/utils.ts:483](https://github.com/paradigmfoundation/paradigmcore/blob/ca51030/src/core/util/utils.ts#L483)*
 
 Used in `witness` transaction execution, where `witness.subject` is "validator". This function "applies" a pending, and recently confirmed witness event to state, by updating the validator's balance in-state depending on the event type (add vs remove).
 
@@ -117,7 +117,7 @@ ___
 
 ▸ **computeConf**(active: *`number`*): `number`
 
-*Defined in [core/util/utils.ts:163](https://github.com/paradigmfoundation/paradigmcore/blob/6f2b1c7/src/core/util/utils.ts#L163)*
+*Defined in [core/util/utils.ts:163](https://github.com/paradigmfoundation/paradigmcore/blob/ca51030/src/core/util/utils.ts#L163)*
 
 Compute the witness confirmation threshold based on number of active validators.
 
@@ -136,7 +136,7 @@ ___
 
 ▸ **createWitnessEventHash**(tx: *`WitnessData`*): `string`
 
-*Defined in [core/util/utils.ts:497](https://github.com/paradigmfoundation/paradigmcore/blob/6f2b1c7/src/core/util/utils.ts#L497)*
+*Defined in [core/util/utils.ts:497](https://github.com/paradigmfoundation/paradigmcore/blob/ca51030/src/core/util/utils.ts#L497)*
 
 Creates a hash of a witness event, for validation inside state machine
 
@@ -155,7 +155,7 @@ ___
 
 ▸ **createWitnessEventObject**(eventData: *`ParadigmEvent`*, block: *`number`*): `WitnessData`
 
-*Defined in [core/util/utils.ts:520](https://github.com/paradigmfoundation/paradigmcore/blob/6f2b1c7/src/core/util/utils.ts#L520)*
+*Defined in [core/util/utils.ts:520](https://github.com/paradigmfoundation/paradigmcore/blob/ca51030/src/core/util/utils.ts#L520)*
 
 Creates a witness tx object from raw input data.
 
@@ -175,7 +175,7 @@ ___
 
 ▸ **decodeTx**(raw: *`Buffer`*): `SignedTransaction`
 
-*Defined in [core/util/utils.ts:92](https://github.com/paradigmfoundation/paradigmcore/blob/6f2b1c7/src/core/util/utils.ts#L92)*
+*Defined in [core/util/utils.ts:92](https://github.com/paradigmfoundation/paradigmcore/blob/ca51030/src/core/util/utils.ts#L92)*
 
 Decode and decompress input transaction.
 
@@ -198,7 +198,7 @@ ___
 
 ▸ **encodeTx**(raw: *`SignedTransaction`*): `string`
 
-*Defined in [core/util/utils.ts:121](https://github.com/paradigmfoundation/paradigmcore/blob/6f2b1c7/src/core/util/utils.ts#L121)*
+*Defined in [core/util/utils.ts:121](https://github.com/paradigmfoundation/paradigmcore/blob/ca51030/src/core/util/utils.ts#L121)*
 
 Encode and compress input transaction.
 
@@ -221,7 +221,7 @@ ___
 
 ▸ **genLimits**(posters: *`PosterInfo`*, limit: *`number`*): `Limits`
 
-*Defined in [core/util/utils.ts:209](https://github.com/paradigmfoundation/paradigmcore/blob/6f2b1c7/src/core/util/utils.ts#L209)*
+*Defined in [core/util/utils.ts:209](https://github.com/paradigmfoundation/paradigmcore/blob/ca51030/src/core/util/utils.ts#L209)*
 
 Generates a rate-limit mapping based on staked balances and the total order limit per staking period, from in-state 'posters' object.
 
@@ -241,7 +241,7 @@ ___
 
 ▸ **invalidTx**(log?: *`string`*, tags?: *`KVPair`[]*, code?: *`number`*): `ResponseDeliverTx` \| `ResponseCheckTx`
 
-*Defined in [core/util/utils.ts:603](https://github.com/paradigmfoundation/paradigmcore/blob/6f2b1c7/src/core/util/utils.ts#L603)*
+*Defined in [core/util/utils.ts:603](https://github.com/paradigmfoundation/paradigmcore/blob/ca51030/src/core/util/utils.ts#L603)*
 
 Generate a response for an invalid ABCI tx.
 
@@ -266,7 +266,7 @@ ___
 
 ▸ **newKVPair**(_key: *`string`*, _value: *`string` \| `number`*): `KVPair`
 
-*Defined in [core/util/utils.ts:151](https://github.com/paradigmfoundation/paradigmcore/blob/6f2b1c7/src/core/util/utils.ts#L151)*
+*Defined in [core/util/utils.ts:151](https://github.com/paradigmfoundation/paradigmcore/blob/ca51030/src/core/util/utils.ts#L151)*
 
 Returns an ABCI transaction/event tag (as in ResponseDelverTx)
 
@@ -286,7 +286,7 @@ ___
 
 ▸ **parseWitness**(data: *`WitnessData`*): `ParsedWitnessData`
 
-*Defined in [core/util/utils.ts:243](https://github.com/paradigmfoundation/paradigmcore/blob/6f2b1c7/src/core/util/utils.ts#L243)*
+*Defined in [core/util/utils.ts:243](https://github.com/paradigmfoundation/paradigmcore/blob/ca51030/src/core/util/utils.ts#L243)*
 
 Parses and validates a `witness` transaction from a validator's witness module.
 
@@ -305,7 +305,7 @@ ___
 
 ▸ **preVerifyTx**(tx: *`SignedTransaction`*, state: *`State`*): `boolean`
 
-*Defined in [core/util/utils.ts:36](https://github.com/paradigmfoundation/paradigmcore/blob/6f2b1c7/src/core/util/utils.ts#L36)*
+*Defined in [core/util/utils.ts:36](https://github.com/paradigmfoundation/paradigmcore/blob/ca51030/src/core/util/utils.ts#L36)*
 
 Verify validator signature, and confirm transaction originated from an active validator.
 
@@ -325,7 +325,7 @@ ___
 
 ▸ **stateUpdateConfThreshold**(state: *`State`*, last: *`object`[]*): `void`
 
-*Defined in [core/util/utils.ts:182](https://github.com/paradigmfoundation/paradigmcore/blob/6f2b1c7/src/core/util/utils.ts#L182)*
+*Defined in [core/util/utils.ts:182](https://github.com/paradigmfoundation/paradigmcore/blob/ca51030/src/core/util/utils.ts#L182)*
 
 Compute and apply the value of 2/3 the active validators as the required confirmation threshold for pending events. Essentially a wrapper (that applies transition) of `computeConf()`.
 
@@ -345,7 +345,7 @@ ___
 
 ▸ **syncStates**(source: *`State`*, target: *`State`*): `void`
 
-*Defined in [core/util/utils.ts:74](https://github.com/paradigmfoundation/paradigmcore/blob/6f2b1c7/src/core/util/utils.ts#L74)*
+*Defined in [core/util/utils.ts:74](https://github.com/paradigmfoundation/paradigmcore/blob/ca51030/src/core/util/utils.ts#L74)*
 
 Clones the 'source' state into the 'target' state.
 
@@ -367,7 +367,7 @@ ___
 
 ▸ **validTx**(log?: *`string`*, tags?: *`KVPair`[]*): `ResponseDeliverTx` \| `ResponseCheckTx`
 
-*Defined in [core/util/utils.ts:575](https://github.com/paradigmfoundation/paradigmcore/blob/6f2b1c7/src/core/util/utils.ts#L575)*
+*Defined in [core/util/utils.ts:575](https://github.com/paradigmfoundation/paradigmcore/blob/ca51030/src/core/util/utils.ts#L575)*
 
 Generate a response for a valid ABCI tx
 
@@ -389,7 +389,7 @@ ___
 
 ▸ **verifyOrder**(order: *`any`*, state: *`State`*): `boolean`
 
-*Defined in [core/util/utils.ts:193](https://github.com/paradigmfoundation/paradigmcore/blob/6f2b1c7/src/core/util/utils.ts#L193)*
+*Defined in [core/util/utils.ts:193](https://github.com/paradigmfoundation/paradigmcore/blob/ca51030/src/core/util/utils.ts#L193)*
 
 Verify an order conforms to max size requirement.
 
