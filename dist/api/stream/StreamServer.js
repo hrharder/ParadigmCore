@@ -82,40 +82,7 @@ class StreamServer extends events_1.EventEmitter {
                 log_1.log("api", `Disconnect from connection "id": "${connectionId}"`);
                 delete this.connectionMap[connectionId];
             });
-            conn.on("message", (msg) => {
-                log_1.log("api", `Message from connection '${connectionId}': '${msg}'`);
-                let res, req, error;
-                try {
-                    req = new Request_1.Request(msg);
-                    error = req.validate();
-                    if (error) {
-                        res = utils_js_1.createResponse(null, null, error);
-                        log_1.warn("api", `Sending error message to connection '${connectionId}'`);
-                    }
-                    else if (!error && _.isObject(req.parsed)) {
-                        const { params, id, method } = req.parsed;
-                        if (!this.methods[method]) {
-                            const methError = utils_js_1.createValError(-32601, "method not implemented.");
-                            res = utils_js_1.createResponse(null, null, methError);
-                        }
-                        else {
-                            log_1.log("api", `Executing method for connection '${connectionId}'`);
-                            const result = this.methods[method](params);
-                            res = utils_js_1.createResponse(result, id, null);
-                        }
-                    }
-                    else {
-                        throw Error();
-                    }
-                }
-                catch (_) {
-                    const intError = utils_js_1.createValError(-32603, "Internal error.");
-                    res = utils_js_1.createResponse(null, null, intError);
-                    log_1.warn("api", "Sending error message (internal) to client.");
-                }
-                this.sendMessageToClient(connectionId, res);
-                return;
-            });
+            conn.on("message", this.messageHandlerWrapper(connectionId));
             conn.on("open", () => {
                 console.log("\nya it open bud\n");
                 const res = new Response_1.Response({ id: "none", result: "welcome brudda" });
@@ -144,6 +111,42 @@ class StreamServer extends events_1.EventEmitter {
         }
         conn.send(JSON.stringify(res));
         return;
+    }
+    messageHandlerWrapper(connId) {
+        return (msg) => {
+            log_1.log("api", `Message from connection '${connId}': '${msg}'`);
+            let res, req, error;
+            try {
+                req = new Request_1.Request(msg);
+                error = req.validate();
+                if (error) {
+                    res = utils_js_1.createResponse(null, null, error);
+                    log_1.warn("api", `Sending error message to connection '${connId}'`);
+                }
+                else if (!error && _.isObject(req.parsed)) {
+                    const { params, id, method } = req.parsed;
+                    if (!this.methods[method]) {
+                        const methError = utils_js_1.createValError(-32601, "method not implemented.");
+                        res = utils_js_1.createResponse(null, null, methError);
+                    }
+                    else {
+                        log_1.log("api", `Executing method for connection '${connId}'`);
+                        const result = this.methods[method](this, params);
+                        res = utils_js_1.createResponse(result, id, null);
+                    }
+                }
+                else {
+                    throw Error();
+                }
+            }
+            catch (_) {
+                const intError = utils_js_1.createValError(-32603, "Internal error.");
+                res = utils_js_1.createResponse(null, null, intError);
+                log_1.warn("api", "Sending error message (internal) to client.");
+            }
+            this.sendMessageToClient(connId, res);
+            return;
+        };
     }
 }
 exports.StreamServer = StreamServer;

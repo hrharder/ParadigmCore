@@ -105,10 +105,16 @@ interface IConnectionMap {
 }
 
 /**
- * Mapping of methods to method implementations;
+ * Mapping of methods to method implementations.
+ * 
+ * The `this` arg for the active [[StreamServer]] instance is passed into all
+ * bound methods, so they may access instance data, such as the current block 
+ * info, etc. 
+ * 
+ * @todo examine if a better structure is needed
  */
 interface IMethods {
-    [methodName: string]: (params: any) => any;
+    [methodName: string]: (_this: StreamServer, params: any) => any;
 }
 
 /**
@@ -450,48 +456,10 @@ export class StreamServer extends EventEmitter {
                 delete this.connectionMap[connectionId];
             })
 
-            // setup message handler
-            // @todo revisit, expand, and move
-            conn.on("message", (msg: WebSocket.Data) => {
+            // handle incoming messages
+            conn.on("message", this.messageHandlerWrapper(connectionId))
 
-                // TEMPORARY
-                log("api", `Message from connection '${connectionId}': '${msg}'`);
-
-                // scope eventual response/request objects
-                let res: Res, req: Req, error: ValidationError;
-
-                try {
-                    // create request object and validate
-                    req = new Req(msg);
-                    error = req.validate();
-
-                    if (error) {
-                        res = createResponse(null, null, error);
-                        warn("api", `Sending error message to connection '${connectionId}'`);
-                    } else if (!error && _.isObject(req.parsed)) {
-                        // this is where we will handle the request.
-                        const { params, id, method} = req.parsed;
-
-                        if (!this.methods[method]) {
-                            const methError = createValError(-32601, "method not implemented.");
-                            res = createResponse(null, null, methError);
-                        } else {
-                            log("api", `Executing method for connection '${connectionId}'`);
-                            const result = this.methods[method](params);
-                            res = createResponse(result, id, null);
-                        }
-                    } else {
-                        throw Error();
-                    }                
-                } catch (_) {
-                    const intError = createValError(-32603, "Internal error.");
-                    res = createResponse(null, null, intError);
-                    warn("api", "Sending error message (internal) to client.");
-                }
-                this.sendMessageToClient(connectionId, res);
-                return;
-            });
-
+            // open connection handler
             conn.on("open", () => {
                 console.log("\nya it open bud\n");
                 const res = new Res({id: "none", result: "welcome brudda" });
@@ -500,6 +468,7 @@ export class StreamServer extends EventEmitter {
                 return;
             })
 
+            // client connection error handler
             conn.on("error", (error: Error) => {
                 // TEMPORARY
                 warn("api", `Error from connection '${connectionId}': ${error.message}`);
@@ -512,7 +481,7 @@ export class StreamServer extends EventEmitter {
             })
 
             // TEMPORARY
-            log("api", `Got new connection "id": "${connectionId}"`);
+            log("api", `Got new connection with "id": "${connectionId}"`);
             return;
         }
     }
@@ -533,5 +502,54 @@ export class StreamServer extends EventEmitter {
         if(conn.readyState !== conn.OPEN) { return; }
         conn.send(JSON.stringify(res));
         return;
+    }
+
+    /**
+     * Build a message handler function for a client.
+     * 
+     * @param connId the connectionId of the client the handler is for
+     */
+    private messageHandlerWrapper(connId: string): (d: WebSocket.Data) => void {
+        return (msg: WebSocket.Data) => {
+            // TEMPORARY
+            log("api", `Message from connection '${connId}': '${msg}'`);
+
+            // scope eventual response/request objects
+            let res: Res, req: Req, error: ValidationError;
+
+            // main method execution block
+            try {
+                // create request object and validate
+                req = new Req(msg);
+                error = req.validate();
+
+                if (error) {
+                    res = createResponse(null, null, error);
+                    warn("api", `Sending error message to connection '${connId}'`);
+                } else if (!error && _.isObject(req.parsed)) {
+                    // this is where we will handle the request.
+                    const { params, id, method} = req.parsed;
+
+                    if (!this.methods[method]) {
+                        const methError = createValError(-32601, "method not implemented.");
+                        res = createResponse(null, null, methError);
+                    } else {
+                        log("api", `Executing method for connection '${connId}'`);
+
+                        // defer to bound method
+                        const result = this.methods[method](this, params)
+                        res = createResponse(result, id, null);
+                    }
+                } else {
+                    throw Error();
+                }                
+            } catch (_) {
+                const intError = createValError(-32603, "Internal error.");
+                res = createResponse(null, null, intError);
+                warn("api", "Sending error message (internal) to client.");
+            }
+            this.sendMessageToClient(connId, res);
+            return;
+        }
     }
 }
