@@ -149,6 +149,30 @@
                 "required": ["height"]
             },
             "errors": []
+        },
+        "state.orderCounter": {
+            "summary": "Query the `state.orderCounter` field.",
+            "description": "Return the incremental counter that tracks the in-state number of total `order` transactions.",
+            "tags": [
+                "state"
+            ],
+            "result": {
+                "type": "object",
+                "properties": {
+                    "response": {
+                        "description": "The result of the query, as a number. Counts the number of total orders processed by the network since genesis.",
+                        "default": 113415,
+                        "type": "number"
+                    }
+                },
+                "required": ["response"]
+            },
+            "errors": [{
+                    "description": "The provided parameters are invalid.",
+                    "code": 1,
+                    "message": "InvalidParameters",
+                    "data": {}
+                }]
         }
     }
 }
