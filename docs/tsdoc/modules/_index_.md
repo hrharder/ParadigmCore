@@ -23,7 +23,7 @@
 
 **● broadcaster**: *[TxBroadcaster](../classes/_core_util_txbroadcaster_.txbroadcaster.md)*
 
-*Defined in [index.ts:45](https://github.com/paradigmfoundation/paradigmcore/blob/99f4a81/src/index.ts#L45)*
+*Defined in [index.ts:45](https://github.com/paradigmfoundation/paradigmcore/blob/5096cb9/src/index.ts#L45)*
 
 ___
 <a id="generator"></a>
@@ -32,7 +32,7 @@ ___
 
 **● generator**: *[TxGenerator](../classes/_core_util_txgenerator_.txgenerator.md)*
 
-*Defined in [index.ts:46](https://github.com/paradigmfoundation/paradigmcore/blob/99f4a81/src/index.ts#L46)*
+*Defined in [index.ts:46](https://github.com/paradigmfoundation/paradigmcore/blob/5096cb9/src/index.ts#L46)*
 
 ___
 <a id="node"></a>
@@ -41,7 +41,7 @@ ___
 
 **● node**: *`any`*
 
-*Defined in [index.ts:49](https://github.com/paradigmfoundation/paradigmcore/blob/99f4a81/src/index.ts#L49)*
+*Defined in [index.ts:49](https://github.com/paradigmfoundation/paradigmcore/blob/5096cb9/src/index.ts#L49)*
 
 ___
 <a id="paradigm"></a>
@@ -50,7 +50,7 @@ ___
 
 **● paradigm**: *`any`*
 
-*Defined in [index.ts:48](https://github.com/paradigmfoundation/paradigmcore/blob/99f4a81/src/index.ts#L48)*
+*Defined in [index.ts:48](https://github.com/paradigmfoundation/paradigmcore/blob/5096cb9/src/index.ts#L48)*
 
 ___
 <a id="web3"></a>
@@ -59,7 +59,7 @@ ___
 
 **● web3**: *`Web3`*
 
-*Defined in [index.ts:47](https://github.com/paradigmfoundation/paradigmcore/blob/99f4a81/src/index.ts#L47)*
+*Defined in [index.ts:47](https://github.com/paradigmfoundation/paradigmcore/blob/5096cb9/src/index.ts#L47)*
 
 ___
 <a id="witness"></a>
@@ -68,7 +68,7 @@ ___
 
 **● witness**: *[Witness](../classes/_witness_witness_.witness.md)*
 
-*Defined in [index.ts:44](https://github.com/paradigmfoundation/paradigmcore/blob/99f4a81/src/index.ts#L44)*
+*Defined in [index.ts:44](https://github.com/paradigmfoundation/paradigmcore/blob/5096cb9/src/index.ts#L44)*
 
 ___
 

@@ -220,6 +220,7 @@ Additionally, feel free to open issues and pull requests with bug fixes or enhan
 * ["core/info"](modules/_core_info_.md)
 * ["core/initChain"](modules/_core_initchain_.md)
 * ["core/main"](modules/_core_main_.md)
+* ["core/query"](modules/_core_query_.md)
 * ["core/util/KVPair"](modules/_core_util_kvpair_.md)
 * ["core/util/TxBroadcaster"](modules/_core_util_txbroadcaster_.md)
 * ["core/util/TxGenerator"](modules/_core_util_txgenerator_.md)
