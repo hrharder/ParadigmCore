@@ -14,6 +14,7 @@ StreamAPI follows the JSONRPC-2.0 specification. More information available at h
 - [subscription.start](#subscription.start)
 - [subscription.end](#subscription.end)
 - [block.latestHeight](#block.latestHeight)
+- [state.orderCounter](#state.orderCounter)
 
 ---
 
@@ -219,6 +220,53 @@ The `block.latestHeight` method will return the integer height of the latest blo
   "id": "1234567890",
   "result": {
     "height": 42341
+  }
+}
+```
+
+<a name="state.orderCounter"></a>
+
+## state.orderCounter
+
+Query the `state.orderCounter` field.
+
+### Description
+
+Return the incremental counter that tracks the in-state number of total `order` transactions.
+
+### Result
+
+| Name            | Type   | Description                                                                                                     |
+| --------------- | ------ | --------------------------------------------------------------------------------------------------------------- |
+| result          | object |                                                                                                                 |
+| result.response | number | The result of the query, as a number. Counts the number of total orders processed by the network since genesis. |
+
+### Errors
+
+| Code | Message           | Description                          |
+| ---- | ----------------- | ------------------------------------ |
+| 1    | InvalidParameters | The provided parameters are invalid. |
+
+### Examples
+
+#### Request
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": "1234567890",
+  "method": "state.orderCounter"
+}
+```
+
+#### Response
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": "1234567890",
+  "result": {
+    "response": 113415
   }
 }
 ```
