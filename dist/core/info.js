@@ -6,7 +6,8 @@ function infoWrapper(state, version) {
             data: "ParadigmCore (alpha)",
             lastBlockAppHash: state.lastBlockAppHash,
             lastBlockHeight: parseInt(state.lastBlockHeight.toString(), 10),
-            version
+            version,
+            arb: "any"
         };
     };
 }

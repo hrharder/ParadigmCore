@@ -9,6 +9,7 @@ const initChain_1 = require("./initChain");
 const commit_1 = require("./commit");
 const info_1 = require("./info");
 const endBlock_1 = require("./endBlock");
+const query_1 = require("./query");
 async function start(options) {
     try {
         let version = options.version;
@@ -23,6 +24,7 @@ async function start(options) {
         };
         let handlers = {
             info: info_1.infoWrapper(cState, version),
+            query: query_1.queryWrapper(cState),
             initChain: initChain_1.initChainWrapper(dState, cState, consensusParams),
             checkTx: checkTx_1.checkTxWrapper(cState, Order),
             beginBlock: beginBlock_1.beginBlockWrapper(dState),

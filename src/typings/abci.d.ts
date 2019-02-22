@@ -39,6 +39,11 @@ interface ResponseInfo {
 interface ResponseInitChain {}
 
 /**
+ * ABCI response to query()
+ */
+interface ResponseQuery {}
+
+/**
  * ABCI response to beginBlock() - currently null
  */
 interface ResponseBeginBlock {}

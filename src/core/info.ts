@@ -26,7 +26,8 @@ export function infoWrapper(state: State, version: string): (r) => ResponseInfo 
             data: "ParadigmCore (alpha)",
             lastBlockAppHash: state.lastBlockAppHash,
             lastBlockHeight: parseInt(state.lastBlockHeight.toString(), 10),
-            version
+            version,
+            arb: "any"
         };
     };
 }

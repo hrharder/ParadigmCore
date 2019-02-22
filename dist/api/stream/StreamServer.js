@@ -98,7 +98,7 @@ class StreamServer extends events_1.EventEmitter {
                 this.connectionMap[connectionId] = undefined;
                 return;
             });
-            log_1.log("api", `Got new connection "id": "${connectionId}"`);
+            log_1.log("api", `Got new connection with "id": "${connectionId}"`);
             return;
         };
     }
