@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const api = require("./api.json");
+const errors = require("./errors.json");
 const schema = require("./schema.json");
 const _ = require("lodash");
 class Request {
@@ -16,7 +16,6 @@ class Request {
     validate() {
         if (this.valid !== null)
             return;
-        const reqDef = Request.api.request;
         try {
             const rawString = this.raw.toString();
             const { jsonrpc, id, method, params } = JSON.parse(rawString);
@@ -75,56 +74,11 @@ class Request {
         }
         return;
     }
-    validateRequestProperties(prop) {
-        const { key, required, type, valRegEx: regExp, valArr: arr, errInfo: info, } = prop;
-        const code = parseInt(prop.errCode);
-        const req = this.parsed;
-        if (required && !req[key]) {
-            this.addValErr(code, `missing required '${key}' field.`);
-            return;
-        }
-        if (typeof req[key] !== type) {
-            this.addValErr(code, `incorrect type for '${key}' option.`);
-            return;
-        }
-        if (req[key] && regExp && !arr) {
-            this.validateExpParam(key, regExp, code, info);
-        }
-        else if (req[key] && !regExp && arr) {
-            this.validateOptionParam(code, arr, req[key]);
-        }
-        else if (req[key] && !regExp && !arr) {
-            if (typeof req[key] === "object" && key === "params") {
-                this.validateMethodParams();
-            }
-        }
-        else {
-            this.addValErr(code, `malformed parameters.`);
-        }
-        return;
-    }
-    validateMethodParams(method, params) { }
-    validateExpParam(key, rgxp, code, log) {
-        const req = this.parsed;
-        const regexp = new RegExp(rgxp);
-        if (!regexp.test(req[key])) {
-            this.addValErr(code, log);
-        }
-        return;
-    }
-    validateOptionParam(code, options, query) {
-        if (options.indexOf(query) === -1) {
-            this.addValErr(code, `invalid option '${query}'.`);
-        }
-        else {
-            return;
-        }
-    }
     addValErr(code, msg) {
         if (this.valid !== null)
             return;
         const suffix = msg ? msg : "";
-        const message = `${Request.api.codes[code].info}${suffix}`;
+        const message = `${Request.errors[code].info}${suffix}`;
         this.close({ code, message });
         return;
     }
@@ -141,5 +95,5 @@ class Request {
     }
 }
 Request.schema = schema;
-Request.api = api;
+Request.errors = errors;
 exports.Request = Request;

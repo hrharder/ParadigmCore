@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Request_1 = require("./Request");
-const Response_1 = require("./Response");
 const log_1 = require("../../common/log");
 const TendermintRPC_js_1 = require("../../common/TendermintRPC.js");
 const utils_js_1 = require("./utils.js");
@@ -54,14 +53,7 @@ class StreamServer extends events_1.EventEmitter {
         return;
     }
     async start() {
-        this.rpcClient.on("open", () => {
-            log_1.log("api", "connected to tendermint rpc server");
-            this.rpcClient.subscribe("tm.event='NewBlock'", (data) => {
-                const { height } = data.block.header;
-                this.latestBlockData.height = parseInt(height, 10);
-                log_1.log("api", `just received tendermint block: ${height}`);
-            });
-        });
+        this.rpcClient.on("open", this.createTendermintHandler());
         await this.rpcClient.connect(this.retryMax, this.retryInterval);
         this.setupServer(this.streamHost, this.streamPort);
         return;
@@ -69,36 +61,54 @@ class StreamServer extends events_1.EventEmitter {
     bind(methodName, method) {
         this.methods[methodName] = method;
     }
+    createTendermintHandler() {
+        return () => {
+            log_1.log("api", "connected to tendermint rpc server");
+            this.rpcClient.subscribe("tm.event='NewBlock'", this.createNewBlockHandler());
+            return;
+        };
+    }
+    createNewBlockHandler() {
+        return (data) => {
+            const { height } = data.block.header;
+            this.latestBlockData.height = parseInt(height, 10);
+            log_1.log("api", `received new tendermint block: ${height}`);
+            return;
+        };
+    }
     setupServer(host, port) {
         const options = { host, port };
         this.server = new WebSocket.Server(options);
         this.server.on("connection", this.createConnectionHandler());
     }
     createConnectionHandler() {
-        return (conn) => {
+        return (connection) => {
             const connectionId = StreamServer.generateConnectionId(this.secret, StreamServer.generate32RandomBytes());
-            this.connectionMap[connectionId] = conn;
-            conn.on("close", () => {
-                log_1.log("api", `Disconnect from connection "id": "${connectionId}"`);
-                delete this.connectionMap[connectionId];
-            });
-            conn.on("message", this.messageHandlerWrapper(connectionId));
-            conn.on("open", () => {
-                console.log("\nya it open bud\n");
-                const res = new Response_1.Response({ id: "none", result: "welcome brudda" });
-                this.sendMessageToClient(connectionId, res);
-                log_1.log("api", `Send open message to connection '${connectionId}'`);
-                return;
-            });
-            conn.on("error", (error) => {
-                log_1.warn("api", `Error from connection '${connectionId}': ${error.message}`);
-                const res = new Response_1.Response({ id: "none", result: "goodbye, error found." });
-                this.sendMessageToClient(connectionId, res);
-                log_1.warn("api", `Send error message to connection '${connectionId}'`);
-                this.connectionMap[connectionId] = undefined;
-                return;
-            });
-            log_1.log("api", `Got new connection with "id": "${connectionId}"`);
+            this.connectionMap[connectionId] = connection;
+            connection.on("close", this.createConnCloseHandler(connectionId));
+            connection.on("message", this.createConnMessageHandler(connectionId));
+            connection.on("open", this.createConnOpenHandler(connectionId));
+            connection.on("error", this.createConnErrorHandler(connectionId));
+        };
+    }
+    createConnCloseHandler(connId) {
+        return () => {
+            log_1.log("api", `Disconnect from connection "id": "${connId}"`);
+            delete this.connectionMap[connId];
+        };
+    }
+    createConnOpenHandler(connId) {
+        return () => {
+            log_1.log("api", `Got new connection with "id": "${connId}"`);
+            return;
+        };
+    }
+    createConnErrorHandler(connId) {
+        return (error) => {
+            const intError = utils_js_1.createValError(-32603, `Internal error: ${error.message}`);
+            const res = utils_js_1.createResponse(null, null, intError);
+            log_1.warn("api", "Sending error message (internal) to client.");
+            this.sendMessageToClient(connId, res);
             return;
         };
     }
@@ -112,38 +122,33 @@ class StreamServer extends events_1.EventEmitter {
         conn.send(JSON.stringify(res));
         return;
     }
-    messageHandlerWrapper(connId) {
+    createConnMessageHandler(connId) {
         return (msg) => {
             log_1.log("api", `Message from connection '${connId}': '${msg}'`);
             let res, req, error;
-            try {
-                req = new Request_1.Request(msg);
-                error = req.validate();
-                if (error) {
-                    res = utils_js_1.createResponse(null, null, error);
-                    log_1.warn("api", `Sending error message to connection '${connId}'`);
-                }
-                else if (!error && _.isObject(req.parsed)) {
-                    const { params, id, method } = req.parsed;
-                    if (!this.methods[method]) {
-                        const methError = utils_js_1.createValError(-32601, "method not implemented.");
-                        res = utils_js_1.createResponse(null, null, methError);
-                    }
-                    else {
-                        log_1.log("api", `Executing method for connection '${connId}'`);
-                        const result = this.methods[method](this, params);
-                        res = utils_js_1.createResponse(result, id, null);
-                    }
-                }
-                else {
-                    throw Error();
-                }
+            req = new Request_1.Request(msg);
+            error = req.validate();
+            if (error) {
+                res = utils_js_1.createResponse(null, null, error);
+                this.sendMessageToClient(connId, res);
+                return;
             }
-            catch (_) {
-                const intError = utils_js_1.createValError(-32603, "Internal error.");
-                res = utils_js_1.createResponse(null, null, intError);
-                log_1.warn("api", "Sending error message (internal) to client.");
+            if (!_.isObject(req.parsed)) {
+                const methError = utils_js_1.createValError(-32700, "unable to parse request.");
+                res = utils_js_1.createResponse(null, null, methError);
+                this.sendMessageToClient(connId, res);
+                return;
             }
+            const { params, id, method } = req.parsed;
+            if (!this.methods[method]) {
+                const methError = utils_js_1.createValError(-32601, "method not implemented.");
+                res = utils_js_1.createResponse(null, null, methError);
+                this.sendMessageToClient(connId, res);
+                return;
+            }
+            const result = this.methods[method](this, this.connectionMap[connId], params);
+            log_1.log("api", `Executing method for connection '${connId}'`);
+            res = utils_js_1.createResponse(result, id, null);
             this.sendMessageToClient(connId, res);
             return;
         };

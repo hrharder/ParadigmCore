@@ -36,23 +36,26 @@
             "tags": [
                 "session"
             ],
-            "result": {
-                "type": "object",
-                "properties": {
-                    "response": {
-                        "description": "The server's response to the connection-close request.",
-                        "default": "Closing connection.",
-                        "type": "string"
-                    }
-                },
-                "required": ["response"]
-            },
-            "errors": [{
-                    "description": "The provided 'id' is invalid, or unused.",
-                    "code": 1,
-                    "message": "UnknownSession",
+            "errors": [
+                {
+                    "description": "The provided parameters are invalid.",
+                    "code": -32602,
+                    "message": "Invalid Parameters",
                     "data": {}
-                }]
+                },
+                {
+                    "description": "The request object is invalid.",
+                    "code": -32600,
+                    "message": "Parse Error",
+                    "data": {}
+                },
+                {
+                    "description": "The server encountered an error processing the request.",
+                    "code": -32603,
+                    "message": "Internal Error",
+                    "data": {}
+                }
+            ]
         },
         "subscription.start": {
             "summary": "Subscribe to a specific ParadigmCore event.",
@@ -89,12 +92,26 @@
                 },
                 "required": ["response"]
             },
-            "errors": [{
+            "errors": [
+                {
                     "description": "The provided parameters are invalid.",
-                    "code": 1,
-                    "message": "InvalidParameters",
+                    "code": -32602,
+                    "message": "Invalid Parameters",
                     "data": {}
-                }]
+                },
+                {
+                    "description": "The request object is invalid.",
+                    "code": -32600,
+                    "message": "Parse Error",
+                    "data": {}
+                },
+                {
+                    "description": "The server encountered an error processing the request.",
+                    "code": -32603,
+                    "message": "Internal Error",
+                    "data": {}
+                }
+            ]
         },
         "subscription.end": {
             "summary": "Unsubscribe from a specific ParadigmCore event.",
@@ -124,18 +141,33 @@
                 },
                 "required": ["response"]
             },
-            "errors": [{
+            "errors": [
+                {
                     "description": "The provided parameters are invalid.",
-                    "code": 1,
-                    "message": "InvalidParameters",
+                    "code": -32602,
+                    "message": "Invalid Parameters",
                     "data": {}
-                }]
+                },
+                {
+                    "description": "The request object is invalid.",
+                    "code": -32600,
+                    "message": "Parse Error",
+                    "data": {}
+                },
+                {
+                    "description": "The server encountered an error processing the request.",
+                    "code": -32603,
+                    "message": "Internal Error",
+                    "data": {}
+                }
+            ]
         },
-        "block.latestHeight": {
+        "state.latestHeight": {
             "summary": "Return the height of the best known block.",
             "description": "The `block.latestHeight` method will return the integer height of the latest block committed to the blockchain.",
             "tags": [
-                "block"
+                "state",
+                "blockchain"
             ],
             "result": {
                 "type": "object",
@@ -148,7 +180,26 @@
                 },
                 "required": ["height"]
             },
-            "errors": []
+            "errors": [
+                {
+                    "description": "The provided parameters are invalid.",
+                    "code": -32602,
+                    "message": "Invalid Parameters",
+                    "data": {}
+                },
+                {
+                    "description": "The request object is invalid.",
+                    "code": -32600,
+                    "message": "Parse Error",
+                    "data": {}
+                },
+                {
+                    "description": "The server encountered an error processing the request.",
+                    "code": -32603,
+                    "message": "Internal Error",
+                    "data": {}
+                }
+            ]
         },
         "state.orderCounter": {
             "summary": "Query the `state.orderCounter` field.",
@@ -167,12 +218,26 @@
                 },
                 "required": ["response"]
             },
-            "errors": [{
+            "errors": [
+                {
                     "description": "The provided parameters are invalid.",
-                    "code": 1,
-                    "message": "InvalidParameters",
+                    "code": -32602,
+                    "message": "Invalid Parameters",
                     "data": {}
-                }]
+                },
+                {
+                    "description": "The request object is invalid.",
+                    "code": -32600,
+                    "message": "Parse Error",
+                    "data": {}
+                },
+                {
+                    "description": "The server encountered an error processing the request.",
+                    "code": -32603,
+                    "message": "Internal Error",
+                    "data": {}
+                }
+            ]
         },
         "state.query": {
             "summary": "Query the permitted fields of an OrderStream node's state.",
@@ -188,19 +253,33 @@
                 "type": "object",
                 "properties": {
                     "path": {
-                        "description": "A unique ID provided by the server upon an event subscription.",
-                        "default": "posters/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+                        "description": "The `path` string is passed to the `abci_query` method and directs a query towards a particular state account object.",
+                        "default": "posters/0xaa554d0c5ff879387fc234de5d22ec02983baa27/limit",
                         "type": "string"
                     }
                 },
                 "required": ["path"]
             },
-            "errors": [{
+            "errors": [
+                {
                     "description": "The provided parameters are invalid.",
-                    "code": 1,
-                    "message": "InvalidParameters",
+                    "code": -32602,
+                    "message": "Invalid Parameters",
                     "data": {}
-                }]
+                },
+                {
+                    "description": "The request object is invalid.",
+                    "code": -32600,
+                    "message": "Parse Error",
+                    "data": {}
+                },
+                {
+                    "description": "The server encountered an error processing the request.",
+                    "code": -32603,
+                    "message": "Internal Error",
+                    "data": {}
+                }
+            ]
         }
     }
 }
