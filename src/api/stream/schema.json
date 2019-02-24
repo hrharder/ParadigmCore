@@ -173,6 +173,45 @@
 				"message": "InvalidParameters",
 				"data": {}
 			}]
+		},
+		"state.query": {
+			"summary": "Query the permitted fields of an OrderStream node's state.",
+			"description": [
+				"The `state.query` method allows RPC's to return information about the node (and a connected network's) public state.",
+				"The `params.path` field can be used to direct a query to a particular path of the current state. The `path` is passed to ParadigmCore's ABCI `query` method, and the result of that function is returned."
+			],
+			"tags": [
+				"state",
+				"query"
+            ],
+			"params": {
+				"type": "object",
+				"properties": {
+					"path": {
+						"description": "A unique ID provided by the server upon an event subscription.",
+						"default": "posters/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+						"type": "string"
+					}
+				},
+				"required": ["path"]
+			},
+			"result": {
+				"type": "object",
+				"properties": {
+					"data": {
+						"description": "The response data from the `query` method.",
+						"default": "tbd",
+						"type": "string"
+					}
+				},
+				"required": ["data"]
+			},
+			"errors": [{
+				"description": "The provided parameters are invalid.",
+				"code": 1,
+				"message": "InvalidParameters",
+				"data": {}
+			}]
 		}
 	}
 }

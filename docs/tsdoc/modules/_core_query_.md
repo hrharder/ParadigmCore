@@ -18,9 +18,11 @@
 
 ▸ **queryWrapper**(state: *`State`*): `function`
 
-*Defined in [core/query.ts:23](https://github.com/paradigmfoundation/paradigmcore/blob/5096cb9/src/core/query.ts#L23)*
+*Defined in [core/query.ts:26](https://github.com/paradigmfoundation/paradigmcore/blob/24132f3/src/core/query.ts#L26)*
 
 Return information about the state and software.
+
+*__todo__*: parse path, support multiple query paths and options, util functions for buffering req/res objects
 
 **Parameters:**
 

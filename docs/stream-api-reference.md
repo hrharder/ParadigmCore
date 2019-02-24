@@ -15,6 +15,7 @@ StreamAPI follows the JSONRPC-2.0 specification. More information available at h
 - [subscription.end](#subscription.end)
 - [block.latestHeight](#block.latestHeight)
 - [state.orderCounter](#state.orderCounter)
+- [state.query](#state.query)
 
 ---
 
@@ -267,6 +268,64 @@ Return the incremental counter that tracks the in-state number of total `order` 
   "id": "1234567890",
   "result": {
     "response": 113415
+  }
+}
+```
+
+<a name="state.query"></a>
+
+## state.query
+
+Query the permitted fields of an OrderStream node's state.
+
+### Description
+
+The `state.query` method allows RPC's to return information about the node (and a connected network's) public state.  
+The `params.path` field can be used to direct a query to a particular path of the current state. The `path` is passed to ParadigmCore's ABCI `query` method, and the result of that function is returned.
+
+### Parameters
+
+| Name        | Type   | Description                                                    |
+| ----------- | ------ | -------------------------------------------------------------- |
+| params      | object |                                                                |
+| params.path | string | A unique ID provided by the server upon an event subscription. |
+
+### Result
+
+| Name        | Type   | Description                                |
+| ----------- | ------ | ------------------------------------------ |
+| result      | object |                                            |
+| result.data | string | The response data from the `query` method. |
+
+### Errors
+
+| Code | Message           | Description                          |
+| ---- | ----------------- | ------------------------------------ |
+| 1    | InvalidParameters | The provided parameters are invalid. |
+
+### Examples
+
+#### Request
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": "1234567890",
+  "method": "state.query",
+  "params": {
+    "path": "posters/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+  }
+}
+```
+
+#### Response
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": "1234567890",
+  "result": {
+    "data": "tbd"
   }
 }
 ```
