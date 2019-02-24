@@ -7,11 +7,8 @@
  *
  * @author Henry Harder
  * @date (initial)  05-February-2019
- * @date (modified) 20-February-2019
+ * @date (modified) 24-February-2019
 **/
-
-// request/response schemas
-import * as api from "./api.json";
 
 // request/response objects
 import { Request as Req } from "./Request";
@@ -114,7 +111,7 @@ interface IConnectionMap {
  * @todo examine if a better structure is needed
  */
 interface IMethods {
-    [methodName: string]: (_this: StreamServer, params: any) => any;
+    [methodName: string]: (server: StreamServer, client: WebSocket, params: any) => any;
 }
 
 /**
@@ -373,23 +370,8 @@ export class StreamServer extends EventEmitter {
      * local TendermintRPC instance. 
      */
     public async start(): Promise<void> {
-        // TEMPORARY testing RPC
-        // @todo move elsewhere
-        this.rpcClient.on("open", () => {
-            log("api", "connected to tendermint rpc server");
-
-            // handle each new block
-            this.rpcClient.subscribe("tm.event='NewBlock'", (data: RawBlockData) => {
-                // console.log(`\n${JSON.stringify(data)}\n`);
-
-                // update latest height
-                const { height } = data.block.header;
-                this.latestBlockData.height = parseInt(height, 10);
-
-                // temporary log height
-                log("api", `just received tendermint block: ${height}`);
-            });
-        });
+        // setup handler for successful tendermint connection
+        this.rpcClient.on("open", this.createTendermintHandler());
 
         // connect to tendermint rpc server
         await this.rpcClient.connect(this.retryMax, this.retryInterval);
@@ -411,6 +393,42 @@ export class StreamServer extends EventEmitter {
     // BEGIN private methods
 
     /**
+     * Creates a handler function for the TendermintRPC connection.
+     * 
+     * Currently only subscribes to the Tendermint `NewBlock` event, but in the
+     * future may be used to subscribe to additional tags and blockchain events,
+     * used to notify clients an update the server's state.
+     */
+    private createTendermintHandler(): () => void {
+        return () => {
+            log("api", "connected to tendermint rpc server");
+
+            // handle each new block
+            this.rpcClient.subscribe("tm.event='NewBlock'", this.createNewBlockHandler());
+            return;
+        }
+    }
+
+    /**
+     * Creates a handler function for Tendermint `NewBlock` events.
+     * 
+     * Currently used to update the in-memory tracking of the current Tendermint
+     * blockchain height. In the future may be used to pull additional block data
+     * to be stored in-memory.
+     */
+    private createNewBlockHandler(): (data: RawBlockData) => void {
+        return (data) => {
+            // update latest height
+            const { height } = data.block.header;
+            this.latestBlockData.height = parseInt(height, 10);
+
+            // temporary log height
+            log("api", `received new tendermint block: ${height}`);
+            return;
+        }
+    }
+
+    /**
      * Setup the StreamAPI WebSocket server
      * 
      * @description Configure and start the StreamAPI JSONRPC(2.0) WebSocket
@@ -426,17 +444,43 @@ export class StreamServer extends EventEmitter {
 
         // attach new connection handler
         this.server.on("connection", this.createConnectionHandler());
+
+        // attach server error handler
+        this.server.on("error", this.createErrorHandler());
+        return;
     }
 
     /**
-     * Create a server connection handler
+     * Creates an error handler for server errors.
      * 
-     * @description Creates a `StreamServer` connection handler function. 
+     * A generic method used to create an async (event) error handler. Currently
+     * only used to handler server (not client<>server) errors, but in the future
+     * may also handle additional errors.
+     */
+    private createErrorHandler(): (error: Error) => void {
+        return (error: Error) => {
+            // create error message string (to log AND emit)
+            const message = `Internal Error: ${error.message}`;
+
+            // log and emit error message;
+            err("api", message);
+            this.emit("error", message);
+            return;
+        }
+    }
+
+    /**
+     * Create a server connection handler.
+     * 
+     * This method is used to create a handler function for connected clients. 
+     * It establishes the correct handler functions for connection events, and 
+     * binds method definitions to the connection object to handle JSONRPC
+     * requests.
      * 
      * @todo document better
      */
-    private createConnectionHandler(): (conn: WebSocket) => void {
-        return (conn: WebSocket) => {
+    private createConnectionHandler(): (connection: WebSocket) => void {
+        return (connection: WebSocket) => {
             // generate a unique id string for this connection
             const connectionId = StreamServer.generateConnectionId(
                 this.secret,
@@ -444,44 +488,74 @@ export class StreamServer extends EventEmitter {
             );
 
             // store connection in mapping
-            this.connectionMap[connectionId] = conn;
+            this.connectionMap[connectionId] = connection;
 
-            // setup close/error handler
-            // @todo revisit/expand
-            conn.on("close", () => {
-                // TEMPORARY
-                log("api", `Disconnect from connection "id": "${connectionId}"`);
+            // setup close/error handler to terminate connection tracking
+            connection.on("close", this.createConnCloseHandler(connectionId));
 
-                // remove from connection mapping
-                delete this.connectionMap[connectionId];
-            })
-
-            // handle incoming messages
-            conn.on("message", this.messageHandlerWrapper(connectionId))
+            // handle incoming messages from connected clients
+            connection.on("message", this.createConnMessageHandler(connectionId));
 
             // open connection handler
-            conn.on("open", () => {
-                console.log("\nya it open bud\n");
-                const res = new Res({id: "none", result: "welcome brudda" });
-                this.sendMessageToClient(connectionId, res);
-                log("api", `Send open message to connection '${connectionId}'`);
-                return;
-            })
+            connection.on("open", this.createConnOpenHandler(connectionId));
 
             // client connection error handler
-            conn.on("error", (error: Error) => {
-                // TEMPORARY
-                warn("api", `Error from connection '${connectionId}': ${error.message}`);
-                const res = new Res({id: "none", result: "goodbye, error found." });
-                this.sendMessageToClient(connectionId, res);
-                warn("api", `Send error message to connection '${connectionId}'`);
-                // remove from connection mapping
-                this.connectionMap[connectionId] = undefined;
-                return;
-            })
+            connection.on("error", this.createConnErrorHandler(connectionId));
+            return;
+        }
+    }
 
-            // TEMPORARY
-            log("api", `Got new connection with "id": "${connectionId}"`);
+    /**
+     * Create an close event handler.
+     * 
+     * This wrapper method builds a function to handle "close" events from the
+     * connected clients. Currently, it will remove the client-tracking object
+     * for the connection the disconnect event is received over.
+     * 
+     * @param connId the server-side id string used to identify the connection
+     */
+    private createConnCloseHandler(connId: string): () => void {
+        return () => {
+            log("api", `Disconnect from connection "id": "${connId}"`);
+            delete this.connectionMap[connId];
+            return;
+        }
+    }
+
+    /**
+     * Create an open event handler.
+     * 
+     * This wrapper method builds a function to handle "open" events from the
+     * connected clients. Currently it is just used to log new connections,
+     * but in the future may handle additional processing of new connections.
+     * 
+     * @param connId the server-side id string used to identify the connection
+     */
+    private createConnOpenHandler(connId: string): () => void {
+        return () => {
+            log("api", `Got new connection with "id": "${connId}"`);
+            return;
+        }
+    }
+
+    /**
+     * Create a client error handler.
+     * 
+     * This wrapper function creates an error-handler function that handles any
+     * internal server errors that occur during the client<>server connection,
+     * or processing of client requests.
+     * 
+     * @param connId the unique server-side id string used to identify the connection
+     */
+    private createConnErrorHandler(connId: string): (error: Error) => void {
+        return (error: Error) => {
+            // create error message object
+            const intError = createValError(-32603, `Internal error: ${error.message}`);
+            const res = createResponse(null, null, intError);
+
+            // send error message to client
+            warn("api", "Sending error message (internal) to client.");
+            this.sendMessageToClient(connId, res);
             return;
         }
     }
@@ -507,9 +581,14 @@ export class StreamServer extends EventEmitter {
     /**
      * Build a message handler function for a client.
      * 
+     * This method builds a function to handle incoming messages (requests) from
+     * connected clients. It is used to delegate the processing of requests via
+     * bound method definitions, that are attached with the `bind` method,
+     * or passed into the constructor.
+     * 
      * @param connId the connectionId of the client the handler is for
      */
-    private messageHandlerWrapper(connId: string): (d: WebSocket.Data) => void {
+    private createConnMessageHandler(connId: string): (d: WebSocket.Data) => void {
         return (msg: WebSocket.Data) => {
             // TEMPORARY
             log("api", `Message from connection '${connId}': '${msg}'`);
@@ -517,37 +596,40 @@ export class StreamServer extends EventEmitter {
             // scope eventual response/request objects
             let res: Res, req: Req, error: ValidationError;
 
-            // main method execution block
-            try {
-                // create request object and validate
-                req = new Req(msg);
-                error = req.validate();
+            // create request object and validate
+            req = new Req(msg);
+            error = req.validate();
 
-                if (error) {
-                    res = createResponse(null, null, error);
-                    warn("api", `Sending error message to connection '${connId}'`);
-                } else if (!error && _.isObject(req.parsed)) {
-                    // this is where we will handle the request.
-                    const { params, id, method} = req.parsed;
-
-                    if (!this.methods[method]) {
-                        const methError = createValError(-32601, "method not implemented.");
-                        res = createResponse(null, null, methError);
-                    } else {
-                        log("api", `Executing method for connection '${connId}'`);
-
-                        // defer to bound method
-                        const result = this.methods[method](this, params)
-                        res = createResponse(result, id, null);
-                    }
-                } else {
-                    throw Error();
-                }                
-            } catch (_) {
-                const intError = createValError(-32603, "Internal error.");
-                res = createResponse(null, null, intError);
-                warn("api", "Sending error message (internal) to client.");
+            // terminate execution on validation error
+            if (error) {
+                res = createResponse(null, null, error);
+                this.sendMessageToClient(connId, res);
+                return;
             }
+
+            // check that parsed request is an object
+            if (!_.isObject(req.parsed)) {
+                const methError = createValError(-32700, "unable to parse request.");
+                res = createResponse(null, null, methError);
+                this.sendMessageToClient(connId, res);
+                return;
+            }       
+            
+            // if this point is reached, we will handle the request (or fail)
+            const { params, id, method } = req.parsed;
+
+            // handle bad method requests
+            if (!this.methods[method]) {
+                const methError = createValError(-32601, "method not implemented.");
+                res = createResponse(null, null, methError);
+                this.sendMessageToClient(connId, res);
+                return;
+            }
+
+            // defer to bound method for execution
+            const result = this.methods[method](this, this.connectionMap[connId], params)
+            log("api", `Executing method for connection '${connId}'`);
+            res = createResponse(result, id, null);
             this.sendMessageToClient(connId, res);
             return;
         }

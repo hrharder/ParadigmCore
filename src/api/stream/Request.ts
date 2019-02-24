@@ -13,7 +13,7 @@
 **/
 
 // request/response schemas
-import * as api from "./api.json";
+import * as errors from "./errors.json";
 import * as schema from "./schema.json";
 
 // third party
@@ -35,7 +35,7 @@ export class Request {
     /**
      * Top-level definitions for JSONRPC request/responses.
      */
-    private static api: IStreamAPI = api;
+    private static errors: IErrors = errors;
 
     /**
      * Raw input string, deleted after parsing.
@@ -85,8 +85,6 @@ export class Request {
     public validate(): ValidationError {
         // return immediately if already validated
         if (this.valid !== null) return;
-        // shortcut to request property definitions
-        const reqDef = Request.api.request;
 
         // check valid json by parsing
         try {
@@ -123,15 +121,6 @@ export class Request {
             this.addValErr(-32603);
         }
         
-        /* todo remove
-        try {
-            // check request based on JSON definition
-            for (let i = 0; i < reqDef.properties.length; i++){
-                this.validateRequestProperties(reqDef.properties[i]);
-            }
-        } catch (err) {
-            this.addValErr(-32603);
-        }*/
 
         // return validation error (if any)
         if (this.valid === null) { this.close(); }
@@ -157,92 +146,6 @@ export class Request {
         }
         return;
     }
-    
-
-    /**
-     * Not implemented yet.
-     * 
-     * @param prop 
-     */
-    private validateRequestProperties(prop: IRequestProperty): void {
-        // destructure values from property definitions
-        const {
-            key,
-            required,
-            type,
-            valRegEx:   regExp,
-            valArr:     arr,
-            errInfo:    info, 
-        } = prop;
-
-        const code = parseInt(prop.errCode);
-        const req = this.parsed;
-
-        // check for missing requirements
-        if (required && !req[key]) {
-            this.addValErr(code, `missing required '${key}' field.`);
-            return;
-        }
-
-        // validate properties
-        if (typeof req[key] !== type) {
-            this.addValErr(code, `incorrect type for '${key}' option.`);
-            return;
-        }
-        
-        // validate top-level request
-        if (req[key] && regExp && !arr) {
-            this.validateExpParam(key, regExp, code, info);
-        } else if (req[key] && !regExp && arr) {
-            this.validateOptionParam(code, arr, req[key]);
-        } else if (req[key] && !regExp && !arr) {
-            if (typeof req[key] === "object" && key === "params") {
-                this.validateMethodParams();
-            }
-        } else {
-            this.addValErr(code, `malformed parameters.`);
-        }
-        return;
-    }
-
-    /**
-     * Not implemented yet.
-     * 
-     * @param method 
-     * @param params 
-     */
-    public validateMethodParams(method?: string, params?: IParam) {}
-
-    /**
-     * Validate params that can be validated via regular expression testing.
-     * 
-     * @param key target parameter key string
-     * @param rgxp regex string to test against
-     * @param code error code if param failure detected
-     * @param log error log message if param failure
-     */
-    private validateExpParam(key: string, rgxp: string, code: number, log: string) {
-        const req = this.parsed;
-        const regexp = new RegExp(rgxp);
-        if (!regexp.test(req[key])) {
-            this.addValErr(code, log);
-        }
-        return;
-    }
-
-    /**
-     * Validate a param where the possible values are contained within `options`.
-     * 
-     * @param options array of possible string values
-     * @param query the string key included in the request
-     */
-    private validateOptionParam(code: number, options: string[], query: string) {
-        if (options.indexOf(query) === -1) {
-            this.addValErr(code, `invalid option '${query}'.`);
-        } else {
-            return;
-        }
-    }
 
     /**
      * Add a newly detected validation error to the array of detected errors.
@@ -253,7 +156,7 @@ export class Request {
     private addValErr(code: number, msg?: string) {
         if (this.valid !== null) return;
         const suffix = msg ? msg : "";
-        const message = `${Request.api.codes[code].info}${suffix}`;
+        const message = `${Request.errors[code].info}${suffix}`;
         this.close({ code, message });
         return;
     }

@@ -18,6 +18,13 @@ interface IResponseOptions {
     error?: any;
 }
 
+interface IErrors {
+    [code: string]: {
+        name: string;
+        info: string;
+    }
+}
+
 // STREAM API DEFS BELOW
 
 interface IStreamAPI {
