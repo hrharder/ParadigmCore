@@ -260,6 +260,17 @@
                 },
                 "required": ["path"]
             },
+            "result": {
+                "type": "object",
+                "properties": {
+                    "response": {
+                        "description": "The result of the query, as a string (more documentation coming soon).",
+                        "default": "12000",
+                        "type": "number"
+                    }
+                },
+                "required": ["response"]
+            },
             "errors": [
                 {
                     "description": "The provided parameters are invalid.",

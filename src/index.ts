@@ -27,26 +27,32 @@ import { Witness } from "./witness/Witness";
 import { TxBroadcaster } from "./core/util/TxBroadcaster";
 import { TxGenerator } from "./core/util/TxGenerator";
 
+// JSONRPC API server and method definitions
+import { StreamServer } from "./api/stream/StreamServer";
+import { methods } from "./api/stream/methods";
+
 // State object templates
 import { commitState as cState } from "./state/commitState";
 import { deliverState as dState } from "./state/deliverState";
 
 // Initialization functions
 import { start as startAPIserver } from "./api/post/HttpServer";
-// import { start as startStreamServer } from "./api/stream/WsServer";
 import { start as startMain } from "./core/main";
 
 // General utilities and misc.
 import { err, log, logStart, warn } from "./common/log";
 import { messages as msg } from "./common/static/messages";
 
-// VALIDATOR MODULES
+// validator-only modules
 let witness:        Witness;
 let broadcaster:    TxBroadcaster;  // internal ABCI transaction broadcaster
 let generator:      TxGenerator;    // construct and sign paradigm-core tx's
-let web3: Web3;                 // web3 instance
-let paradigm;                   // paradigm instance (paradigm-connect)
-let node;                       // tendermint node child process instance
+
+// FULL-NODE (and validator) modules
+let web3:       Web3;           // web3 instance
+let server:     StreamServer;   // JSONRPC stream-server
+let paradigm;   // paradigm instance (paradigm-connect)
+let node;       // tendermint node child process instance
 
 /**
  * This function executes immediately upon this file being loaded. It is
@@ -74,7 +80,7 @@ let node;                       // tendermint node child process instance
         let options: any  = {
             moniker: env.MONIKER,
             rpc: {
-                laddr: `tcp://${env.ABCI_HOST}:${env.ABCI_RPC_PORT}`,
+                laddr: `tcp://${env.TENDERMINT_HOST}:${env.TENDERMINT_PORT}`,
             },
         };
         if (env.SEEDS !== "0" && env.SEEDS !== undefined) {
@@ -142,6 +148,10 @@ let node;                       // tendermint node child process instance
     log("api", "starting WS API server...");
     try {
         // create new stream-api server ...
+        server = new StreamServer({
+            tendermintRpcUrl: `ws://${env.TENDERMINT_HOST}:${env.TENDERMINT_PORT}/websocket`,
+            methods
+        });
     } catch (error) {
         throw { 
             message: error.message,
@@ -248,11 +258,14 @@ let node;                       // tendermint node child process instance
     }
     log("peg", msg.rebalancer.messages.activated);
 
-
     // start tx broadcaster
     // TODO: change to TendermintRPC class
     log("tx", "starting validator transaction broadcaster...");
     broadcaster.start();
+
+    // start JSONRPC server
+    log("api", "starting JSONRPC API server...");
+    await server.start();
     return;
 })(process.env).then(() => {
     logStart("paradigm-core startup successfully completed");

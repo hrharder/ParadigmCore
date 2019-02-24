@@ -49,6 +49,9 @@ class StreamServer extends events_1.EventEmitter {
         this.retryMax = options.retryMax || 30;
         this.retryInterval = options.retryInterval || 2000;
         this.rpcClient = new TendermintRPC_js_1.TendermintRPC(options.tendermintRpcUrl, this.retryMax, this.retryInterval);
+        if (options.methods) {
+            this.bindMethods(options.methods);
+        }
         this.started = false;
         return;
     }
@@ -60,6 +63,11 @@ class StreamServer extends events_1.EventEmitter {
     }
     bind(methodName, method) {
         this.methods[methodName] = method;
+    }
+    bindMethods(methods) {
+        Object.keys(methods).forEach((method) => {
+            this.bind(method, methods[method]);
+        });
     }
     createTendermintHandler() {
         return () => {

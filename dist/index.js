@@ -7,6 +7,8 @@ const tendermint = require("../lib/tendermint");
 const Witness_1 = require("./witness/Witness");
 const TxBroadcaster_1 = require("./core/util/TxBroadcaster");
 const TxGenerator_1 = require("./core/util/TxGenerator");
+const StreamServer_1 = require("./api/stream/StreamServer");
+const methods_1 = require("./api/stream/methods");
 const commitState_1 = require("./state/commitState");
 const deliverState_1 = require("./state/deliverState");
 const HttpServer_1 = require("./api/post/HttpServer");
@@ -17,6 +19,7 @@ let witness;
 let broadcaster;
 let generator;
 let web3;
+let server;
 let paradigm;
 let node;
 (async (env) => {
@@ -31,7 +34,7 @@ let node;
         let options = {
             moniker: env.MONIKER,
             rpc: {
-                laddr: `tcp://${env.ABCI_HOST}:${env.ABCI_RPC_PORT}`,
+                laddr: `tcp://${env.TENDERMINT_HOST}:${env.TENDERMINT_PORT}`,
             },
         };
         if (env.SEEDS !== "0" && env.SEEDS !== undefined) {
@@ -92,6 +95,10 @@ let node;
     }
     log_1.log("api", "starting WS API server...");
     try {
+        server = new StreamServer_1.StreamServer({
+            tendermintRpcUrl: `ws://${env.TENDERMINT_HOST}:${env.TENDERMINT_PORT}/websocket`,
+            methods: methods_1.methods
+        });
     }
     catch (error) {
         throw {
@@ -176,6 +183,8 @@ let node;
     log_1.log("peg", messages_1.messages.rebalancer.messages.activated);
     log_1.log("tx", "starting validator transaction broadcaster...");
     broadcaster.start();
+    log_1.log("api", "starting JSONRPC API server...");
+    await server.start();
     return;
 })(process.env).then(() => {
     log_1.logStart("paradigm-core startup successfully completed");
