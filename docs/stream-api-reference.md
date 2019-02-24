@@ -13,7 +13,7 @@ StreamAPI follows the JSONRPC-2.0 specification. More information available at h
 - [session.end](#session.end)
 - [subscription.start](#subscription.start)
 - [subscription.end](#subscription.end)
-- [block.latestHeight](#block.latestHeight)
+- [state.latestHeight](#state.latestHeight)
 - [state.orderCounter](#state.orderCounter)
 - [state.query](#state.query)
 
@@ -31,18 +31,13 @@ Terminate a StreamAPI session immediately.
 
 Calling this method will cancel all subscriptions, and immediately close the client/server connection.
 
-### Result
-
-| Name            | Type   | Description                                            |
-| --------------- | ------ | ------------------------------------------------------ |
-| result          | object |                                                        |
-| result.response | string | The server's response to the connection-close request. |
-
 ### Errors
 
-| Code | Message        | Description                              |
-| ---- | -------------- | ---------------------------------------- |
-| 1    | UnknownSession | The provided 'id' is invalid, or unused. |
+| Code   | Message            | Description                                             |
+| ------ | ------------------ | ------------------------------------------------------- |
+| -32602 | Invalid Parameters | The provided parameters are invalid.                    |
+| -32600 | Parse Error        | The request object is invalid.                          |
+| -32603 | Internal Error     | The server encountered an error processing the request. |
 
 ### Examples
 
@@ -61,10 +56,7 @@ Calling this method will cancel all subscriptions, and immediately close the cli
 ```json
 {
   "jsonrpc": "2.0",
-  "id": "1234567890",
-  "result": {
-    "response": "Closing connection."
-  }
+  "id": "1234567890"
 }
 ```
 
@@ -95,9 +87,11 @@ Initiate a subscription to an OrderStream node for specific blockchain and state
 
 ### Errors
 
-| Code | Message           | Description                          |
-| ---- | ----------------- | ------------------------------------ |
-| 1    | InvalidParameters | The provided parameters are invalid. |
+| Code   | Message            | Description                                             |
+| ------ | ------------------ | ------------------------------------------------------- |
+| -32602 | Invalid Parameters | The provided parameters are invalid.                    |
+| -32600 | Parse Error        | The request object is invalid.                          |
+| -32603 | Internal Error     | The server encountered an error processing the request. |
 
 ### Examples
 
@@ -153,9 +147,11 @@ Immediately end a subscription to a certain event, and stop receiving notificati
 
 ### Errors
 
-| Code | Message           | Description                          |
-| ---- | ----------------- | ------------------------------------ |
-| 1    | InvalidParameters | The provided parameters are invalid. |
+| Code   | Message            | Description                                             |
+| ------ | ------------------ | ------------------------------------------------------- |
+| -32602 | Invalid Parameters | The provided parameters are invalid.                    |
+| -32600 | Parse Error        | The request object is invalid.                          |
+| -32603 | Internal Error     | The server encountered an error processing the request. |
 
 ### Examples
 
@@ -184,9 +180,9 @@ Immediately end a subscription to a certain event, and stop receiving notificati
 }
 ```
 
-<a name="block.latestHeight"></a>
+<a name="state.latestHeight"></a>
 
-## block.latestHeight
+## state.latestHeight
 
 Return the height of the best known block.
 
@@ -201,6 +197,14 @@ The `block.latestHeight` method will return the integer height of the latest blo
 | result        | object |                                                   |
 | result.height | number | The integer height of the latest committed block. |
 
+### Errors
+
+| Code   | Message            | Description                                             |
+| ------ | ------------------ | ------------------------------------------------------- |
+| -32602 | Invalid Parameters | The provided parameters are invalid.                    |
+| -32600 | Parse Error        | The request object is invalid.                          |
+| -32603 | Internal Error     | The server encountered an error processing the request. |
+
 ### Examples
 
 #### Request
@@ -209,7 +213,7 @@ The `block.latestHeight` method will return the integer height of the latest blo
 {
   "jsonrpc": "2.0",
   "id": "1234567890",
-  "method": "block.latestHeight"
+  "method": "state.latestHeight"
 }
 ```
 
@@ -244,9 +248,11 @@ Return the incremental counter that tracks the in-state number of total `order` 
 
 ### Errors
 
-| Code | Message           | Description                          |
-| ---- | ----------------- | ------------------------------------ |
-| 1    | InvalidParameters | The provided parameters are invalid. |
+| Code   | Message            | Description                                             |
+| ------ | ------------------ | ------------------------------------------------------- |
+| -32602 | Invalid Parameters | The provided parameters are invalid.                    |
+| -32600 | Parse Error        | The request object is invalid.                          |
+| -32603 | Internal Error     | The server encountered an error processing the request. |
 
 ### Examples
 
@@ -285,16 +291,18 @@ The `params.path` field can be used to direct a query to a particular path of th
 
 ### Parameters
 
-| Name        | Type   | Description                                                    |
-| ----------- | ------ | -------------------------------------------------------------- |
-| params      | object |                                                                |
-| params.path | string | A unique ID provided by the server upon an event subscription. |
+| Name        | Type   | Description                                                                                                           |
+| ----------- | ------ | --------------------------------------------------------------------------------------------------------------------- |
+| params      | object |                                                                                                                       |
+| params.path | string | The `path` string is passed to the `abci_query` method and directs a query towards a particular state account object. |
 
 ### Errors
 
-| Code | Message           | Description                          |
-| ---- | ----------------- | ------------------------------------ |
-| 1    | InvalidParameters | The provided parameters are invalid. |
+| Code   | Message            | Description                                             |
+| ------ | ------------------ | ------------------------------------------------------- |
+| -32602 | Invalid Parameters | The provided parameters are invalid.                    |
+| -32600 | Parse Error        | The request object is invalid.                          |
+| -32603 | Internal Error     | The server encountered an error processing the request. |
 
 ### Examples
 
@@ -306,7 +314,7 @@ The `params.path` field can be used to direct a query to a particular path of th
   "id": "1234567890",
   "method": "state.query",
   "params": {
-    "path": "posters/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+    "path": "posters/0xaa554d0c5ff879387fc234de5d22ec02983baa27/limit"
   }
 }
 ```
