@@ -49,6 +49,11 @@ interface IOptions {
 
     /** Network host to bind StreamAPI server. */
     host?: string;
+
+    /** Optional pre-defined method implementations. */
+    methods?: {
+        [name: string]: (server: StreamServer, client: WebSocket, params: any) => any;
+    }
 }
 
 /**
@@ -356,7 +361,12 @@ export class StreamServer extends EventEmitter {
             this.retryInterval,
         );
 
-        // status
+        // if pre-defined methods provided, bind each
+        if (options.methods) {
+            this.bindMethods(options.methods);
+        }
+
+        // set initial status
         this.started = false;
         return;
     }
@@ -383,14 +393,34 @@ export class StreamServer extends EventEmitter {
 
     /**
      * Bind a method to the StreamServer.
+     * 
+     * @param methodName the name of the method to bind to
+     * @param method the function object of the method implementation, using the correct call signature 
      */
-    public bind(methodName: string, method: (params: any) => any): void {
+    public bind(
+        methodName: string,
+        method: (server: StreamServer, client: WebSocket, params: any) => any
+    ): void {
         this.methods[methodName] = method;
     }
 
     // END public methods
 
     // BEGIN private methods
+
+    /**
+     * Bind an object of pre-defined methods to the server.
+     * 
+     * Used to optionally bind an object with pre-defined methods supplied to the 
+     * StreamServer's constructor.
+     * 
+     * @param methods a user-provided object with pre-defined method implementations
+     */
+    private bindMethods(methods: IMethods): void {
+        Object.keys(methods).forEach((method) => {
+            this.bind(method, methods[method]);
+        });
+    }
 
     /**
      * Creates a handler function for the TendermintRPC connection.
