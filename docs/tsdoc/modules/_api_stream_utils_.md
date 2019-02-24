@@ -20,7 +20,7 @@
 
 ▸ **createResponse**(result?: *`any`*, id?: *`string`*, error?: *`ValidationError`*): `Res`
 
-*Defined in [api/stream/utils.ts:71](https://github.com/paradigmfoundation/paradigmcore/blob/8eaa498/src/api/stream/utils.ts#L71)*
+*Defined in [api/stream/utils.ts:71](https://github.com/paradigmfoundation/paradigmcore/blob/5599f72/src/api/stream/utils.ts#L71)*
 
 Generate a JSONRPC response.
 
@@ -43,7 +43,7 @@ ___
 
 ▸ **createValError**(code: *`number`*, message: *`string`*): `ValidationError`
 
-*Defined in [api/stream/utils.ts:51](https://github.com/paradigmfoundation/paradigmcore/blob/8eaa498/src/api/stream/utils.ts#L51)*
+*Defined in [api/stream/utils.ts:51](https://github.com/paradigmfoundation/paradigmcore/blob/5599f72/src/api/stream/utils.ts#L51)*
 
 Build a JSONRPC validation object.
 
@@ -65,7 +65,7 @@ ___
 
 ▸ **validateMessage**(message: *`WebSocket.Data`*): `ValidationError`
 
-*Defined in [api/stream/utils.ts:31](https://github.com/paradigmfoundation/paradigmcore/blob/8eaa498/src/api/stream/utils.ts#L31)*
+*Defined in [api/stream/utils.ts:31](https://github.com/paradigmfoundation/paradigmcore/blob/5599f72/src/api/stream/utils.ts#L31)*
 
 Validate an incoming client message
 
