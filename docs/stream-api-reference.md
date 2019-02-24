@@ -296,6 +296,13 @@ The `params.path` field can be used to direct a query to a particular path of th
 | params      | object |                                                                                                                       |
 | params.path | string | The `path` string is passed to the `abci_query` method and directs a query towards a particular state account object. |
 
+### Result
+
+| Name            | Type   | Description                                                            |
+| --------------- | ------ | ---------------------------------------------------------------------- |
+| result          | object |                                                                        |
+| result.response | number | The result of the query, as a string (more documentation coming soon). |
+
 ### Errors
 
 | Code   | Message            | Description                                             |
@@ -324,6 +331,9 @@ The `params.path` field can be used to direct a query to a particular path of th
 ```json
 {
   "jsonrpc": "2.0",
-  "id": "1234567890"
+  "id": "1234567890",
+  "result": {
+    "response": "12000"
+  }
 }
 ```
