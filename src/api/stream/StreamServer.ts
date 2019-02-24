@@ -451,9 +451,6 @@ export class StreamServer extends EventEmitter {
             // update latest height
             const { height } = data.block.header;
             this.latestBlockData.height = parseInt(height, 10);
-
-            // temporary log height
-            log("api", `received new tendermint block: ${height}`);
             return;
         }
     }
