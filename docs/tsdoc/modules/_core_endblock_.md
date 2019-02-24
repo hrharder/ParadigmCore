@@ -18,7 +18,7 @@
 
 ▸ **endBlockWrapper**(state: *`State`*): `function`
 
-*Defined in [core/endBlock.ts:20](https://github.com/paradigmfoundation/paradigmcore/blob/14aa45f/src/core/endBlock.ts#L20)*
+*Defined in [core/endBlock.ts:20](https://github.com/paradigmfoundation/paradigmcore/blob/486e89a/src/core/endBlock.ts#L20)*
 
 **Parameters:**
 

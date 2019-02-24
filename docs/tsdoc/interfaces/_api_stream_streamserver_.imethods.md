@@ -19,13 +19,14 @@ Mapping of methods to method implementations.
 
 The `this` arg for the active [StreamServer](../classes/_api_stream_streamserver_.streamserver.md) instance is passed into all bound methods, so they may access instance data, such as the current block info, etc.
 
-▸(_this: *[StreamServer](../classes/_api_stream_streamserver_.streamserver.md)*, params: *`any`*): `any`
+▸(server: *[StreamServer](../classes/_api_stream_streamserver_.streamserver.md)*, client: *`WebSocket`*, params: *`any`*): `any`
 
 **Parameters:**
 
 | Name | Type |
 | ------ | ------ |
-| _this | [StreamServer](../classes/_api_stream_streamserver_.streamserver.md) |
+| server | [StreamServer](../classes/_api_stream_streamserver_.streamserver.md) |
+| client | `WebSocket` |
 | params | `any` |
 
 **Returns:** `any`

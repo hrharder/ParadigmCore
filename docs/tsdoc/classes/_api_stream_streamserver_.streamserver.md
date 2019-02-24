@@ -38,13 +38,19 @@ Certain endpoints may be implemented with an HTTP server to support JSONRPC(2.0)
 
 * [addListener](_api_stream_streamserver_.streamserver.md#addlistener)
 * [bind](_api_stream_streamserver_.streamserver.md#bind)
+* [createConnCloseHandler](_api_stream_streamserver_.streamserver.md#createconnclosehandler)
+* [createConnErrorHandler](_api_stream_streamserver_.streamserver.md#createconnerrorhandler)
+* [createConnMessageHandler](_api_stream_streamserver_.streamserver.md#createconnmessagehandler)
+* [createConnOpenHandler](_api_stream_streamserver_.streamserver.md#createconnopenhandler)
 * [createConnectionHandler](_api_stream_streamserver_.streamserver.md#createconnectionhandler)
+* [createErrorHandler](_api_stream_streamserver_.streamserver.md#createerrorhandler)
+* [createNewBlockHandler](_api_stream_streamserver_.streamserver.md#createnewblockhandler)
+* [createTendermintHandler](_api_stream_streamserver_.streamserver.md#createtenderminthandler)
 * [emit](_api_stream_streamserver_.streamserver.md#emit)
 * [eventNames](_api_stream_streamserver_.streamserver.md#eventnames)
 * [getMaxListeners](_api_stream_streamserver_.streamserver.md#getmaxlisteners)
 * [listenerCount](_api_stream_streamserver_.streamserver.md#listenercount)
 * [listeners](_api_stream_streamserver_.streamserver.md#listeners)
-* [messageHandlerWrapper](_api_stream_streamserver_.streamserver.md#messagehandlerwrapper)
 * [off](_api_stream_streamserver_.streamserver.md#off)
 * [on](_api_stream_streamserver_.streamserver.md#on)
 * [once](_api_stream_streamserver_.streamserver.md#once)
@@ -72,7 +78,7 @@ Certain endpoints may be implemented with an HTTP server to support JSONRPC(2.0)
 
 ⊕ **new StreamServer**(options?: *[IOptions](../interfaces/_api_stream_streamserver_.ioptions.md)*): [StreamServer](_api_stream_streamserver_.streamserver.md)
 
-*Defined in [api/stream/StreamServer.ts:322](https://github.com/paradigmfoundation/paradigmcore/blob/14aa45f/src/api/stream/StreamServer.ts#L322)*
+*Defined in [api/stream/StreamServer.ts:319](https://github.com/paradigmfoundation/paradigmcore/blob/486e89a/src/api/stream/StreamServer.ts#L319)*
 
 Create a new `StreamServer` instance.
 
@@ -96,7 +102,7 @@ ___
 
 **● connectionMap**: *[IConnectionMap](../interfaces/_api_stream_streamserver_.iconnectionmap.md)*
 
-*Defined in [api/stream/StreamServer.ts:314](https://github.com/paradigmfoundation/paradigmcore/blob/14aa45f/src/api/stream/StreamServer.ts#L314)*
+*Defined in [api/stream/StreamServer.ts:311](https://github.com/paradigmfoundation/paradigmcore/blob/486e89a/src/api/stream/StreamServer.ts#L311)*
 
 Mapping of active `connectionId` strings to connection objects
 
@@ -109,7 +115,7 @@ ___
 
 **● latestBlockData**: *[IBlockData](../interfaces/_api_stream_streamserver_.iblockdata.md)*
 
-*Defined in [api/stream/StreamServer.ts:246](https://github.com/paradigmfoundation/paradigmcore/blob/14aa45f/src/api/stream/StreamServer.ts#L246)*
+*Defined in [api/stream/StreamServer.ts:243](https://github.com/paradigmfoundation/paradigmcore/blob/486e89a/src/api/stream/StreamServer.ts#L243)*
 
 Data for the latest Tendermint block.
 
@@ -122,7 +128,7 @@ ___
 
 **● methods**: *[IMethods](../interfaces/_api_stream_streamserver_.imethods.md)*
 
-*Defined in [api/stream/StreamServer.ts:229](https://github.com/paradigmfoundation/paradigmcore/blob/14aa45f/src/api/stream/StreamServer.ts#L229)*
+*Defined in [api/stream/StreamServer.ts:226](https://github.com/paradigmfoundation/paradigmcore/blob/486e89a/src/api/stream/StreamServer.ts#L226)*
 
 Mapping of method handler functions.
 
@@ -133,7 +139,7 @@ ___
 
 **● retryInterval**: *`number`*
 
-*Defined in [api/stream/StreamServer.ts:262](https://github.com/paradigmfoundation/paradigmcore/blob/14aa45f/src/api/stream/StreamServer.ts#L262)*
+*Defined in [api/stream/StreamServer.ts:259](https://github.com/paradigmfoundation/paradigmcore/blob/486e89a/src/api/stream/StreamServer.ts#L259)*
 
 Interval (in ms) between retry attempts
 
@@ -146,7 +152,7 @@ ___
 
 **● retryMax**: *`number`*
 
-*Defined in [api/stream/StreamServer.ts:254](https://github.com/paradigmfoundation/paradigmcore/blob/14aa45f/src/api/stream/StreamServer.ts#L254)*
+*Defined in [api/stream/StreamServer.ts:251](https://github.com/paradigmfoundation/paradigmcore/blob/486e89a/src/api/stream/StreamServer.ts#L251)*
 
 Number of times to attempt RPC connection.
 
@@ -159,7 +165,7 @@ ___
 
 **● rpcClient**: *[TendermintRPC](_common_tendermintrpc_.tendermintrpc.md)*
 
-*Defined in [api/stream/StreamServer.ts:238](https://github.com/paradigmfoundation/paradigmcore/blob/14aa45f/src/api/stream/StreamServer.ts#L238)*
+*Defined in [api/stream/StreamServer.ts:235](https://github.com/paradigmfoundation/paradigmcore/blob/486e89a/src/api/stream/StreamServer.ts#L235)*
 
 Tendermint RPC client instance.
 
@@ -172,7 +178,7 @@ ___
 
 **● secret**: *`Buffer`*
 
-*Defined in [api/stream/StreamServer.ts:224](https://github.com/paradigmfoundation/paradigmcore/blob/14aa45f/src/api/stream/StreamServer.ts#L224)*
+*Defined in [api/stream/StreamServer.ts:221](https://github.com/paradigmfoundation/paradigmcore/blob/486e89a/src/api/stream/StreamServer.ts#L221)*
 
 Server secret bytes
 
@@ -185,7 +191,7 @@ ___
 
 **● server**: *`Server`*
 
-*Defined in [api/stream/StreamServer.ts:285](https://github.com/paradigmfoundation/paradigmcore/blob/14aa45f/src/api/stream/StreamServer.ts#L285)*
+*Defined in [api/stream/StreamServer.ts:282](https://github.com/paradigmfoundation/paradigmcore/blob/486e89a/src/api/stream/StreamServer.ts#L282)*
 
 StreamAPI WebSocket server instance
 
@@ -198,7 +204,7 @@ ___
 
 **● started**: *`boolean`*
 
-*Defined in [api/stream/StreamServer.ts:322](https://github.com/paradigmfoundation/paradigmcore/blob/14aa45f/src/api/stream/StreamServer.ts#L322)*
+*Defined in [api/stream/StreamServer.ts:319](https://github.com/paradigmfoundation/paradigmcore/blob/486e89a/src/api/stream/StreamServer.ts#L319)*
 
 Server status
 
@@ -211,7 +217,7 @@ ___
 
 **● streamHost**: *`string`*
 
-*Defined in [api/stream/StreamServer.ts:276](https://github.com/paradigmfoundation/paradigmcore/blob/14aa45f/src/api/stream/StreamServer.ts#L276)*
+*Defined in [api/stream/StreamServer.ts:273](https://github.com/paradigmfoundation/paradigmcore/blob/486e89a/src/api/stream/StreamServer.ts#L273)*
 
 Stream host
 
@@ -224,7 +230,7 @@ ___
 
 **● streamPort**: *`number`*
 
-*Defined in [api/stream/StreamServer.ts:269](https://github.com/paradigmfoundation/paradigmcore/blob/14aa45f/src/api/stream/StreamServer.ts#L269)*
+*Defined in [api/stream/StreamServer.ts:266](https://github.com/paradigmfoundation/paradigmcore/blob/486e89a/src/api/stream/StreamServer.ts#L266)*
 
 StreamAPI port
 
@@ -237,7 +243,7 @@ ___
 
 **● subscriptions**: *[ISubscription](../interfaces/_api_stream_streamserver_.isubscription.md)[]*
 
-*Defined in [api/stream/StreamServer.ts:306](https://github.com/paradigmfoundation/paradigmcore/blob/14aa45f/src/api/stream/StreamServer.ts#L306)*
+*Defined in [api/stream/StreamServer.ts:303](https://github.com/paradigmfoundation/paradigmcore/blob/486e89a/src/api/stream/StreamServer.ts#L303)*
 
 Array of subscription objects
 
@@ -293,7 +299,7 @@ ___
 
 ▸ **bind**(methodName: *`string`*, method: *`function`*): `void`
 
-*Defined in [api/stream/StreamServer.ts:405](https://github.com/paradigmfoundation/paradigmcore/blob/14aa45f/src/api/stream/StreamServer.ts#L405)*
+*Defined in [api/stream/StreamServer.ts:387](https://github.com/paradigmfoundation/paradigmcore/blob/486e89a/src/api/stream/StreamServer.ts#L387)*
 
 Bind a method to the StreamServer.
 
@@ -307,19 +313,148 @@ Bind a method to the StreamServer.
 **Returns:** `void`
 
 ___
+<a id="createconnclosehandler"></a>
+
+### `<Private>` createConnCloseHandler
+
+▸ **createConnCloseHandler**(connId: *`string`*): `function`
+
+*Defined in [api/stream/StreamServer.ts:517](https://github.com/paradigmfoundation/paradigmcore/blob/486e89a/src/api/stream/StreamServer.ts#L517)*
+
+Create an close event handler.
+
+This wrapper method builds a function to handle "close" events from the connected clients. Currently, it will remove the client-tracking object for the connection the disconnect event is received over.
+
+**Parameters:**
+
+| Name | Type | Description |
+| ------ | ------ | ------ |
+| connId | `string` |  the server-side id string used to identify the connection |
+
+**Returns:** `function`
+
+___
+<a id="createconnerrorhandler"></a>
+
+### `<Private>` createConnErrorHandler
+
+▸ **createConnErrorHandler**(connId: *`string`*): `function`
+
+*Defined in [api/stream/StreamServer.ts:550](https://github.com/paradigmfoundation/paradigmcore/blob/486e89a/src/api/stream/StreamServer.ts#L550)*
+
+Create a client error handler.
+
+This wrapper function creates an error-handler function that handles any internal server errors that occur during the client<>server connection, or processing of client requests.
+
+**Parameters:**
+
+| Name | Type | Description |
+| ------ | ------ | ------ |
+| connId | `string` |  the unique server-side id string used to identify the connection |
+
+**Returns:** `function`
+
+___
+<a id="createconnmessagehandler"></a>
+
+### `<Private>` createConnMessageHandler
+
+▸ **createConnMessageHandler**(connId: *`string`*): `function`
+
+*Defined in [api/stream/StreamServer.ts:591](https://github.com/paradigmfoundation/paradigmcore/blob/486e89a/src/api/stream/StreamServer.ts#L591)*
+
+Build a message handler function for a client.
+
+This method builds a function to handle incoming messages (requests) from connected clients. It is used to delegate the processing of requests via bound method definitions, that are attached with the `bind` method, or passed into the constructor.
+
+**Parameters:**
+
+| Name | Type | Description |
+| ------ | ------ | ------ |
+| connId | `string` |  the connectionId of the client the handler is for |
+
+**Returns:** `function`
+
+___
+<a id="createconnopenhandler"></a>
+
+### `<Private>` createConnOpenHandler
+
+▸ **createConnOpenHandler**(connId: *`string`*): `function`
+
+*Defined in [api/stream/StreamServer.ts:534](https://github.com/paradigmfoundation/paradigmcore/blob/486e89a/src/api/stream/StreamServer.ts#L534)*
+
+Create an open event handler.
+
+This wrapper method builds a function to handle "open" events from the connected clients. Currently it is just used to log new connections, but in the future may handle additional processing of new connections.
+
+**Parameters:**
+
+| Name | Type | Description |
+| ------ | ------ | ------ |
+| connId | `string` |  the server-side id string used to identify the connection |
+
+**Returns:** `function`
+
+___
 <a id="createconnectionhandler"></a>
 
 ### `<Private>` createConnectionHandler
 
 ▸ **createConnectionHandler**(): `function`
 
-*Defined in [api/stream/StreamServer.ts:438](https://github.com/paradigmfoundation/paradigmcore/blob/14aa45f/src/api/stream/StreamServer.ts#L438)*
+*Defined in [api/stream/StreamServer.ts:482](https://github.com/paradigmfoundation/paradigmcore/blob/486e89a/src/api/stream/StreamServer.ts#L482)*
 
-Create a server connection handler
+Create a server connection handler.
 
-*__description__*: Creates a `StreamServer` connection handler function.
+This method is used to create a handler function for connected clients. It establishes the correct handler functions for connection events, and binds method definitions to the connection object to handle JSONRPC requests.
 
 *__todo__*: document better
+
+**Returns:** `function`
+
+___
+<a id="createerrorhandler"></a>
+
+### `<Private>` createErrorHandler
+
+▸ **createErrorHandler**(): `function`
+
+*Defined in [api/stream/StreamServer.ts:460](https://github.com/paradigmfoundation/paradigmcore/blob/486e89a/src/api/stream/StreamServer.ts#L460)*
+
+Creates an error handler for server errors.
+
+A generic method used to create an async (event) error handler. Currently only used to handler server (not client<>server) errors, but in the future may also handle additional errors.
+
+**Returns:** `function`
+
+___
+<a id="createnewblockhandler"></a>
+
+### `<Private>` createNewBlockHandler
+
+▸ **createNewBlockHandler**(): `function`
+
+*Defined in [api/stream/StreamServer.ts:419](https://github.com/paradigmfoundation/paradigmcore/blob/486e89a/src/api/stream/StreamServer.ts#L419)*
+
+Creates a handler function for Tendermint `NewBlock` events.
+
+Currently used to update the in-memory tracking of the current Tendermint blockchain height. In the future may be used to pull additional block data to be stored in-memory.
+
+**Returns:** `function`
+
+___
+<a id="createtenderminthandler"></a>
+
+### `<Private>` createTendermintHandler
+
+▸ **createTendermintHandler**(): `function`
+
+*Defined in [api/stream/StreamServer.ts:402](https://github.com/paradigmfoundation/paradigmcore/blob/486e89a/src/api/stream/StreamServer.ts#L402)*
+
+Creates a handler function for the TendermintRPC connection.
+
+Currently only subscribes to the Tendermint `NewBlock` event, but in the future may be used to subscribe to additional tags and blockchain events, used to notify clients an update the server's state.
 
 **Returns:** `function`
 
@@ -416,25 +551,6 @@ ___
 | event | `string` \| `symbol` |
 
 **Returns:** `Function`[]
-
-___
-<a id="messagehandlerwrapper"></a>
-
-### `<Private>` messageHandlerWrapper
-
-▸ **messageHandlerWrapper**(connId: *`string`*): `function`
-
-*Defined in [api/stream/StreamServer.ts:512](https://github.com/paradigmfoundation/paradigmcore/blob/14aa45f/src/api/stream/StreamServer.ts#L512)*
-
-Build a message handler function for a client.
-
-**Parameters:**
-
-| Name | Type | Description |
-| ------ | ------ | ------ |
-| connId | `string` |  the connectionId of the client the handler is for |
-
-**Returns:** `function`
 
 ___
 <a id="off"></a>
@@ -617,7 +733,7 @@ ___
 
 ▸ **sendMessageToClient**(id: *`string`*, res: *`Res`*): `void`
 
-*Defined in [api/stream/StreamServer.ts:498](https://github.com/paradigmfoundation/paradigmcore/blob/14aa45f/src/api/stream/StreamServer.ts#L498)*
+*Defined in [api/stream/StreamServer.ts:572](https://github.com/paradigmfoundation/paradigmcore/blob/486e89a/src/api/stream/StreamServer.ts#L572)*
 
 Send a message to a connected client+
 
@@ -660,7 +776,7 @@ ___
 
 ▸ **setupServer**(host: *`string`*, port: *`number`*): `void`
 
-*Defined in [api/stream/StreamServer.ts:422](https://github.com/paradigmfoundation/paradigmcore/blob/14aa45f/src/api/stream/StreamServer.ts#L422)*
+*Defined in [api/stream/StreamServer.ts:440](https://github.com/paradigmfoundation/paradigmcore/blob/486e89a/src/api/stream/StreamServer.ts#L440)*
 
 Setup the StreamAPI WebSocket server
 
@@ -682,7 +798,7 @@ ___
 
 ▸ **start**(): `Promise`<`void`>
 
-*Defined in [api/stream/StreamServer.ts:375](https://github.com/paradigmfoundation/paradigmcore/blob/14aa45f/src/api/stream/StreamServer.ts#L375)*
+*Defined in [api/stream/StreamServer.ts:372](https://github.com/paradigmfoundation/paradigmcore/blob/486e89a/src/api/stream/StreamServer.ts#L372)*
 
 Start the StreamAPI server.
 
@@ -697,7 +813,7 @@ ___
 
 ▸ **generate32RandomBytes**(start?: *`number`*): `Buffer`
 
-*Defined in [api/stream/StreamServer.ts:143](https://github.com/paradigmfoundation/paradigmcore/blob/14aa45f/src/api/stream/StreamServer.ts#L143)*
+*Defined in [api/stream/StreamServer.ts:140](https://github.com/paradigmfoundation/paradigmcore/blob/486e89a/src/api/stream/StreamServer.ts#L140)*
 
 Generate a pseudo-random byte array
 
@@ -720,7 +836,7 @@ ___
 
 ▸ **generateConnectionId**(secret: *`Buffer`*, salt: *`Buffer`*): `string`
 
-*Defined in [api/stream/StreamServer.ts:204](https://github.com/paradigmfoundation/paradigmcore/blob/14aa45f/src/api/stream/StreamServer.ts#L204)*
+*Defined in [api/stream/StreamServer.ts:201](https://github.com/paradigmfoundation/paradigmcore/blob/486e89a/src/api/stream/StreamServer.ts#L201)*
 
 Generate secret `connectionId`
 
@@ -744,7 +860,7 @@ ___
 
 ▸ **generateEventId**(connectionId: *`string`*, salt: *`Buffer`*): `string`
 
-*Defined in [api/stream/StreamServer.ts:177](https://github.com/paradigmfoundation/paradigmcore/blob/14aa45f/src/api/stream/StreamServer.ts#L177)*
+*Defined in [api/stream/StreamServer.ts:174](https://github.com/paradigmfoundation/paradigmcore/blob/486e89a/src/api/stream/StreamServer.ts#L174)*
 
 Generate client-safe `eventId` from secret connectionId
 
