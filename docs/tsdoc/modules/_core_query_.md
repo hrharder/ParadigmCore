@@ -18,9 +18,11 @@
 
 ▸ **queryWrapper**(state: *`State`*): `function`
 
-*Defined in [core/query.ts:26](https://github.com/paradigmfoundation/paradigmcore/blob/f520b2a/src/core/query.ts#L26)*
+*Defined in [core/query.ts:29](https://github.com/paradigmfoundation/paradigmcore/blob/14aa45f/src/core/query.ts#L29)*
 
 Return information about the state and software.
+
+THe `request.path` field is used to direct a query towards a particular state object. Currently, query requests can return information about
 
 *__todo__*: parse path, support multiple query paths and options, util functions for buffering req/res objects
 

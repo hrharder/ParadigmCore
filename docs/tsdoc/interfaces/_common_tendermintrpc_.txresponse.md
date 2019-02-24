@@ -23,7 +23,7 @@
 
 **● ok**: *`boolean`*
 
-*Defined in [common/TendermintRPC.ts:38](https://github.com/paradigmfoundation/paradigmcore/blob/f520b2a/src/common/TendermintRPC.ts#L38)*
+*Defined in [common/TendermintRPC.ts:38](https://github.com/paradigmfoundation/paradigmcore/blob/14aa45f/src/common/TendermintRPC.ts#L38)*
 
 True if no error encountered during RPC
 
@@ -34,7 +34,7 @@ ___
 
 **● res**: *`string` \| `object`*
 
-*Defined in [common/TendermintRPC.ts:41](https://github.com/paradigmfoundation/paradigmcore/blob/f520b2a/src/common/TendermintRPC.ts#L41)*
+*Defined in [common/TendermintRPC.ts:41](https://github.com/paradigmfoundation/paradigmcore/blob/14aa45f/src/common/TendermintRPC.ts#L41)*
 
 The response object (or message) from the server
 
