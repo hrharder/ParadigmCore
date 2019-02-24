@@ -195,17 +195,6 @@
 				},
 				"required": ["path"]
 			},
-			"result": {
-				"type": "object",
-				"properties": {
-					"data": {
-						"description": "The response data from the `query` method.",
-						"default": "tbd",
-						"type": "string"
-					}
-				},
-				"required": ["data"]
-			},
 			"errors": [{
 				"description": "The provided parameters are invalid.",
 				"code": 1,

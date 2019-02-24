@@ -41,7 +41,7 @@ Also see [https://www.jsonrpc.org/specification](https://www.jsonrpc.org/specifi
 
 ⊕ **new Response**(options: *`IResponseOptions`*): [Response](_api_stream_response_.response.md)
 
-*Defined in [api/stream/Response.ts:58](https://github.com/paradigmfoundation/paradigmcore/blob/24132f3/src/api/stream/Response.ts#L58)*
+*Defined in [api/stream/Response.ts:58](https://github.com/paradigmfoundation/paradigmcore/blob/f520b2a/src/api/stream/Response.ts#L58)*
 
 Create a new response object.
 
@@ -67,7 +67,7 @@ ___
 
 **● error**: *`ValidationError`* =  null
 
-*Defined in [api/stream/Response.ts:58](https://github.com/paradigmfoundation/paradigmcore/blob/24132f3/src/api/stream/Response.ts#L58)*
+*Defined in [api/stream/Response.ts:58](https://github.com/paradigmfoundation/paradigmcore/blob/f520b2a/src/api/stream/Response.ts#L58)*
 
 Any validation (or process) errors.
 
@@ -80,7 +80,7 @@ ___
 
 **● id**: *`string`* =  null
 
-*Defined in [api/stream/Response.ts:43](https://github.com/paradigmfoundation/paradigmcore/blob/24132f3/src/api/stream/Response.ts#L43)*
+*Defined in [api/stream/Response.ts:43](https://github.com/paradigmfoundation/paradigmcore/blob/f520b2a/src/api/stream/Response.ts#L43)*
 
 The client-provided id string.
 
@@ -93,7 +93,7 @@ ___
 
 **● result**: *`any`* =  null
 
-*Defined in [api/stream/Response.ts:50](https://github.com/paradigmfoundation/paradigmcore/blob/24132f3/src/api/stream/Response.ts#L50)*
+*Defined in [api/stream/Response.ts:50](https://github.com/paradigmfoundation/paradigmcore/blob/f520b2a/src/api/stream/Response.ts#L50)*
 
 Arbitrary result data included in response.
 
@@ -106,7 +106,7 @@ ___
 
 **● jsonrpc**: *`string`* = "2.0"
 
-*Defined in [api/stream/Response.ts:36](https://github.com/paradigmfoundation/paradigmcore/blob/24132f3/src/api/stream/Response.ts#L36)*
+*Defined in [api/stream/Response.ts:36](https://github.com/paradigmfoundation/paradigmcore/blob/f520b2a/src/api/stream/Response.ts#L36)*
 
 Static JSONRPC version string for v2
 
@@ -122,7 +122,7 @@ ___
 
 ▸ **toJSON**(): `IJsonResponse`
 
-*Defined in [api/stream/Response.ts:91](https://github.com/paradigmfoundation/paradigmcore/blob/24132f3/src/api/stream/Response.ts#L91)*
+*Defined in [api/stream/Response.ts:91](https://github.com/paradigmfoundation/paradigmcore/blob/f520b2a/src/api/stream/Response.ts#L91)*
 
 **Returns:** `IJsonResponse`
 

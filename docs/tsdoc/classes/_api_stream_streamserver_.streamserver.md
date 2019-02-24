@@ -72,7 +72,7 @@ Certain endpoints may be implemented with an HTTP server to support JSONRPC(2.0)
 
 ⊕ **new StreamServer**(options?: *[IOptions](../interfaces/_api_stream_streamserver_.ioptions.md)*): [StreamServer](_api_stream_streamserver_.streamserver.md)
 
-*Defined in [api/stream/StreamServer.ts:322](https://github.com/paradigmfoundation/paradigmcore/blob/24132f3/src/api/stream/StreamServer.ts#L322)*
+*Defined in [api/stream/StreamServer.ts:322](https://github.com/paradigmfoundation/paradigmcore/blob/f520b2a/src/api/stream/StreamServer.ts#L322)*
 
 Create a new `StreamServer` instance.
 
@@ -96,7 +96,7 @@ ___
 
 **● connectionMap**: *[IConnectionMap](../interfaces/_api_stream_streamserver_.iconnectionmap.md)*
 
-*Defined in [api/stream/StreamServer.ts:314](https://github.com/paradigmfoundation/paradigmcore/blob/24132f3/src/api/stream/StreamServer.ts#L314)*
+*Defined in [api/stream/StreamServer.ts:314](https://github.com/paradigmfoundation/paradigmcore/blob/f520b2a/src/api/stream/StreamServer.ts#L314)*
 
 Mapping of active `connectionId` strings to connection objects
 
@@ -109,7 +109,7 @@ ___
 
 **● latestBlockData**: *[IBlockData](../interfaces/_api_stream_streamserver_.iblockdata.md)*
 
-*Defined in [api/stream/StreamServer.ts:246](https://github.com/paradigmfoundation/paradigmcore/blob/24132f3/src/api/stream/StreamServer.ts#L246)*
+*Defined in [api/stream/StreamServer.ts:246](https://github.com/paradigmfoundation/paradigmcore/blob/f520b2a/src/api/stream/StreamServer.ts#L246)*
 
 Data for the latest Tendermint block.
 
@@ -122,7 +122,7 @@ ___
 
 **● methods**: *[IMethods](../interfaces/_api_stream_streamserver_.imethods.md)*
 
-*Defined in [api/stream/StreamServer.ts:229](https://github.com/paradigmfoundation/paradigmcore/blob/24132f3/src/api/stream/StreamServer.ts#L229)*
+*Defined in [api/stream/StreamServer.ts:229](https://github.com/paradigmfoundation/paradigmcore/blob/f520b2a/src/api/stream/StreamServer.ts#L229)*
 
 Mapping of method handler functions.
 
@@ -133,7 +133,7 @@ ___
 
 **● retryInterval**: *`number`*
 
-*Defined in [api/stream/StreamServer.ts:262](https://github.com/paradigmfoundation/paradigmcore/blob/24132f3/src/api/stream/StreamServer.ts#L262)*
+*Defined in [api/stream/StreamServer.ts:262](https://github.com/paradigmfoundation/paradigmcore/blob/f520b2a/src/api/stream/StreamServer.ts#L262)*
 
 Interval (in ms) between retry attempts
 
@@ -146,7 +146,7 @@ ___
 
 **● retryMax**: *`number`*
 
-*Defined in [api/stream/StreamServer.ts:254](https://github.com/paradigmfoundation/paradigmcore/blob/24132f3/src/api/stream/StreamServer.ts#L254)*
+*Defined in [api/stream/StreamServer.ts:254](https://github.com/paradigmfoundation/paradigmcore/blob/f520b2a/src/api/stream/StreamServer.ts#L254)*
 
 Number of times to attempt RPC connection.
 
@@ -159,7 +159,7 @@ ___
 
 **● rpcClient**: *[TendermintRPC](_common_tendermintrpc_.tendermintrpc.md)*
 
-*Defined in [api/stream/StreamServer.ts:238](https://github.com/paradigmfoundation/paradigmcore/blob/24132f3/src/api/stream/StreamServer.ts#L238)*
+*Defined in [api/stream/StreamServer.ts:238](https://github.com/paradigmfoundation/paradigmcore/blob/f520b2a/src/api/stream/StreamServer.ts#L238)*
 
 Tendermint RPC client instance.
 
@@ -172,7 +172,7 @@ ___
 
 **● secret**: *`Buffer`*
 
-*Defined in [api/stream/StreamServer.ts:224](https://github.com/paradigmfoundation/paradigmcore/blob/24132f3/src/api/stream/StreamServer.ts#L224)*
+*Defined in [api/stream/StreamServer.ts:224](https://github.com/paradigmfoundation/paradigmcore/blob/f520b2a/src/api/stream/StreamServer.ts#L224)*
 
 Server secret bytes
 
@@ -185,7 +185,7 @@ ___
 
 **● server**: *`Server`*
 
-*Defined in [api/stream/StreamServer.ts:285](https://github.com/paradigmfoundation/paradigmcore/blob/24132f3/src/api/stream/StreamServer.ts#L285)*
+*Defined in [api/stream/StreamServer.ts:285](https://github.com/paradigmfoundation/paradigmcore/blob/f520b2a/src/api/stream/StreamServer.ts#L285)*
 
 StreamAPI WebSocket server instance
 
@@ -198,7 +198,7 @@ ___
 
 **● started**: *`boolean`*
 
-*Defined in [api/stream/StreamServer.ts:322](https://github.com/paradigmfoundation/paradigmcore/blob/24132f3/src/api/stream/StreamServer.ts#L322)*
+*Defined in [api/stream/StreamServer.ts:322](https://github.com/paradigmfoundation/paradigmcore/blob/f520b2a/src/api/stream/StreamServer.ts#L322)*
 
 Server status
 
@@ -211,7 +211,7 @@ ___
 
 **● streamHost**: *`string`*
 
-*Defined in [api/stream/StreamServer.ts:276](https://github.com/paradigmfoundation/paradigmcore/blob/24132f3/src/api/stream/StreamServer.ts#L276)*
+*Defined in [api/stream/StreamServer.ts:276](https://github.com/paradigmfoundation/paradigmcore/blob/f520b2a/src/api/stream/StreamServer.ts#L276)*
 
 Stream host
 
@@ -224,7 +224,7 @@ ___
 
 **● streamPort**: *`number`*
 
-*Defined in [api/stream/StreamServer.ts:269](https://github.com/paradigmfoundation/paradigmcore/blob/24132f3/src/api/stream/StreamServer.ts#L269)*
+*Defined in [api/stream/StreamServer.ts:269](https://github.com/paradigmfoundation/paradigmcore/blob/f520b2a/src/api/stream/StreamServer.ts#L269)*
 
 StreamAPI port
 
@@ -237,7 +237,7 @@ ___
 
 **● subscriptions**: *[ISubscription](../interfaces/_api_stream_streamserver_.isubscription.md)[]*
 
-*Defined in [api/stream/StreamServer.ts:306](https://github.com/paradigmfoundation/paradigmcore/blob/24132f3/src/api/stream/StreamServer.ts#L306)*
+*Defined in [api/stream/StreamServer.ts:306](https://github.com/paradigmfoundation/paradigmcore/blob/f520b2a/src/api/stream/StreamServer.ts#L306)*
 
 Array of subscription objects
 
@@ -293,7 +293,7 @@ ___
 
 ▸ **bind**(methodName: *`string`*, method: *`function`*): `void`
 
-*Defined in [api/stream/StreamServer.ts:405](https://github.com/paradigmfoundation/paradigmcore/blob/24132f3/src/api/stream/StreamServer.ts#L405)*
+*Defined in [api/stream/StreamServer.ts:405](https://github.com/paradigmfoundation/paradigmcore/blob/f520b2a/src/api/stream/StreamServer.ts#L405)*
 
 Bind a method to the StreamServer.
 
@@ -313,7 +313,7 @@ ___
 
 ▸ **createConnectionHandler**(): `function`
 
-*Defined in [api/stream/StreamServer.ts:438](https://github.com/paradigmfoundation/paradigmcore/blob/24132f3/src/api/stream/StreamServer.ts#L438)*
+*Defined in [api/stream/StreamServer.ts:438](https://github.com/paradigmfoundation/paradigmcore/blob/f520b2a/src/api/stream/StreamServer.ts#L438)*
 
 Create a server connection handler
 
@@ -424,7 +424,7 @@ ___
 
 ▸ **messageHandlerWrapper**(connId: *`string`*): `function`
 
-*Defined in [api/stream/StreamServer.ts:512](https://github.com/paradigmfoundation/paradigmcore/blob/24132f3/src/api/stream/StreamServer.ts#L512)*
+*Defined in [api/stream/StreamServer.ts:512](https://github.com/paradigmfoundation/paradigmcore/blob/f520b2a/src/api/stream/StreamServer.ts#L512)*
 
 Build a message handler function for a client.
 
@@ -617,7 +617,7 @@ ___
 
 ▸ **sendMessageToClient**(id: *`string`*, res: *`Res`*): `void`
 
-*Defined in [api/stream/StreamServer.ts:498](https://github.com/paradigmfoundation/paradigmcore/blob/24132f3/src/api/stream/StreamServer.ts#L498)*
+*Defined in [api/stream/StreamServer.ts:498](https://github.com/paradigmfoundation/paradigmcore/blob/f520b2a/src/api/stream/StreamServer.ts#L498)*
 
 Send a message to a connected client+
 
@@ -660,7 +660,7 @@ ___
 
 ▸ **setupServer**(host: *`string`*, port: *`number`*): `void`
 
-*Defined in [api/stream/StreamServer.ts:422](https://github.com/paradigmfoundation/paradigmcore/blob/24132f3/src/api/stream/StreamServer.ts#L422)*
+*Defined in [api/stream/StreamServer.ts:422](https://github.com/paradigmfoundation/paradigmcore/blob/f520b2a/src/api/stream/StreamServer.ts#L422)*
 
 Setup the StreamAPI WebSocket server
 
@@ -682,7 +682,7 @@ ___
 
 ▸ **start**(): `Promise`<`void`>
 
-*Defined in [api/stream/StreamServer.ts:375](https://github.com/paradigmfoundation/paradigmcore/blob/24132f3/src/api/stream/StreamServer.ts#L375)*
+*Defined in [api/stream/StreamServer.ts:375](https://github.com/paradigmfoundation/paradigmcore/blob/f520b2a/src/api/stream/StreamServer.ts#L375)*
 
 Start the StreamAPI server.
 
@@ -697,7 +697,7 @@ ___
 
 ▸ **generate32RandomBytes**(start?: *`number`*): `Buffer`
 
-*Defined in [api/stream/StreamServer.ts:143](https://github.com/paradigmfoundation/paradigmcore/blob/24132f3/src/api/stream/StreamServer.ts#L143)*
+*Defined in [api/stream/StreamServer.ts:143](https://github.com/paradigmfoundation/paradigmcore/blob/f520b2a/src/api/stream/StreamServer.ts#L143)*
 
 Generate a pseudo-random byte array
 
@@ -720,7 +720,7 @@ ___
 
 ▸ **generateConnectionId**(secret: *`Buffer`*, salt: *`Buffer`*): `string`
 
-*Defined in [api/stream/StreamServer.ts:204](https://github.com/paradigmfoundation/paradigmcore/blob/24132f3/src/api/stream/StreamServer.ts#L204)*
+*Defined in [api/stream/StreamServer.ts:204](https://github.com/paradigmfoundation/paradigmcore/blob/f520b2a/src/api/stream/StreamServer.ts#L204)*
 
 Generate secret `connectionId`
 
@@ -744,7 +744,7 @@ ___
 
 ▸ **generateEventId**(connectionId: *`string`*, salt: *`Buffer`*): `string`
 
-*Defined in [api/stream/StreamServer.ts:177](https://github.com/paradigmfoundation/paradigmcore/blob/24132f3/src/api/stream/StreamServer.ts#L177)*
+*Defined in [api/stream/StreamServer.ts:177](https://github.com/paradigmfoundation/paradigmcore/blob/f520b2a/src/api/stream/StreamServer.ts#L177)*
 
 Generate client-safe `eventId` from secret connectionId
 

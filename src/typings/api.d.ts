@@ -126,7 +126,7 @@ interface ISchemaMethod {
     summary: string;
     description: string | string[];
     tags: string[];
-    result: IDefinition;
+    result?: IDefinition;
     params?: IDefinition;
     errors: IErrorDefinition[];
 }

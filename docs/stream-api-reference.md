@@ -290,13 +290,6 @@ The `params.path` field can be used to direct a query to a particular path of th
 | params      | object |                                                                |
 | params.path | string | A unique ID provided by the server upon an event subscription. |
 
-### Result
-
-| Name        | Type   | Description                                |
-| ----------- | ------ | ------------------------------------------ |
-| result      | object |                                            |
-| result.data | string | The response data from the `query` method. |
-
 ### Errors
 
 | Code | Message           | Description                          |
@@ -323,9 +316,6 @@ The `params.path` field can be used to direct a query to a particular path of th
 ```json
 {
   "jsonrpc": "2.0",
-  "id": "1234567890",
-  "result": {
-    "data": "tbd"
-  }
+  "id": "1234567890"
 }
 ```
