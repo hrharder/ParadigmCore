@@ -18,14 +18,19 @@ function createValError(code, message) {
 }
 exports.createValError = createValError;
 function createResponse(result, id, error) {
+    let res;
     if (!result && error) {
-        return new Response_1.Response({ error });
+        res = new Response_1.Response({ error });
     }
-    else if (result && id && !error) {
-        return new Response_1.Response({ id, result });
+    else if (id && !error && result) {
+        res = new Response_1.Response({ id, result });
+    }
+    else if (id && !error && !result) {
+        res = new Response_1.Response({ id, result: {} });
     }
     else {
         throw Error("Invalid input for response generator.");
     }
+    return res;
 }
 exports.createResponse = createResponse;

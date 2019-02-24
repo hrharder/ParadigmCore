@@ -7,7 +7,7 @@
  *
  * @author Henry Harder
  * @date (initial)  19-February-2019
- * @date (modified) 20-February-2019
+ * @date (modified) 24-February-2019
  * 
  * Utility functions for the ParadigmCore JSONRPC server.
 **/
@@ -69,11 +69,20 @@ export function createValError(code: number, message: string): ValidationError {
  * @param code an error code if the response indicates a failed request
  */
 export function createResponse(result?: any, id?: string, error?: ValidationError): Res {
+    // will be a response object
+    let res: Res;
+
+    // create response object based on input
     if (!result && error) {
-        return new Res({ error });
-    } else if (result && id && !error) {
-        return new Res({ id, result });
+        res =  new Res({ error });
+    } else if (id && !error && result) {
+        res = new Res({ id, result });
+    } else if (id && !error && !result) {
+        res = new Res({ id, result: {}});
     } else {
         throw Error("Invalid input for response generator.");
     }
+
+    // return constructed result object
+    return res;
 }

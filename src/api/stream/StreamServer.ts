@@ -464,7 +464,7 @@ export class StreamServer extends EventEmitter {
 
             // log and emit error message;
             err("api", message);
-            this.emit("error", message);
+            //this.emit("error", message);
             return;
         }
     }

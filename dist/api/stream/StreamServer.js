@@ -80,6 +80,15 @@ class StreamServer extends events_1.EventEmitter {
         const options = { host, port };
         this.server = new WebSocket.Server(options);
         this.server.on("connection", this.createConnectionHandler());
+        this.server.on("error", this.createErrorHandler());
+        return;
+    }
+    createErrorHandler() {
+        return (error) => {
+            const message = `Internal Error: ${error.message}`;
+            log_1.err("api", message);
+            return;
+        };
     }
     createConnectionHandler() {
         return (connection) => {
@@ -89,12 +98,14 @@ class StreamServer extends events_1.EventEmitter {
             connection.on("message", this.createConnMessageHandler(connectionId));
             connection.on("open", this.createConnOpenHandler(connectionId));
             connection.on("error", this.createConnErrorHandler(connectionId));
+            return;
         };
     }
     createConnCloseHandler(connId) {
         return () => {
             log_1.log("api", `Disconnect from connection "id": "${connId}"`);
             delete this.connectionMap[connId];
+            return;
         };
     }
     createConnOpenHandler(connId) {
