@@ -196,7 +196,7 @@ export class TendermintRPC extends EventEmitter {
 
                 // emit open event
                 this.emit("open");
-                
+
                 // end cycle and resolve promise
                 log("tm", `connected to server after ${counter} attempts`);
                 resolve();
@@ -413,6 +413,19 @@ export class TendermintRPC extends EventEmitter {
                 this.internalSubmitTx();
             }
         });
+    }
+
+    /**
+     * (in-progress)
+     * 
+     * @todo expand
+     * 
+     * @param path the path to submit to the ABCI query method
+     */
+    public async query(path: string): Promise<any> {
+        const res = await this.conn.abciQuery({path});
+        const { info } = res.response;
+        return info ? info : null;
     }
     /**
      * Public getter method to check connection status. 

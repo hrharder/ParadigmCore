@@ -7,9 +7,7 @@
  *
  * @author Henry Harder
  * @date (initial)  18-February-2019
- * @date (modified) 20-February-2019
- * 
- * Utility functions for the ParadigmCore JSONRPC server.
+ * @date (modified) 24-February-2019
 **/
 
 /**
@@ -88,6 +86,9 @@ export class Response {
         this.error = options.error || null;
     }
 
+    /**
+     * Enables serialization of `Response` objects.
+     */
     public toJSON(): IJsonResponse {
         // base response object
         const res = {

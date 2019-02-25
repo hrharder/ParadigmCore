@@ -5,27 +5,13 @@
 	"info": {
 		"title": "StreamAPI Reference",
 		"description": [
-			"The StreamAPI enables interaction with the ParadigmCore via JSONRPC/WebSocket.\n",
+			"The StreamAPI enables interaction with ParadigmCore via JSONRPC/WebSocket.\n",
 			"The API is served by the `StreamServer`, an optional component included as part of the `api` module in ParadigmCore.\n",
             "StreamAPI follows the JSONRPC-2.0 specification. More information available at http://www.jsonrpc.org/specification."
         ],
-		"version": "0.1-rc-2"
+		"version": "0.1-rc-3"
 	},
-	"definitions": {
-        "subscription": {
-            "type": "object",
-			"properties": {
-				"id": {
-					"description": "The server-provided 'subscription.id' used in all event notifications.",
-					"default": "sID-23189",
-					"type": "string",
-                    "minLength": 1,
-                    "maxLength": 32
-                }
-			},
-			"required": ["id"]
-        }
-	},
+	"definitions": {},
 	"methods": {
         "session.end": {
 			"summary": "End a StreamAPI session.",
@@ -84,9 +70,9 @@
 						"default": "Successfully started subscription",
 						"type": "string"
 					},
-					"eventId": {
+					"subscriptionId": {
 						"description": "A unique ID that can be used for filtering many event subscriptions.",
-						"default": "132162",
+						"default": "84a55ba0-7f87-4430-b921-738f84857889",
 						"type": "string"
 					}
 				},
@@ -122,13 +108,13 @@
 			"params": {
 				"type": "object",
 				"properties": {
-					"eventId": {
+					"subscriptionId": {
 						"description": "A unique ID provided by the server upon an event subscription.",
-						"default": "132162",
+						"default": "84a55ba0-7f87-4430-b921-738f84857889",
 						"type": "string"
 					}
 				},
-				"required": ["eventId"]
+				"required": ["subscriptionId"]
 			},
 			"result": {
 				"type": "object",

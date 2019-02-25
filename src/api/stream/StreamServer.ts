@@ -19,17 +19,13 @@ import { log, warn, err } from "../../common/log";
 import { TendermintRPC } from "../../common/TendermintRPC.js";
 
 // stream server utils
-import {
-    createResponse,
-    createValError
-} from "./utils.js";
+import {createResponse, createValError } from "./utils.js";
 
 // third party/std-lib
 import * as _ from "lodash";
-import { EventEmitter } from "events";
 import * as WebSocket from "ws";
+import { EventEmitter } from "events";
 import { createHash, Hash } from "crypto";
-
 
 /**
  * Defines the object provided to the `StreamServer` constructor.
@@ -88,10 +84,17 @@ interface RawBlockData {
 }
 
 /**
+ * Defines the subscription-tracking object.
+ */
+interface ISubscriptions {
+    [id: string]: ISubscription;
+}
+
+/**
  * Defines the object type used to represent an event subscription.
  */
 interface ISubscription {
-    serverId: string;
+    subscriptionId: string;
     clientId: string;
     connection: WebSocket;
     params: {
@@ -287,7 +290,7 @@ export class StreamServer extends EventEmitter {
     private server: WebSocket.Server;
 
     /**
-     * Array of subscription objects
+     * Mapping of subscription objects (by subscriptionId)
      * 
      * @description Master array of active subscriptions, where each entry has a
      * `subscription.connectionId` which is the the utf8 hex-string of the first
@@ -297,15 +300,14 @@ export class StreamServer extends EventEmitter {
      * should be kept private from clients;
      * 
      * The `subscription.eventId` (used to track individual event subscriptions)
-     * is the first 16 bytes of the SHA256 hash of connectionId , as a hex
-     * encoded string.
+     * is a random `uuid/v4` string.
      *
      * ```ts
      * connectionId = StreamServer.generateSecretBytes();
      * eventId = StreamServer.genEventIdFromConnId(connectionId);
      * ```
      */
-    private subscriptions: ISubscription[];
+    private subscriptions: ISubscriptions;
 
     /**
      * Mapping of active `connectionId` strings to connection objects
@@ -337,7 +339,7 @@ export class StreamServer extends EventEmitter {
         this.secret = StreamServer.generate32RandomBytes();
 
         // setup subscription and connection tracking objects
-        this.subscriptions = [];
+        this.subscriptions = {};
         this.connectionMap = {};
 
         // setup methods object
@@ -388,6 +390,21 @@ export class StreamServer extends EventEmitter {
 
         // start listening to client requests
         this.setupServer(this.streamHost, this.streamPort);
+
+        // attach handler for subscriptions
+        this.on("newBlock", () => {
+            Object.keys(this.subscriptions).forEach((subId) => {
+                const sub = this.subscriptions[subId];
+                const msg = new Res({
+                    id: `${sub.clientId}/${sub.subscriptionId}`,
+                    result: `yup ur subsctibed: ${sub.subscriptionId}`,
+                });
+                sub.connection.send(JSON.stringify(msg));
+            });
+        })
+
+        // set started status
+        this.started = true;
         return;
     }
 
@@ -402,6 +419,63 @@ export class StreamServer extends EventEmitter {
         method: (server: StreamServer, client: WebSocket, params: any) => any
     ): void {
         this.methods[methodName] = method;
+    }
+
+    /**
+     * (In progress)
+     * 
+     * This method is a public method to allow bound definitions to interact
+     * with the private `subscriptions` mapping.
+     */
+    public addSubscription(
+        subscriptionId: string,
+        clientId: string,
+        connection: WebSocket,
+        params: any
+    ): void {
+        // create new subscription object
+        const subscription: ISubscription = {
+            connection,
+            subscriptionId,
+            clientId,
+            params,
+        };
+
+        // add to mapping
+        this.subscriptions[subscriptionId] = subscription;
+    }
+
+    /**
+     * Remove a subscription (by `subscriptionId`).
+     * 
+     * This method is a public method to allow bound definitions to interact
+     * with the private `subscriptions` mapping.
+     */
+    public removeSubscription(subscriptionId: string): boolean {
+        // check if subscriptionId exists at all
+        const exists = this.subscriptions[subscriptionId] ? true : false;
+        
+        // attempt to remove subscription
+        delete this.subscriptions[subscriptionId];
+
+        // return `true` if valid, otherwise false
+        return exists;
+    }
+
+    /**
+     * Public function that returns latest known (most recent commit) block height.
+     */
+    public getLatestHeight(): number {
+        return this.latestBlockData.height;
+    }
+
+    /**
+     * Public function to execute state query over a provided path.
+     * 
+     * @param path the string path to be passed to the ABCI query method
+     */
+    public async executeTendermintQuery(path: string): Promise<any> {
+        return await this.rpcClient.query(path);
     }
 
     // END public methods
@@ -451,6 +525,9 @@ export class StreamServer extends EventEmitter {
             // update latest height
             const { height } = data.block.header;
             this.latestBlockData.height = parseInt(height, 10);
+
+            // emit local `newBlock` event
+            this.emit("newBlock");
             return;
         }
     }
@@ -616,7 +693,7 @@ export class StreamServer extends EventEmitter {
      * @param connId the connectionId of the client the handler is for
      */
     private createConnMessageHandler(connId: string): (d: WebSocket.Data) => void {
-        return (msg: WebSocket.Data) => {
+        return async (msg: WebSocket.Data) => {
             // TEMPORARY
             log("api", `Message from connection '${connId}': '${msg}'`);
 
@@ -632,15 +709,7 @@ export class StreamServer extends EventEmitter {
                 res = createResponse(null, null, error);
                 this.sendMessageToClient(connId, res);
                 return;
-            }
-
-            // check that parsed request is an object
-            if (!_.isObject(req.parsed)) {
-                const methError = createValError(-32700, "unable to parse request.");
-                res = createResponse(null, null, methError);
-                this.sendMessageToClient(connId, res);
-                return;
-            }       
+            }     
             
             // if this point is reached, we will handle the request (or fail)
             const { params, id, method } = req.parsed;
@@ -654,9 +723,8 @@ export class StreamServer extends EventEmitter {
             }
 
             // defer to bound method for execution
-            const result = this.methods[method](this, this.connectionMap[connId], params)
-            log("api", `Executing method for connection '${connId}'`);
-            res = createResponse(result, id, null);
+            res = await this.methods[method](this, this.connectionMap[connId], req);
+            // res = createResponse(result, id, null);
             this.sendMessageToClient(connId, res);
             return;
         }
