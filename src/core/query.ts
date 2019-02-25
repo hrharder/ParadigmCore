@@ -46,7 +46,7 @@ export function queryWrapper(state: State): (r) => ResponseQuery {
             code = 1;
             log = "Failed query: invalid query path."
             info = "Currently query only accepts poster and validator queries."
-
+            
             // construct ResponseQuery object
             return { code, log, info, height }
         }

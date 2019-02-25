@@ -424,8 +424,8 @@ export class TendermintRPC extends EventEmitter {
      */
     public async query(path: string): Promise<any> {
         const res = await this.conn.abciQuery({path});
-        const { info } = res.response;
-        return info ? info : null;
+        const { code, info, log, key, value } = res.response;
+        return { code, info, log, key, value }
     }
     /**
      * Public getter method to check connection status. 
