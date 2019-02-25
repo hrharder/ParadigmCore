@@ -13,9 +13,7 @@
 
 *__date__*: (initial) 18-February-2019
 
-*__date__*: (modified) 20-February-2019
-
-Utility functions for the ParadigmCore JSONRPC server.
+*__date__*: (modified) 24-February-2019
 
 ## Index
 

@@ -36,7 +36,7 @@ Generates and signs ABCI transactions from validators.
 
 ⊕ **new TxGenerator**(options: *`any`*): [TxGenerator](_core_util_txgenerator_.txgenerator.md)
 
-*Defined in [core/util/TxGenerator.ts:113](https://github.com/paradigmfoundation/paradigmcore/blob/6bbcaa8/src/core/util/TxGenerator.ts#L113)*
+*Defined in [core/util/TxGenerator.ts:113](https://github.com/paradigmfoundation/paradigmcore/blob/922005d/src/core/util/TxGenerator.ts#L113)*
 
 Create a new TransactionGenerator instance.
 
@@ -58,7 +58,7 @@ ___
 
 **● address**: *`Buffer`*
 
-*Defined in [core/util/TxGenerator.ts:110](https://github.com/paradigmfoundation/paradigmcore/blob/6bbcaa8/src/core/util/TxGenerator.ts#L110)*
+*Defined in [core/util/TxGenerator.ts:110](https://github.com/paradigmfoundation/paradigmcore/blob/922005d/src/core/util/TxGenerator.ts#L110)*
 
 ___
 <a id="encoding"></a>
@@ -67,7 +67,7 @@ ___
 
 **● encoding**: *`string`*
 
-*Defined in [core/util/TxGenerator.ts:113](https://github.com/paradigmfoundation/paradigmcore/blob/6bbcaa8/src/core/util/TxGenerator.ts#L113)*
+*Defined in [core/util/TxGenerator.ts:113](https://github.com/paradigmfoundation/paradigmcore/blob/922005d/src/core/util/TxGenerator.ts#L113)*
 
 ___
 <a id="privkey"></a>
@@ -76,7 +76,7 @@ ___
 
 **● privKey**: *`Buffer`*
 
-*Defined in [core/util/TxGenerator.ts:109](https://github.com/paradigmfoundation/paradigmcore/blob/6bbcaa8/src/core/util/TxGenerator.ts#L109)*
+*Defined in [core/util/TxGenerator.ts:109](https://github.com/paradigmfoundation/paradigmcore/blob/922005d/src/core/util/TxGenerator.ts#L109)*
 
 ___
 <a id="pubkey"></a>
@@ -85,7 +85,7 @@ ___
 
 **● pubKey**: *`Buffer`*
 
-*Defined in [core/util/TxGenerator.ts:108](https://github.com/paradigmfoundation/paradigmcore/blob/6bbcaa8/src/core/util/TxGenerator.ts#L108)*
+*Defined in [core/util/TxGenerator.ts:108](https://github.com/paradigmfoundation/paradigmcore/blob/922005d/src/core/util/TxGenerator.ts#L108)*
 
 ___
 
@@ -97,7 +97,7 @@ ___
 
 ▸ **create**(rawTx: *`RawTransaction`*): `SignedTransaction`
 
-*Defined in [core/util/TxGenerator.ts:169](https://github.com/paradigmfoundation/paradigmcore/blob/6bbcaa8/src/core/util/TxGenerator.ts#L169)*
+*Defined in [core/util/TxGenerator.ts:169](https://github.com/paradigmfoundation/paradigmcore/blob/922005d/src/core/util/TxGenerator.ts#L169)*
 
 Create and sign an ABCI transaction. Returns a signed transaction object.
 
@@ -116,7 +116,7 @@ ___
 
 ▸ **isValidInput**(rawTx: *`RawTransaction`*): `boolean`
 
-*Defined in [core/util/TxGenerator.ts:36](https://github.com/paradigmfoundation/paradigmcore/blob/6bbcaa8/src/core/util/TxGenerator.ts#L36)*
+*Defined in [core/util/TxGenerator.ts:36](https://github.com/paradigmfoundation/paradigmcore/blob/922005d/src/core/util/TxGenerator.ts#L36)*
 
 Returns true if an ABCI transaction is structurally valid (stateless validity).
 

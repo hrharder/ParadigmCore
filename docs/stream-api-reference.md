@@ -1,12 +1,12 @@
 # StreamAPI Reference
 
-The StreamAPI enables interaction with the ParadigmCore via JSONRPC/WebSocket.
+The StreamAPI enables interaction with ParadigmCore via JSONRPC/WebSocket.
 
 The API is served by the `StreamServer`, an optional component included as part of the `api` module in ParadigmCore.
 
 StreamAPI follows the JSONRPC-2.0 specification. More information available at http://www.jsonrpc.org/specification.
 
-<strong>Version 0.1-rc-2</strong>
+<strong>Version 0.1-rc-3</strong>
 
 ---
 
@@ -79,11 +79,11 @@ Initiate a subscription to an OrderStream node for specific blockchain and state
 
 ### Result
 
-| Name            | Type   | Description                                                          |
-| --------------- | ------ | -------------------------------------------------------------------- |
-| result          | object |                                                                      |
-| result.response | string | The server's response to the subscription-start request.             |
-| result?.eventId | string | A unique ID that can be used for filtering many event subscriptions. |
+| Name                   | Type   | Description                                                          |
+| ---------------------- | ------ | -------------------------------------------------------------------- |
+| result                 | object |                                                                      |
+| result.response        | string | The server's response to the subscription-start request.             |
+| result?.subscriptionId | string | A unique ID that can be used for filtering many event subscriptions. |
 
 ### Errors
 
@@ -116,7 +116,7 @@ Initiate a subscription to an OrderStream node for specific blockchain and state
   "id": "1234567890",
   "result": {
     "response": "Successfully started subscription",
-    "eventId": "132162"
+    "subscriptionId": "84a55ba0-7f87-4430-b921-738f84857889"
   }
 }
 ```
@@ -133,10 +133,10 @@ Immediately end a subscription to a certain event, and stop receiving notificati
 
 ### Parameters
 
-| Name           | Type   | Description                                                    |
-| -------------- | ------ | -------------------------------------------------------------- |
-| params         | object |                                                                |
-| params.eventId | string | A unique ID provided by the server upon an event subscription. |
+| Name                  | Type   | Description                                                    |
+| --------------------- | ------ | -------------------------------------------------------------- |
+| params                | object |                                                                |
+| params.subscriptionId | string | A unique ID provided by the server upon an event subscription. |
 
 ### Result
 
@@ -163,7 +163,7 @@ Immediately end a subscription to a certain event, and stop receiving notificati
   "id": "1234567890",
   "method": "subscription.end",
   "params": {
-    "eventId": "132162"
+    "subscriptionId": "84a55ba0-7f87-4430-b921-738f84857889"
   }
 }
 ```

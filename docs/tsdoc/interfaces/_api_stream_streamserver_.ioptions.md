@@ -29,7 +29,7 @@ Defines the object provided to the `StreamServer` constructor.
 
 **● host**: *`string`*
 
-*Defined in [api/stream/StreamServer.ts:51](https://github.com/paradigmfoundation/paradigmcore/blob/6bbcaa8/src/api/stream/StreamServer.ts#L51)*
+*Defined in [api/stream/StreamServer.ts:47](https://github.com/paradigmfoundation/paradigmcore/blob/922005d/src/api/stream/StreamServer.ts#L47)*
 
 Network host to bind StreamAPI server.
 
@@ -40,7 +40,7 @@ ___
 
 **● methods**: *`object`*
 
-*Defined in [api/stream/StreamServer.ts:54](https://github.com/paradigmfoundation/paradigmcore/blob/6bbcaa8/src/api/stream/StreamServer.ts#L54)*
+*Defined in [api/stream/StreamServer.ts:50](https://github.com/paradigmfoundation/paradigmcore/blob/922005d/src/api/stream/StreamServer.ts#L50)*
 
 Optional pre-defined method implementations.
 
@@ -67,7 +67,7 @@ ___
 
 **● port**: *`number`*
 
-*Defined in [api/stream/StreamServer.ts:48](https://github.com/paradigmfoundation/paradigmcore/blob/6bbcaa8/src/api/stream/StreamServer.ts#L48)*
+*Defined in [api/stream/StreamServer.ts:44](https://github.com/paradigmfoundation/paradigmcore/blob/922005d/src/api/stream/StreamServer.ts#L44)*
 
 Port to bind the StreamAPI server to.
 
@@ -78,7 +78,7 @@ ___
 
 **● retryInterval**: *`number`*
 
-*Defined in [api/stream/StreamServer.ts:42](https://github.com/paradigmfoundation/paradigmcore/blob/6bbcaa8/src/api/stream/StreamServer.ts#L42)*
+*Defined in [api/stream/StreamServer.ts:38](https://github.com/paradigmfoundation/paradigmcore/blob/922005d/src/api/stream/StreamServer.ts#L38)*
 
 Interval between connection attempts (in ms).
 
@@ -89,7 +89,7 @@ ___
 
 **● retryMax**: *`number`*
 
-*Defined in [api/stream/StreamServer.ts:45](https://github.com/paradigmfoundation/paradigmcore/blob/6bbcaa8/src/api/stream/StreamServer.ts#L45)*
+*Defined in [api/stream/StreamServer.ts:41](https://github.com/paradigmfoundation/paradigmcore/blob/922005d/src/api/stream/StreamServer.ts#L41)*
 
 The maximum number of times to retry connection before throwing.
 
@@ -100,7 +100,7 @@ ___
 
 **● tendermintRpcUrl**: *`string`*
 
-*Defined in [api/stream/StreamServer.ts:39](https://github.com/paradigmfoundation/paradigmcore/blob/6bbcaa8/src/api/stream/StreamServer.ts#L39)*
+*Defined in [api/stream/StreamServer.ts:35](https://github.com/paradigmfoundation/paradigmcore/blob/922005d/src/api/stream/StreamServer.ts#L35)*
 
 URL of the local Tendermint RPC server.
 

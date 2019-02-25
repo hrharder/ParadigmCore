@@ -15,7 +15,7 @@ Defines the object type used to represent an event subscription.
 * [clientId](_api_stream_streamserver_.isubscription.md#clientid)
 * [connection](_api_stream_streamserver_.isubscription.md#connection)
 * [params](_api_stream_streamserver_.isubscription.md#params)
-* [serverId](_api_stream_streamserver_.isubscription.md#serverid)
+* [subscriptionId](_api_stream_streamserver_.isubscription.md#subscriptionid)
 
 ---
 
@@ -27,7 +27,7 @@ Defines the object type used to represent an event subscription.
 
 **● clientId**: *`string`*
 
-*Defined in [api/stream/StreamServer.ts:95](https://github.com/paradigmfoundation/paradigmcore/blob/6bbcaa8/src/api/stream/StreamServer.ts#L95)*
+*Defined in [api/stream/StreamServer.ts:98](https://github.com/paradigmfoundation/paradigmcore/blob/922005d/src/api/stream/StreamServer.ts#L98)*
 
 ___
 <a id="connection"></a>
@@ -36,7 +36,7 @@ ___
 
 **● connection**: *`WebSocket`*
 
-*Defined in [api/stream/StreamServer.ts:96](https://github.com/paradigmfoundation/paradigmcore/blob/6bbcaa8/src/api/stream/StreamServer.ts#L96)*
+*Defined in [api/stream/StreamServer.ts:99](https://github.com/paradigmfoundation/paradigmcore/blob/922005d/src/api/stream/StreamServer.ts#L99)*
 
 ___
 <a id="params"></a>
@@ -45,20 +45,20 @@ ___
 
 **● params**: *`object`*
 
-*Defined in [api/stream/StreamServer.ts:97](https://github.com/paradigmfoundation/paradigmcore/blob/6bbcaa8/src/api/stream/StreamServer.ts#L97)*
+*Defined in [api/stream/StreamServer.ts:100](https://github.com/paradigmfoundation/paradigmcore/blob/922005d/src/api/stream/StreamServer.ts#L100)*
 
 #### Type declaration
 
  eventName: `string`
 
 ___
-<a id="serverid"></a>
+<a id="subscriptionid"></a>
 
-###  serverId
+###  subscriptionId
 
-**● serverId**: *`string`*
+**● subscriptionId**: *`string`*
 
-*Defined in [api/stream/StreamServer.ts:94](https://github.com/paradigmfoundation/paradigmcore/blob/6bbcaa8/src/api/stream/StreamServer.ts#L94)*
+*Defined in [api/stream/StreamServer.ts:97](https://github.com/paradigmfoundation/paradigmcore/blob/922005d/src/api/stream/StreamServer.ts#L97)*
 
 ___
 

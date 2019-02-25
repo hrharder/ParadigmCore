@@ -15,6 +15,7 @@
 * [IMethods](../interfaces/_api_stream_streamserver_.imethods.md)
 * [IOptions](../interfaces/_api_stream_streamserver_.ioptions.md)
 * [ISubscription](../interfaces/_api_stream_streamserver_.isubscription.md)
+* [ISubscriptions](../interfaces/_api_stream_streamserver_.isubscriptions.md)
 * [RawBlockData](../interfaces/_api_stream_streamserver_.rawblockdata.md)
 
 ---
