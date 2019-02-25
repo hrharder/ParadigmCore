@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Request_1 = require("./Request");
+const Response_1 = require("./Response");
 const log_1 = require("../../common/log");
 const TendermintRPC_js_1 = require("../../common/TendermintRPC.js");
 const utils_js_1 = require("./utils.js");
-const _ = require("lodash");
-const events_1 = require("events");
 const WebSocket = require("ws");
+const events_1 = require("events");
 const crypto_1 = require("crypto");
 class StreamServer extends events_1.EventEmitter {
     static generate32RandomBytes(start) {
@@ -40,7 +40,7 @@ class StreamServer extends events_1.EventEmitter {
     constructor(options = {}) {
         super();
         this.secret = StreamServer.generate32RandomBytes();
-        this.subscriptions = [];
+        this.subscriptions = {};
         this.connectionMap = {};
         this.methods = {};
         this.latestBlockData = {};
@@ -59,10 +59,41 @@ class StreamServer extends events_1.EventEmitter {
         this.rpcClient.on("open", this.createTendermintHandler());
         await this.rpcClient.connect(this.retryMax, this.retryInterval);
         this.setupServer(this.streamHost, this.streamPort);
+        this.on("newBlock", () => {
+            Object.keys(this.subscriptions).forEach((subId) => {
+                const sub = this.subscriptions[subId];
+                const msg = new Response_1.Response({
+                    id: `${sub.clientId}/${sub.subscriptionId}`,
+                    result: `yup ur subsctibed: ${sub.subscriptionId}`,
+                });
+                sub.connection.send(JSON.stringify(msg));
+            });
+        });
+        this.started = true;
         return;
     }
     bind(methodName, method) {
         this.methods[methodName] = method;
+    }
+    addSubscription(subscriptionId, clientId, connection, params) {
+        const subscription = {
+            connection,
+            subscriptionId,
+            clientId,
+            params,
+        };
+        this.subscriptions[subscriptionId] = subscription;
+    }
+    removeSubscription(subscriptionId) {
+        const exists = this.subscriptions[subscriptionId] ? true : false;
+        delete this.subscriptions[subscriptionId];
+        return exists;
+    }
+    getLatestHeight() {
+        return this.latestBlockData.height;
+    }
+    async executeTendermintQuery(path) {
+        return await this.rpcClient.query(path);
     }
     bindMethods(methods) {
         Object.keys(methods).forEach((method) => {
@@ -80,7 +111,7 @@ class StreamServer extends events_1.EventEmitter {
         return (data) => {
             const { height } = data.block.header;
             this.latestBlockData.height = parseInt(height, 10);
-            log_1.log("api", `received new tendermint block: ${height}`);
+            this.emit("newBlock");
             return;
         };
     }
@@ -142,19 +173,13 @@ class StreamServer extends events_1.EventEmitter {
         return;
     }
     createConnMessageHandler(connId) {
-        return (msg) => {
+        return async (msg) => {
             log_1.log("api", `Message from connection '${connId}': '${msg}'`);
             let res, req, error;
             req = new Request_1.Request(msg);
             error = req.validate();
             if (error) {
                 res = utils_js_1.createResponse(null, null, error);
-                this.sendMessageToClient(connId, res);
-                return;
-            }
-            if (!_.isObject(req.parsed)) {
-                const methError = utils_js_1.createValError(-32700, "unable to parse request.");
-                res = utils_js_1.createResponse(null, null, methError);
                 this.sendMessageToClient(connId, res);
                 return;
             }
@@ -165,9 +190,7 @@ class StreamServer extends events_1.EventEmitter {
                 this.sendMessageToClient(connId, res);
                 return;
             }
-            const result = this.methods[method](this, this.connectionMap[connId], params);
-            log_1.log("api", `Executing method for connection '${connId}'`);
-            res = utils_js_1.createResponse(result, id, null);
+            res = await this.methods[method](this, this.connectionMap[connId], req);
             this.sendMessageToClient(connId, res);
             return;
         };

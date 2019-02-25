@@ -179,6 +179,11 @@ class TendermintRPC extends events_1.EventEmitter {
             }
         });
     }
+    async query(path) {
+        const res = await this.conn.abciQuery({ path });
+        const { info } = res.response;
+        return info ? info : null;
+    }
     isConnected() {
         return this.connected;
     }
