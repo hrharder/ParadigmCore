@@ -117,7 +117,6 @@ export class Request {
                 }
             }
         } catch (error) {
-            console.log("error: " + error);
             this.addValErr(-32603);
         }
         
@@ -127,12 +126,14 @@ export class Request {
         return this.err;
     }
 
+    /**
+     * @todo document
+     */
     private validateRequiredParam(def: ISchemaProperty, param: any, name: string) {
         if (!param) {
             this.addValErr(-32602, "missing required parameter");
         } else if (!def) {
-            console.log("no def :(");
-            this.addValErr(-32603);
+            this.addValErr(-32603, "missing definition (todo)");
         }
 
         try {
