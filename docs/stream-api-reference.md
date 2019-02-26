@@ -10,55 +10,14 @@ StreamAPI follows the JSONRPC-2.0 specification. More information available at h
 
 ---
 
-- [session.end](#session.end)
 - [subscription.start](#subscription.start)
 - [subscription.end](#subscription.end)
 - [state.latestHeight](#state.latestHeight)
 - [state.orderCounter](#state.orderCounter)
 - [state.query](#state.query)
+- [session.end](#session.end)
 
 ---
-
-<a name="session.end"></a>
-
-## session.end
-
-End a StreamAPI session.
-
-### Description
-
-Terminate a StreamAPI session immediately.
-
-Calling this method will cancel all subscriptions, and immediately close the client/server connection.
-
-### Errors
-
-| Code   | Message            | Description                                             |
-| ------ | ------------------ | ------------------------------------------------------- |
-| -32602 | Invalid Parameters | The provided parameters are invalid.                    |
-| -32600 | Parse Error        | The request object is invalid.                          |
-| -32603 | Internal Error     | The server encountered an error processing the request. |
-
-### Examples
-
-#### Request
-
-```json
-{
-  "jsonrpc": "2.0",
-  "id": "1234567890",
-  "method": "session.end"
-}
-```
-
-#### Response
-
-```json
-{
-  "jsonrpc": "2.0",
-  "id": "1234567890"
-}
-```
 
 <a name="subscription.start"></a>
 
@@ -70,12 +29,20 @@ Subscribe to a specific ParadigmCore event.
 
 Initiate a subscription to an OrderStream node for specific blockchain and state-related events.
 
+The `eventName` parameter is used to subscribe to specific blockchain events. Currently, you can subscribe to `block` events, or `orders`.
+
+A `block` subscription (with no filters) will push various blockchain and header data to the client upon a new block being committed. The `filters` parameter can be used to filter out irrelevant data.
+
+If no strings are included in the `filters` parameter, all block data will be returned.
+
+The `orders` subscription will alert the client with an array of all accepted `order` transactions for each new block. By default, a notification is sent to the client every block, even if there were no `order` transactions in that block.
+
 ### Parameters
 
 | Name             | Type   | Description                                                                                                                         |
 | ---------------- | ------ | ----------------------------------------------------------------------------------------------------------------------------------- |
 | params           | object |                                                                                                                                     |
-| params.eventName | string | The name of the event you are subscribing to. Can be 'order' or 'block' currently.                                                  |
+| params.eventName | string | The name of the event you are subscribing to. Can be 'orders' or 'block' currently.                                                 |
 | params?.filters  | array  | An array of strings to be used as response filters. If present, only the keys in the filter array will be included in the response. |
 
 ### Result
@@ -337,5 +304,46 @@ The `params.path` field can be used to direct a query to a particular path of th
   "result": {
     "response": "12000"
   }
+}
+```
+
+<a name="session.end"></a>
+
+## session.end
+
+End a StreamAPI session.
+
+### Description
+
+Terminate a StreamAPI session immediately.
+
+Calling this method will cancel all subscriptions, and immediately close the client/server connection.
+
+### Errors
+
+| Code   | Message            | Description                                             |
+| ------ | ------------------ | ------------------------------------------------------- |
+| -32602 | Invalid Parameters | The provided parameters are invalid.                    |
+| -32600 | Parse Error        | The request object is invalid.                          |
+| -32603 | Internal Error     | The server encountered an error processing the request. |
+
+### Examples
+
+#### Request
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": "1234567890",
+  "method": "session.end"
+}
+```
+
+#### Response
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": "1234567890"
 }
 ```
