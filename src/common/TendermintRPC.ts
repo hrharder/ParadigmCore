@@ -411,7 +411,9 @@ export class TendermintRPC extends EventEmitter {
 
             // trigger broadcast, if needed
             if (!this.sending) {
-                this.internalSubmitTx();
+                this.internalSubmitTx().catch((error) => {
+                    reject(error.message);
+                });
             }
         });
     }
