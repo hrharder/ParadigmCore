@@ -24,21 +24,35 @@ Raw block data as delivered over Tendermint JSONRPC (pre-parsing).
 
 **● block**: *`object`*
 
-*Defined in [api/stream/StreamServer.ts:71](https://github.com/paradigmfoundation/paradigmcore/blob/922005d/src/api/stream/StreamServer.ts#L71)*
+*Defined in [api/stream/StreamServer.ts:83](https://github.com/paradigmfoundation/paradigmcore/blob/adc87ed/src/api/stream/StreamServer.ts#L83)*
 
 #### Type declaration
 
+ data: `object`
+
+ txs: `any`[]
+
  header: `object`
+
+ app_hash: `string`
 
  chain_id: `string`
 
  height: `string`
+
+ last_block_id: `object`
+
+ hash: `string`
+
+ last_commit_hash: `string`
 
  num_txs: `string`
 
  time: `string`
 
  total_txs: `string`
+
+ validators_hash: `string`
 
  version: `object`
 

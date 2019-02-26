@@ -4,6 +4,8 @@
 
 Defines the ConnectionMap interface.
 
+*__todo__*: expand to point to subscriptions, and track other data
+
 ## Hierarchy
 
 **IConnectionMap**
