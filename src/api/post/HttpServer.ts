@@ -36,6 +36,7 @@ import { NextFunction, Request, Response } from "express";
 let client: TendermintRPC;  // connection to tendermint rpc server
 let generator: TxGenerator; // Generates and signs ABCI tx's
 let app = express();        // Express.js server
+let ready = false;
 
 /**
  * Start and bind API server.
@@ -85,7 +86,7 @@ export async function start(options) {
         await app.listen(options.port);
 
         // connect to tendermint rpc instance
-        client.connect(100, 2000);
+        client.connect(100, 2000).then(() => { ready = true; });
 
         // finish
         log("api", `http api server started on port ${options.port}`);
@@ -99,6 +100,12 @@ export async function start(options) {
  * Express POST handler for incoming orders (and eventually stream tx's).
  */
 async function postHandler(req: Request, res: Response, next: NextFunction) {
+    // don't try to send if not ready 
+    if (!ready) {
+        Message.staticSend(res, "Server not ready yet. Try again later.");
+        return;
+    }
+
     // Create transaction object
     const tx: SignedTransaction = generator.create({ data: req.body, type: "order" });
 
@@ -107,6 +114,7 @@ async function postHandler(req: Request, res: Response, next: NextFunction) {
 
     // send response from application back to client
     Message.staticSend(res, log);
+    return;
 }
 
 /**

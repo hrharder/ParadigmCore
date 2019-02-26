@@ -17,6 +17,7 @@ import { Response as Res } from "./Response";
 // common imports
 import { log, warn, err } from "../../common/log";
 import { TendermintRPC } from "../../common/TendermintRPC.js";
+import { decodeTx } from "../../core/util/utils";
 
 // stream server utils
 import {createResponse, createValError } from "./utils.js";
@@ -62,6 +63,11 @@ interface IBlockData {
      * The best known tendermint block (height).
      */
     height?: number;
+
+    /**
+     * An array of stringified (yet parsed) transaction objects
+     */
+    txs?: string[];
 }
 
 /**
@@ -79,6 +85,9 @@ interface RawBlockData {
             time: string;
             num_txs: string;
             total_txs: string;
+        },
+        data: {
+            txs: any[];
         }
     }
 }
@@ -397,7 +406,10 @@ export class StreamServer extends EventEmitter {
                 const sub = this.subscriptions[subId];
                 const msg = new Res({
                     id: `${sub.clientId}/${sub.subscriptionId}`,
-                    result: `yup ur subsctibed: ${sub.subscriptionId}`,
+                    result: {
+                        height: this.latestBlockData.height,
+                        txs: this.latestBlockData.txs,
+                    },
                 });
                 sub.connection.send(JSON.stringify(msg));
             });
@@ -521,9 +533,24 @@ export class StreamServer extends EventEmitter {
      * to be stored in-memory.
      */
     private createNewBlockHandler(): (data: RawBlockData) => void {
-        return (data) => {
+        return (data: RawBlockData) => {
             // update latest height
             const { height } = data.block.header;
+            const { txs } = data.block.data;
+
+            // reset latest txs array
+            this.latestBlockData.txs = [];
+
+            // if there are any txs, parse, stringify, and store in-memory
+            if (txs) {
+                txs.forEach((i) => {
+                    const txBuff = Buffer.from(i, "base64");
+                    const tx = decodeTx(txBuff);
+                    const txStr = JSON.stringify(tx).replace(/"/g, "'");
+                    this.latestBlockData.txs.push(txStr);
+                });
+            }
+
             this.latestBlockData.height = parseInt(height, 10);
 
             // emit local `newBlock` event
