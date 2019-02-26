@@ -18,6 +18,7 @@ import { Response as Res } from "./Response";
 import { log, warn, err } from "../../common/log";
 import { TendermintRPC } from "../../common/TendermintRPC.js";
 import { decodeTx } from "../../core/util/utils";
+import { convertIsoTimeToUnix } from "../../common/utils";
 
 // stream server utils
 import {createResponse, createValError } from "./utils.js";
@@ -65,6 +66,11 @@ interface IBlockData {
     height?: number;
 
     /**
+     * The unix timestamp of the time the block was committed.
+     */
+    time?: number;
+
+    /**
      * An array of stringified (yet parsed) transaction objects
      */
     txs?: string[];
@@ -85,6 +91,12 @@ interface RawBlockData {
             time: string;
             num_txs: string;
             total_txs: string;
+            last_commit_hash: string;
+            validators_hash: string;
+            app_hash: string;
+            last_block_id: {
+                hash: string;
+            }
         },
         data: {
             txs: any[];
@@ -108,6 +120,7 @@ interface ISubscription {
     connection: WebSocket;
     params: {
         eventName: string;
+        filters?: string[];
     }
 }
 
@@ -403,19 +416,7 @@ export class StreamServer extends EventEmitter {
         this.setupServer(this.streamHost, this.streamPort);
 
         // attach handler for subscriptions
-        this.on("newBlock", () => {
-            Object.keys(this.subscriptions).forEach((subId) => {
-                const sub = this.subscriptions[subId];
-                const msg = new Res({
-                    id: `${sub.clientId}/${sub.subscriptionId}`,
-                    result: {
-                        height: this.latestBlockData.height,
-                        txs: this.latestBlockData.txs,
-                    },
-                });
-                this.sendMessageToConn(sub.connection, msg);
-            });
-        })
+        this.on("newBlock", this.subscriptionTrigger);
 
         // set started status
         this.started = true;
@@ -513,6 +514,49 @@ export class StreamServer extends EventEmitter {
     }
 
     /**
+     * Subscription trigger (documentation coming soon)
+     */
+    private subscriptionTrigger(): void {
+        Object.keys(this.subscriptions).forEach((subId) => {
+            // load subscription object, and client/sub ID's
+            const sub = this.subscriptions[subId];
+            const { clientId, subscriptionId } = sub;
+
+            // create `CLIENT_ID/SUB_ID` string
+            const id = `${clientId}/${subscriptionId}`;
+
+            // load params for subscription
+            const { eventName, filters } = sub.params;
+            const { height, txs, time } = this.latestBlockData;
+
+            // will be the message sent to client, and resulting block data
+            let msg: Res;
+            let result: IBlockData;
+
+            // load full block data
+            const fullResult = { height, txs, time };
+
+            // filter, if filters are provided
+            if (filters && !_.isEmpty(filters)) {
+                result = Object.keys(fullResult).filter((key) => {
+                    return filters.includes(key);
+                }).reduce((obj, key) => {
+                    obj[key] = fullResult[key];
+                    return obj;
+                }, {});
+            } else {
+                result = fullResult;
+            }
+
+            // create message object
+            msg = createResponse(result, id);
+            
+            // deliver to subscribed connection
+            this.sendMessageToConn(sub.connection, msg);
+        });
+    }
+
+    /**
      * Creates a handler function for the TendermintRPC connection.
      * 
      * Currently only subscribes to the Tendermint `NewBlock` event, but in the
@@ -539,8 +583,11 @@ export class StreamServer extends EventEmitter {
     private createNewBlockHandler(): (data: RawBlockData) => void {
         return (data: RawBlockData) => {
             // update latest height
-            const { height } = data.block.header;
+            const { height, time } = data.block.header;
             const { txs } = data.block.data;
+
+            // parse time into unix time
+            const unixTs = convertIsoTimeToUnix(time);
 
             // reset latest txs array
             this.latestBlockData.txs = [];
@@ -556,6 +603,7 @@ export class StreamServer extends EventEmitter {
             }
 
             this.latestBlockData.height = parseInt(height, 10);
+            this.latestBlockData.time = unixTs;
 
             // emit local `newBlock` event
             this.emit("newBlock");

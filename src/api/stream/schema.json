@@ -54,11 +54,16 @@
 				"properties": {
 					"eventName": {
 						"description": "The name of the event you are subscribing to. Can be 'order' or 'block' currently.",
-                        "default": "order",
+                        "default": "block",
                         "enum": ["order", "block"],
 						"type": "string",
 						"minLength": 1
-                    }
+					},
+					"filters": {
+						"description": "An array of strings to be used as response filters. If present, only the keys in the filter array will be included in the response.",
+						"type": "array",
+						"default": ["height", "time"]
+					}
 				},
 				"required": ["eventName"]
 			},
