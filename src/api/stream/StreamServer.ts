@@ -462,6 +462,8 @@ export class StreamServer extends EventEmitter {
      * 
      * This method is a public method to allow bound definitions to interact
      * with the private `subscriptions` mapping.
+     * 
+     * @todo: add check to ensure only the client that started a subscription can end it
      */
     public removeSubscription(subscriptionId: string): boolean {
         // check if subscriptionId exists at all

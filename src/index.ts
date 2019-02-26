@@ -137,6 +137,7 @@ let node;       // tendermint node child process instance
         server = new StreamServer({
             tendermintRpcUrl: `ws://${env.TENDERMINT_HOST}:${env.TENDERMINT_PORT}/websocket`,
             methods,
+            port: parseInt(env.STREAM_PORT, 10)
         });
     } catch (error) {
         throw { 
