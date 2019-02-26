@@ -86,3 +86,15 @@ export function createResponse(result?: any, id?: string, error?: ValidationErro
     // return constructed result object
     return res;
 }
+
+export function parseOrdersForSubscription(txs: string[]): OrderData[] {
+    const orders = [];
+    txs.forEach(tx => {
+        const objTx = JSON.parse(tx);
+        const { type, data } = objTx;
+        if (type === "order") {
+            orders.push(data);
+        }
+    });
+    return orders;
+}

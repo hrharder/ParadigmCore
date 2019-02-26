@@ -21,7 +21,7 @@ import { decodeTx } from "../../core/util/utils";
 import { convertIsoTimeToUnix } from "../../common/utils";
 
 // stream server utils
-import {createResponse, createValError } from "./utils.js";
+import {createResponse, createValError, parseOrdersForSubscription } from "./utils.js";
 
 // third party/std-lib
 import * as _ from "lodash";
@@ -531,19 +531,21 @@ export class StreamServer extends EventEmitter {
 
             // will be the message sent to client, and resulting block data
             let msg: Res;
-            let result: IBlockData;
+            let result: any | IBlockData;
 
             // load full block data
             const fullResult = { height, txs, time };
-
+            
             // filter, if filters are provided
-            if (filters && !_.isEmpty(filters)) {
+            if (eventName === "block" && filters && !_.isEmpty(filters)) {
                 result = Object.keys(fullResult).filter((key) => {
                     return filters.includes(key);
                 }).reduce((obj, key) => {
                     obj[key] = fullResult[key];
                     return obj;
                 }, {});
+            } else if (eventName === "orders") {
+                result = parseOrdersForSubscription(txs);
             } else {
                 result = fullResult;
             }
@@ -597,7 +599,7 @@ export class StreamServer extends EventEmitter {
                 txs.forEach((i) => {
                     const txBuff = Buffer.from(i, "base64");
                     const tx = decodeTx(txBuff);
-                    const txStr = JSON.stringify(tx).replace(/"/g, "'");
+                    const txStr = JSON.stringify(tx) //.replace(/"/g, "'");
                     this.latestBlockData.txs.push(txStr);
                 });
             }

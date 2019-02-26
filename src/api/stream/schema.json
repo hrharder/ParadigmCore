@@ -55,7 +55,7 @@
 					"eventName": {
 						"description": "The name of the event you are subscribing to. Can be 'order' or 'block' currently.",
                         "default": "block",
-                        "enum": ["order", "block"],
+                        "enum": ["orders", "block"],
 						"type": "string",
 						"minLength": 1
 					},
