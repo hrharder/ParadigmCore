@@ -15,9 +15,10 @@ import { RpcClient } from "tendermint";
 import { EventEmitter } from "events";
 import * as uniqueId from "uuid/v4";
 
-// ParadigmCore local utilities
+// ParadigmCore local utilities/typings
 import { log, warn, err } from "./log";
 import { encodeTx } from "../core/util/utils";
+import { ResponseBroadcastTx } from "src/typings/abci";
 
 /**
  * Defines the object passed into `TendermintRPC.prototype.queue`
@@ -38,7 +39,7 @@ interface TxResponse {
     ok: boolean;
 
     /** The response object (or message) from the server */
-    res: string | object;
+    res: ResponseBroadcastTx;
 }
 
 /**
@@ -376,7 +377,7 @@ export class TendermintRPC extends EventEmitter {
      * 
      * @param tx 
      */
-    public submitTx(tx: SignedTransaction, mode?: "sync" | "async" | "commit") {
+    public submitTx(tx: SignedTransaction, mode?: "sync" | "async" | "commit"): Promise<ResponseBroadcastTx> {
         // use a specific broadcast method for this tx
         let method;
         const methodBuilder = m => `broadcastTx${m}`;

@@ -20,14 +20,13 @@
 import * as _ from "lodash";
 import * as TruffleContract from "truffle-contract";
 import { URL } from "url";
-import Web3 = require("web3");
 import { WebsocketProvider } from "web3/providers";
+import { EventEmitter } from "events";
+import Web3 = require("web3");
 
 // ParadigmCore modules/classes
-import * as WebSocket from "ws";
 import { contracts, eventDecoder } from "paradigm-contracts";
 import { TxGenerator } from "src/core/util/TxGenerator";
-import { TxBroadcaster } from "../core/util/TxBroadcaster";
 import { createWitnessEventObject } from "../core/util/utils";
 
 // ParadigmCore common utils
@@ -35,8 +34,6 @@ import { default as codes } from "../common/Codes";
 import { err, log, warn } from "../common/log";
 import { messages as msg } from "../common/static/messages";
 import { TendermintRPC } from "../common/TendermintRPC";
-import { EventEmitter } from "events";
-import { bigIntReplacer } from "../common/static/bigIntUtils";
 
 /**
  * A Witness supports a one way peg-zone between Ethereum and the OrderStream to

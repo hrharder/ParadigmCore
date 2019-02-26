@@ -24,7 +24,6 @@ import * as tendermint from "../lib/tendermint";
 
 // ParadigmCore classes
 import { Witness } from "./witness/Witness";
-import { TxBroadcaster } from "./core/util/TxBroadcaster";
 import { TxGenerator } from "./core/util/TxGenerator";
 
 // JSONRPC API server and method definitions
@@ -45,7 +44,6 @@ import { messages as msg } from "./common/static/messages";
 
 // validator-only modules
 let witness:        Witness;
-let broadcaster:    TxBroadcaster;  // internal ABCI transaction broadcaster
 let generator:      TxGenerator;    // construct and sign paradigm-core tx's
 
 // FULL-NODE (and validator) modules
@@ -118,18 +116,6 @@ let node;       // tendermint node child process instance
         
     }
 
-    // local transaction broadcaster
-    log("tx", "setting up validator transaction broadcaster...");
-    try {
-        broadcaster = new TxBroadcaster({ client: node.rpc });
-    } catch (error) {
-        throw { 
-            message: error.message,
-            info: "failed creating transaction broadcaster instance",
-            comp: "tx"
-        };
-    }
-
     log("tx", "setting up validator transaction signer...");
     try {
         generator = new TxGenerator({
@@ -166,8 +152,12 @@ let node;       // tendermint node child process instance
             // Paradigm instance
             paradigm,
 
-            // Tx generator/broadcaster
-            broadcaster, generator,
+            // validator rxx generator
+            generator,
+            
+            // tendermint rpc config
+            tendermintHost: env.TENDERMINT_HOST,
+            tendermintPort: env.TENDERMINT_PORT,
 
             // Rate limiter config
             rateWindow: parseInt(env.WINDOW_MS, 10),
@@ -257,11 +247,6 @@ let node;       // tendermint node child process instance
         };
     }
     log("peg", msg.rebalancer.messages.activated);
-
-    // start tx broadcaster
-    // TODO: change to TendermintRPC class
-    log("tx", "starting validator transaction broadcaster...");
-    broadcaster.start();
 
     // start JSONRPC server
     log("api", "starting JSONRPC API server...");
