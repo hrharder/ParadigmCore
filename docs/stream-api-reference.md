@@ -72,10 +72,11 @@ Initiate a subscription to an OrderStream node for specific blockchain and state
 
 ### Parameters
 
-| Name             | Type   | Description                                                                        |
-| ---------------- | ------ | ---------------------------------------------------------------------------------- |
-| params           | object |                                                                                    |
-| params.eventName | string | The name of the event you are subscribing to. Can be 'order' or 'block' currently. |
+| Name             | Type   | Description                                                                                                                         |
+| ---------------- | ------ | ----------------------------------------------------------------------------------------------------------------------------------- |
+| params           | object |                                                                                                                                     |
+| params.eventName | string | The name of the event you are subscribing to. Can be 'order' or 'block' currently.                                                  |
+| params?.filters  | array  | An array of strings to be used as response filters. If present, only the keys in the filter array will be included in the response. |
 
 ### Result
 
@@ -103,7 +104,8 @@ Initiate a subscription to an OrderStream node for specific blockchain and state
   "id": "1234567890",
   "method": "subscription.start",
   "params": {
-    "eventName": "order"
+    "eventName": "block",
+    "filters": ["height", "time"]
   }
 }
 ```
