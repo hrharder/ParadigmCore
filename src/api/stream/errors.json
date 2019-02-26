@@ -1,0 +1,22 @@
+{
+    "-32700": {
+        "name": "PARSE",
+        "info": "Parse error: "
+    },
+    "-32600": {
+        "name": "REQUEST",
+        "info": "Invalid request: "
+    },
+    "-32601": {
+        "name": "METHOD",
+        "info": "Method not found: "
+    },
+    "-32602": {
+        "name": "PARAM",
+        "info": "Invalid param: "
+    },
+    "-32603": {
+        "name": "INTERNAL",
+        "info": "Internal error: please try again later."
+    }
+}

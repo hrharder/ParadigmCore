@@ -15,7 +15,7 @@ Defines the object type used to represent an event subscription.
 * [clientId](_api_stream_streamserver_.isubscription.md#clientid)
 * [connection](_api_stream_streamserver_.isubscription.md#connection)
 * [params](_api_stream_streamserver_.isubscription.md#params)
-* [serverId](_api_stream_streamserver_.isubscription.md#serverid)
+* [subscriptionId](_api_stream_streamserver_.isubscription.md#subscriptionid)
 
 ---
 
@@ -27,7 +27,7 @@ Defines the object type used to represent an event subscription.
 
 **● clientId**: *`string`*
 
-*Defined in [api/stream/StreamServer.ts:62](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/api/stream/StreamServer.ts#L62)*
+*Defined in [api/stream/StreamServer.ts:119](https://github.com/paradigmfoundation/paradigmcore/blob/adc87ed/src/api/stream/StreamServer.ts#L119)*
 
 ___
 <a id="connection"></a>
@@ -36,7 +36,7 @@ ___
 
 **● connection**: *`WebSocket`*
 
-*Defined in [api/stream/StreamServer.ts:63](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/api/stream/StreamServer.ts#L63)*
+*Defined in [api/stream/StreamServer.ts:120](https://github.com/paradigmfoundation/paradigmcore/blob/adc87ed/src/api/stream/StreamServer.ts#L120)*
 
 ___
 <a id="params"></a>
@@ -45,20 +45,22 @@ ___
 
 **● params**: *`object`*
 
-*Defined in [api/stream/StreamServer.ts:64](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/api/stream/StreamServer.ts#L64)*
+*Defined in [api/stream/StreamServer.ts:121](https://github.com/paradigmfoundation/paradigmcore/blob/adc87ed/src/api/stream/StreamServer.ts#L121)*
 
 #### Type declaration
 
  eventName: `string`
 
+`Optional`  filters: `string`[]
+
 ___
-<a id="serverid"></a>
+<a id="subscriptionid"></a>
 
-###  serverId
+###  subscriptionId
 
-**● serverId**: *`string`*
+**● subscriptionId**: *`string`*
 
-*Defined in [api/stream/StreamServer.ts:61](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/api/stream/StreamServer.ts#L61)*
+*Defined in [api/stream/StreamServer.ts:118](https://github.com/paradigmfoundation/paradigmcore/blob/adc87ed/src/api/stream/StreamServer.ts#L118)*
 
 ___
 

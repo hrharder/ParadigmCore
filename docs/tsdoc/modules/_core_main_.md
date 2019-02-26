@@ -22,7 +22,7 @@
 
 **● abci**: *`any`* =  require("abci")
 
-*Defined in [core/main.ts:17](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/core/main.ts#L17)*
+*Defined in [core/main.ts:17](https://github.com/paradigmfoundation/paradigmcore/blob/adc87ed/src/core/main.ts#L17)*
 
 \=========================== ParadigmCore: Blind Star
 
@@ -49,7 +49,7 @@ ___
 
 ▸ **start**(options: *`ParadigmCoreOptions`*): `Promise`<`null`>
 
-*Defined in [core/main.ts:51](https://github.com/paradigmfoundation/paradigmcore/blob/838c6d3/src/core/main.ts#L51)*
+*Defined in [core/main.ts:50](https://github.com/paradigmfoundation/paradigmcore/blob/adc87ed/src/core/main.ts#L50)*
 
 Initialize and start the ABCI application.
 
@@ -57,7 +57,7 @@ Initialize and start the ABCI application.
 
 | Name | Type | Description |
 | ------ | ------ | ------ |
-| options | `ParadigmCoreOptions` |  Options object with parameters:*   options.version {string} paradigmcore version string*   options.tracker {OrderTracker} tracks valid orders*   options.witness {Witness} witness instance (tracks Ethereum)*   options.deliverState {object} deliverTx state object*   options.commitState {object} commit state object*   options.abciServPort {number} local ABCI server port*   options.finalityThreshold {number} Ethereum block finality threshold*   options.maxOrderBytes {number} maximum order size in bytes*   options.periodLength {number} length of rebalance period*   options.periodLimit {number} transactions accepted per period*   options.paradigm {Paradigm} paradigm-connect instance |
+| options | `ParadigmCoreOptions` |  Options object with parameters:*   options.version {string} paradigmcore version string*   options.deliverState {object} deliverTx state object*   options.commitState {object} commit state object*   options.abciServPort {number} local ABCI server port*   options.finalityThreshold {number} Ethereum block finality threshold*   options.maxOrderBytes {number} maximum order size in bytes*   options.periodLength {number} length of rebalance period*   options.periodLimit {number} transactions accepted per period*   options.paradigm {Paradigm} paradigm-connect instance |
 
 **Returns:** `Promise`<`null`>
 

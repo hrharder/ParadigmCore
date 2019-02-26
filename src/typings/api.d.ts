@@ -1,5 +1,3 @@
-
-
 interface ClientMap extends Object {
     [id: string]: Client;
 }
@@ -18,6 +16,13 @@ interface IResponseOptions {
     id?: string;
     result?: any;
     error?: any;
+}
+
+interface IErrors {
+    [code: string]: {
+        name: string;
+        info: string;
+    }
 }
 
 // STREAM API DEFS BELOW
@@ -50,8 +55,8 @@ interface IRequestMethod {
 }
 
 interface ValidationError {
-    code:   string;
-    message:   string;
+    code:       number;
+    message:    string;
 }
 
 interface IParsedRequest {
@@ -79,4 +84,63 @@ interface IJsonResponse {
     id: string,
     error?: ValidationError;
     result?: any;
+}
+
+// STREAM SCHEMA
+interface IStreamSchema {
+    $schema: string;
+    jrgen: string;
+    jsonrpc: string;
+    info: ISchemaInfo;
+    definitions: IDefinitions;
+    methods: ISchemaMethods;
+}
+
+interface ISchemaInfo {
+    title: string;
+    description: string | string[];
+    version: string;
+}
+
+interface IDefinitions {
+    [name: string]: IDefinition;
+}
+
+interface IDefinition {
+    type: string;
+    properties: ISchemaProperties;
+    required: string[];
+}
+
+interface ISchemaProperties {
+    [name: string]: ISchemaProperty;
+}
+
+interface ISchemaProperty {
+    description: string;
+    default: any;
+    type: string;
+    minLength?: number;
+    maxLength?: number;
+    enum?: any[];
+}
+
+interface ISchemaMethods {
+    [name: string]: ISchemaMethod;
+}
+
+interface ISchemaMethod {
+    summary: string;
+    description: string | string[];
+    tags: string[];
+    result?: IDefinition;
+    params?: IDefinition;
+    errors: IErrorDefinition[];
+}
+
+interface IErrorDefinition {
+    description: string;
+    code: number;
+    message: string,
+    data: any;
 }

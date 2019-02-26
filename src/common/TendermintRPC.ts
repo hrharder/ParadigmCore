@@ -15,9 +15,10 @@ import { RpcClient } from "tendermint";
 import { EventEmitter } from "events";
 import * as uniqueId from "uuid/v4";
 
-// ParadigmCore local utilities
+// ParadigmCore local utilities/typings
 import { log, warn, err } from "./log";
 import { encodeTx } from "../core/util/utils";
+import { ResponseBroadcastTx } from "src/typings/abci";
 
 /**
  * Defines the object passed into `TendermintRPC.prototype.queue`
@@ -38,7 +39,7 @@ interface TxResponse {
     ok: boolean;
 
     /** The response object (or message) from the server */
-    res: string | object;
+    res: ResponseBroadcastTx;
 }
 
 /**
@@ -119,9 +120,11 @@ export class TendermintRPC extends EventEmitter {
     /**
      * Create a new Tendermint RPC instance.
      * 
-     * @param endpoint 
+     * @param endpoint the full URI for the target tendermint rpc server
+     * @param maxRetries the maximum number of times to try reconnect before timeout
+     * @param interval the delay (in ms) between each reconnect attempt
      */
-    constructor(endpoint: string, maxRetries, interval) {
+    constructor(endpoint: string, maxRetries: number, interval: number) {
         super();
         this.url = new URL(endpoint);
         if (["ws:", "wss:"].indexOf(this.url.protocol) === -1) {
@@ -191,6 +194,9 @@ export class TendermintRPC extends EventEmitter {
                 this.connected = true;
                 this.shouldRetry = true;
                 this.connecting = false;
+
+                // emit open event
+                this.emit("open");
 
                 // end cycle and resolve promise
                 log("tm", `connected to server after ${counter} attempts`);
@@ -371,7 +377,7 @@ export class TendermintRPC extends EventEmitter {
      * 
      * @param tx 
      */
-    public submitTx(tx: SignedTransaction, mode?: "sync" | "async" | "commit") {
+    public submitTx(tx: SignedTransaction, mode?: "sync" | "async" | "commit"): Promise<ResponseBroadcastTx> {
         // use a specific broadcast method for this tx
         let method;
         const methodBuilder = m => `broadcastTx${m}`;
@@ -408,6 +414,19 @@ export class TendermintRPC extends EventEmitter {
                 this.internalSubmitTx();
             }
         });
+    }
+
+    /**
+     * (in-progress)
+     * 
+     * @todo expand
+     * 
+     * @param path the path to submit to the ABCI query method
+     */
+    public async query(path: string): Promise<any> {
+        const res = await this.conn.abciQuery({path});
+        const { code, info, log, key, value } = res.response;
+        return { code, info, log, key, value }
     }
     /**
      * Public getter method to check connection status. 

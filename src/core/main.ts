@@ -31,6 +31,7 @@ import { endBlockWrapper } from "./endBlock";
 
 // custom types
 import { ParadigmCoreOptions } from "src/typings/abci";
+import { queryWrapper } from "./query";
 
 /**
  * Initialize and start the ABCI application.
@@ -68,8 +69,9 @@ export async function start(options: ParadigmCoreOptions): Promise<null> {
 
         // Establish ABCI handler functions
         let handlers = {
-            // query state hash, height, version
+            // query, info, w/ state hash, height, version
             info: infoWrapper(cState, version),
+            query: queryWrapper(cState),
             
             // called at genesis
             initChain: initChainWrapper(dState, cState, consensusParams),

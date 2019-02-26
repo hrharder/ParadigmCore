@@ -23,25 +23,27 @@ import * as rateLimit from "express-rate-limit";
 import * as helmet from "helmet";
 
 // ParadigmCore classes and imports
-import { TxBroadcaster } from "../../core/util/TxBroadcaster";
 import { TxGenerator } from "../../core/util/TxGenerator";
 import { err, warn, log } from "../../common/log";
 import { messages as msg } from "../../common/static/messages";
 import { HttpMessage as Message } from "./HttpMessage";
+import { TendermintRPC } from "../../common/TendermintRPC";
 
 // Type defs
 import { NextFunction, Request, Response } from "express";
 
 // "Globals"
-let client: TxBroadcaster;  // Tendermint client for RPC
+let client: TendermintRPC;  // connection to tendermint rpc server
 let generator: TxGenerator; // Generates and signs ABCI tx's
 let app = express();        // Express.js server
+let ready = false;
 
 /**
  * Start and bind API server.
  *
  * @param options {object} options object with:
- * - options.broadcaster    {TxBroadcaster} transaction broadcaster instance
+ * - options.tendermintHost {string}        the network host tendermint running on
+ * - options.tendermintPort {number}        the port the tendermint rpc server is on
  * - options.generator      {TxGenerator}   validator tx generator instance
  * - options.paradigm       {Paradigm}      paradigm-connect instance
  * - options.port           {number}        port to bind HTTP server to
@@ -50,11 +52,16 @@ let app = express();        // Express.js server
  */
 export async function start(options) {
     try {
-        // Store TxBroadcaster and TxGenerator
-        client = options.broadcaster;
+        // validate tendermint rpc url
+        const url = new URL(
+            `ws://${options.tendermintHost}:${options.tendermintPort}/websocket`
+        );
+
+        // create tendermint-rpc connection and store generator reference
+        client = new TendermintRPC(url.href, 100, 2000);
         generator = options.generator;
 
-        // Setup rate limiting
+        // set up rate limiting
         const limiter = rateLimit({
             windowMs: options.rateWindow,
             max: options.rateMax,
@@ -77,8 +84,17 @@ export async function start(options) {
 
         // start API server
         await app.listen(options.port);
+
+        // connect to tendermint rpc instance
+        client.connect(100, 2000).then(() => {
+            ready = true;
+        }).catch((e) => {
+            ready = false;
+            err("api", `Client (tendermint) error: ${e.message}`);
+        });
+
+        // finish
         log("api", `http api server started on port ${options.port}`);
-        
         return;
     } catch (error) {
         throw new Error(error.message);
@@ -89,14 +105,21 @@ export async function start(options) {
  * Express POST handler for incoming orders (and eventually stream tx's).
  */
 async function postHandler(req: Request, res: Response, next: NextFunction) {
+    // don't try to send if not ready 
+    if (!ready) {
+        Message.staticSend(res, "Server not ready yet. Try again later.");
+        return;
+    }
+
     // Create transaction object
     const tx: SignedTransaction = generator.create({ data: req.body, type: "order" });
 
     // submit transaction to mempool and network
-    const response = await client.send(tx);
+    const { log } = await client.submitTx(tx);
 
     // send response from application back to client
-    Message.staticSend(res, response);
+    Message.staticSend(res, log);
+    return;
 }
 
 /**

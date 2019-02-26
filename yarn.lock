@@ -5276,7 +5276,7 @@ ono@^4.0.11:
   dependencies:
     format-util "^1.0.3"
 
-openzeppelin-solidity@^2.0.0, openzeppelin-solidity@^2.1.0-rc.2:
+openzeppelin-solidity@^2.0.0, openzeppelin-solidity@^2.1.0-rc.2, openzeppelin-solidity@^2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/openzeppelin-solidity/-/openzeppelin-solidity-2.1.2.tgz#94e2bb92b60e91abb22c6fe27d983d92850fb324"
   integrity sha512-1ggh+AZFpMAgGfgnVMQ8dwYawjD2QN4xuWkQS4FUbeUz1fnCKJpguUl2cyadyfDYjBq1XJ6MA6VkzYpTZtJMqw==
@@ -5400,14 +5400,14 @@ paradigm-connect@0.0.12:
     web3 "^1.0.0-beta.36"
     ws "^6.0.0"
 
-paradigm-contracts@0.0.4:
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/paradigm-contracts/-/paradigm-contracts-0.0.4.tgz#76bc4c40f7e7b6a6d806ed8d53c3d1db47eab7a3"
-  integrity sha512-gy7iceRZZvkYuBkfjULpruDYMs973WCgAQZ0E6v0YS7eTM174nmGVyritpfDH2VnIY2/Ek+DbOFYe9NozUoNGQ==
+paradigm-contracts@^0.0.5:
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/paradigm-contracts/-/paradigm-contracts-0.0.5.tgz#bc7880599a2181798563ecabb6397602dbd93938"
+  integrity sha512-TSxn5OH6QNoZF8gCMW4L2XQKy5uFKUxHs5AKgj627UiKNELuQxtKiH9uUSn7Hnwu4Y9aaIGQ8XHl1GL0ILL7dw==
   dependencies:
-    openzeppelin-solidity "^2.1.0-rc.2"
-    paradigm-subcontract-sdk "0.0.3"
-    web3-utils "^1.0.0-beta.41"
+    openzeppelin-solidity "^2.1.2"
+    paradigm-subcontract-sdk "0.0.4"
+    web3-utils "^1.0.0-beta.46"
 
 paradigm-protocol-contracts@0.0.5:
   version "0.0.5"
@@ -5421,7 +5421,14 @@ paradigm-protocol-contracts@0.0.5:
     paradigm-subcontract-sdk "~0.0.2"
     truffle-wallet-provider "0.0.5"
 
-paradigm-subcontract-sdk@0.0.3, paradigm-subcontract-sdk@~0.0.2:
+paradigm-subcontract-sdk@0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/paradigm-subcontract-sdk/-/paradigm-subcontract-sdk-0.0.4.tgz#02f4d851b674a0f936a6cb51f2d62cdef8ab9e04"
+  integrity sha512-DARYSzACnL9Mt+FycrmEsBgcnKUoK6J1i8ziqWlEWJ5Dn1vZsSHJZGivvhPM0gV6ileRZerLO+slbnycILE+yw==
+  dependencies:
+    openzeppelin-solidity "^2.1.2"
+
+paradigm-subcontract-sdk@~0.0.2:
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/paradigm-subcontract-sdk/-/paradigm-subcontract-sdk-0.0.3.tgz#90d36388c1655089ea2262116456f6975eda2dc5"
   integrity sha512-ebtnbUwmMa8mTnp/2KVkFpD6y/Se2FhxLweiw/NSqYMt94JYKrpA1kIF18ouBgHPlOxNBCdB46wL06zJuI5YSg==
@@ -7569,7 +7576,7 @@ web3-utils@1.0.0-beta.37:
     underscore "1.8.3"
     utf8 "2.1.1"
 
-web3-utils@^1.0.0-beta.41:
+web3-utils@^1.0.0-beta.46:
   version "1.0.0-beta.46"
   resolved "https://registry.yarnpkg.com/web3-utils/-/web3-utils-1.0.0-beta.46.tgz#9984dda27c9079b129e741cbb63b665ae0f9725c"
   integrity sha512-mSz+NrAil2fDZkxTXHPntCclZ8DofMjv8Q+BYR0VAyzTzylpYNXAV0WDdxBp/sXgniWRZXZMF7OkQNWqhZ1J9g==

@@ -1,6 +1,5 @@
 import { EventEmitter } from "events";
 import { TxGenerator } from "src/core/util/TxGenerator";
-import { TxBroadcaster } from "src/core/util/TxBroadcaster";
 import { Witness } from "src/witness/Witness";
 
 /**
@@ -34,9 +33,24 @@ interface ResponseInfo {
 }
 
 /**
+ * ABCI resposne to a submitTx request
+ */
+interface ResponseBroadcastTx {
+    code: number;
+    data: any;
+    log: string;
+    hash: string;
+}
+
+/**
  * ABCI response to initChain() - currently null
  */
 interface ResponseInitChain {}
+
+/**
+ * ABCI response to query()
+ */
+interface ResponseQuery {}
 
 /**
  * ABCI response to beginBlock() - currently null
