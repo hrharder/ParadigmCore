@@ -86,7 +86,12 @@ export async function start(options) {
         await app.listen(options.port);
 
         // connect to tendermint rpc instance
-        client.connect(100, 2000).then(() => { ready = true; });
+        client.connect(100, 2000).then(() => {
+            ready = true;
+        }).catch((e) => {
+            ready = false;
+            err("api", `Client (tendermint) error: ${e.message}`);
+        });
 
         // finish
         log("api", `http api server started on port ${options.port}`);

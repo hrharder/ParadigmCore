@@ -113,6 +113,8 @@ interface ISubscription {
 
 /**
  * Defines the ConnectionMap interface.
+ * 
+ * @todo expand to point to subscriptions, and track other data
  */
 interface IConnectionMap {
     [connectionId: string]: WebSocket
@@ -411,7 +413,7 @@ export class StreamServer extends EventEmitter {
                         txs: this.latestBlockData.txs,
                     },
                 });
-                sub.connection.send(JSON.stringify(msg));
+                this.sendMessageToConn(sub.connection, msg);
             });
         })
 
@@ -694,10 +696,9 @@ export class StreamServer extends EventEmitter {
     }
 
     /**
-     * Send a message to a connected client+
+     * Send a message to a connected client (by server id)
      * 
-     * @description Send a JSON response to a client identified by server-side
-     * connectionId string.
+     * Send a JSON response to a client identified by server-side connectionId.
      * 
      * @param id the server-side client ID string
      * @param res a JsonResponse object
@@ -705,6 +706,22 @@ export class StreamServer extends EventEmitter {
     private sendMessageToClient(id: string, res: Res) {
         // @todo make sure to properly handle disconnects
         const conn = this.connectionMap[id];
+        if (!conn) return;
+        if(conn.readyState !== conn.OPEN) { return; }
+        conn.send(JSON.stringify(res));
+        return;
+    }
+
+    /**
+     * Send a message to a connected client (by conn. instance)
+     * 
+     * Send a JSON response to a client to a specified connected client instance.
+     * 
+     * @param conn the instance of the websocket client connection
+     * @param res a JsonResponse object to be sent
+     */
+    private sendMessageToConn(conn: WebSocket, res: Res) {
+        // @todo make sure to properly handle disconnects
         if (!conn) return;
         if(conn.readyState !== conn.OPEN) { return; }
         conn.send(JSON.stringify(res));
