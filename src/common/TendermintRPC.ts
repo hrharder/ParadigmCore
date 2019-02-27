@@ -274,7 +274,7 @@ export class TendermintRPC extends EventEmitter {
         // send every tx in the queue
         this.sending = true;
         for (let i = 0; i < this.queue.length; i++) {
-            const { tx, method, id } = this.queue.pop();
+            const { tx, method, id } = this.queue.shift();
             try {
                 const payload = encodeTx(tx);
                 const res = await this.conn[method]({ tx: payload });
@@ -379,6 +379,8 @@ export class TendermintRPC extends EventEmitter {
      */
     public submitTx(tx: SignedTransaction, mode?: "sync" | "async" | "commit"): Promise<ResponseBroadcastTx> {
         // use a specific broadcast method for this tx
+        // console.log(`======\ncalled with @ ${Date.now()} with tx: ${JSON.stringify(tx, null, 2)}\n=======`)
+
         let method;
         const methodBuilder = m => `broadcastTx${m}`;
         const parsed = mode ? mode.toLowerCase(): null;
@@ -412,6 +414,7 @@ export class TendermintRPC extends EventEmitter {
             // trigger broadcast, if needed
             if (!this.sending) {
                 this.internalSubmitTx().catch((error) => {
+                    warn("tm", "failed to send ABCI tx");
                     reject(error.message);
                 });
             }

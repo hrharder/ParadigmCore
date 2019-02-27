@@ -5400,10 +5400,10 @@ paradigm-connect@0.0.12:
     web3 "^1.0.0-beta.36"
     ws "^6.0.0"
 
-paradigm-contracts@^0.0.5:
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/paradigm-contracts/-/paradigm-contracts-0.0.5.tgz#bc7880599a2181798563ecabb6397602dbd93938"
-  integrity sha512-TSxn5OH6QNoZF8gCMW4L2XQKy5uFKUxHs5AKgj627UiKNELuQxtKiH9uUSn7Hnwu4Y9aaIGQ8XHl1GL0ILL7dw==
+paradigm-contracts@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/paradigm-contracts/-/paradigm-contracts-0.1.0.tgz#79676d78069a9ce8950b87166f693d20de7898c1"
+  integrity sha512-y93SwLNJwkg9CTVhoRgMwN0TdLXkqwn4fjDrhqaIp+ZGe7HB4vfuoHfh7ffv4I+MHYTp6coahnko0bl8PjqeOg==
   dependencies:
     openzeppelin-solidity "^2.1.2"
     paradigm-subcontract-sdk "0.0.4"

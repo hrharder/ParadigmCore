@@ -256,9 +256,9 @@ export class Witness {
         // attach tx handlers (for interface with TendermintRPC)
         this.txEmitter.on("tx", (inTx?: SignedTransaction) => {
             this.tmRpc.submitTx(inTx).then((res: any) => {
-                log("peg", `successfully executed tx: ${res.log}`);
+                log("peg", `successfully executed tx: ${res.log} at ${Date.now()}`);
             }).catch((err) => {
-                warn("peg", `failed sending tx: ${err}`);
+                warn("peg", `\nfailed sending tx: ${err}\n`);
             })
         });
 
