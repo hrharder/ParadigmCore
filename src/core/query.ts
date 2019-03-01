@@ -85,6 +85,6 @@ export function queryWrapper(state: State): (r) => ResponseQuery {
         }
 
         // return `ResponseQuery` object
-        return { code, log, info, key, value}
+        return { code, log, info, key, value, height }
     }
 }
