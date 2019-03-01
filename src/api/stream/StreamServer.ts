@@ -18,7 +18,7 @@ import { Response as Res } from "./Response";
 import { log, warn, err } from "../../common/log";
 import { TendermintRPC } from "../../common/TendermintRPC.js";
 import { decodeTx } from "../../core/util/utils";
-import { convertIsoTimeToUnix } from "../../common/utils";
+import { convertIsoTimeToUnixMs } from "../../common/utils";
 
 // stream server utils
 import {createResponse, createValError, parseOrdersForSubscription } from "./utils.js";
@@ -589,7 +589,7 @@ export class StreamServer extends EventEmitter {
             const { txs } = data.block.data;
 
             // parse time into unix time
-            const unixTs = convertIsoTimeToUnix(time);
+            const unixTs = convertIsoTimeToUnixMs(time);
 
             // reset latest txs array
             this.latestBlockData.txs = [];

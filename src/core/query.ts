@@ -12,6 +12,9 @@
  * ABCI query implementation.
 */
 
+// for supporting query
+import { get, isUndefined } from "lodash";
+
 // custom typings
 import { ResponseQuery } from "../typings/abci";
 
@@ -37,52 +40,51 @@ export function queryWrapper(state: State): (r) => ResponseQuery {
         // destructure query request params
         // @todo leverage more of the possible RequestQuery params
         const { path } = request;
+        
+        // convert path to object traversal ('/' => '.')
+        const dotPath = path.replace(/\//g, ".");
 
-        // path tester regex
-        // @todo improve and move
-        const pathTest = /^(posters|validators){1}\/(0x)[a-zA-Z0-9]{40}\/.*$/;
+        // execute query using lodash get
+        const result = get(state, dotPath, undefined);
 
-        if (!pathTest.test(path)) {
-            code = 1;
-            log = "Failed query: invalid query path."
-            info = "Currently query only accepts poster and validator queries."
-            
-            // construct ResponseQuery object
-            return { code, log, info, height }
+        if (isUndefined(result)) {
+            return {
+                code: 1,
+                log: "Failed query: invalid path."
+            };
         }
 
-        // split path
-        const [ subject, account, filter] = path.split("/");
+        // include the original store-type in return message, and query path
+        info = typeof result;
+        log = `state/${path}`;
+        code = 0;
 
-        // check state object for fields 
-        const accountObject = state[subject][account];
-
-        // check for account and filter
-        if (accountObject && accountObject[filter]) {
-            // encode result as string
-            const result = accountObject[filter].toString();
-
-            // set success status
-            code = 0;
-            log = "Successful query.";
-
-            // buffer key and value for tags
-            key = Buffer.from(filter);
-            value = Buffer.from(result);
-
-            // include string version of result
-            info = result;
-
-            // construct ResponseQuery object
-            return { code, info, log, key, value, height};
+        // stringify return value
+        switch (info) {
+            case "object": { 
+                info = `[${Object.keys(result).toString()}]`;
+                break;
+            }
+            case "number": {
+                info = result.toString();
+                break;
+            }
+            case "string": {
+                info = result.toString();
+                break;
+            }
+            case "bigint": {
+                info = result.toString();
+                break;
+            }
+            default: {
+                code = 1;
+                log = "Failed query: unsupported view.";
+                info = null;
+                break;
+            }
         }
 
-        // case for invalid request/missing account
-        code = 1;
-        log = "Failed query: invalid account or filter.";
-        info = path;
-
-        // construct ResponseQuery object
-        return { code, info, log, height };
+        return { code, log, info, key, value}
     }
 }

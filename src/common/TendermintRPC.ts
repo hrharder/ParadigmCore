@@ -256,6 +256,8 @@ export class TendermintRPC extends EventEmitter {
             } else if (this.connecting === true ){
                 return;
             } else {
+                console.log("killing process (L259 TendermintRPC)");
+                process.exit(1);
                 throw Error("Connection fatally closed, not retrying.");
             }
             

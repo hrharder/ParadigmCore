@@ -183,8 +183,8 @@ let node;       // tendermint node child process instance
 
             // tendermint rpc config
             tendermintRpcUrl: "ws://localhost:26657",
-            reconnAttempts: 20,
-            reconnInterval: 1000,
+            reconnAttempts: 50,
+            reconnInterval: 2000,
 
             // web3 provider url and contract config
             provider: env.WEB3_PROVIDER,

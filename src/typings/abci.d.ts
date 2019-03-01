@@ -90,6 +90,15 @@ interface ResponseCommit {
     data: string | Buffer;
 }
 
+interface ResponseQuery {
+    code: number;
+    log?: string;
+    info?: string;
+    key?: Buffer;
+    value?: Buffer;
+    proof?: any;
+}
+
 // END RESPONSE TYPES
 
 // SUPPORTING TYPES BELOW

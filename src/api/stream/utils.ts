@@ -19,6 +19,7 @@ import { Response as Res } from "./Response";
 // third party and stdlib
 import * as WebSocket from "ws";
 import * as _ from "lodash";
+import { ResponseQuery } from "src/typings/abci";
 
 /**
  * Validate an incoming client message
