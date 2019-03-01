@@ -17,7 +17,8 @@ export let deliverState: State = {
     number: 0,
     startsAt: 0,
     endsAt: 0,
-    limit: 0
+    limit: 0,
+    limitUsed: 0,
   },
   events: {},
   posters: {},

@@ -126,6 +126,8 @@ export function deliverRebalance(tx: SignedRebalanceTx, state: State): ResponseD
                     state.round.number += 1;
                     state.round.startsAt = proposal.round.startsAt;
                     state.round.endsAt = proposal.round.endsAt;
+                    state.round.limit = proposal.round.limit
+                    state.round.limitUsed = 0;
 
                     // copy limits from proposal to each balance
                     Object.keys(propLimits).forEach((i) => {

@@ -143,6 +143,7 @@ interface RoundInfo {
     startsAt:   number;
     endsAt:     number;
     limit:      number;
+    limitUsed:  number,
 }
 
 /**

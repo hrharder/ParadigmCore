@@ -98,6 +98,7 @@ export function deliverOrder(tx: SignedOrderTx, state: State, Order): ResponseDe
         // Begin state modification
         state.posters[poster].limit -= 1;
         state.orderCounter += 1;
+        state.round.limitUsed += 1;
         // End state modification
 
         // add tags (for stream/search)
