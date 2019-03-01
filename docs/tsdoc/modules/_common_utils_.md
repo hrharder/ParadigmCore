@@ -19,19 +19,19 @@
 
 ### Functions
 
-* [convertIsoTimeToUnix](_common_utils_.md#convertisotimetounix)
+* [convertIsoTimeToUnixMs](_common_utils_.md#convertisotimetounixms)
 
 ---
 
 ## Functions
 
-<a id="convertisotimetounix"></a>
+<a id="convertisotimetounixms"></a>
 
-###  convertIsoTimeToUnix
+###  convertIsoTimeToUnixMs
 
-▸ **convertIsoTimeToUnix**(dateTime: *`string`*): `number`
+▸ **convertIsoTimeToUnixMs**(dateTime: *`string`*): `number`
 
-*Defined in [common/utils.ts:18](https://github.com/paradigmfoundation/paradigmcore/blob/80c3bb7/src/common/utils.ts#L18)*
+*Defined in [common/utils.ts:18](https://github.com/paradigmfoundation/paradigmcore/blob/5e7a947/src/common/utils.ts#L18)*
 
 Convert an ISO date-time string to UNIX timestamp.
 
