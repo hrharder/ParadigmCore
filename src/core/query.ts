@@ -7,7 +7,7 @@
  *
  * @author Henry Harder
  * @date (initial)  21-February-2019
- * @date (modified) 21-February-2019
+ * @date (modified) 011-March-2019
  *
  * ABCI query implementation.
 */
@@ -21,7 +21,7 @@ import { ResponseQuery } from "../typings/abci";
 /**
  * Return information about the state and software.
  * 
- * THe `request.path` field is used to direct a query towards a particular state
+ * The `request.path` field is used to direct a query towards a particular state
  * object. Currently, query requests can return information about 
  * 
  * @todo parse path, support multiple query paths and options, util functions 
@@ -46,7 +46,6 @@ export function queryWrapper(state: State): (r) => ResponseQuery {
 
         // execute query using lodash get
         const result = get(state, dotPath, undefined);
-
         if (isUndefined(result)) {
             return {
                 code: 1,
@@ -85,6 +84,7 @@ export function queryWrapper(state: State): (r) => ResponseQuery {
             }
         }
 
+        // return `ResponseQuery` object
         return { code, log, info, key, value}
     }
 }
