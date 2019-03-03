@@ -90,6 +90,12 @@ let node;       // tendermint node child process instance
         // create tendermint subprocess
         node = tendermint.node(env.TM_HOME, options);
 
+        // temporary
+        node.on("error", (e) => {
+            console.log(`\n\nFatal error in tendermint: ${e} at ${Date.now()}\n\n`);
+            process.exit(1);
+        });
+
         // if in debug mode, pipe tendermint logs to STDOUT
         if (env.DEBUG) node.stdout.pipe(process.stdout);
     } catch (error) {
