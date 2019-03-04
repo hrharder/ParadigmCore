@@ -126,6 +126,7 @@ interface Validator {
     power:          number; // vote power on tendermint chain
     publicKey:      Buffer; // raw 32 byte public key 
     ethAccount:     string;
+    firstVote:      number;
     lastVoted:      number;
     lastProposed:   number;
     totalVotes:     number;

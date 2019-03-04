@@ -60,7 +60,8 @@ export function endBlockWrapper(state: State): (r) => ResponseEndBlock {
         });
 
         // return validator updates, if any
-        return { validatorUpdates: [
-        ] };
+        return {
+            validatorUpdates: []
+        };
     };
 }

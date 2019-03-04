@@ -13,7 +13,7 @@
 */
 
 // for supporting query
-import { get, isUndefined } from "lodash";
+import { get, isUndefined, isArray, isBuffer } from "lodash";
 
 // custom typings
 import { ResponseQuery } from "../typings/abci";
@@ -60,8 +60,12 @@ export function queryWrapper(state: State): (r) => ResponseQuery {
 
         // stringify return value
         switch (info) {
-            case "object": { 
-                info = `[${Object.keys(result).toString()}]`;
+            case "object": {
+                if (isBuffer(result)) {
+                    info = `0x${result.toString("hex")}`;
+                } else {
+                    info = `[${Object.keys(result).toString()}]`;
+                }
                 break;
             }
             case "number": {

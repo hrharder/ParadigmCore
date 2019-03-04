@@ -40,6 +40,7 @@ export function initChainWrapper(
 
     // Return initChain function
     return (request) => {
+        console.log(`\n\n${JSON.stringify(request)}\n\n`);
         // add genesis validators to in-state validator list
         request.validators.forEach((validator) => {
             // Generate hexadecimal nodeID from public key
@@ -55,7 +56,8 @@ export function initChainWrapper(
                     publicKey: pubKey,
                     ethAccount: null,
                     lastProposed: null,
-                    lastVoted: 0,
+                    firstVote: null,
+                    lastVoted: null,
                     totalVotes: 0,
                     active: true,
                     genesis: true,

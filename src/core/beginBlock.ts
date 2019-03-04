@@ -61,6 +61,11 @@ export function beginBlockWrapper(state: State): (r) => ResponseBeginBlock {
                 // update (or re-record) validator vote power
                 state.validators[nodeId].power = power;
 
+                // update (or skip) first vote
+                if (!state.validators[nodeId].firstVote) {
+                    state.validators[nodeId].firstVote = currHeight;
+                }
+
                 /**
                  * TEMPORARY
                  * @todo remove
