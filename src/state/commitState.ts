@@ -10,7 +10,7 @@
  * @date (modified) 21-January-2019
  *
  * Object representing the post-commit state of the network.
- */
+ * /
 
 export let commitState: State = {
   round: {
@@ -34,4 +34,4 @@ export let commitState: State = {
   orderCounter: 0,
   lastBlockHeight: 0,
   lastBlockAppHash: null
-};
+};*/

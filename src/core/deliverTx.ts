@@ -31,7 +31,7 @@ import { deliverRebalance } from "./handlers/rebalance";
  *
  * @param request {object} raw transaction as delivered by Tendermint core.
  */
-export function deliverTxWrapper(state: State, Order: any): (r) => ResponseDeliverTx {
+export function deliverTxWrapper(state: IState, Order: any): (r) => ResponseDeliverTx {
     return (request) => {
         // load transaction from request
         const rawTx: Buffer = request.tx;   // Encoded/compressed tx object

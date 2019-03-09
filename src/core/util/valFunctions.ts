@@ -74,6 +74,7 @@ export function validatorUpdate(pubKey: Buffer, power: bigint): ValidatorUpdate 
  * @param state {State} current state object
  * @param cb {function} callback function to execute on each validator
  */
-export function doForEachValidator(state: State, cb: (v, i, a) => void): void {
+export function doForEachValidator(state: IState, cb: (v, i, a) => void): void {
     Object.keys(state.validators).forEach(cb);
 }
+

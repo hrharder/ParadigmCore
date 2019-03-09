@@ -7,10 +7,7 @@ import { Witness } from "src/witness/Witness";
  */
 interface ParadigmCoreOptions {
     version:            string;
-    //tracker:            OrderTracker;
     witness:            Witness;
-    deliverState:       State;
-    commitState:        State;
     abciServPort:       number;
     txGenerator:        TxGenerator;    
     finalityThreshold:  number;

@@ -19,6 +19,8 @@ import { ResponseInitChain } from "../typings/abci";
 import { pubToAddr } from "./util/valFunctions";
 import { computeConf, syncStates } from "./util/utils";
 
+import * as _ from "lodash"
+
 /**
  * Called once upon chain initialization. Sets initial validators and consensus
  * parameters.
@@ -26,8 +28,8 @@ import { computeConf, syncStates } from "./util/utils";
  * @param request {RequestInitChain}    genesis information
  */
 export function initChainWrapper(
-    deliverState: State,
-    commitState: State,
+    deliverState: IState,
+    commitState: IState,
     params: ConsensusParams
 ): (r) => ResponseInitChain {
     // destructure initial consensus parameters
@@ -40,7 +42,16 @@ export function initChainWrapper(
 
     // Return initChain function
     return (request) => {
-        console.log(`\n\n${JSON.stringify(request)}\n\n`);
+        
+        // load genesis state
+        const stateBytes = Buffer.from(request.appStateBytes, "base64");
+        const stateJson = JSON.parse(stateBytes.toString());
+
+        // set initial states
+        // deliverState = _.cloneDeep(stateJson);
+        // commitState = _.cloneDeep(stateJson);
+        
+
         // add genesis validators to in-state validator list
         request.validators.forEach((validator) => {
             // Generate hexadecimal nodeID from public key

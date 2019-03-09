@@ -15,6 +15,7 @@
 // paradigmcore classes/types
 import { Witness } from "../witness/Witness";
 import { Hasher } from "../crypto/Hasher";
+import { State } from "../state/State";
 
 // custom typings
 import { ResponseCommit } from "../typings/abci";
@@ -44,7 +45,7 @@ export function commitWrapper(
             deliverState.lastBlockHeight += 1;
 
             // Generate new state hash and update
-            stateHash = Hasher.hashState(deliverState);
+            stateHash = deliverState.generateAppHash();
             deliverState.lastBlockAppHash = stateHash;
 
             // temporarily log state if a rebalance event occurred

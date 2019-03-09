@@ -30,7 +30,7 @@ import { ResponseDeliverTx, ResponseCheckTx } from "src/typings/abci";
  * @param tx    {SignedOrderTx} decoded transaction body
  * @param state {State}         current round state
  */
-export function checkOrder(tx: SignedOrderTx, state: State, Order): ResponseCheckTx {
+export function checkOrder(tx: SignedOrderTx, state: IState, Order): ResponseCheckTx {
     let order: Order;   // Paradigm order object
     let poster: string; // Recovered poster address from signature
 
@@ -73,7 +73,7 @@ export function checkOrder(tx: SignedOrderTx, state: State, Order): ResponseChec
  * @param state {State}         current round state
  * @param q     {OrderTracker}  valid order queue
  */
-export function deliverOrder(tx: SignedOrderTx, state: State, Order): ResponseDeliverTx {
+export function deliverOrder(tx: SignedOrderTx, state: IState, Order): ResponseDeliverTx {
     let order: Order;   // Paradigm order object
     let poster: string; // Recovered poster address from signature
     let tags: KVPair[] = [];

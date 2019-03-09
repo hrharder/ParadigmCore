@@ -31,7 +31,7 @@ import { ResponseDeliverTx, ResponseCheckTx } from "../../typings/abci";
  * @param tx    {SignedRebalanceTx} decoded transaction body
  * @param state {State}             current round state
  */
-export function checkRebalance(tx: SignedRebalanceTx, state: State): ResponseCheckTx {
+export function checkRebalance(tx: SignedRebalanceTx, state: IState): ResponseCheckTx {
     // Load proposal from rebalance tx
     const proposal: RebalanceData = tx.data;
 
@@ -66,7 +66,7 @@ export function checkRebalance(tx: SignedRebalanceTx, state: State): ResponseChe
  * @param state {State}             current round state
  * @param rb    {StakeRebalancer}   the current rebalancer instance
  */
-export function deliverRebalance(tx: SignedRebalanceTx, state: State): ResponseDeliverTx {
+export function deliverRebalance(tx: SignedRebalanceTx, state: IState): ResponseDeliverTx {
     // unpack proposal from transaction
     const proposal: RebalanceData = tx.data;
     let tags: KVPair[] = [];

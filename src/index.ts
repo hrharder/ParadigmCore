@@ -30,10 +30,6 @@ import { TxGenerator } from "./core/util/TxGenerator";
 import { StreamServer } from "./api/stream/StreamServer";
 import { methods } from "./api/stream/methods";
 
-// State object templates
-import { commitState as cState } from "./state/commitState";
-import { deliverState as dState } from "./state/deliverState";
-
 // Initialization functions
 import { start as startAPIserver } from "./api/post/HttpServer";
 import { start as startMain } from "./core/main";
@@ -219,8 +215,6 @@ let node;       // tendermint node child process instance
 
             // ABCI configuration options
             abciServPort: parseInt(env.ABCI_PORT, 10),
-            commitState: cState,
-            deliverState: dState,
             version: env.npm_package_version,
 
             // Rebalancer and consensus options

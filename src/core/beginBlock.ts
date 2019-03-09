@@ -26,8 +26,9 @@ import { doForEachValidator } from "./util/valFunctions";
  *
  * @param request {object} raw transaction as delivered by Tendermint core.
  */
-export function beginBlockWrapper(state: State): (r) => ResponseBeginBlock {
+export function beginBlockWrapper(state: IState): (r) => ResponseBeginBlock {
     return (request) => {
+        console.log('beginBlock')
         // parse height and proposer from header
         const currHeight: number = Number(request.header.height);
         const proposer: string = request.header.proposerAddress.toString("hex");

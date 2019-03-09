@@ -17,7 +17,7 @@ import { ResponseEndBlock } from "../typings/abci";
 import { bigIntReplacer } from "../common/static/bigIntUtils";
 import { validatorUpdate, doForEachValidator } from "./util/valFunctions";
 
-export function endBlockWrapper(state: State): (r) => ResponseEndBlock {
+export function endBlockWrapper(state: IState): (r) => ResponseEndBlock {
     return (request) => {
         /**
          * Implementation idea:

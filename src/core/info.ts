@@ -14,6 +14,7 @@
 
 // custom typings
 import { ResponseInfo } from "../typings/abci";
+import { State } from "src/state/State";
 
 /**
  * Return information about the state and software.
@@ -22,12 +23,12 @@ import { ResponseInfo } from "../typings/abci";
  */
 export function infoWrapper(state: State, version: string): (r) => ResponseInfo {
     return (request) => {
+        console.log('info')
         return {
             data: "ParadigmCore (alpha)",
-            lastBlockAppHash: state.lastBlockAppHash,
-            lastBlockHeight: parseInt(state.lastBlockHeight.toString(), 10),
+            lastBlockAppHash: null,
+            lastBlockHeight: 0,
             version,
-            arb: "any"
         };
     };
 }

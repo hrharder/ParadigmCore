@@ -16,7 +16,7 @@
  * Outer level datastructure representing the state of the network, including
  * poster staked balances, poster rate limit, validator set, etc.
  */
-interface State {
+interface IState {
     /**
      * Contains data necessary to track and update the rebalance rounds.
      */

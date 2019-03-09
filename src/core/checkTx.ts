@@ -37,7 +37,7 @@ import { checkRebalance } from "./handlers/rebalance";
  *
  * @param request {object} raw transaction as delivered by Tendermint core.
  */
-export function checkTxWrapper(state: State, Order: any): (r) => ResponseCheckTx {
+export function checkTxWrapper(state: IState, Order: any): (r) => ResponseCheckTx {
     return (request) => {
         // load transaction from request
         const rawTx: Buffer = request.tx;   // Encoded/compressed tx object

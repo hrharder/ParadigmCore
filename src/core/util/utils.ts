@@ -33,7 +33,7 @@ import * as zlib from "zlib";
  * @param tx    {SignedTransaction} signed transaction object (decoded)
  * @param state {State}             current state
  */
-export function preVerifyTx(tx: SignedTransaction, state: State): boolean {
+export function preVerifyTx(tx: SignedTransaction, state: IState): boolean {
     // result of verification
     let isValid: boolean;
 
@@ -71,7 +71,7 @@ export function preVerifyTx(tx: SignedTransaction, state: State): boolean {
  * @param source {State} the state to copy FROM
  * @param target {State} the state to copy TO
  */
-export function syncStates(source: State, target: State): void {
+export function syncStates(source: IState, target: IState): void {
     Object.keys(source).forEach((key) => {
         if (typeof source[key] !== "object") {
             target[key] = source[key].valueOf();
@@ -179,7 +179,7 @@ export function computeConf(active: number): number {
  * @param state {State} current network state object
  * @param last {Array} array of 'lastVotes' (from RequestBeginBlock) 
  */
-export function stateUpdateConfThreshold(state: State, last: object[]): void {
+export function stateUpdateConfThreshold(state: IState, last: object[]): void {
     state.consensusParams.confirmationThreshold = computeConf(last.length);
 }
 
@@ -190,7 +190,7 @@ export function stateUpdateConfThreshold(state: State, last: object[]): void {
  *
  * @todo make size parameter an in-state parameter
  */
-export function verifyOrder(order: any, state: State): boolean {
+export function verifyOrder(order: any, state: IState): boolean {
     // Convert order => string => buffer and count bytes
     let orderBuf: Buffer = Buffer.from(JSON.stringify(order), "utf8");
     let maxSize: number = state.consensusParams.maxOrderBytes;
@@ -303,7 +303,7 @@ export function parseWitness(data: WitnessData): ParsedWitnessData {
  * @param state {State} current state object
  * @param tx {ParsedWitnessData} the witness attestation tx being executed
  */
-export function addNewEvent(state: State, tx: ParsedWitnessData): boolean {
+export function addNewEvent(state: IState, tx: ParsedWitnessData): boolean {
     // destructure event data
     const { subject, amount, block, address, publicKey, id } = tx;
 
@@ -364,7 +364,7 @@ export function addNewEvent(state: State, tx: ParsedWitnessData): boolean {
  * @param tx {ParsedWitnessData} the witness transaction being executed
  */
 export function addConfMaybeApplyEvent(
-    state: State,
+    state: IState,
     tx: ParsedWitnessData
 ): boolean {
     // destructure event data
@@ -415,7 +415,7 @@ export function addConfMaybeApplyEvent(
  * @param state {State} the current deliverState object
  * @param tx {ParsedWitnessData} the witness transaction being executed
  */
-export function applyPosterEvent(state: State, tx: ParsedWitnessData): boolean {
+export function applyPosterEvent(state: IState, tx: ParsedWitnessData): boolean {
     // destructure necessary event data
     const { amount, block, address, id } = tx;
 
@@ -481,7 +481,7 @@ export function applyPosterEvent(state: State, tx: ParsedWitnessData): boolean {
  * @param tx {ParsedWitnessData} the witness transaction being executed
  */
 export function applyValidatorEvent(
-    state: State,
+    state: IState,
     tx: ParsedWitnessData
 ): boolean {
     // destructure necessary event data

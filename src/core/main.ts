@@ -30,16 +30,15 @@ import { infoWrapper } from "./info";
 import { endBlockWrapper } from "./endBlock";
 
 // custom types
-import { ParadigmCoreOptions } from "src/typings/abci";
+import { ParadigmCoreOptions } from "../typings/abci";
 import { queryWrapper } from "./query";
+import { State } from "../state/State";
 
 /**
  * Initialize and start the ABCI application.
  *
  * @param options {object} Options object with parameters:
  *  - options.version       {string}        paradigmcore version string
- *  - options.deliverState  {object}        deliverTx state object
- *  - options.commitState   {object}        commit state object
  *  - options.abciServPort  {number}        local ABCI server port
  *  - options.finalityThreshold {number}    Ethereum block finality threshold
  *  - options.maxOrderBytes {number}        maximum order size in bytes
@@ -56,8 +55,8 @@ export async function start(options: ParadigmCoreOptions): Promise<null> {
         let Order = options.paradigm.Order;
 
         // Load state objects
-        let dState = options.deliverState;
-        let cState = options.commitState;
+        let dState = new State();
+        let cState = new State();
 
         // Load initial consensus params
         let consensusParams: ConsensusParams = {

@@ -51,7 +51,7 @@ export class Hasher {
    *
    * @param state {State} the current state object
    */
-  public static hashState(state: State): Buffer {
+  public static hashState(state: IState): Buffer {
     let stateHash: Buffer;
     const hashPrep: object = {
       posters: JSON.stringify(state.posters, bigIntReplacer),

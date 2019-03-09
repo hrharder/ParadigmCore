@@ -35,7 +35,7 @@ import {
  * @param tx    {object} decoded transaction body
  * @param state {object} current round state
  */
-export function checkWitness(tx: SignedWitnessTx, state: State): ResponseCheckTx {
+export function checkWitness(tx: SignedWitnessTx, state: IState): ResponseCheckTx {
     try {
         parseWitness(tx.data);
         log("mem", "stake witness transaction accepted");
@@ -53,7 +53,7 @@ export function checkWitness(tx: SignedWitnessTx, state: State): ResponseCheckTx
  * @param tx    {object} decoded transaction body
  * @param state {object} current round state
  */
-export function deliverWitness(tx: SignedWitnessTx, state: State): ResponseDeliverTx {
+export function deliverWitness(tx: SignedWitnessTx, state: IState): ResponseDeliverTx {
     // will store parsed event data (after validation)
     let parsedTx: ParsedWitnessData;
     

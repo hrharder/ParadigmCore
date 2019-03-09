@@ -17,6 +17,7 @@ import { get, isUndefined, isArray, isBuffer } from "lodash";
 
 // custom typings
 import { ResponseQuery } from "../typings/abci";
+import { State } from "src/state/State";
 
 /**
  * Return information about the state and software.
@@ -45,7 +46,7 @@ export function queryWrapper(state: State): (r) => ResponseQuery {
         const dotPath = path.replace(/\//g, ".");
 
         // execute query using lodash get
-        const result = get(state, dotPath, undefined);
+        const result = get(state.toJSON(), dotPath, undefined);
         if (isUndefined(result)) {
             return {
                 code: 1,
@@ -79,6 +80,9 @@ export function queryWrapper(state: State): (r) => ResponseQuery {
             case "bigint": {
                 info = result.toString();
                 break;
+            }
+            case "undefined": {
+                return;
             }
             default: {
                 code = 1;
