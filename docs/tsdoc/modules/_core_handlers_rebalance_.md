@@ -17,9 +17,9 @@
 
 ###  checkRebalance
 
-▸ **checkRebalance**(tx: *`SignedRebalanceTx`*, state: *`State`*): `ResponseCheckTx`
+▸ **checkRebalance**(tx: *`SignedRebalanceTx`*, state: *`IState`*): `ResponseCheckTx`
 
-*Defined in [core/handlers/rebalance.ts:34](https://github.com/paradigmfoundation/paradigmcore/blob/5e7a947/src/core/handlers/rebalance.ts#L34)*
+*Defined in [core/handlers/rebalance.ts:34](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/core/handlers/rebalance.ts#L34)*
 
 Verify a Rebalance proposal before accepting it into the local mempool.
 
@@ -28,7 +28,7 @@ Verify a Rebalance proposal before accepting it into the local mempool.
 | Name | Type | Description |
 | ------ | ------ | ------ |
 | tx | `SignedRebalanceTx` |  decoded transaction body |
-| state | `State` |  current round state |
+| state | `IState` |  current round state |
 
 **Returns:** `ResponseCheckTx`
 
@@ -37,9 +37,9 @@ ___
 
 ###  deliverRebalance
 
-▸ **deliverRebalance**(tx: *`SignedRebalanceTx`*, state: *`State`*): `ResponseDeliverTx`
+▸ **deliverRebalance**(tx: *`SignedRebalanceTx`*, state: *`IState`*): `ResponseDeliverTx`
 
-*Defined in [core/handlers/rebalance.ts:69](https://github.com/paradigmfoundation/paradigmcore/blob/5e7a947/src/core/handlers/rebalance.ts#L69)*
+*Defined in [core/handlers/rebalance.ts:69](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/core/handlers/rebalance.ts#L69)*
 
 Execute a Rebalance transaction and adopt the new mapping in state.
 
@@ -48,7 +48,7 @@ Execute a Rebalance transaction and adopt the new mapping in state.
 | Name | Type | Description |
 | ------ | ------ | ------ |
 | tx | `SignedRebalanceTx` |  decoded transaction body |
-| state | `State` |  current round state |
+| state | `IState` |  current round state |
 
 **Returns:** `ResponseDeliverTx`
 

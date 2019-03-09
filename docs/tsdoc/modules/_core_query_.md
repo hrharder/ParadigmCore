@@ -16,9 +16,9 @@
 
 ###  queryWrapper
 
-▸ **queryWrapper**(state: *`State`*): `function`
+▸ **queryWrapper**(state: *[State](../classes/_state_state_.state.md)*): `function`
 
-*Defined in [core/query.ts:32](https://github.com/paradigmfoundation/paradigmcore/blob/5e7a947/src/core/query.ts#L32)*
+*Defined in [core/query.ts:33](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/core/query.ts#L33)*
 
 Return information about the state and software.
 
@@ -30,7 +30,7 @@ The `request.path` field is used to direct a query towards a particular state ob
 
 | Name | Type |
 | ------ | ------ |
-| state | `State` |
+| state | [State](../classes/_state_state_.state.md) |
 
 **Returns:** `function`
 

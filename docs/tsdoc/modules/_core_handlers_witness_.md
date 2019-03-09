@@ -17,9 +17,9 @@
 
 ###  checkWitness
 
-▸ **checkWitness**(tx: *`SignedWitnessTx`*, state: *`State`*): `ResponseCheckTx`
+▸ **checkWitness**(tx: *`SignedWitnessTx`*, state: *`IState`*): `ResponseCheckTx`
 
-*Defined in [core/handlers/witness.ts:38](https://github.com/paradigmfoundation/paradigmcore/blob/5e7a947/src/core/handlers/witness.ts#L38)*
+*Defined in [core/handlers/witness.ts:38](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/core/handlers/witness.ts#L38)*
 
 Performs mempool verification of Ethereum StakeEvent transactions. Condition for validity is purely structural. I.E. are all necessary parameters present?
 
@@ -28,7 +28,7 @@ Performs mempool verification of Ethereum StakeEvent transactions. Condition for
 | Name | Type | Description |
 | ------ | ------ | ------ |
 | tx | `SignedWitnessTx` |  decoded transaction body |
-| state | `State` |  current round state |
+| state | `IState` |  current round state |
 
 **Returns:** `ResponseCheckTx`
 
@@ -37,9 +37,9 @@ ___
 
 ###  deliverWitness
 
-▸ **deliverWitness**(tx: *`SignedWitnessTx`*, state: *`State`*): `ResponseDeliverTx`
+▸ **deliverWitness**(tx: *`SignedWitnessTx`*, state: *`IState`*): `ResponseDeliverTx`
 
-*Defined in [core/handlers/witness.ts:56](https://github.com/paradigmfoundation/paradigmcore/blob/5e7a947/src/core/handlers/witness.ts#L56)*
+*Defined in [core/handlers/witness.ts:56](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/core/handlers/witness.ts#L56)*
 
 Performs state modification of Stake Event transactions (modify staker's balance).
 
@@ -48,7 +48,7 @@ Performs state modification of Stake Event transactions (modify staker's balance
 | Name | Type | Description |
 | ------ | ------ | ------ |
 | tx | `SignedWitnessTx` |  decoded transaction body |
-| state | `State` |  current round state |
+| state | `IState` |  current round state |
 
 **Returns:** `ResponseDeliverTx`
 

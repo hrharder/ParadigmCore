@@ -229,8 +229,8 @@ Additionally, feel free to open issues and pull requests with bug fixes or enhan
 * ["core/util/valFunctions"](modules/_core_util_valfunctions_.md)
 * ["crypto/Hasher"](modules/_crypto_hasher_.md)
 * ["index"](modules/_index_.md)
+* ["state/State"](modules/_state_state_.md)
 * ["state/commitState"](modules/_state_commitstate_.md)
-* ["state/deliverState"](modules/_state_deliverstate_.md)
 * ["witness/Witness"](modules/_witness_witness_.md)
 
 ---
