@@ -5,7 +5,7 @@
   "main": "./dist/index.js",
   "scripts": {
     "build": "tsc",
-    "preinstall": "./scripts/preinstall.sh",
+    "preinstall": "export DONEVAL=0 && ./scripts/preinstall.sh",
     "install": "yarn",
     "postinstall": "export PCHOME=$(pwd) && node ./init.js",
     "start": "node ./dist/index.js",
