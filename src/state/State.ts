@@ -241,6 +241,7 @@ export class State {
                 }
             });
         } catch (e) {
+            console.log("failed to read");
             throw Error(`Failed to read state file: ${e.message}`);
         }
     }
@@ -255,7 +256,7 @@ export class State {
      * internal `internalWriteFile` method.
      */
     public async writeToDisk() {
-        if (this._readOnly) {
+        if (this._readOnly) { 
             return;
         }
         const strData = JSON.stringify(this.toJSON(), (k, v) => {
