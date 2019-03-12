@@ -18,7 +18,7 @@
 
 ▸ **decodeTx**(tx: *`string`*): `string`
 
-*Defined in [common/index.ts:8](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/common/index.ts#L8)*
+*Defined in [common/index.ts:8](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/common/index.ts#L8)*
 
 Decodes and decompresses a raw transaction string.
 

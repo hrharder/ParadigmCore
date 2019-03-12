@@ -18,7 +18,7 @@
 
 **methods**: *`object`*
 
-*Defined in [api/stream/methods.ts:25](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/api/stream/methods.ts#L25)*
+*Defined in [api/stream/methods.ts:25](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/api/stream/methods.ts#L25)*
 
 Method implementations for the JSONRPC StreamAPI server (StreamServer)
 
@@ -28,7 +28,7 @@ Method implementations for the JSONRPC StreamAPI server (StreamServer)
 
 ▸ **session.end**(server: *[StreamServer](../classes/_api_stream_streamserver_.streamserver.md)*, client: *`WebSocket`*, req: *[Request](../classes/_api_stream_request_.request.md)*): `Promise`<`void`>
 
-*Defined in [api/stream/methods.ts:26](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/api/stream/methods.ts#L26)*
+*Defined in [api/stream/methods.ts:26](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/api/stream/methods.ts#L26)*
 
 **Parameters:**
 
@@ -47,7 +47,7 @@ ___
 
 ▸ **state.latestHeight**(server: *[StreamServer](../classes/_api_stream_streamserver_.streamserver.md)*, client: *`WebSocket`*, req: *[Request](../classes/_api_stream_request_.request.md)*): `Promise`<[Response](../classes/_api_stream_response_.response.md)>
 
-*Defined in [api/stream/methods.ts:68](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/api/stream/methods.ts#L68)*
+*Defined in [api/stream/methods.ts:68](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/api/stream/methods.ts#L68)*
 
 **Parameters:**
 
@@ -66,7 +66,7 @@ ___
 
 ▸ **state.query**(server: *[StreamServer](../classes/_api_stream_streamserver_.streamserver.md)*, client: *`WebSocket`*, req: *[Request](../classes/_api_stream_request_.request.md)*): `Promise`<[Response](../classes/_api_stream_response_.response.md)>
 
-*Defined in [api/stream/methods.ts:80](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/api/stream/methods.ts#L80)*
+*Defined in [api/stream/methods.ts:80](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/api/stream/methods.ts#L80)*
 
 **Parameters:**
 
@@ -85,7 +85,7 @@ ___
 
 ▸ **subscription.end**(server: *[StreamServer](../classes/_api_stream_streamserver_.streamserver.md)*, client: *`WebSocket`*, req: *[Request](../classes/_api_stream_request_.request.md)*): `Promise`<[Response](../classes/_api_stream_response_.response.md)>
 
-*Defined in [api/stream/methods.ts:49](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/api/stream/methods.ts#L49)*
+*Defined in [api/stream/methods.ts:49](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/api/stream/methods.ts#L49)*
 
 **Parameters:**
 
@@ -104,7 +104,7 @@ ___
 
 ▸ **subscription.start**(server: *[StreamServer](../classes/_api_stream_streamserver_.streamserver.md)*, client: *`WebSocket`*, req: *[Request](../classes/_api_stream_request_.request.md)*): `Promise`<[Response](../classes/_api_stream_response_.response.md)>
 
-*Defined in [api/stream/methods.ts:30](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/api/stream/methods.ts#L30)*
+*Defined in [api/stream/methods.ts:30](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/api/stream/methods.ts#L30)*
 
 **Parameters:**
 

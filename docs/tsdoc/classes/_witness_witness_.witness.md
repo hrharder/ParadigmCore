@@ -68,7 +68,7 @@ See spec for more details.
 
 ⊕ **new Witness**(opts: *`any`*): [Witness](_witness_witness_.witness.md)
 
-*Defined in [witness/Witness.ts:217](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/witness/Witness.ts#L217)*
+*Defined in [witness/Witness.ts:218](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/witness/Witness.ts#L218)*
 
 PRIVATE constructor. Do not use. Create new `witness` instances with Witness.create(options)
 
@@ -90,7 +90,7 @@ ___
 
 **● currHeight**: *`number`*
 
-*Defined in [witness/Witness.ts:162](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/witness/Witness.ts#L162)*
+*Defined in [witness/Witness.ts:163](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/witness/Witness.ts#L163)*
 
 The "best" (highest) known height of the Ethereum blockchain.
 
@@ -101,7 +101,7 @@ ___
 
 **● eventEmitterContract**: *`any`*
 
-*Defined in [witness/Witness.ts:192](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/witness/Witness.ts#L192)*
+*Defined in [witness/Witness.ts:193](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/witness/Witness.ts#L193)*
 
 The `web3.Contract` instance of the EventEmitter contract, used to interface with the paradigm contract system.
 
@@ -112,7 +112,7 @@ ___
 
 **● events**: *`any`*
 
-*Defined in [witness/Witness.ts:210](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/witness/Witness.ts#L210)*
+*Defined in [witness/Witness.ts:211](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/witness/Witness.ts#L211)*
 
 Mapping that tracks pending events from the Ethereum contracts.
 
@@ -123,7 +123,7 @@ ___
 
 **● finalityThreshold**: *`number`*
 
-*Defined in [witness/Witness.ts:152](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/witness/Witness.ts#L152)*
+*Defined in [witness/Witness.ts:153](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/witness/Witness.ts#L153)*
 
 THe currently agreed up block-maturation threshold for Ethereum events. This value should be agreed upon by all validators.
 
@@ -134,7 +134,7 @@ ___
 
 **● generator**: *[TxGenerator](_core_util_txgenerator_.txgenerator.md)*
 
-*Defined in [witness/Witness.ts:207](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/witness/Witness.ts#L207)*
+*Defined in [witness/Witness.ts:208](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/witness/Witness.ts#L208)*
 
 ABCI transaction generator and signer (for validators).
 
@@ -145,7 +145,7 @@ ___
 
 **● initHeight**: *`number`*
 
-*Defined in [witness/Witness.ts:159](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/witness/Witness.ts#L159)*
+*Defined in [witness/Witness.ts:160](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/witness/Witness.ts#L160)*
 
 The height of the Ethereum blockchain when this `Witness` instance was started. Used to check if historical events (before witness started) are confirmed or not.
 
@@ -156,7 +156,7 @@ ___
 
 **● initialized**: *`boolean`*
 
-*Defined in [witness/Witness.ts:127](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/witness/Witness.ts#L127)*
+*Defined in [witness/Witness.ts:128](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/witness/Witness.ts#L128)*
 
 Boolean value that indicates weather or not `.initialize()` has been called successfully.
 
@@ -167,7 +167,7 @@ ___
 
 **● periodEnd**: *`number`*
 
-*Defined in [witness/Witness.ts:179](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/witness/Witness.ts#L179)*
+*Defined in [witness/Witness.ts:180](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/witness/Witness.ts#L180)*
 
 The block at which current period ends.
 
@@ -178,7 +178,7 @@ ___
 
 **● periodLength**: *`number`*
 
-*Defined in [witness/Witness.ts:170](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/witness/Witness.ts#L170)*
+*Defined in [witness/Witness.ts:171](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/witness/Witness.ts#L171)*
 
 The length of the current period (in Ethereum blocks).
 
@@ -189,7 +189,7 @@ ___
 
 **● periodLimit**: *`number`*
 
-*Defined in [witness/Witness.ts:173](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/witness/Witness.ts#L173)*
+*Defined in [witness/Witness.ts:174](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/witness/Witness.ts#L174)*
 
 The number of transactions accepted in a period. Used for rebalance.
 
@@ -200,7 +200,7 @@ ___
 
 **● periodNumber**: *`number`*
 
-*Defined in [witness/Witness.ts:167](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/witness/Witness.ts#L167)*
+*Defined in [witness/Witness.ts:168](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/witness/Witness.ts#L168)*
 
 The incremental number tracking the current rebalance period.
 
@@ -211,7 +211,7 @@ ___
 
 **● periodStart**: *`number`*
 
-*Defined in [witness/Witness.ts:176](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/witness/Witness.ts#L176)*
+*Defined in [witness/Witness.ts:177](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/witness/Witness.ts#L177)*
 
 The block at which the current period ends.
 
@@ -222,7 +222,7 @@ ___
 
 **● posterBalances**: *`PosterBalances`*
 
-*Defined in [witness/Witness.ts:213](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/witness/Witness.ts#L213)*
+*Defined in [witness/Witness.ts:214](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/witness/Witness.ts#L214)*
 
 Mapping that tracks poster balances. Used to submit proposals.
 
@@ -233,7 +233,7 @@ ___
 
 **● rebalanceEmitter**: *`EventEmitter`*
 
-*Defined in [witness/Witness.ts:186](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/witness/Witness.ts#L186)*
+*Defined in [witness/Witness.ts:187](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/witness/Witness.ts#L187)*
 
 Event emitter triggered when a rebalance TX is included in a block.
 
@@ -246,7 +246,7 @@ ___
 
 **● reconnAttempts**: *`number`*
 
-*Defined in [witness/Witness.ts:201](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/witness/Witness.ts#L201)*
+*Defined in [witness/Witness.ts:202](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/witness/Witness.ts#L202)*
 
 Number of time to attempt to recover connection to Tendermint RPC.
 
@@ -257,7 +257,7 @@ ___
 
 **● reconnInterval**: *`number`*
 
-*Defined in [witness/Witness.ts:204](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/witness/Witness.ts#L204)*
+*Defined in [witness/Witness.ts:205](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/witness/Witness.ts#L205)*
 
 Interval (in ms) between each attempt to reconnect with the RPC server.
 
@@ -268,7 +268,7 @@ ___
 
 **● started**: *`boolean`*
 
-*Defined in [witness/Witness.ts:133](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/witness/Witness.ts#L133)*
+*Defined in [witness/Witness.ts:134](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/witness/Witness.ts#L134)*
 
 Boolean value that indicates if the instance is "listening" and attesting to (via ABCI transaction) Ethereum events.
 
@@ -279,7 +279,7 @@ ___
 
 **● tmRpc**: *[TendermintRPC](_common_tendermintrpc_.tendermintrpc.md)*
 
-*Defined in [witness/Witness.ts:195](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/witness/Witness.ts#L195)*
+*Defined in [witness/Witness.ts:196](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/witness/Witness.ts#L196)*
 
 Witness class's connection to the Tendermint RPC server.
 
@@ -290,7 +290,7 @@ ___
 
 **● tmRpcUrl**: *`URL`*
 
-*Defined in [witness/Witness.ts:198](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/witness/Witness.ts#L198)*
+*Defined in [witness/Witness.ts:199](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/witness/Witness.ts#L199)*
 
 Node URL object of provided Tendermint RPC URl.
 
@@ -301,7 +301,7 @@ ___
 
 **● txEmitter**: *`EventEmitter`*
 
-*Defined in [witness/Witness.ts:215](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/witness/Witness.ts#L215)*
+*Defined in [witness/Witness.ts:216](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/witness/Witness.ts#L216)*
 
 ___
 <a id="txqueue"></a>
@@ -310,7 +310,7 @@ ___
 
 **● txQueue**: *`SignedTransaction`[]*
 
-*Defined in [witness/Witness.ts:217](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/witness/Witness.ts#L217)*
+*Defined in [witness/Witness.ts:218](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/witness/Witness.ts#L218)*
 
 ___
 <a id="web3"></a>
@@ -319,7 +319,7 @@ ___
 
 **● web3**: *`Web3`*
 
-*Defined in [witness/Witness.ts:144](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/witness/Witness.ts#L144)*
+*Defined in [witness/Witness.ts:145](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/witness/Witness.ts#L145)*
 
 The `web3.js` provider instance, configured when assigned based on witness configuration options.
 
@@ -330,7 +330,7 @@ ___
 
 **● web3provider**: *`URL`*
 
-*Defined in [witness/Witness.ts:138](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/witness/Witness.ts#L138)*
+*Defined in [witness/Witness.ts:139](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/witness/Witness.ts#L139)*
 
 URL of the configured `web3` provider.
 
@@ -344,7 +344,7 @@ ___
 
 ▸ **connectWeb3**(): `number`
 
-*Defined in [witness/Witness.ts:421](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/witness/Witness.ts#L421)*
+*Defined in [witness/Witness.ts:430](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/witness/Witness.ts#L430)*
 
 Used to create web3 instance (based on provider generated in `this.getProvider()` method).
 
@@ -357,7 +357,7 @@ ___
 
 ▸ **execEventTx**(event: *`WitnessData`*): `Promise`<`void`>
 
-*Defined in [witness/Witness.ts:644](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/witness/Witness.ts#L644)*
+*Defined in [witness/Witness.ts:653](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/witness/Witness.ts#L653)*
 
 Generate and send and event witness transaction.
 
@@ -376,7 +376,7 @@ ___
 
 ▸ **execRebalanceTx**(round: *`any`*, start: *`any`*, length: *`any`*): `SignedTransaction`
 
-*Defined in [witness/Witness.ts:609](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/witness/Witness.ts#L609)*
+*Defined in [witness/Witness.ts:618](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/witness/Witness.ts#L618)*
 
 Generates a rebalance transaction object by computing proportional allocation of transaction throughput based on stake size.
 
@@ -397,7 +397,7 @@ ___
 
 ▸ **getProvider**(): `WebsocketProvider`
 
-*Defined in [witness/Witness.ts:372](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/witness/Witness.ts#L372)*
+*Defined in [witness/Witness.ts:381](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/witness/Witness.ts#L381)*
 
 Used to connect to Web3 provider. Called during initialization, and if a web3 disconnect is detected.
 
@@ -410,7 +410,7 @@ ___
 
 ▸ **handleBlock**(error: *`any`*, res: *`any`*): `void`
 
-*Defined in [witness/Witness.ts:525](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/witness/Witness.ts#L525)*
+*Defined in [witness/Witness.ts:534](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/witness/Witness.ts#L534)*
 
 New Ethereum block event handler. Updates balances and executes ABCI transactions at appropriate finality blocks.
 
@@ -430,7 +430,7 @@ ___
 
 ▸ **handleParadigmEvent**(error: *`any`*, res: *`any`*): `void`
 
-*Defined in [witness/Witness.ts:482](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/witness/Witness.ts#L482)*
+*Defined in [witness/Witness.ts:491](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/witness/Witness.ts#L491)*
 
 Stake event handler. NOTE: events are indexed by the block they occur in, not the finality block for that event.
 
@@ -450,7 +450,7 @@ ___
 
 ▸ **initialize**(): `Promise`<`number`>
 
-*Defined in [witness/Witness.ts:288](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/witness/Witness.ts#L288)*
+*Defined in [witness/Witness.ts:289](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/witness/Witness.ts#L289)*
 
 Initialize rebalancer instance by connecting to a web3 endpoint and instantiating contract instance. Uses error codes.
 
@@ -464,7 +464,7 @@ ___
 
 ▸ **start**(): `Promise`<`number`>
 
-*Defined in [witness/Witness.ts:326](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/witness/Witness.ts#L326)*
+*Defined in [witness/Witness.ts:327](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/witness/Witness.ts#L327)*
 
 Starts rebalancer instance after node synchronization, and connects to local Tendermint instance via ABCI.
 
@@ -478,7 +478,7 @@ ___
 
 ▸ **subscribe**(from?: *`number`*): `number`
 
-*Defined in [witness/Witness.ts:442](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/witness/Witness.ts#L442)*
+*Defined in [witness/Witness.ts:451](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/witness/Witness.ts#L451)*
 
 Subscribe to relevant Ethereum events and attach handlers.
 
@@ -497,7 +497,7 @@ ___
 
 ▸ **synchronize**(round: *`number`*, startsAt: *`number`*, endsAt: *`number`*): `void`
 
-*Defined in [witness/Witness.ts:353](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/witness/Witness.ts#L353)*
+*Defined in [witness/Witness.ts:362](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/witness/Witness.ts#L362)*
 
 Use in ABCI commit() to update when a new state is accepted. Updates staking period parameters.
 
@@ -518,7 +518,7 @@ ___
 
 ▸ **updateBalance**(event: *`WitnessData`*): `void`
 
-*Defined in [witness/Witness.ts:583](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/witness/Witness.ts#L583)*
+*Defined in [witness/Witness.ts:592](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/witness/Witness.ts#L592)*
 
 Perform "state transition" of instance balances. NOTE: this function does not modify the state of the ABCI application, however it implements the same logic as the state machine to ensure balances in state are up-to-date with the instance balances.
 
@@ -537,7 +537,7 @@ ___
 
 ▸ **create**(options: *`any`*): `Promise`<[Witness](_witness_witness_.witness.md)>
 
-*Defined in [witness/Witness.ts:59](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/witness/Witness.ts#L59)*
+*Defined in [witness/Witness.ts:60](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/witness/Witness.ts#L60)*
 
 Static generator to create new rebalancer instances.
 
@@ -557,7 +557,7 @@ ___
 
 ▸ **genLimits**(bals: *`PosterBalances`*, limit: *`number`*): `Limits`
 
-*Defined in [witness/Witness.ts:89](https://github.com/paradigmfoundation/paradigmcore/blob/acc965b/src/witness/Witness.ts#L89)*
+*Defined in [witness/Witness.ts:90](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/witness/Witness.ts#L90)*
 
 Generates an output address:limit mapping based on a provided address:balance mapping, and a total throughput limit.
 

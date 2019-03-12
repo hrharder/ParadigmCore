@@ -1,5 +1,5 @@
 
-ParadigmCore [`v0.8.1-rc-1`](https://github.com/ParadigmFoundation/ParadigmCore/pull/38)
+ParadigmCore [`v0.8.2-rc-1`](https://github.com/ParadigmFoundation/ParadigmCore/pull/38)
 ========================================================================================
 
 ParadigmCore is (currently) the reference implementation of the OrderStream, and the first network client. It is built on [Tendermint](https://www.tendermint.com/), which is used for networking and BFT consensus.
@@ -230,7 +230,6 @@ Additionally, feel free to open issues and pull requests with bug fixes or enhan
 * ["crypto/Hasher"](modules/_crypto_hasher_.md)
 * ["index"](modules/_index_.md)
 * ["state/State"](modules/_state_state_.md)
-* ["state/commitState"](modules/_state_commitstate_.md)
 * ["witness/Witness"](modules/_witness_witness_.md)
 
 ---
