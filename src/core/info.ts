@@ -23,6 +23,7 @@ import { State } from "src/state/State";
  */
 export function infoWrapper(state: State, version: string): (r) => ResponseInfo {
     return (request) => {
+        console.log("reading from state file in info");
         state.readFromDisk();
         return {
             data: "ParadigmCore (alpha)",
