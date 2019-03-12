@@ -23,7 +23,9 @@ import { State } from "src/state/State";
  */
 export function infoWrapper(state: State, version: string): (r) => ResponseInfo {
     return (request) => {
-        state.readFromDisk();
+        state.readFromDisk().catch(e => {
+            console.log("failed to read from disk");
+        });
         return {
             data: "ParadigmCore (alpha)",
             lastBlockAppHash: state.lastBlockAppHash,

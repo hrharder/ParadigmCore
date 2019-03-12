@@ -140,7 +140,7 @@ export class State {
         this.lastEvent = null;
         this.orderCounter = null;
         this.lastBlockHeight = null;
-        this.lastBlockAppHash = Buffer.alloc(0);
+        this.lastBlockAppHash = null;
 
         // after setting genesis state, read from disk if file present
         // check if file exists and load contents if it does
@@ -255,12 +255,14 @@ export class State {
      * internal `internalWriteFile` method.
      */
     public async writeToDisk() {
-        if (this._readOnly) { console.log(`\n\nSKIPPING WRITE\n\n`); return; }
+        if (this._readOnly) {
+            return;
+        }
         const strData = JSON.stringify(this.toJSON(), (k, v) => {
             if (typeof v === "bigint") {
                 return v.toString().concat("n");
             } else if (k === "lastBlockAppHash" || k === "publicKey") {
-                return v.data;
+                return v === null ? v : v.data;
             } else {
                 return v;
             }
@@ -426,15 +428,15 @@ export class State {
      */
     public toJSON(): IState {
         return {
-            round: this.round,
-            events: this.events,
-            posters: this.posters,
-            validators: this.validators,
-            lastEvent: this.lastEvent,
-            consensusParams: this.consensusParams,
-            orderCounter: this.orderCounter,
-            lastBlockHeight: this.lastBlockHeight,
-            lastBlockAppHash: this.lastBlockAppHash,
+            round: cloneDeep(this.round),
+            events: cloneDeep(this.events),
+            posters: cloneDeep(this.posters),
+            validators: cloneDeep(this.validators),
+            lastEvent: clone(this.lastEvent),
+            consensusParams: cloneDeep(this.consensusParams),
+            orderCounter: clone(this.orderCounter),
+            lastBlockHeight: clone(this.lastBlockHeight),
+            lastBlockAppHash: clone(this.lastBlockAppHash),
         }
     }
 }

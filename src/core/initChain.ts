@@ -43,16 +43,6 @@ export function initChainWrapper(
 
     // Return initChain function
     return (request) => {
-        
-        // load genesis state
-        const stateBytes = Buffer.from(request.appStateBytes, "base64");
-        const stateJson = JSON.parse(stateBytes.toString());
-
-        // set initial states
-        // deliverState = _.cloneDeep(stateJson);
-        // commitState = _.cloneDeep(stateJson);
-        
-
         // add genesis validators to in-state validator list
         request.validators.forEach((validator) => {
             // Generate hexadecimal nodeID from public key

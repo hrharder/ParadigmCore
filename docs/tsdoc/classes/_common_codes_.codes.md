@@ -46,7 +46,7 @@ Error codes. Working on integrating better error codes throughout PC.
 
 **● ABCI_CON**: *`number`* = 3
 
-*Defined in [common/Codes.ts:19](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/common/Codes.ts#L19)*
+*Defined in [common/Codes.ts:19](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/common/Codes.ts#L19)*
 
 ___
 <a id="contract"></a>
@@ -55,7 +55,7 @@ ___
 
 **● CONTRACT**: *`number`* = 2
 
-*Defined in [common/Codes.ts:18](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/common/Codes.ts#L18)*
+*Defined in [common/Codes.ts:18](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/common/Codes.ts#L18)*
 
 ___
 <a id="no_abci"></a>
@@ -64,7 +64,7 @@ ___
 
 **● NO_ABCI**: *`number`* = 8
 
-*Defined in [common/Codes.ts:24](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/common/Codes.ts#L24)*
+*Defined in [common/Codes.ts:24](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/common/Codes.ts#L24)*
 
 ___
 <a id="no_block"></a>
@@ -73,7 +73,7 @@ ___
 
 **● NO_BLOCK**: *`number`* = 1
 
-*Defined in [common/Codes.ts:17](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/common/Codes.ts#L17)*
+*Defined in [common/Codes.ts:17](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/common/Codes.ts#L17)*
 
 ___
 <a id="ok"></a>
@@ -82,7 +82,7 @@ ___
 
 **● OK**: *`number`* = 0
 
-*Defined in [common/Codes.ts:16](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/common/Codes.ts#L16)*
+*Defined in [common/Codes.ts:16](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/common/Codes.ts#L16)*
 
 ___
 <a id="subscribe"></a>
@@ -91,7 +91,7 @@ ___
 
 **● SUBSCRIBE**: *`number`* = 7
 
-*Defined in [common/Codes.ts:23](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/common/Codes.ts#L23)*
+*Defined in [common/Codes.ts:23](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/common/Codes.ts#L23)*
 
 ___
 <a id="tx_failed"></a>
@@ -100,7 +100,7 @@ ___
 
 **● TX_FAILED**: *`number`* = 9
 
-*Defined in [common/Codes.ts:25](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/common/Codes.ts#L25)*
+*Defined in [common/Codes.ts:25](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/common/Codes.ts#L25)*
 
 ___
 <a id="uri_scheme"></a>
@@ -109,7 +109,7 @@ ___
 
 **● URI_SCHEME**: *`number`* = 4
 
-*Defined in [common/Codes.ts:20](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/common/Codes.ts#L20)*
+*Defined in [common/Codes.ts:20](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/common/Codes.ts#L20)*
 
 ___
 <a id="web3_inst"></a>
@@ -118,7 +118,7 @@ ___
 
 **● WEB3_INST**: *`number`* = 6
 
-*Defined in [common/Codes.ts:22](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/common/Codes.ts#L22)*
+*Defined in [common/Codes.ts:22](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/common/Codes.ts#L22)*
 
 ___
 <a id="web3_prov"></a>
@@ -127,7 +127,7 @@ ___
 
 **● WEB3_PROV**: *`number`* = 5
 
-*Defined in [common/Codes.ts:21](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/common/Codes.ts#L21)*
+*Defined in [common/Codes.ts:21](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/common/Codes.ts#L21)*
 
 ___
 
