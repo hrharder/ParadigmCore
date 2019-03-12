@@ -362,9 +362,9 @@ export class Witness {
     public synchronize(round: number, startsAt: number, endsAt: number): void {
         // Check that new round is the next round
         if (round !== (this.periodNumber + 1)) {
-            err("peg", "new round is not one greater than current...");
-            console.log(`round: ${round}, in-mem: ${this.periodNumber}`);
-            err("peg", "this witness may be out of sync with peers...");
+            err("peg", "new round is not one greater than current.");
+            err("peg", "this witness may be out of sync with peers.");
+            err("peg", "this message will also show after a restart and can be ignored.");
         }
 
         // Update parameters
