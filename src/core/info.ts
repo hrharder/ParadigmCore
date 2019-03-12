@@ -25,6 +25,7 @@ export function infoWrapper(state: State, version: string): (r) => ResponseInfo 
     return (request) => {
         console.log("reading from state file in info");
         state.readFromDisk();
+        console.log("done reading from state file in info");
         return {
             data: "ParadigmCore (alpha)",
             lastBlockAppHash: state.lastBlockAppHash,
