@@ -22,17 +22,81 @@ import { readFile, writeFile, readdir } from "fs";
  * various state transitions.
  */
 export class State {
+    /**
+     * The `round` object tracks rebalance round information. It is used to 
+     * maintain sync with the Ethereum chain, which is used to mark the
+     * beginning and end of each rebalance round.
+     */
     public round: RoundInfo;
+
+    /**
+     * Pending witness attestations (delivered via `witness` transactions) are
+     * stored here while they await confirmation by sufficient validators
+     * submitting attestations to the same event. Indexed by block, then by
+     * a hash of the event data, you can read more about hte [[Events]] interface.
+     */
     public events: Events;
+
+    /**
+     * The `posters` object is where poster accounts are created, updated, and 
+     * stored. Each poster with registered stake in the `PosterRegistry` contract
+     * system has an account object that follows the [[Poster]] interface.
+     */
     public posters: PosterInfo;
+
+    /**
+     * Validator information is kept in the `validators` object, where each 
+     * validator has an account. Contained within each [[Validator]] is their
+     * public key, Ethereum address, staked balance, and other fields.
+     */
     public validators: ValidatorInfo;
+
+    /**
+     * The `lastEvent` is updated each time an Ethereum event is accepted, and
+     * is used to prevent acceptance of historical events that the state has
+     * already been updated with.
+     */
     public lastEvent: number;
+
+    /**
+     * A variety of consensus-critical parameters are stored in the
+     * `consensusParams` mapping. Keep in mind that the app-state consensus
+     * parameters (this object) is separate from the Tendermint-specific
+     * consensus parameters, such as `MaxBlockSize`.
+     */
     public consensusParams: ConsensusParams;
+
+    /**
+     * Incrementally counts the number of orders accepted by the network since
+     * genesis. The `orderCounter` is incremented by 1 each time a valid `order`
+     * transaction is accepted during consensus (in `DeliverTx`).
+     */
     public orderCounter: number;
+
+    /**
+     * The last Tendermint block height at which a successful commit occurred. 
+     */
     public lastBlockHeight: number;
+
+    /**
+     * The `AppHash` of the previous commit. 
+     */
     public lastBlockAppHash: Buffer;
 
+    // NON-STATE RELATED PARAMETERS BELOW
+
+    /**
+     * The (absolute) file path to read to and write from.
+     */
     private _path: URL;
+
+    /**
+     * If set to true, the `State` instance will ONLY read, and will refuse to
+     * write to disk.
+     * 
+     * Useful when managing many state instances, with only one that should be
+     * committed to disk with each block.
+     */
     private _readOnly: boolean;
 
     /**
