@@ -111,7 +111,7 @@ If needed, modify [`tsconfig.json`](./tsconfig.json) to set compiler options.
 
 ### Start
 
-Start ParadigmCore by running one of the following. ParadigmCore will intentionally exit if initiated by executing the startup script (`src/index.ts`) directly. If this behavior is desired, you can remove that check from the startup proceedure.
+Start ParadigmCore by running one of the following. ParadigmCore will intentionally exit if initiated by executing the startup script (`src/index.ts`) directly. If this behavior is desired, you can remove that check from the startup procedure.
 
 ```shell
 # with npm

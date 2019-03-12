@@ -10,20 +10,20 @@
  * @date (modified) 22-January-2019
  *
  * ABCI deliverTx implementation.
-*/
+**/
 
 // custom typings
 import { ResponseDeliverTx } from "../typings/abci";
 
 // util functions/vars
 import { warn } from "../common/log";
-import { decodeTx, preVerifyTx, invalidTx } from "./util/utils";
-import { messages } from "../common/static/messages"
+import { messages } from "../common/static/messages";
+import { decodeTx, invalidTx, preVerifyTx } from "./util/utils";
 
 // tx handlers
 import { deliverOrder } from "./handlers/order";
-import { deliverWitness } from "./handlers/witness";
 import { deliverRebalance } from "./handlers/rebalance";
+import { deliverWitness } from "./handlers/witness";
 
 /**
  * Execute a transaction in full: perform state modification, and verify

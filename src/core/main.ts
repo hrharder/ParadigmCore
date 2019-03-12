@@ -23,16 +23,16 @@ import { messages as templates } from "../common/static/messages";
 // abci handler implementations
 import { beginBlockWrapper } from "./beginBlock";
 import { checkTxWrapper } from "./checkTx";
-import { deliverTxWrapper } from "./deliverTx";
-import { initChainWrapper } from "./initChain";
 import { commitWrapper } from "./commit";
-import { infoWrapper } from "./info";
+import { deliverTxWrapper } from "./deliverTx";
 import { endBlockWrapper } from "./endBlock";
+import { infoWrapper } from "./info";
+import { initChainWrapper } from "./initChain";
 
 // custom types
+import { State } from "../state/State";
 import { ParadigmCoreOptions } from "../typings/abci";
 import { queryWrapper } from "./query";
-import { State } from "../state/State";
 
 /**
  * Initialize and start the ABCI application.
@@ -71,7 +71,7 @@ export async function start(options: ParadigmCoreOptions): Promise<null> {
             // query, info, w/ state hash, height, version
             info: infoWrapper(cState, version),
             query: queryWrapper(cState),
-            
+
             // called at genesis
             initChain: initChainWrapper(dState, cState, consensusParams),
 
@@ -87,7 +87,7 @@ export async function start(options: ParadigmCoreOptions): Promise<null> {
 
         // Start ABCI server (connection to Tendermint core)
         await abci(handlers).listen(options.abciServPort);
-        log("state", `abci server connected on port ${options.abciServPort}`)
+        log("state", `abci server connected on port ${options.abciServPort}`);
     } catch (error) {
         throw new Error(`initializing abci application: ${error.message}`);
     }

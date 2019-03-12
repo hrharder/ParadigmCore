@@ -13,19 +13,19 @@
 */
 
 // for supporting query
-import { get, isUndefined, isArray, isBuffer } from "lodash";
+import { get, isArray, isBuffer, isUndefined } from "lodash";
 
 // custom typings
-import { ResponseQuery } from "../typings/abci";
 import { State } from "src/state/State";
+import { ResponseQuery } from "../typings/abci";
 
 /**
  * Return information about the state and software.
- * 
+ *
  * The `request.path` field is used to direct a query towards a particular state
- * object. Currently, query requests can return information about 
- * 
- * @todo parse path, support multiple query paths and options, util functions 
+ * object. Currently, query requests can return information about
+ *
+ * @todo parse path, support multiple query paths and options, util functions
  * for buffering req/res objects
  *
  * @param request {RequestInfo}    info request
@@ -34,7 +34,7 @@ export function queryWrapper(state: State): (r) => ResponseQuery {
     return (request) => {
         // load latest data from disk
         state.readFromDisk();
-        
+
         // the height at which the query is checked
         const height = state.lastBlockHeight;
 
@@ -44,7 +44,7 @@ export function queryWrapper(state: State): (r) => ResponseQuery {
         // destructure query request params
         // @todo leverage more of the possible RequestQuery params
         const { path } = request;
-        
+
         // convert path to object traversal ('/' => '.')
         const dotPath = path.replace(/\//g, ".");
 
@@ -96,6 +96,6 @@ export function queryWrapper(state: State): (r) => ResponseQuery {
         }
 
         // return `ResponseQuery` object
-        return { code, log, info, key, value, height }
-    }
+        return { code, log, info, key, value, height };
+    };
 }

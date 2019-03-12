@@ -46,8 +46,8 @@ export function log(mod: string, msg: string, height?: number, hash?: string) {
 
     // write to stdout with log level 0 (info/all)
     print(
-        `${c.gray("lvl:")} ${c.bold("info")}\t` + 
-        `${c.gray("mod:")} ${c.bold[(defs[mod].color)](defs[mod].label)}\t` + 
+        `${c.gray("lvl:")} ${c.bold("info")}\t` +
+        `${c.gray("mod:")} ${c.bold[(defs[mod].color)](defs[mod].label)}\t` +
         `${c.gray("msg:")} ${msg}\t` + ifHeight + ifHash,
         0
     );
@@ -58,9 +58,9 @@ export function warn(mod: string, msg: string) {
     if (_.isUndefined(defs[mod]) || !_.isString(msg)) { return; }
 
     // write to stdout with log level 1 (warnings)
-     print(
-        `${c.gray("lvl:")} ${c.bold.yellow("warn")}\t` + 
-        `${c.gray("mod:")} ${c.bold[(defs[mod].color)](defs[mod].label)}\t` + 
+    print(
+        `${c.gray("lvl:")} ${c.bold.yellow("warn")}\t` +
+        `${c.gray("mod:")} ${c.bold[(defs[mod].color)](defs[mod].label)}\t` +
         `${c.gray("msg:")} ${msg}`,
         1
     );
@@ -72,8 +72,8 @@ export function err(mod: string, msg: string) {
 
     // write to stdout with log level 2 (errors)
     print(
-        `${c.gray("lvl:")} ${c.bold.red("error")}\t` + 
-        `${c.gray("mod:")} ${c.bold[(defs[mod].color)](defs[mod].label)}\t` + 
+        `${c.gray("lvl:")} ${c.bold.red("error")}\t` +
+        `${c.gray("mod:")} ${c.bold[(defs[mod].color)](defs[mod].label)}\t` +
         `${c.gray("msg:")} ${msg}`,
         2
     );

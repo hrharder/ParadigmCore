@@ -23,11 +23,11 @@ import * as rateLimit from "express-rate-limit";
 import * as helmet from "helmet";
 
 // ParadigmCore classes and imports
-import { TxGenerator } from "../../core/util/TxGenerator";
-import { err, warn, log } from "../../common/log";
+import { err, log as Log, warn } from "../../common/log";
 import { messages as msg } from "../../common/static/messages";
-import { HttpMessage as Message } from "./HttpMessage";
 import { TendermintRPC } from "../../common/TendermintRPC";
+import { TxGenerator } from "../../core/util/TxGenerator";
+import { HttpMessage as Message } from "./HttpMessage";
 
 // Type defs
 import { NextFunction, Request, Response } from "express";
@@ -94,7 +94,7 @@ export async function start(options) {
         });
 
         // finish
-        log("api", `http api server started on port ${options.port}`);
+        Log("api", `http api server started on port ${options.port}`);
         return;
     } catch (error) {
         throw new Error(error.message);
@@ -105,7 +105,7 @@ export async function start(options) {
  * Express POST handler for incoming orders (and eventually stream tx's).
  */
 async function postHandler(req: Request, res: Response, next: NextFunction) {
-    // don't try to send if not ready 
+    // don't try to send if not ready
     if (!ready) {
         Message.staticSend(res, "Server not ready yet. Try again later.");
         return;

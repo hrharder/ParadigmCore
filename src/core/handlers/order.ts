@@ -18,10 +18,10 @@
 import { Hasher } from "../../crypto/Hasher";
 
 // ParadigmCore utilities
+import { ResponseCheckTx, ResponseDeliverTx } from "src/typings/abci";
 import { err, log, warn } from "../../common/log";
 import { messages as msg } from "../../common/static/messages";
-import { verifyOrder, newKVPair, invalidTx, validTx } from "../util/utils";
-import { ResponseDeliverTx, ResponseCheckTx } from "src/typings/abci";
+import { invalidTx, newKVPair, validTx, verifyOrder } from "../util/utils";
 
 /**
  * Performs light verification of OrderBroadcast transactions before accepting

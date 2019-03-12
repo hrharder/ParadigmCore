@@ -12,18 +12,18 @@
 
 // STDLIB and 3rd party imports
 import { createHash, Hash } from "crypto";
+import { readdir, readFile, writeFile } from "fs";
 import { clone, cloneDeep, isBuffer, isString } from "lodash";
-import { readFile, writeFile, readdir } from "fs";
 
 /**
- * A class representing the OrderStream network state. 
- * 
+ * A class representing the OrderStream network state.
+ *
  * Provides methods for hashing (generation of `AppHash` and Merkle root) and
  * various state transitions.
  */
 export class State {
     /**
-     * The `round` object tracks rebalance round information. It is used to 
+     * The `round` object tracks rebalance round information. It is used to
      * maintain sync with the Ethereum chain, which is used to mark the
      * beginning and end of each rebalance round.
      */
@@ -38,14 +38,14 @@ export class State {
     public events: Events;
 
     /**
-     * The `posters` object is where poster accounts are created, updated, and 
+     * The `posters` object is where poster accounts are created, updated, and
      * stored. Each poster with registered stake in the `PosterRegistry` contract
      * system has an account object that follows the [[Poster]] interface.
      */
     public posters: PosterInfo;
 
     /**
-     * Validator information is kept in the `validators` object, where each 
+     * Validator information is kept in the `validators` object, where each
      * validator has an account. Contained within each [[Validator]] is their
      * public key, Ethereum address, staked balance, and other fields.
      */
@@ -74,12 +74,12 @@ export class State {
     public orderCounter: number;
 
     /**
-     * The last Tendermint block height at which a successful commit occurred. 
+     * The last Tendermint block height at which a successful commit occurred.
      */
     public lastBlockHeight: number;
 
     /**
-     * The `AppHash` of the previous commit. 
+     * The `AppHash` of the previous commit.
      */
     public lastBlockAppHash: Buffer;
 
@@ -93,18 +93,18 @@ export class State {
     /**
      * If set to true, the `State` instance will ONLY read, and will refuse to
      * write to disk.
-     * 
+     *
      * Useful when managing many state instances, with only one that should be
      * committed to disk with each block.
      */
     private _readOnly: boolean;
 
     /**
-     * Create a new `State` object instance. 
-     * 
+     * Create a new `State` object instance.
+     *
      * Initializes a null (genesis) state object. The hash of a null state (the
      * `AppHash`) will always be the same.
-     * 
+     *
      * @param path the (absolute) path to write state contents to disk with
      */
     constructor(readOnly: boolean, path?: string, name?: string) {
@@ -150,7 +150,7 @@ export class State {
             } else {
                 this.writeToDisk();
             }
-        })
+        });
     }
 
     /**
@@ -174,7 +174,7 @@ export class State {
 
     /**
      * Applies state transition for an `order` transaction.
-     * 
+     *
      * @param poster the Ethereum address of the relevant poster account
      */
     public applyOrderTx(poster: string): void {
@@ -189,7 +189,7 @@ export class State {
 
     /**
      * Applies state transition for a `rebalance` transaction.
-     * 
+     *
      * @param proposal the rebalance proposal to apply (already accepted)
      */
     public applyRebalanceTx(proposal: RebalanceData): void {
@@ -203,24 +203,27 @@ export class State {
 
             // update poster limits
             for (let account in proposal.limits) {
-                this.posters[account].limit = proposal.limits[account];
+                if (proposal.limits.hasOwnProperty(account)) {
+                    this.posters[account].limit = proposal.limits[account];
+                }
             }
         } catch (e) {
             throw Error(`Transition failed: ${e.message}`);
         }
     }
 
-    public applyWitnessTx(): void {}
+    // @todo
+    // public applyWitnessTx(): void {}
 
     // END STATE TRANSITION METHODS
 
     /**
      * Reads the contents of the file path specified upon construction from disk,
      * and loads its contents into state, over-writing any and all current data.
-     * 
+     *
      * Handles parsing the custom-stringified data kept in the JSON file.
-     * 
-     * The actual process of reading the file from disk is handled by the 
+     *
+     * The actual process of reading the file from disk is handled by the
      * internal `internalReadFile` method.
      */
     public async readFromDisk(): Promise<void> {
@@ -247,15 +250,15 @@ export class State {
 
     /**
      * Writes the contents of state to the file path specified upon construction.
-     * 
+     *
      * Handles generation of a custom-stringified data to be kept in the JSON
      * file, which is necessary due to the currently un-serializable `bigint`.
-     * 
-     * The actual process of writing the file to disk is handled by the 
+     *
+     * The actual process of writing the file to disk is handled by the
      * internal `internalWriteFile` method.
      */
     public async writeToDisk() {
-        if (this._readOnly) { 
+        if (this._readOnly) {
             return;
         }
         const strData = JSON.stringify(this.toJSON(), (k, v) => {
@@ -271,6 +274,46 @@ export class State {
     }
 
     /**
+     * Generates a hash of all state values. Represents the `AppHash` and the
+     * Merkle root of the `state` trie.
+     *
+     * Does **not** modify the state of the object prototype.
+     */
+    public generateAppHash(): Buffer {
+        const thisCopy: State = clone(this);
+        const rawHash = createHash("sha256");
+
+        // hash all values recursively of state copy
+        this.updateHashObject(rawHash, thisCopy);
+
+        // generate the hashed value
+        const hash = rawHash.digest();
+        return hash;
+    }
+
+    /* End internal hashing methods */
+
+    /**
+     * Convert state object to plain object (without method definitions).
+     *
+     * Should not be used for serialization –  don't call `JSON.stringify(state)`
+     * as it is non-deterministic.
+     */
+    public toJSON(): IState {
+        return {
+            round: cloneDeep(this.round),
+            events: cloneDeep(this.events),
+            posters: cloneDeep(this.posters),
+            validators: cloneDeep(this.validators),
+            lastEvent: clone(this.lastEvent),
+            consensusParams: cloneDeep(this.consensusParams),
+            orderCounter: clone(this.orderCounter),
+            lastBlockHeight: clone(this.lastBlockHeight),
+            lastBlockAppHash: clone(this.lastBlockAppHash),
+        };
+    }
+
+    /**
      * Returns a promise executor that wraps the async `fs.readFile` method.
      */
     private internalReadFile(): (res, rej) => void {
@@ -282,7 +325,7 @@ export class State {
                     resolve(data);
                 }
             });
-        }
+        };
     }
 
     /**
@@ -297,25 +340,7 @@ export class State {
                     resolve();
                 }
             });
-        }
-    }
-
-    /**
-     * Generates a hash of all state values. Represents the `AppHash` and the
-     * Merkle root of the `state` trie.
-     * 
-     * Does **not** modify the state of the object prototype.
-     */
-    public generateAppHash(): Buffer {
-        const thisCopy: State = clone(this);
-        const rawHash = createHash("sha256");
-        
-        // hash all values recursively of state copy
-        this.updateHashObject(rawHash, thisCopy);
-
-        // generate the hashed value
-        const hash = rawHash.digest();
-        return hash;
+        };
     }
 
     /* Begin internal hashing methods */
@@ -323,26 +348,28 @@ export class State {
     /**
      * Iterates over an objects enumerable properties and defers to the correct
      * logic for generating a hash of all the object's values.
-     * 
+     *
      * @param hash the hash object being operated on
      * @param obj the object whose properties should be included in a hash
      */
     private updateHashObject(hash: Hash, obj: object): void {
         for (let key in obj) {
-            const value = obj[key];
-            if (isBuffer(value)) {
-                hash.update(value);
-            } else {
-                this.updateHashValue(hash, value);
-            }         
+            if (obj.hasOwnProperty(key)) {
+                const value = obj[key];
+                if (isBuffer(value)) {
+                    hash.update(value);
+                } else {
+                    this.updateHashValue(hash, value);
+                }
+            }
         }
         return;
     }
 
     /**
-     * Selects the correct method of serialization to binary data for a given 
+     * Selects the correct method of serialization to binary data for a given
      * type to be included in a `Hash` object.
-     * 
+     *
      * @param hash the hash object to update with a given value
      * @param value the value to include in the provided hash
      */
@@ -365,7 +392,7 @@ export class State {
 
     /**
      * Converts a string to a `Buffer` object to update a hash object with.
-     * 
+     *
      * @param hash the hash being operated on
      * @param string a string to include in the hash
      */
@@ -377,7 +404,7 @@ export class State {
     /**
      * Converts a number value (either `bigint` or `number` type) to a
      * hexadecimal string value to be included in the hash.
-     * 
+     *
      * @param hash the hash being operated on
      * @param number a number value (`bigint` or `number`) to include
      */
@@ -391,7 +418,7 @@ export class State {
      * Defines a manner to hash null or 0 values. For `null`, `undefined` or
      * 0 (including `false`) values, simply append a `00` byte to the binary
      * has input (prior to digestion).
-     * 
+     *
      * @param hash the hash being operated on
      * @param nullVal a null or 0 value to include in the hash
      */
@@ -403,9 +430,9 @@ export class State {
 
     /**
      * Defines a method of hashing a boolean value. Values that are `true` are
-     * included as a `ff` byte in the raw hash input, and `false` values are 
+     * included as a `ff` byte in the raw hash input, and `false` values are
      * included as a `00` byte. Both appended prior to digestion.
-     * 
+     *
      * @param hash the hash being operated on
      * @param bool a boolean value ot include in the hash
      */
@@ -416,27 +443,5 @@ export class State {
             hash.update(Buffer.from("00", "hex"));
         }
         return;
-    }
-
-    /* End internal hashing methods */
-
-    /**
-     * Convert state object to plain object (without method definitions).
-     * 
-     * Should not be used for serialization –  don't call `JSON.stringify(state)`
-     * as it is non-deterministic.
-     */
-    public toJSON(): IState {
-        return {
-            round: cloneDeep(this.round),
-            events: cloneDeep(this.events),
-            posters: cloneDeep(this.posters),
-            validators: cloneDeep(this.validators),
-            lastEvent: clone(this.lastEvent),
-            consensusParams: cloneDeep(this.consensusParams),
-            orderCounter: clone(this.orderCounter),
-            lastBlockHeight: clone(this.lastBlockHeight),
-            lastBlockAppHash: clone(this.lastBlockAppHash),
-        }
     }
 }

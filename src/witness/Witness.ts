@@ -17,12 +17,12 @@
  */
 
 // Third party and stdlib imports
+import { EventEmitter } from "events";
 import * as _ from "lodash";
 import * as TruffleContract from "truffle-contract";
 import { URL } from "url";
-import { WebsocketProvider } from "web3/providers";
-import { EventEmitter } from "events";
 import Web3 = require("web3");
+import { WebsocketProvider } from "web3/providers";
 
 // ParadigmCore modules/classes
 import { contracts, eventDecoder } from "paradigm-contracts";
@@ -34,7 +34,6 @@ import { default as codes } from "../common/Codes";
 import { err, log, warn } from "../common/log";
 import { messages as msg } from "../common/static/messages";
 import { TendermintRPC } from "../common/TendermintRPC";
-import { bigIntReplacer } from "../common/static/bigIntUtils";
 
 /**
  * A Witness supports a one way peg-zone between Ethereum and the OrderStream to
@@ -102,8 +101,8 @@ export class Witness {
         Object.keys(bals).forEach((k, v) => {
             if (bals.hasOwnProperty(k) && typeof(bals[k]) === "bigint") {
                 // Compute proportional order limit
-                const balNum = parseInt(bals[k].toString());
-                const totNum = parseInt(total.toString());
+                const balNum = parseInt(bals[k].toString(), 10);
+                const totNum = parseInt(total.toString(), 10);
                 const lim = (balNum / totNum) * limit;
 
                 // Create limit for each address
@@ -144,7 +143,7 @@ export class Witness {
      */
     private web3: Web3;
 
-    // ETHEREUM-RELATED 
+    // ETHEREUM-RELATED
 
     /**
      * THe currently agreed up block-maturation threshold for Ethereum events.
@@ -153,7 +152,7 @@ export class Witness {
     private finalityThreshold: number;
 
     /**
-     * The height of the Ethereum blockchain when this `Witness` instance was 
+     * The height of the Ethereum blockchain when this `Witness` instance was
      * started. Used to check if historical events (before witness started) are
      * confirmed or not.
      */
@@ -165,11 +164,11 @@ export class Witness {
     // STAKING PERIOD PARAMETERS
 
     /** The incremental number tracking the current rebalance period. */
-    private periodNumber: number;   
+    private periodNumber: number;
 
     /** The length of the current period (in Ethereum blocks). */
     private periodLength: number;
-    
+
     /** The number of transactions accepted in a period. Used for rebalance. */
     private periodLimit: number;
 
@@ -179,21 +178,21 @@ export class Witness {
     /** The block at which current period ends. */
     private periodEnd: number;
 
-    /**  
+    /**
      * Event emitter triggered when a rebalance TX is included in a block.
-     * 
+     *
      * @todo better doc
      */
     private rebalanceEmitter: EventEmitter;
 
-    /** 
+    /**
      * The `web3.Contract` instance of the EventEmitter contract, used to
      * interface with the paradigm contract system.
      */
     private eventEmitterContract: any;
 
     /** Witness class's connection to the Tendermint RPC server. */
-    private tmRpc: TendermintRPC //TxBroadcaster;
+    private tmRpc: TendermintRPC; // TxBroadcaster;
 
     /** Node URL object of provided Tendermint RPC URl. */
     private tmRpcUrl: URL;
@@ -258,9 +257,9 @@ export class Witness {
         this.txEmitter.on("tx", (inTx?: SignedTransaction) => {
             this.tmRpc.submitTx(inTx).then((res: any) => {
                 log("peg", `successfully executed tx: ${res.log} at ${Date.now()}`);
-            }).catch((err) => {
-                warn("peg", `failed sending tx: ${err}`);
-            })
+            }).catch((error) => {
+                warn("peg", `failed sending tx: ${error}`);
+            });
         });
 
         // Finality threshold
@@ -305,9 +304,9 @@ export class Witness {
 
         // Create staking contract instance via TruffleContract
         try {
-            const EventEmitter = TruffleContract(contracts.EventEmitter);
-            EventEmitter.setProvider(this.web3.currentProvider);
-            this.eventEmitterContract = await EventEmitter.deployed();
+            const EventEmitterContract = TruffleContract(contracts.EventEmitter);
+            EventEmitterContract.setProvider(this.web3.currentProvider);
+            this.eventEmitterContract = await EventEmitterContract.deployed();
         } catch (error) {
             err("peg", error.message);
             return codes.CONTRACT; // Unable to initialize staking contract
@@ -331,13 +330,13 @@ export class Witness {
             log("peg", "connected to the tendermint RPC server");
 
             // handle case where this is a restart
-            const roundNo = parseInt((await this.tmRpc.query("round/number")).info);
+            const roundNo = parseInt((await this.tmRpc.query("round/number")).info, 10);
             if (roundNo > 0) {
-                const startsAt = parseInt((await this.tmRpc.query("round/startsAt")).info)
-                const endsAt = parseInt((await this.tmRpc.query("round/endsAt")).info)
+                const startsAt = parseInt((await this.tmRpc.query("round/startsAt")).info, 10);
+                const endsAt = parseInt((await this.tmRpc.query("round/endsAt")).info, 10);
                 this.synchronize(roundNo, startsAt, endsAt);
             }
-        } catch(error) {
+        } catch (error) {
             err("peg", error.message);
             return codes.NO_ABCI;
         }
@@ -465,17 +464,17 @@ export class Witness {
             let { tags } = data.TxResult.result;
             let params: any = {};
             tags.forEach((tag) => {
-                const key = Buffer.from(tag["key"], "base64").toString();
-                const value = Buffer.from(tag["value"], "base64").toString();
+                const key = Buffer.from(tag.key, "base64").toString();
+                const value = Buffer.from(tag.value, "base64").toString();
 
                 const [ tagSubject, tagParam ] = key.split(".");
-                if (tagSubject !== "round") return;
+                if (tagSubject !== "round") { return; }
                 params[tagParam] = value;
             });
             const { number, start, end } = params;
             log("peg", `detected rebalance tx in block, now on round ${number}`);
             this.synchronize(parseInt(number, 10), start, end);
-        })
+        });
 
         // Success
         return codes.OK;
@@ -505,7 +504,7 @@ export class Witness {
         );
 
         // ignore irrelevant events from contract system
-        if(witnessEvent === undefined) return;
+        if (witnessEvent === undefined) { return; }
 
         // See if this is a historical event that has already matured
         if ((this.initHeight - block) > this.finalityThreshold) {
@@ -594,7 +593,7 @@ export class Witness {
         if (event.subject !== "poster") {
             return;
         }
-        
+
         // set balance of account to event
         const { address, amount } = event;
         this.posterBalances[event.address] = BigInt(amount);

@@ -13,17 +13,17 @@
 */
 
 // paradigmcore classes/types
-import { Witness } from "../witness/Witness";
 import { Hasher } from "../crypto/Hasher";
 import { State } from "../state/State";
+import { Witness } from "../witness/Witness";
 
 // custom typings
 import { ResponseCommit } from "../typings/abci";
 
 // util functions
-import { syncStates } from "./util/utils";
-import { log, err, warn } from "../common/log";
+import { err, log, warn } from "../common/log";
 import { bigIntReplacer } from "../common/static/bigIntUtils";
+import { syncStates } from "./util/utils";
 
 /**
  * Persist application state, synchronize commit and deliver states, and
@@ -63,8 +63,8 @@ export function commitWrapper(
 
             log(
                 "state",
-                `new state hash: ` + 
-                `${stateHash.toString("hex").slice(0,5)}...` +
+                `new state hash: ` +
+                `${stateHash.toString("hex").slice(0, 5)}...` +
                 `${stateHash.toString("hex").slice(-5)}`,
                 commitState.lastBlockHeight,
                 stateHash.toString("hex").toUpperCase()

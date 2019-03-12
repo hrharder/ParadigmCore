@@ -16,11 +16,11 @@
 import { ResponseBeginBlock } from "../typings/abci";
 
 // util functions
-import { computeConf } from "./util/utils";
-import { bigIntReplacer } from "../common/static/bigIntUtils";
 import { log } from "../common/log";
-import { doForEachValidator } from "./util/valFunctions";
+import { bigIntReplacer } from "../common/static/bigIntUtils";
 import { State } from "../state/State";
+import { computeConf } from "./util/utils";
+import { doForEachValidator } from "./util/valFunctions";
 
 /**
  * Called at the beginning of each new block. Updates proposer and block height.
@@ -99,7 +99,7 @@ export function beginBlockWrapper(state: State): (r) => ResponseBeginBlock {
         // Indicate new round, return no indexing tags
         log(
             "state",
-            `current proposer: ${proposer.slice(0,5)}...${proposer.slice(-5)}`,
+            `current proposer: ${proposer.slice(0, 5)}...${proposer.slice(-5)}`,
             currHeight
         );
         return {};

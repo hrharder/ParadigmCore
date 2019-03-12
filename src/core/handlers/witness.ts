@@ -15,17 +15,17 @@
  */
 
  // ParadigmCore classes
-import { log, warn, err } from "../../common/log";
+import { err, log, warn } from "../../common/log";
 
 // ParadigmCore utilities/types
 import { ParsedWitnessData, ResponseCheckTx, ResponseDeliverTx } from "../../typings/abci";
 import {
-    parseWitness,
-    createWitnessEventHash,
-    addNewEvent,
     addConfMaybeApplyEvent,
-    validTx, 
-    invalidTx
+    addNewEvent,
+    createWitnessEventHash,
+    invalidTx,
+    parseWitness,
+    validTx
 } from "../util/utils";
 
 /**
@@ -56,7 +56,7 @@ export function checkWitness(tx: SignedWitnessTx, state: IState): ResponseCheckT
 export function deliverWitness(tx: SignedWitnessTx, state: IState): ResponseDeliverTx {
     // will store parsed event data (after validation)
     let parsedTx: ParsedWitnessData;
-    
+
     // unique eventId, hash of event contents
     let eventId: string;
 
@@ -73,7 +73,7 @@ export function deliverWitness(tx: SignedWitnessTx, state: IState): ResponseDeli
             address: tx.data.address,
             publicKey: tx.data.publicKey
         });
-       
+
         // confirm id in event matches hash of event data
         if (eventId !== tx.data.id) {
             throw new Error("reported eventId does not match actual");
@@ -85,7 +85,7 @@ export function deliverWitness(tx: SignedWitnessTx, state: IState): ResponseDeli
 
     // unpack/parse event data after id is confirmed
     const { subject, block, id } = parsedTx;
-    
+
     // will be true if transaction is ultimately valid
     let accepted: boolean;
 

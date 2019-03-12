@@ -16,10 +16,10 @@
 import { ResponseInitChain } from "../typings/abci";
 
 // util functions
-import { pubToAddr } from "./util/valFunctions";
 import { computeConf, syncStates } from "./util/utils";
+import { pubToAddr } from "./util/valFunctions";
 
-import * as _ from "lodash"
+import * as _ from "lodash";
 import { State } from "../state/State";
 
 /**

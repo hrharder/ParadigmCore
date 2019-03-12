@@ -51,9 +51,9 @@ export function privToPub(input: Buffer): Buffer {
 }
 
 /**
- * Generates a `ValidatorUpdate` object, intended to be used in the EndBlock 
+ * Generates a `ValidatorUpdate` object, intended to be used in the EndBlock
  * handler.
- * 
+ *
  * @param pubKey {Buffer} raw 32 byte public key
  * @param power {bigint} desired power for validator
  */
@@ -70,11 +70,10 @@ export function validatorUpdate(pubKey: Buffer, power: bigint): ValidatorUpdate 
 /**
  * Simple wrapper for Object.keys() to execute a function on each validator that
  * is currently in-state.
- * 
+ *
  * @param state {State} current state object
  * @param cb {function} callback function to execute on each validator
  */
 export function doForEachValidator(state: IState, cb: (v, i, a) => void): void {
     Object.keys(state.validators).forEach(cb);
 }
-

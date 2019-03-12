@@ -12,20 +12,26 @@
  * ABCI info implementation.
 */
 
+// common imports
+import { warn } from "../common/log";
+
 // custom typings
-import { ResponseInfo } from "../typings/abci";
 import { State } from "src/state/State";
+import { ResponseInfo } from "../typings/abci";
 
 /**
  * Return information about the state and software.
  *
  * @param request {RequestInfo}    info request
  */
-export function infoWrapper(state: State, version: string): (r) => ResponseInfo {
-    return (request) => {
-        state.readFromDisk().catch(e => {
-            console.log("failed to read from disk");
-        });
+export function infoWrapper(state: State, version: string): (r) => Promise<ResponseInfo> {
+    return async (request) => {
+        try {
+            await state.readFromDisk();
+        } catch (error) {
+            warn("api", "failed to load state from disk during info");
+            warn("api", `provided error message: ${error.message}`);
+        }
         return {
             data: "ParadigmCore (alpha)",
             lastBlockAppHash: state.lastBlockAppHash,

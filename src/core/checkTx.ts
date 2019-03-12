@@ -17,18 +17,18 @@ import { ResponseCheckTx } from "../typings/abci";
 
 // utils
 import { warn } from "../common/log";
-import { messages } from "../common/static/messages"
-import { decodeTx, preVerifyTx, invalidTx } from "./util/utils";
+import { messages } from "../common/static/messages";
+import { decodeTx, invalidTx, preVerifyTx } from "./util/utils";
 
 // tx handlers
 import { checkOrder } from "./handlers/order";
-import { checkWitness } from "./handlers/witness";
 import { checkRebalance } from "./handlers/rebalance";
+import { checkWitness } from "./handlers/witness";
 
 /**
  * Perform light verification on incoming transactions, accept valid
  * transactions to the mempool, and reject invalid ones.
- * 
+ *
  * Currently, all transaction types are checked before mempool/gossip by:
  * - encoding according to spec/implementation of TxGenerator and TxBroadcaster
  * - zlib compression

@@ -20,10 +20,10 @@ import { isEqual } from "lodash";
 // ParadigmCore utilities
 import { log, warn } from "../../common/log";
 import { messages as msg } from "../../common/static/messages";
-import { genLimits, newKVPair, invalidTx, validTx } from "../util/utils";
+import { genLimits, invalidTx, newKVPair, validTx } from "../util/utils";
 
 // ParadigmCore type defs
-import { ResponseDeliverTx, ResponseCheckTx } from "../../typings/abci";
+import { ResponseCheckTx, ResponseDeliverTx } from "../../typings/abci";
 
 /**
  * Verify a Rebalance proposal before accepting it into the local mempool.
@@ -95,7 +95,7 @@ export function deliverRebalance(tx: SignedRebalanceTx, state: IState): Response
                 const rNumber = newKVPair("round.number", state.round.number);
                 const rStartBlock = newKVPair("round.start", state.round.startsAt);
                 const rEndBlock = newKVPair("round.end", state.round.endsAt);
-                
+
                 // add tags to be included in ABCI response
                 tags.push(txType, rNumber, rStartBlock, rEndBlock);
 
@@ -126,7 +126,7 @@ export function deliverRebalance(tx: SignedRebalanceTx, state: IState): Response
                     state.round.number += 1;
                     state.round.startsAt = proposal.round.startsAt;
                     state.round.endsAt = proposal.round.endsAt;
-                    state.round.limit = proposal.round.limit
+                    state.round.limit = proposal.round.limit;
                     state.round.limitUsed = 0;
 
                     // copy limits from proposal to each balance
@@ -140,7 +140,7 @@ export function deliverRebalance(tx: SignedRebalanceTx, state: IState): Response
                     const rNumber = newKVPair("round.number", state.round.number);
                     const rStartBlock = newKVPair("round.start", state.round.startsAt);
                     const rEndBlock = newKVPair("round.end", state.round.endsAt);
-                    
+
                     // add tags to be included in ABCI response
                     tags.push(txType, rNumber, rStartBlock, rEndBlock);
 

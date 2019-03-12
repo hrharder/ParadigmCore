@@ -45,32 +45,4 @@ export class Hasher {
     // return computed hash
     return orderHash;
   }
-
-  /**
-   * Generate a hash of the state.
-   *
-   * @param state {State} the current state object
-   */
-  public static hashState(state: IState): Buffer {
-    let stateHash: Buffer;
-    const hashPrep: object = {
-      posters: JSON.stringify(state.posters, bigIntReplacer),
-      endHeight: state.round.endsAt,
-      events: JSON.stringify(state.events, bigIntReplacer),
-      lastHeight: parseInt(state.lastBlockHeight.toString(), 10),
-      ordernum: parseInt(state.orderCounter.toString(), 10),
-      roundNumber: state.round.number,
-      startHeight: state.round.startsAt,
-      lastHash: state.lastBlockAppHash
-    };
-
-    try {
-      stateHash = Buffer.from(hash(hashPrep), "hex");
-    } catch (error) {
-      throw new Error(`failed generating state hash: ${error.message}`);
-    }
-
-    // return computed hash
-    return stateHash;
-  }
 }
