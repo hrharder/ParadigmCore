@@ -140,7 +140,7 @@ export class State {
         this.lastEvent = null;
         this.orderCounter = null;
         this.lastBlockHeight = null;
-        this.lastBlockAppHash = Buffer.alloc(0);
+        this.lastBlockAppHash = Buffer.alloc(1);
 
         // after setting genesis state, read from disk if file present
         // check if file exists and load contents if it does
