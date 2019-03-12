@@ -7,7 +7,7 @@
  *
  * @author Henry Harder
  * @date (initial)  15-October-2018
- * @date (modified) 12-February-2019
+ * @date (modified) 12-March-2019
 **/
 
 // stdlib and third-party imports
@@ -275,7 +275,7 @@ export class TendermintRPC extends EventEmitter {
 
         // send every tx in the queue
         this.sending = true;
-        for (let i = 0; i < this.queue.length; i++) {
+        while(this.queue.length > 0) {
             const { tx, method, id } = this.queue.shift();
             try {
                 const payload = encodeTx(tx);
@@ -381,8 +381,6 @@ export class TendermintRPC extends EventEmitter {
      */
     public submitTx(tx: SignedTransaction, mode?: "sync" | "async" | "commit"): Promise<ResponseBroadcastTx> {
         // use a specific broadcast method for this tx
-        // console.log(`======\ncalled with @ ${Date.now()} with tx: ${JSON.stringify(tx, null, 2)}\n=======`)
-
         let method;
         const methodBuilder = m => `broadcastTx${m}`;
         const parsed = mode ? mode.toLowerCase(): null;

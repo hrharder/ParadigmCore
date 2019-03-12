@@ -2,12 +2,12 @@
  * ===========================
  * ParadigmCore: Blind Star
  * @name initChain.ts
- * @module src/core
+ * @module core
  * ===========================
  *
  * @author Henry Harder
  * @date (initial)  21-January-2019
- * @date (modified) 21-January-2019
+ * @date (modified) 12-March-2019
  *
  * ABCI initChain implementation.
 */
@@ -20,6 +20,7 @@ import { pubToAddr } from "./util/valFunctions";
 import { computeConf, syncStates } from "./util/utils";
 
 import * as _ from "lodash"
+import { State } from "../state/State";
 
 /**
  * Called once upon chain initialization. Sets initial validators and consensus
@@ -28,8 +29,8 @@ import * as _ from "lodash"
  * @param request {RequestInitChain}    genesis information
  */
 export function initChainWrapper(
-    deliverState: IState,
-    commitState: IState,
+    deliverState: State,
+    commitState: State,
     params: ConsensusParams
 ): (r) => ResponseInitChain {
     // destructure initial consensus parameters
@@ -87,7 +88,7 @@ export function initChainWrapper(
         };
 
         // synchronize states upon network genesis
-        syncStates(deliverState, commitState);
+        commitState.acceptNew(deliverState.toJSON());
 
         // Do not change any other parameters here
         return {};

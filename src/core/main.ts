@@ -7,7 +7,7 @@
  *
  * @author Henry Harder
  * @date (initial)  15-October-2018
- * @date (modified) 22-January-2019
+ * @date (modified) 12-March-2019
  *
  * ParadigmCore primary state machine (via imported handlers) and ABCI
  * application.
@@ -54,9 +54,9 @@ export async function start(options: ParadigmCoreOptions): Promise<null> {
         // Load paradigm Order constructor
         let Order = options.paradigm.Order;
 
-        // Load state objects
-        let dState = new State();
-        let cState = new State();
+        // Load state objects (performs initial write, if necessary)
+        let dState = new State(true);
+        let cState = new State(false);
 
         // Load initial consensus params
         let consensusParams: ConsensusParams = {

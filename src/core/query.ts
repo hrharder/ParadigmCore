@@ -32,6 +32,9 @@ import { State } from "src/state/State";
  */
 export function queryWrapper(state: State): (r) => ResponseQuery {
     return (request) => {
+        // load latest data from disk
+        state.readFromDisk();
+        
         // the height at which the query is checked
         const height = state.lastBlockHeight;
 

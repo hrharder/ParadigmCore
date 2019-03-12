@@ -2,12 +2,12 @@
  * ===========================
  * ParadigmCore: Blind Star
  * @name Witness.ts
- * @module src/async
+ * @module witness
  * ===========================
  *
  * @author Henry Harder
  * @date (initial)  15-October-2018
- * @date (modified) 12-February-2019
+ * @date (modified) 12-March-2019
  *
  * The Witness class implements a one-way (read only) peg to Ethereum,
  * and adds a "finality gadget" via a block maturity requirement for events
@@ -34,6 +34,7 @@ import { default as codes } from "../common/Codes";
 import { err, log, warn } from "../common/log";
 import { messages as msg } from "../common/static/messages";
 import { TendermintRPC } from "../common/TendermintRPC";
+import { bigIntReplacer } from "../common/static/bigIntUtils";
 
 /**
  * A Witness supports a one way peg-zone between Ethereum and the OrderStream to
@@ -258,7 +259,7 @@ export class Witness {
             this.tmRpc.submitTx(inTx).then((res: any) => {
                 log("peg", `successfully executed tx: ${res.log} at ${Date.now()}`);
             }).catch((err) => {
-                warn("peg", `\nfailed sending tx: ${err}\n`);
+                warn("peg", `failed sending tx: ${err}`);
             })
         });
 
@@ -328,6 +329,14 @@ export class Witness {
         try {
             await this.tmRpc.connect(this.reconnAttempts, this.reconnInterval);
             log("peg", "connected to the tendermint RPC server");
+
+            // handle case where this is a restart
+            const roundNo = parseInt((await this.tmRpc.query("round/number")).info);
+            if (roundNo > 0) {
+                const startsAt = parseInt((await this.tmRpc.query("round/startsAt")).info)
+                const endsAt = parseInt((await this.tmRpc.query("round/endsAt")).info)
+                this.synchronize(roundNo, startsAt, endsAt);
+            }
         } catch(error) {
             err("peg", error.message);
             return codes.NO_ABCI;

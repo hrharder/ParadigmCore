@@ -12,8 +12,8 @@
 
 // STDLIB and 3rd party imports
 import { createHash, Hash } from "crypto";
-import { clone, isBuffer, isString } from "lodash";
-import { readFile, writeFile } from "fs";
+import { clone, cloneDeep, isBuffer, isString } from "lodash";
+import { readFile, writeFile, readdir } from "fs";
 
 /**
  * A class representing the OrderStream network state. 
@@ -33,6 +33,7 @@ export class State {
     public lastBlockAppHash: Buffer;
 
     private _path: URL;
+    private _readOnly: boolean;
 
     /**
      * Create a new `State` object instance. 
@@ -42,17 +43,22 @@ export class State {
      * 
      * @param path the (absolute) path to write state contents to disk with
      */
-    constructor(path?: string, fileName?: string) {
+    constructor(readOnly: boolean, path?: string, name?: string) {
         // parse absolute file path
-        this._path = new URL(`file://${path || process.cwd()}/${fileName || "state.json"}`);
+        const filePath = path || process.cwd();
+        const fileName = name || "state.json";
+
+        // set file path and write permissions
+        this._path = new URL(`file://${filePath}/${fileName}`);
+        this._readOnly = readOnly;
 
         // null out round number
         this.round = {
-            number: null,
-            startsAt: null,
-            endsAt: null,
-            limit: null,
-            limitUsed: null
+            number: 0,
+            startsAt: 0,
+            endsAt: 0,
+            limit: 0,
+            limitUsed: 0
         };
 
         // null out consensus params
@@ -71,6 +77,16 @@ export class State {
         this.orderCounter = null;
         this.lastBlockHeight = null;
         this.lastBlockAppHash = Buffer.alloc(0);
+
+        // after setting genesis state, read from disk if file present
+        // check if file exists and load contents if it does
+        readdir(filePath, (_, files) => {
+            if (files.includes(fileName)) {
+                this.readFromDisk();
+            } else {
+                this.writeToDisk();
+            }
+        })
     }
 
     /**
@@ -79,15 +95,15 @@ export class State {
      * @param newState an existing full state object (meets [[IState]] interface)
      */
     public acceptNew(newState: IState) {
-        this.round = newState.round;
-        this.events = newState.events;
-        this.posters = newState.posters;
-        this.validators  = newState.validators;
-        this.lastEvent = newState.lastEvent;
-        this.consensusParams  = newState.consensusParams;
-        this.orderCounter = newState.orderCounter;
-        this.lastBlockHeight = newState.lastBlockHeight;
-        this.lastBlockAppHash = newState.lastBlockAppHash;
+        this.round = cloneDeep(newState.round);
+        this.events = cloneDeep(newState.events);
+        this.posters = cloneDeep(newState.posters);
+        this.validators  = cloneDeep(newState.validators);
+        this.lastEvent = clone(newState.lastEvent);
+        this.consensusParams  = cloneDeep(newState.consensusParams);
+        this.orderCounter = clone(newState.orderCounter);
+        this.lastBlockHeight = clone(newState.lastBlockHeight);
+        this.lastBlockAppHash = clone(newState.lastBlockAppHash);
     }
 
     // BEGIN STATE TRANSITION FUNCTIONS
@@ -147,11 +163,9 @@ export class State {
         try {
             const data = await new Promise(this.internalReadFile());
             const parsed = JSON.parse(data.toString(), (k, v) => {
-                if (k === "lastBlockAppHash") {
-                    console.log(v);
+                if (k === "lastBlockAppHash" || k === "publicKey") {
                     return Buffer.from(v);
                 } else if (isString(v) && /^(\d*)n$/.test(v)) {
-                    console.log(v);
                     return BigInt(v.slice(0, -1));
                 } else {
                     return v;
@@ -177,10 +191,11 @@ export class State {
      * internal `internalWriteFile` method.
      */
     public async writeToDisk() {
+        if (this._readOnly) { console.log(`\n\nSKIPPING WRITE\n\n`); return; }
         const strData = JSON.stringify(this.toJSON(), (k, v) => {
             if (typeof v === "bigint") {
                 return v.toString().concat("n");
-            } else if (k === "lastBlockAppHash") {
+            } else if (k === "lastBlockAppHash" || k === "publicKey") {
                 return v.data;
             } else {
                 return v;

@@ -7,7 +7,7 @@
  *
  * @author Henry Harder
  * @date (initial)  21-January-2019
- * @date (modified) 22-January-2019
+ * @date (modified) 12-March-2019
  *
  * ABCI beginBlock implementation.
 */
@@ -20,15 +20,15 @@ import { computeConf } from "./util/utils";
 import { bigIntReplacer } from "../common/static/bigIntUtils";
 import { log } from "../common/log";
 import { doForEachValidator } from "./util/valFunctions";
+import { State } from "../state/State";
 
 /**
  * Called at the beginning of each new block. Updates proposer and block height.
  *
  * @param request {object} raw transaction as delivered by Tendermint core.
  */
-export function beginBlockWrapper(state: IState): (r) => ResponseBeginBlock {
+export function beginBlockWrapper(state: State): (r) => ResponseBeginBlock {
     return (request) => {
-        console.log('beginBlock')
         // parse height and proposer from header
         const currHeight: number = Number(request.header.height);
         const proposer: string = request.header.proposerAddress.toString("hex");

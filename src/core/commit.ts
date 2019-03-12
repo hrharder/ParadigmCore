@@ -7,7 +7,7 @@
  *
  * @author Henry Harder
  * @date (initial)  21-January-2019
- * @date (modified) 21-January-2019
+ * @date (modified) 12-March-2019
  *
  * ABCI commit implementation.
 */
@@ -56,7 +56,10 @@ export function commitWrapper(
             }
 
             // Synchronize commit state from delivertx state
-            syncStates(deliverState, commitState);
+            commitState.acceptNew(deliverState.toJSON());
+
+            // write state contents to disk
+            commitState.writeToDisk();
 
             log(
                 "state",
