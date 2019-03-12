@@ -33,7 +33,7 @@ export class State {
      * Pending witness attestations (delivered via `witness` transactions) are
      * stored here while they await confirmation by sufficient validators
      * submitting attestations to the same event. Indexed by block, then by
-     * a hash of the event data, you can read more about hte [[Events]] interface.
+     * a hash of the event data, you can read more about the [[Events]] interface.
      */
     public events: Events;
 
