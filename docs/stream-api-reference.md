@@ -255,7 +255,7 @@ Query the permitted fields of an OrderStream node's state.
 
 ### Description
 
-The `state.query` method allows RPC's to return information about the node (and a connected network's) public state.  
+The `state.query` method allows RPCs to return information about the node (and a connected network's) public state.  
 The `params.path` field can be used to direct a query to a particular path of the current state. The `path` is passed to ParadigmCore's ABCI `query` method, and the result of that function is returned.
 
 ### Parameters

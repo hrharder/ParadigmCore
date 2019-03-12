@@ -24,7 +24,7 @@ Raw block data as delivered over Tendermint JSONRPC (pre-parsing).
 
 **● block**: *`object`*
 
-*Defined in [api/stream/StreamServer.ts:83](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/api/stream/StreamServer.ts#L83)*
+*Defined in [api/stream/StreamServer.ts:83](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/api/stream/StreamServer.ts#L83)*
 
 #### Type declaration
 

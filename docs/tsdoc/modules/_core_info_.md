@@ -18,7 +18,7 @@
 
 ▸ **infoWrapper**(state: *[State](../classes/_state_state_.state.md)*, version: *`string`*): `function`
 
-*Defined in [core/info.ts:24](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/core/info.ts#L24)*
+*Defined in [core/info.ts:27](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/core/info.ts#L27)*
 
 Return information about the state and software.
 

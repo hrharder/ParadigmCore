@@ -1,5 +1,5 @@
 
-ParadigmCore [`v0.8.2-rc-1`](https://github.com/ParadigmFoundation/ParadigmCore/pull/38)
+ParadigmCore [`v0.8.3-rc-1`](https://github.com/ParadigmFoundation/ParadigmCore/pull/38)
 ========================================================================================
 
 ParadigmCore is (currently) the reference implementation of the OrderStream, and the first network client. It is built on [Tendermint](https://www.tendermint.com/), which is used for networking and BFT consensus.
@@ -119,7 +119,7 @@ If needed, modify [`tsconfig.json`](./tsconfig.json) to set compiler options.
 
 ### Start
 
-Start ParadigmCore by running one of the following. ParadigmCore will intentionally exit if initiated by executing the startup script (`src/index.ts`) directly. If this behavior is desired, you can remove that check from the startup proceedure.
+Start ParadigmCore by running one of the following. ParadigmCore will intentionally exit if initiated by executing the startup script (`src/index.ts`) directly. If this behavior is desired, you can remove that check from the startup procedure.
 
 ```shell
 # with npm
@@ -214,7 +214,6 @@ Additionally, feel free to open issues and pull requests with bug fixes or enhan
 * ["core/beginBlock"](modules/_core_beginblock_.md)
 * ["core/checkTx"](modules/_core_checktx_.md)
 * ["core/commit"](modules/_core_commit_.md)
-* ["core/compare"](modules/_core_compare_.md)
 * ["core/deliverTx"](modules/_core_delivertx_.md)
 * ["core/endBlock"](modules/_core_endblock_.md)
 * ["core/handlers/order"](modules/_core_handlers_order_.md)

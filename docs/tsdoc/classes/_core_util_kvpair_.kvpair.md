@@ -31,7 +31,7 @@
 
 ⊕ **new KVPair**(key: *`string`*, value: *`string` \| `number`*): [KVPair](_core_util_kvpair_.kvpair.md)
 
-*Defined in [core/util/KVPair.ts:3](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/core/util/KVPair.ts#L3)*
+*Defined in [core/util/KVPair.ts:3](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/core/util/KVPair.ts#L3)*
 
 **Parameters:**
 
@@ -52,7 +52,7 @@ ___
 
 **● key**: *`Buffer`*
 
-*Defined in [core/util/KVPair.ts:2](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/core/util/KVPair.ts#L2)*
+*Defined in [core/util/KVPair.ts:2](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/core/util/KVPair.ts#L2)*
 
 ___
 <a id="value"></a>
@@ -61,7 +61,7 @@ ___
 
 **● value**: *`Buffer`*
 
-*Defined in [core/util/KVPair.ts:3](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/core/util/KVPair.ts#L3)*
+*Defined in [core/util/KVPair.ts:3](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/core/util/KVPair.ts#L3)*
 
 ___
 
@@ -73,7 +73,7 @@ ___
 
 ▸ **toJSON**(): `object`
 
-*Defined in [core/util/KVPair.ts:8](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/core/util/KVPair.ts#L8)*
+*Defined in [core/util/KVPair.ts:8](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/core/util/KVPair.ts#L8)*
 
 **Returns:** `object`
 

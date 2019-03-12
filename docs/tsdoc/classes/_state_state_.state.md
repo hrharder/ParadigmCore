@@ -35,7 +35,6 @@ Provides methods for hashing (generation of `AppHash` and Merkle root) and vario
 * [acceptNew](_state_state_.state.md#acceptnew)
 * [applyOrderTx](_state_state_.state.md#applyordertx)
 * [applyRebalanceTx](_state_state_.state.md#applyrebalancetx)
-* [applyWitnessTx](_state_state_.state.md#applywitnesstx)
 * [generateAppHash](_state_state_.state.md#generateapphash)
 * [internalReadFile](_state_state_.state.md#internalreadfile)
 * [internalWriteFile](_state_state_.state.md#internalwritefile)
@@ -59,7 +58,7 @@ Provides methods for hashing (generation of `AppHash` and Merkle root) and vario
 
 ⊕ **new State**(readOnly: *`boolean`*, path?: *`string`*, name?: *`string`*): [State](_state_state_.state.md)
 
-*Defined in [state/State.ts:100](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/state/State.ts#L100)*
+*Defined in [state/State.ts:100](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/state/State.ts#L100)*
 
 Create a new `State` object instance.
 
@@ -85,7 +84,7 @@ ___
 
 **● _path**: *`URL`*
 
-*Defined in [state/State.ts:91](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/state/State.ts#L91)*
+*Defined in [state/State.ts:91](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/state/State.ts#L91)*
 
 The (absolute) file path to read to and write from.
 
@@ -96,7 +95,7 @@ ___
 
 **● _readOnly**: *`boolean`*
 
-*Defined in [state/State.ts:100](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/state/State.ts#L100)*
+*Defined in [state/State.ts:100](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/state/State.ts#L100)*
 
 If set to true, the `State` instance will ONLY read, and will refuse to write to disk.
 
@@ -109,7 +108,7 @@ ___
 
 **● consensusParams**: *`ConsensusParams`*
 
-*Defined in [state/State.ts:67](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/state/State.ts#L67)*
+*Defined in [state/State.ts:67](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/state/State.ts#L67)*
 
 A variety of consensus-critical parameters are stored in the `consensusParams` mapping. Keep in mind that the app-state consensus parameters (this object) is separate from the Tendermint-specific consensus parameters, such as `MaxBlockSize`.
 
@@ -120,7 +119,7 @@ ___
 
 **● events**: *`Events`*
 
-*Defined in [state/State.ts:38](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/state/State.ts#L38)*
+*Defined in [state/State.ts:38](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/state/State.ts#L38)*
 
 Pending witness attestations (delivered via `witness` transactions) are stored here while they await confirmation by sufficient validators submitting attestations to the same event. Indexed by block, then by a hash of the event data, you can read more about the \[\[Events\]\] interface.
 
@@ -131,7 +130,7 @@ ___
 
 **● lastBlockAppHash**: *`Buffer`*
 
-*Defined in [state/State.ts:84](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/state/State.ts#L84)*
+*Defined in [state/State.ts:84](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/state/State.ts#L84)*
 
 The `AppHash` of the previous commit.
 
@@ -142,7 +141,7 @@ ___
 
 **● lastBlockHeight**: *`number`*
 
-*Defined in [state/State.ts:79](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/state/State.ts#L79)*
+*Defined in [state/State.ts:79](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/state/State.ts#L79)*
 
 The last Tendermint block height at which a successful commit occurred.
 
@@ -153,7 +152,7 @@ ___
 
 **● lastEvent**: *`number`*
 
-*Defined in [state/State.ts:59](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/state/State.ts#L59)*
+*Defined in [state/State.ts:59](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/state/State.ts#L59)*
 
 The `lastEvent` is updated each time an Ethereum event is accepted, and is used to prevent acceptance of historical events that the state has already been updated with.
 
@@ -164,7 +163,7 @@ ___
 
 **● orderCounter**: *`number`*
 
-*Defined in [state/State.ts:74](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/state/State.ts#L74)*
+*Defined in [state/State.ts:74](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/state/State.ts#L74)*
 
 Incrementally counts the number of orders accepted by the network since genesis. The `orderCounter` is incremented by 1 each time a valid `order` transaction is accepted during consensus (in `DeliverTx`).
 
@@ -175,7 +174,7 @@ ___
 
 **● posters**: *`PosterInfo`*
 
-*Defined in [state/State.ts:45](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/state/State.ts#L45)*
+*Defined in [state/State.ts:45](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/state/State.ts#L45)*
 
 The `posters` object is where poster accounts are created, updated, and stored. Each poster with registered stake in the `PosterRegistry` contract system has an account object that follows the \[\[Poster\]\] interface.
 
@@ -186,7 +185,7 @@ ___
 
 **● round**: *`RoundInfo`*
 
-*Defined in [state/State.ts:30](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/state/State.ts#L30)*
+*Defined in [state/State.ts:30](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/state/State.ts#L30)*
 
 The `round` object tracks rebalance round information. It is used to maintain sync with the Ethereum chain, which is used to mark the beginning and end of each rebalance round.
 
@@ -197,7 +196,7 @@ ___
 
 **● validators**: *`ValidatorInfo`*
 
-*Defined in [state/State.ts:52](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/state/State.ts#L52)*
+*Defined in [state/State.ts:52](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/state/State.ts#L52)*
 
 Validator information is kept in the `validators` object, where each validator has an account. Contained within each \[\[Validator\]\] is their public key, Ethereum address, staked balance, and other fields.
 
@@ -211,7 +210,7 @@ ___
 
 ▸ **acceptNew**(newState: *`IState`*): `void`
 
-*Defined in [state/State.ts:161](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/state/State.ts#L161)*
+*Defined in [state/State.ts:161](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/state/State.ts#L161)*
 
 Overwrite all existing state values with those from the object passed in.
 
@@ -230,7 +229,7 @@ ___
 
 ▸ **applyOrderTx**(poster: *`string`*): `void`
 
-*Defined in [state/State.ts:180](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/state/State.ts#L180)*
+*Defined in [state/State.ts:180](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/state/State.ts#L180)*
 
 Applies state transition for an `order` transaction.
 
@@ -249,7 +248,7 @@ ___
 
 ▸ **applyRebalanceTx**(proposal: *`RebalanceData`*): `void`
 
-*Defined in [state/State.ts:195](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/state/State.ts#L195)*
+*Defined in [state/State.ts:195](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/state/State.ts#L195)*
 
 Applies state transition for a `rebalance` transaction.
 
@@ -262,24 +261,13 @@ Applies state transition for a `rebalance` transaction.
 **Returns:** `void`
 
 ___
-<a id="applywitnesstx"></a>
-
-###  applyWitnessTx
-
-▸ **applyWitnessTx**(): `void`
-
-*Defined in [state/State.ts:213](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/state/State.ts#L213)*
-
-**Returns:** `void`
-
-___
 <a id="generateapphash"></a>
 
 ###  generateAppHash
 
 ▸ **generateAppHash**(): `Buffer`
 
-*Defined in [state/State.ts:307](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/state/State.ts#L307)*
+*Defined in [state/State.ts:282](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/state/State.ts#L282)*
 
 Generates a hash of all state values. Represents the `AppHash` and the Merkle root of the `state` trie.
 
@@ -294,7 +282,7 @@ ___
 
 ▸ **internalReadFile**(): `function`
 
-*Defined in [state/State.ts:274](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/state/State.ts#L274)*
+*Defined in [state/State.ts:319](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/state/State.ts#L319)*
 
 Returns a promise executor that wraps the async `fs.readFile` method.
 
@@ -307,7 +295,7 @@ ___
 
 ▸ **internalWriteFile**(data: *`string`*): `function`
 
-*Defined in [state/State.ts:289](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/state/State.ts#L289)*
+*Defined in [state/State.ts:334](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/state/State.ts#L334)*
 
 Returns a promise executor that wraps the async `fs.writeFile` method.
 
@@ -326,7 +314,7 @@ ___
 
 ▸ **readFromDisk**(): `Promise`<`void`>
 
-*Defined in [state/State.ts:226](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/state/State.ts#L226)*
+*Defined in [state/State.ts:229](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/state/State.ts#L229)*
 
 Reads the contents of the file path specified upon construction from disk, and loads its contents into state, over-writing any and all current data.
 
@@ -343,7 +331,7 @@ ___
 
 ▸ **toJSON**(): `IState`
 
-*Defined in [state/State.ts:427](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/state/State.ts#L427)*
+*Defined in [state/State.ts:302](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/state/State.ts#L302)*
 
 Convert state object to plain object (without method definitions).
 
@@ -358,7 +346,7 @@ ___
 
 ▸ **updateHashBoolean**(hash: *`Hash`*, bool: *`boolean`*): `void`
 
-*Defined in [state/State.ts:410](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/state/State.ts#L410)*
+*Defined in [state/State.ts:439](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/state/State.ts#L439)*
 
 Defines a method of hashing a boolean value. Values that are `true` are included as a `ff` byte in the raw hash input, and `false` values are included as a `00` byte. Both appended prior to digestion.
 
@@ -378,7 +366,7 @@ ___
 
 ▸ **updateHashNumber**(hash: *`Hash`*, number: *`number` \| `bigint`*): `void`
 
-*Defined in [state/State.ts:382](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/state/State.ts#L382)*
+*Defined in [state/State.ts:411](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/state/State.ts#L411)*
 
 Converts a number value (either `bigint` or `number` type) to a hexadecimal string value to be included in the hash.
 
@@ -398,7 +386,7 @@ ___
 
 ▸ **updateHashObject**(hash: *`Hash`*, obj: *`object`*): `void`
 
-*Defined in [state/State.ts:328](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/state/State.ts#L328)*
+*Defined in [state/State.ts:355](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/state/State.ts#L355)*
 
 Iterates over an objects enumerable properties and defers to the correct logic for generating a hash of all the object's values.
 
@@ -418,7 +406,7 @@ ___
 
 ▸ **updateHashString**(hash: *`Hash`*, string: *`string`*): `void`
 
-*Defined in [state/State.ts:370](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/state/State.ts#L370)*
+*Defined in [state/State.ts:399](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/state/State.ts#L399)*
 
 Converts a string to a `Buffer` object to update a hash object with.
 
@@ -438,7 +426,7 @@ ___
 
 ▸ **updateHashUndefined**(hash: *`Hash`*): `void`
 
-*Defined in [state/State.ts:396](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/state/State.ts#L396)*
+*Defined in [state/State.ts:425](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/state/State.ts#L425)*
 
 Defines a manner to hash null or 0 values. For `null`, `undefined` or 0 (including `false`) values, simply append a `00` byte to the binary has input (prior to digestion).
 
@@ -457,7 +445,7 @@ ___
 
 ▸ **updateHashValue**(hash: *`Hash`*, value: *`any`*): `void`
 
-*Defined in [state/State.ts:347](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/state/State.ts#L347)*
+*Defined in [state/State.ts:376](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/state/State.ts#L376)*
 
 Selects the correct method of serialization to binary data for a given type to be included in a `Hash` object.
 
@@ -477,7 +465,7 @@ ___
 
 ▸ **writeToDisk**(): `Promise`<`void`>
 
-*Defined in [state/State.ts:257](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/state/State.ts#L257)*
+*Defined in [state/State.ts:260](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/state/State.ts#L260)*
 
 Writes the contents of state to the file path specified upon construction.
 
