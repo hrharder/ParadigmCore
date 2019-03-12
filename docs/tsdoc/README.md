@@ -214,6 +214,7 @@ Additionally, feel free to open issues and pull requests with bug fixes or enhan
 * ["core/beginBlock"](modules/_core_beginblock_.md)
 * ["core/checkTx"](modules/_core_checktx_.md)
 * ["core/commit"](modules/_core_commit_.md)
+* ["core/compare"](modules/_core_compare_.md)
 * ["core/deliverTx"](modules/_core_delivertx_.md)
 * ["core/endBlock"](modules/_core_endblock_.md)
 * ["core/handlers/order"](modules/_core_handlers_order_.md)

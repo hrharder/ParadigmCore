@@ -72,7 +72,7 @@ A wrapper class facilitating a WebSocket connection to the Tendermint RPC server
 
 ⊕ **new TendermintRPC**(endpoint: *`string`*, maxRetries: *`number`*, interval: *`number`*): [TendermintRPC](_common_tendermintrpc_.tendermintrpc.md)
 
-*Defined in [common/TendermintRPC.ts:118](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/common/TendermintRPC.ts#L118)*
+*Defined in [common/TendermintRPC.ts:118](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/common/TendermintRPC.ts#L118)*
 
 Create a new Tendermint RPC instance.
 
@@ -96,7 +96,7 @@ ___
 
 **● conn**: *`RpcClient`*
 
-*Defined in [common/TendermintRPC.ts:71](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/common/TendermintRPC.ts#L71)*
+*Defined in [common/TendermintRPC.ts:71](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/common/TendermintRPC.ts#L71)*
 
 The connection to the Tendermint RPC server over WebSocket is initialized when `WrapABCI.prototype.connect()` is called.
 
@@ -107,7 +107,7 @@ ___
 
 **● connected**: *`boolean`*
 
-*Defined in [common/TendermintRPC.ts:65](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/common/TendermintRPC.ts#L65)*
+*Defined in [common/TendermintRPC.ts:65](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/common/TendermintRPC.ts#L65)*
 
 True if connected to Tendermint RPC server.
 
@@ -118,7 +118,7 @@ ___
 
 **● connecting**: *`boolean`*
 
-*Defined in [common/TendermintRPC.ts:107](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/common/TendermintRPC.ts#L107)*
+*Defined in [common/TendermintRPC.ts:107](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/common/TendermintRPC.ts#L107)*
 
 Only `true` if connection attempts are in progress.
 
@@ -129,7 +129,7 @@ ___
 
 **● id**: *`string`*
 
-*Defined in [common/TendermintRPC.ts:77](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/common/TendermintRPC.ts#L77)*
+*Defined in [common/TendermintRPC.ts:77](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/common/TendermintRPC.ts#L77)*
 
 A pseudo-randomly generated ID string to support a unique client<>server session identifier with Tendermint.
 
@@ -140,7 +140,7 @@ ___
 
 **● latestBlockData**: *`any`*
 
-*Defined in [common/TendermintRPC.ts:96](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/common/TendermintRPC.ts#L96)*
+*Defined in [common/TendermintRPC.ts:96](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/common/TendermintRPC.ts#L96)*
 
 The in-memory representation of the latest block-data that has been received by the instance.
 
@@ -151,7 +151,7 @@ ___
 
 **● maxRetries**: *`number`*
 
-*Defined in [common/TendermintRPC.ts:84](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/common/TendermintRPC.ts#L84)*
+*Defined in [common/TendermintRPC.ts:84](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/common/TendermintRPC.ts#L84)*
 
 The number of times a `TendermintRPC` instance will try to reconnect to the Tendermint RPC server after a connection is lost (following an initially successful connection).
 
@@ -162,7 +162,7 @@ ___
 
 **● queue**: *[TransactionConfig](../interfaces/_common_tendermintrpc_.transactionconfig.md)[]*
 
-*Defined in [common/TendermintRPC.ts:112](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/common/TendermintRPC.ts#L112)*
+*Defined in [common/TendermintRPC.ts:112](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/common/TendermintRPC.ts#L112)*
 
 The broadcast queue of transactions that need to be sent via RPC.
 
@@ -173,7 +173,7 @@ ___
 
 **● retryInterval**: *`number`*
 
-*Defined in [common/TendermintRPC.ts:90](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/common/TendermintRPC.ts#L90)*
+*Defined in [common/TendermintRPC.ts:90](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/common/TendermintRPC.ts#L90)*
 
 The amount of time (in ms) to wait between each attempt to connect to the Tendermint RPC server.
 
@@ -184,7 +184,7 @@ ___
 
 **● sending**: *`boolean`*
 
-*Defined in [common/TendermintRPC.ts:118](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/common/TendermintRPC.ts#L118)*
+*Defined in [common/TendermintRPC.ts:118](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/common/TendermintRPC.ts#L118)*
 
 Boolean status used to track if broadcast via RPC is in progress, or completed/not-started.
 
@@ -195,7 +195,7 @@ ___
 
 **● shouldRetry**: *`boolean`*
 
-*Defined in [common/TendermintRPC.ts:102](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/common/TendermintRPC.ts#L102)*
+*Defined in [common/TendermintRPC.ts:102](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/common/TendermintRPC.ts#L102)*
 
 Used to enable re-connections upon connection loss between the instance and the Tendermint RPC server.
 
@@ -206,7 +206,7 @@ ___
 
 **● url**: *`URL`*
 
-*Defined in [common/TendermintRPC.ts:60](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/common/TendermintRPC.ts#L60)*
+*Defined in [common/TendermintRPC.ts:60](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/common/TendermintRPC.ts#L60)*
 
 The URL of the Tendermint RPC (ABCI) server port.
 
@@ -219,7 +219,7 @@ ___
 
 *Inherited from EventEmitter.defaultMaxListeners*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/@types/node/index.d.ts:1110*
+*Defined in /Users/hen/GitHub/pc/node_modules/@types/node/index.d.ts:1110*
 
 ___
 
@@ -231,7 +231,7 @@ ___
 
 ▸ **abciInfo**(override?: *`boolean`*): `Promise`<`ResponseInfo`>
 
-*Defined in [common/TendermintRPC.ts:301](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/common/TendermintRPC.ts#L301)*
+*Defined in [common/TendermintRPC.ts:301](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/common/TendermintRPC.ts#L301)*
 
 Query the ABCI `info` method.
 
@@ -256,7 +256,7 @@ ___
 
 *Overrides EventEmitter.addListener*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/@types/node/index.d.ts:1112*
+*Defined in /Users/hen/GitHub/pc/node_modules/@types/node/index.d.ts:1112*
 
 **Parameters:**
 
@@ -274,7 +274,7 @@ ___
 
 ▸ **connect**(maxTries: *`number`*, intervalMs: *`number`*): `Promise`<`void`>
 
-*Defined in [common/TendermintRPC.ts:153](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/common/TendermintRPC.ts#L153)*
+*Defined in [common/TendermintRPC.ts:153](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/common/TendermintRPC.ts#L153)*
 
 Initialize connection to Tendermint RPC server.
 
@@ -296,7 +296,7 @@ ___
 
 ▸ **connectionCloseHandler**(_this: *[TendermintRPC](_common_tendermintrpc_.tendermintrpc.md)*): `function`
 
-*Defined in [common/TendermintRPC.ts:245](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/common/TendermintRPC.ts#L245)*
+*Defined in [common/TendermintRPC.ts:245](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/common/TendermintRPC.ts#L245)*
 
 Generate a handler function for connection closure.
 
@@ -319,7 +319,7 @@ ___
 
 ▸ **connectionErrorHandler**(_this: *[TendermintRPC](_common_tendermintrpc_.tendermintrpc.md)*): `function`
 
-*Defined in [common/TendermintRPC.ts:219](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/common/TendermintRPC.ts#L219)*
+*Defined in [common/TendermintRPC.ts:219](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/common/TendermintRPC.ts#L219)*
 
 Generate a handler function for connection closure.
 
@@ -346,7 +346,7 @@ ___
 
 *Overrides EventEmitter.emit*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/@types/node/index.d.ts:1124*
+*Defined in /Users/hen/GitHub/pc/node_modules/@types/node/index.d.ts:1124*
 
 **Parameters:**
 
@@ -368,7 +368,7 @@ ___
 
 *Overrides EventEmitter.eventNames*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/@types/node/index.d.ts:1125*
+*Defined in /Users/hen/GitHub/pc/node_modules/@types/node/index.d.ts:1125*
 
 **Returns:** `Array`<`string` \| `symbol`>
 
@@ -383,7 +383,7 @@ ___
 
 *Overrides EventEmitter.getMaxListeners*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/@types/node/index.d.ts:1121*
+*Defined in /Users/hen/GitHub/pc/node_modules/@types/node/index.d.ts:1121*
 
 **Returns:** `number`
 
@@ -394,7 +394,7 @@ ___
 
 ▸ **internalSubmitTx**(): `Promise`<`any`>
 
-*Defined in [common/TendermintRPC.ts:272](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/common/TendermintRPC.ts#L272)*
+*Defined in [common/TendermintRPC.ts:272](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/common/TendermintRPC.ts#L272)*
 
 (Internal) Submit a transaction to Tendermint via RPC. Use the public `TendermintRPC.prototype.submitTx` method to add transactions to the broadcast queue.
 
@@ -407,7 +407,7 @@ ___
 
 ▸ **isConnected**(): `boolean`
 
-*Defined in [common/TendermintRPC.ts:441](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/common/TendermintRPC.ts#L441)*
+*Defined in [common/TendermintRPC.ts:441](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/common/TendermintRPC.ts#L441)*
 
 Public getter method to check connection status.
 
@@ -425,7 +425,7 @@ ___
 
 *Overrides EventEmitter.listenerCount*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/@types/node/index.d.ts:1126*
+*Defined in /Users/hen/GitHub/pc/node_modules/@types/node/index.d.ts:1126*
 
 **Parameters:**
 
@@ -446,7 +446,7 @@ ___
 
 *Overrides EventEmitter.listeners*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/@types/node/index.d.ts:1122*
+*Defined in /Users/hen/GitHub/pc/node_modules/@types/node/index.d.ts:1122*
 
 **Parameters:**
 
@@ -467,7 +467,7 @@ ___
 
 *Overrides EventEmitter.off*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/@types/node/index.d.ts:1118*
+*Defined in /Users/hen/GitHub/pc/node_modules/@types/node/index.d.ts:1118*
 
 **Parameters:**
 
@@ -489,7 +489,7 @@ ___
 
 *Overrides EventEmitter.on*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/@types/node/index.d.ts:1113*
+*Defined in /Users/hen/GitHub/pc/node_modules/@types/node/index.d.ts:1113*
 
 **Parameters:**
 
@@ -511,7 +511,7 @@ ___
 
 *Overrides EventEmitter.once*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/@types/node/index.d.ts:1114*
+*Defined in /Users/hen/GitHub/pc/node_modules/@types/node/index.d.ts:1114*
 
 **Parameters:**
 
@@ -533,7 +533,7 @@ ___
 
 *Overrides EventEmitter.prependListener*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/@types/node/index.d.ts:1115*
+*Defined in /Users/hen/GitHub/pc/node_modules/@types/node/index.d.ts:1115*
 
 **Parameters:**
 
@@ -555,7 +555,7 @@ ___
 
 *Overrides EventEmitter.prependOnceListener*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/@types/node/index.d.ts:1116*
+*Defined in /Users/hen/GitHub/pc/node_modules/@types/node/index.d.ts:1116*
 
 **Parameters:**
 
@@ -573,7 +573,7 @@ ___
 
 ▸ **query**(path: *`string`*): `Promise`<`any`>
 
-*Defined in [common/TendermintRPC.ts:431](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/common/TendermintRPC.ts#L431)*
+*Defined in [common/TendermintRPC.ts:431](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/common/TendermintRPC.ts#L431)*
 
 (in-progress)
 
@@ -598,7 +598,7 @@ ___
 
 *Overrides EventEmitter.rawListeners*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/@types/node/index.d.ts:1123*
+*Defined in /Users/hen/GitHub/pc/node_modules/@types/node/index.d.ts:1123*
 
 **Parameters:**
 
@@ -619,7 +619,7 @@ ___
 
 *Overrides EventEmitter.removeAllListeners*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/@types/node/index.d.ts:1119*
+*Defined in /Users/hen/GitHub/pc/node_modules/@types/node/index.d.ts:1119*
 
 **Parameters:**
 
@@ -640,7 +640,7 @@ ___
 
 *Overrides EventEmitter.removeListener*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/@types/node/index.d.ts:1117*
+*Defined in /Users/hen/GitHub/pc/node_modules/@types/node/index.d.ts:1117*
 
 **Parameters:**
 
@@ -662,7 +662,7 @@ ___
 
 *Overrides EventEmitter.setMaxListeners*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/@types/node/index.d.ts:1120*
+*Defined in /Users/hen/GitHub/pc/node_modules/@types/node/index.d.ts:1120*
 
 **Parameters:**
 
@@ -679,7 +679,7 @@ ___
 
 ▸ **submitTx**(tx: *`SignedTransaction`*, mode?: *"sync" \| "async" \| "commit"*): `Promise`<`ResponseBroadcastTx`>
 
-*Defined in [common/TendermintRPC.ts:382](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/common/TendermintRPC.ts#L382)*
+*Defined in [common/TendermintRPC.ts:382](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/common/TendermintRPC.ts#L382)*
 
 Submit
 
@@ -701,7 +701,7 @@ ___
 
 ▸ **subscribe**(eventName: *`string`*, cb: *`Function`*): `Promise`<`void`>
 
-*Defined in [common/TendermintRPC.ts:327](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/common/TendermintRPC.ts#L327)*
+*Defined in [common/TendermintRPC.ts:327](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/common/TendermintRPC.ts#L327)*
 
 Subscribe to an event in the Tendermint chain.
 
@@ -723,7 +723,7 @@ ___
 
 ▸ **unsubscribe**(query: *`string`*): `Promise`<`void`>
 
-*Defined in [common/TendermintRPC.ts:354](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/common/TendermintRPC.ts#L354)*
+*Defined in [common/TendermintRPC.ts:354](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/common/TendermintRPC.ts#L354)*
 
 Unsubscribe from an event in the Tendermint chain.
 
@@ -746,7 +746,7 @@ ___
 
 *Inherited from EventEmitter.listenerCount*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/@types/node/index.d.ts:1109*
+*Defined in /Users/hen/GitHub/pc/node_modules/@types/node/index.d.ts:1109*
 
 *__deprecated__*: since v4.0.0
 

@@ -31,7 +31,7 @@
 
 ▸ **convertIsoTimeToUnixMs**(dateTime: *`string`*): `number`
 
-*Defined in [common/utils.ts:18](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/common/utils.ts#L18)*
+*Defined in [common/utils.ts:18](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/common/utils.ts#L18)*
 
 Convert an ISO date-time string to UNIX timestamp.
 

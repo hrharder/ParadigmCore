@@ -1,12 +1,12 @@
-[ParadigmCore](../README.md) > ["core/initChain"](../modules/_core_initchain_.md)
+[ParadigmCore](../README.md) > ["core/compare"](../modules/_core_compare_.md)
 
-# External module: "core/initChain"
+# External module: "core/compare"
 
 ## Index
 
 ### Functions
 
-* [initChainWrapper](_core_initchain_.md#initchainwrapper)
+* [initChainWrapper](_core_compare_.md#initchainwrapper)
 
 ---
 
@@ -18,7 +18,7 @@
 
 ▸ **initChainWrapper**(deliverState: *[State](../classes/_state_state_.state.md)*, commitState: *[State](../classes/_state_state_.state.md)*, params: *`ConsensusParams`*): `function`
 
-*Defined in [core/initChain.ts:31](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/core/initChain.ts#L31)*
+*Defined in core/compare.ts:31*
 
 Called once upon chain initialization. Sets initial validators and consensus parameters.
 

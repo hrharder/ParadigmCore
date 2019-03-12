@@ -28,7 +28,7 @@ Defines the parsed block data from the tendermint `NewBlock` event.
 
 **● height**: *`number`*
 
-*Defined in [api/stream/StreamServer.ts:66](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/api/stream/StreamServer.ts#L66)*
+*Defined in [api/stream/StreamServer.ts:66](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/api/stream/StreamServer.ts#L66)*
 
 The best known tendermint block (height).
 
@@ -39,7 +39,7 @@ ___
 
 **● time**: *`number`*
 
-*Defined in [api/stream/StreamServer.ts:71](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/api/stream/StreamServer.ts#L71)*
+*Defined in [api/stream/StreamServer.ts:71](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/api/stream/StreamServer.ts#L71)*
 
 The unix timestamp of the time the block was committed.
 
@@ -50,7 +50,7 @@ ___
 
 **● txs**: *`string`[]*
 
-*Defined in [api/stream/StreamServer.ts:76](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/api/stream/StreamServer.ts#L76)*
+*Defined in [api/stream/StreamServer.ts:76](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/api/stream/StreamServer.ts#L76)*
 
 An array of stringified (yet parsed) transaction objects
 

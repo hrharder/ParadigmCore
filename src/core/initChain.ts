@@ -43,7 +43,6 @@ export function initChainWrapper(
 
     // Return initChain function
     return (request) => {
-        console.log('starting initchain')
         // add genesis validators to in-state validator list
         request.validators.forEach((validator) => {
             // Generate hexadecimal nodeID from public key

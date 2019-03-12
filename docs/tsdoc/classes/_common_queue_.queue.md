@@ -97,7 +97,7 @@ Generalized queue implementation. Currently used in Broadcaster class.
 
 ⊕ **new Queue**(): [Queue](_common_queue_.queue.md)
 
-*Defined in [common/Queue.ts:15](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/common/Queue.ts#L15)*
+*Defined in [common/Queue.ts:15](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/common/Queue.ts#L15)*
 
 **Returns:** [Queue](_common_queue_.queue.md)
 
@@ -113,7 +113,7 @@ ___
 
 *Inherited from Array.length*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.es5.d.ts:1199*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.es5.d.ts:1199*
 
 Gets or sets the length of the array. This is a number one higher than the highest element defined in an array.
 
@@ -124,7 +124,7 @@ ___
 
 **● Array**: *`ArrayConstructor`*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.es5.d.ts:1358*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.es5.d.ts:1358*
 
 ___
 
@@ -138,7 +138,7 @@ ___
 
 *Inherited from Array.[Symbol.iterator]*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.es2015.iterable.d.ts:52*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.es2015.iterable.d.ts:52*
 
 Iterator
 
@@ -153,7 +153,7 @@ ___
 
 *Inherited from Array.[Symbol.unscopables]*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts:94*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts:94*
 
 Returns an object whose properties have the value 'true' when they will be absent when used in a 'with' statement.
 
@@ -166,7 +166,7 @@ ___
 
 ▸ **add**(item: *`any`*): `void`
 
-*Defined in [common/Queue.ts:28](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/common/Queue.ts#L28)*
+*Defined in [common/Queue.ts:28](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/common/Queue.ts#L28)*
 
 Add an item to the queue.
 
@@ -185,7 +185,7 @@ ___
 
 ▸ **allItems**(): `string`
 
-*Defined in [common/Queue.ts:49](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/common/Queue.ts#L49)*
+*Defined in [common/Queue.ts:49](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/common/Queue.ts#L49)*
 
 Returns a string of all items.
 
@@ -203,7 +203,7 @@ ___
 
 *Inherited from Array.concat*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.es5.d.ts:1221*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.es5.d.ts:1221*
 
 Combines two or more arrays.
 
@@ -217,7 +217,7 @@ Combines two or more arrays.
 
 *Inherited from Array.concat*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.es5.d.ts:1226*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.es5.d.ts:1226*
 
 Combines two or more arrays.
 
@@ -238,7 +238,7 @@ ___
 
 *Inherited from Array.copyWithin*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.es2015.core.d.ts:64*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.es2015.core.d.ts:64*
 
 Returns the this object after copying a section of the array identified by start and end to the same array starting at position target
 
@@ -261,7 +261,7 @@ ___
 
 *Inherited from Array.entries*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.es2015.iterable.d.ts:57*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.es2015.iterable.d.ts:57*
 
 Returns an iterable of key, value pairs for every entry in the array
 
@@ -276,7 +276,7 @@ ___
 
 *Inherited from Array.every*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.es5.d.ts:1286*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.es5.d.ts:1286*
 
 Determines whether all the members of an array satisfy the specified test.
 
@@ -298,7 +298,7 @@ ___
 
 *Inherited from Array.fill*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.es2015.core.d.ts:53*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.es2015.core.d.ts:53*
 
 Returns the this object after filling the section identified by start and end with value
 
@@ -323,7 +323,7 @@ ___
 
 *Inherited from Array.filter*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.es5.d.ts:1310*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.es5.d.ts:1310*
 
 Returns the elements of an array that meet the condition specified in a callback function.
 
@@ -341,7 +341,7 @@ Returns the elements of an array that meet the condition specified in a callback
 
 *Inherited from Array.filter*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.es5.d.ts:1316*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.es5.d.ts:1316*
 
 Returns the elements of an array that meet the condition specified in a callback function.
 
@@ -365,7 +365,7 @@ ___
 
 *Inherited from Array.find*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.es2015.core.d.ts:31*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.es2015.core.d.ts:31*
 
 Returns the value of the first element in the array where predicate is true, and undefined otherwise.
 
@@ -383,7 +383,7 @@ Returns the value of the first element in the array where predicate is true, and
 
 *Inherited from Array.find*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.es2015.core.d.ts:32*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.es2015.core.d.ts:32*
 
 **Parameters:**
 
@@ -403,7 +403,7 @@ ___
 
 *Inherited from Array.findIndex*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.es2015.core.d.ts:43*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.es2015.core.d.ts:43*
 
 Returns the index of the first element in the array where predicate is true, and -1 otherwise.
 
@@ -441,7 +441,7 @@ ___
 
 *Inherited from Array.flat*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.esnext.array.d.ts:158*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.esnext.array.d.ts:158*
 
 Returns a new array with all sub-array elements concatenated into it recursively up to the specified depth.
 
@@ -459,7 +459,7 @@ Returns a new array with all sub-array elements concatenated into it recursively
 
 *Inherited from Array.flat*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.esnext.array.d.ts:166*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.esnext.array.d.ts:166*
 
 Returns a new array with all sub-array elements concatenated into it recursively up to the specified depth.
 
@@ -477,7 +477,7 @@ Returns a new array with all sub-array elements concatenated into it recursively
 
 *Inherited from Array.flat*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.esnext.array.d.ts:174*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.esnext.array.d.ts:174*
 
 Returns a new array with all sub-array elements concatenated into it recursively up to the specified depth.
 
@@ -495,7 +495,7 @@ Returns a new array with all sub-array elements concatenated into it recursively
 
 *Inherited from Array.flat*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.esnext.array.d.ts:182*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.esnext.array.d.ts:182*
 
 Returns a new array with all sub-array elements concatenated into it recursively up to the specified depth.
 
@@ -513,7 +513,7 @@ Returns a new array with all sub-array elements concatenated into it recursively
 
 *Inherited from Array.flat*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.esnext.array.d.ts:190*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.esnext.array.d.ts:190*
 
 Returns a new array with all sub-array elements concatenated into it recursively up to the specified depth.
 
@@ -531,7 +531,7 @@ Returns a new array with all sub-array elements concatenated into it recursively
 
 *Inherited from Array.flat*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.esnext.array.d.ts:198*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.esnext.array.d.ts:198*
 
 Returns a new array with all sub-array elements concatenated into it recursively up to the specified depth.
 
@@ -549,7 +549,7 @@ Returns a new array with all sub-array elements concatenated into it recursively
 
 *Inherited from Array.flat*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.esnext.array.d.ts:206*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.esnext.array.d.ts:206*
 
 Returns a new array with all sub-array elements concatenated into it recursively up to the specified depth.
 
@@ -567,7 +567,7 @@ Returns a new array with all sub-array elements concatenated into it recursively
 
 *Inherited from Array.flat*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.esnext.array.d.ts:214*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.esnext.array.d.ts:214*
 
 Returns a new array with all sub-array elements concatenated into it recursively up to the specified depth.
 
@@ -585,7 +585,7 @@ Returns a new array with all sub-array elements concatenated into it recursively
 
 *Inherited from Array.flat*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.esnext.array.d.ts:222*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.esnext.array.d.ts:222*
 
 Returns a new array with all sub-array elements concatenated into it recursively up to the specified depth. If no depth is provided, flat method defaults to the depth of 1.
 
@@ -609,7 +609,7 @@ ___
 
 *Inherited from Array.flatMap*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.esnext.array.d.ts:147*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.esnext.array.d.ts:147*
 
 Calls a defined callback function on each element of an array. Then, flattens the result into a new array. This is identical to a map followed by flat with depth 1.
 
@@ -635,7 +635,7 @@ ___
 
 *Inherited from Array.forEach*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.es5.d.ts:1298*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.es5.d.ts:1298*
 
 Performs the specified action for each element in an array.
 
@@ -655,7 +655,7 @@ ___
 
 ▸ **front**(): `any`
 
-*Defined in [common/Queue.ts:42](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/common/Queue.ts#L42)*
+*Defined in [common/Queue.ts:42](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/common/Queue.ts#L42)*
 
 Returns the first item in the queue.
 
@@ -671,7 +671,7 @@ ___
 
 *Inherited from Array.includes*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.es2016.array.include.d.ts:27*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.es2016.array.include.d.ts:27*
 
 Determines whether an array includes a certain element, returning true or false as appropriate.
 
@@ -693,7 +693,7 @@ ___
 
 *Inherited from Array.indexOf*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.es5.d.ts:1274*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.es5.d.ts:1274*
 
 Returns the index of the first occurrence of a value in an array.
 
@@ -713,7 +713,7 @@ ___
 
 ▸ **isEmpty**(): `boolean`
 
-*Defined in [common/Queue.ts:56](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/common/Queue.ts#L56)*
+*Defined in [common/Queue.ts:56](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/common/Queue.ts#L56)*
 
 Returns true if queue is empty.
 
@@ -729,7 +729,7 @@ ___
 
 *Inherited from Array.join*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.es5.d.ts:1231*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.es5.d.ts:1231*
 
 Adds all the elements of an array separated by the specified separator string.
 
@@ -750,7 +750,7 @@ ___
 
 *Inherited from Array.keys*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.es2015.iterable.d.ts:62*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.es2015.iterable.d.ts:62*
 
 Returns an iterable of keys in the array
 
@@ -765,7 +765,7 @@ ___
 
 *Inherited from Array.lastIndexOf*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.es5.d.ts:1280*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.es5.d.ts:1280*
 
 Returns the index of the last occurrence of a specified value in an array.
 
@@ -787,7 +787,7 @@ ___
 
 *Inherited from Array.map*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.es5.d.ts:1304*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.es5.d.ts:1304*
 
 Calls a defined callback function on each element of an array, and returns an array that contains the results.
 
@@ -812,7 +812,7 @@ ___
 
 *Inherited from Array.pop*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.es5.d.ts:1211*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.es5.d.ts:1211*
 
 Removes the last element from an array and returns it.
 
@@ -827,7 +827,7 @@ ___
 
 *Inherited from Array.push*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.es5.d.ts:1216*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.es5.d.ts:1216*
 
 Appends new elements to an array, and returns the new length of the array.
 
@@ -852,7 +852,7 @@ ___
 
 *Inherited from Array.reduce*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.es5.d.ts:1322*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.es5.d.ts:1322*
 
 Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
 
@@ -866,7 +866,7 @@ Calls the specified callback function for all the elements in an array. The retu
 
 *Inherited from Array.reduce*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.es5.d.ts:1323*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.es5.d.ts:1323*
 
 **Parameters:**
 
@@ -879,7 +879,7 @@ Calls the specified callback function for all the elements in an array. The retu
 
 *Inherited from Array.reduce*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.es5.d.ts:1329*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.es5.d.ts:1329*
 
 Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
 
@@ -908,7 +908,7 @@ ___
 
 *Inherited from Array.reduceRight*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.es5.d.ts:1335*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.es5.d.ts:1335*
 
 Calls the specified callback function for all the elements in an array, in descending order. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
 
@@ -922,7 +922,7 @@ Calls the specified callback function for all the elements in an array, in desce
 
 *Inherited from Array.reduceRight*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.es5.d.ts:1336*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.es5.d.ts:1336*
 
 **Parameters:**
 
@@ -935,7 +935,7 @@ Calls the specified callback function for all the elements in an array, in desce
 
 *Inherited from Array.reduceRight*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.es5.d.ts:1342*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.es5.d.ts:1342*
 
 Calls the specified callback function for all the elements in an array, in descending order. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
 
@@ -958,7 +958,7 @@ ___
 
 ▸ **remove**(): `any`
 
-*Defined in [common/Queue.ts:35](https://github.com/paradigmfoundation/paradigmcore/blob/f3a8acd/src/common/Queue.ts#L35)*
+*Defined in [common/Queue.ts:35](https://github.com/paradigmfoundation/paradigmcore/blob/7bb994c/src/common/Queue.ts#L35)*
 
 Removes and returns the first item from the queue.
 
@@ -975,7 +975,7 @@ ___
 
 *Inherited from Array.reverse*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.es5.d.ts:1235*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.es5.d.ts:1235*
 
 Reverses the elements in an Array.
 
@@ -990,7 +990,7 @@ ___
 
 *Inherited from Array.shift*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.es5.d.ts:1239*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.es5.d.ts:1239*
 
 Removes the first element from an array and returns it.
 
@@ -1005,7 +1005,7 @@ ___
 
 *Inherited from Array.slice*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.es5.d.ts:1245*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.es5.d.ts:1245*
 
 Returns a section of an array.
 
@@ -1027,7 +1027,7 @@ ___
 
 *Inherited from Array.some*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.es5.d.ts:1292*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.es5.d.ts:1292*
 
 Determines whether the specified callback function returns true for any element of an array.
 
@@ -1049,7 +1049,7 @@ ___
 
 *Inherited from Array.sort*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.es5.d.ts:1250*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.es5.d.ts:1250*
 
 Sorts an array.
 
@@ -1072,7 +1072,7 @@ ___
 
 *Inherited from Array.splice*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.es5.d.ts:1256*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.es5.d.ts:1256*
 
 Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.
 
@@ -1087,7 +1087,7 @@ Removes elements from an array and, if necessary, inserts new elements in their 
 
 *Inherited from Array.splice*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.es5.d.ts:1263*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.es5.d.ts:1263*
 
 Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.
 
@@ -1110,7 +1110,7 @@ ___
 
 *Inherited from Array.toLocaleString*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.es5.d.ts:1207*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.es5.d.ts:1207*
 
 Returns a string representation of an array. The elements are converted to string using their toLocalString methods.
 
@@ -1125,7 +1125,7 @@ ___
 
 *Inherited from Array.toString*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.es5.d.ts:1203*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.es5.d.ts:1203*
 
 Returns a string representation of an array.
 
@@ -1140,7 +1140,7 @@ ___
 
 *Inherited from Array.unshift*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.es5.d.ts:1268*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.es5.d.ts:1268*
 
 Inserts new elements at the start of an array.
 
@@ -1161,7 +1161,7 @@ ___
 
 *Inherited from Array.values*
 
-*Defined in /Users/hen/GitHub/paradigmcore-clean/node_modules/typescript/lib/lib.es2015.iterable.d.ts:67*
+*Defined in /Users/hen/GitHub/pc/node_modules/typescript/lib/lib.es2015.iterable.d.ts:67*
 
 Returns an iterable of values in the array
 
