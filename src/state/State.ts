@@ -241,7 +241,6 @@ export class State {
                 }
             });
         } catch (e) {
-            console.log("failed to read");
             throw Error(`Failed to read state file: ${e.message}`);
         }
     }

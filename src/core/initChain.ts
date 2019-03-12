@@ -79,7 +79,6 @@ export function initChainWrapper(
 
         // synchronize states upon network genesis
         commitState.acceptNew(deliverState.toJSON());
-        console.log('done with initchain')
         // Do not change any other parameters here
         return {};
     };
