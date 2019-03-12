@@ -255,7 +255,9 @@ export class State {
      * internal `internalWriteFile` method.
      */
     public async writeToDisk() {
-        if (this._readOnly) { console.log(`\n\nSKIPPING WRITE\n\n`); return; }
+        if (this._readOnly) { 
+            return;
+        }
         const strData = JSON.stringify(this.toJSON(), (k, v) => {
             if (typeof v === "bigint") {
                 return v.toString().concat("n");
