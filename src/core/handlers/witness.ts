@@ -109,7 +109,7 @@ export function deliverWitness(tx: SignedWitnessTx, state: IState): ResponseDeli
 
         // delete the empty block entry we created if empty
         // @todo move somewhere else
-        if (Object.keys(state.events[block]).length === 0) {
+        if (!accepted && Object.keys(state.events[block]).length === 0) {
             delete state.events[block];
         }
     }
