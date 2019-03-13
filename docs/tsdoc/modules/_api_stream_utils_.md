@@ -8,6 +8,7 @@
 
 * [createResponse](_api_stream_utils_.md#createresponse)
 * [createValError](_api_stream_utils_.md#createvalerror)
+* [parseOrdersForSubscription](_api_stream_utils_.md#parseordersforsubscription)
 * [validateMessage](_api_stream_utils_.md#validatemessage)
 
 ---
@@ -20,7 +21,7 @@
 
 ▸ **createResponse**(result?: *`any`*, id?: *`string`*, error?: *`ValidationError`*): `Res`
 
-*Defined in [api/stream/utils.ts:71](https://github.com/paradigmfoundation/paradigmcore/blob/adc87ed/src/api/stream/utils.ts#L71)*
+*Defined in [api/stream/utils.ts:72](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/api/stream/utils.ts#L72)*
 
 Generate a JSONRPC response.
 
@@ -43,7 +44,7 @@ ___
 
 ▸ **createValError**(code: *`number`*, message: *`string`*): `ValidationError`
 
-*Defined in [api/stream/utils.ts:51](https://github.com/paradigmfoundation/paradigmcore/blob/adc87ed/src/api/stream/utils.ts#L51)*
+*Defined in [api/stream/utils.ts:52](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/api/stream/utils.ts#L52)*
 
 Build a JSONRPC validation object.
 
@@ -59,13 +60,30 @@ Build a JSONRPC validation object.
 **Returns:** `ValidationError`
 
 ___
+<a id="parseordersforsubscription"></a>
+
+###  parseOrdersForSubscription
+
+▸ **parseOrdersForSubscription**(txs: *`string`[]*): `OrderData`[]
+
+*Defined in [api/stream/utils.ts:91](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/api/stream/utils.ts#L91)*
+
+**Parameters:**
+
+| Name | Type |
+| ------ | ------ |
+| txs | `string`[] |
+
+**Returns:** `OrderData`[]
+
+___
 <a id="validatemessage"></a>
 
 ###  validateMessage
 
 ▸ **validateMessage**(message: *`WebSocket.Data`*): `ValidationError`
 
-*Defined in [api/stream/utils.ts:31](https://github.com/paradigmfoundation/paradigmcore/blob/adc87ed/src/api/stream/utils.ts#L31)*
+*Defined in [api/stream/utils.ts:32](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/api/stream/utils.ts#L32)*
 
 Validate an incoming client message
 

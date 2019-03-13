@@ -8,7 +8,7 @@
  * @author Henry Harder
  * @date (initial)  19-February-2019
  * @date (modified) 24-February-2019
- * 
+ *
  * Utility functions for the ParadigmCore JSONRPC server.
 **/
 
@@ -17,15 +17,15 @@ import { Request as Req } from "./Request";
 import { Response as Res } from "./Response";
 
 // third party and stdlib
-import * as WebSocket from "ws";
 import * as _ from "lodash";
+import * as WebSocket from "ws";
 
 /**
  * Validate an incoming client message
- * 
- * If the function returns an empty array, assume the input is a valid and 
+ *
+ * If the function returns an empty array, assume the input is a valid and
  * parsable JSON string. Use `createRequest` to create a rich Request object.
- * 
+ *
  * @param message data from the WebSocket client connection
  */
 export function validateMessage(message: WebSocket.Data): ValidationError {
@@ -42,9 +42,9 @@ export function validateMessage(message: WebSocket.Data): ValidationError {
 
 /**
  * Build a JSONRPC validation object.
- * 
+ *
  * @todo pull error message from code -> message mapping
- * 
+ *
  * @param code the JSONRPC error code (see JSONRPC-2.0 specification)
  * @param message the error message to be included in the error object
  */
@@ -53,17 +53,17 @@ export function createValError(code: number, message: string): ValidationError {
         throw Error("Invalid types for validator error.");
     }
 
-    return { code, message }
+    return { code, message };
 }
 
 /**
  * Generate a JSONRPC response.
- * 
+ *
  * Builds a successful (or failure) JSONRPC server -> client response object based
  * on the provided inputs. If a code is provided, and the `id` is `null`, the
  * response will be an error response. If an `id` and `result` are provided, with
- * no error code, a successful response object will be generated. 
- * 
+ * no error code, a successful response object will be generated.
+ *
  * @param result an error message or successful API request result
  * @param id the client-provided ID string, only included for non-errors
  * @param code an error code if the response indicates a failed request
@@ -85,4 +85,22 @@ export function createResponse(result?: any, id?: string, error?: ValidationErro
 
     // return constructed result object
     return res;
+}
+
+/**
+ * Filters non-`order` type transactions from an array of string JSON transactions
+ * and returns an array of parsed (objects) `order` transactions.
+ *
+ * @param txs an array of JSON tx strings
+ */
+export function parseOrdersForSubscription(txs: string[]): OrderData[] {
+    const orders = [];
+    txs.forEach((tx) => {
+        const objTx = JSON.parse(tx);
+        const { type, data } = objTx;
+        if (type === "order") {
+            orders.push(data);
+        }
+    });
+    return orders;
 }

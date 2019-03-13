@@ -2,7 +2,7 @@ import * as zlib from "zlib";
 
 /**
  * Decodes and decompresses a raw transaction string.
- * 
+ *
  * @param tx encoded, compressed TX string (as seen by Tendermint)
  */
 export function decodeTx(tx: string): string {

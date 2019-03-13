@@ -2,7 +2,7 @@
  * ===========================
  * ParadigmCore: Blind Star
  * @name order.ts
- * @module src/core/handlers
+ * @module core/handlers
  * ===========================
  *
  * @author Henry Harder
@@ -18,10 +18,10 @@
 import { Hasher } from "../../crypto/Hasher";
 
 // ParadigmCore utilities
+import { ResponseCheckTx, ResponseDeliverTx } from "src/typings/abci";
 import { err, log, warn } from "../../common/log";
 import { messages as msg } from "../../common/static/messages";
-import { verifyOrder, newKVPair, invalidTx, validTx } from "../util/utils";
-import { ResponseDeliverTx, ResponseCheckTx } from "src/typings/abci";
+import { invalidTx, newKVPair, validTx, verifyOrder } from "../util/utils";
 
 /**
  * Performs light verification of OrderBroadcast transactions before accepting
@@ -30,7 +30,7 @@ import { ResponseDeliverTx, ResponseCheckTx } from "src/typings/abci";
  * @param tx    {SignedOrderTx} decoded transaction body
  * @param state {State}         current round state
  */
-export function checkOrder(tx: SignedOrderTx, state: State, Order): ResponseCheckTx {
+export function checkOrder(tx: SignedOrderTx, state: IState, Order): ResponseCheckTx {
     let order: Order;   // Paradigm order object
     let poster: string; // Recovered poster address from signature
 
@@ -73,7 +73,7 @@ export function checkOrder(tx: SignedOrderTx, state: State, Order): ResponseChec
  * @param state {State}         current round state
  * @param q     {OrderTracker}  valid order queue
  */
-export function deliverOrder(tx: SignedOrderTx, state: State, Order): ResponseDeliverTx {
+export function deliverOrder(tx: SignedOrderTx, state: IState, Order): ResponseDeliverTx {
     let order: Order;   // Paradigm order object
     let poster: string; // Recovered poster address from signature
     let tags: KVPair[] = [];
@@ -98,6 +98,7 @@ export function deliverOrder(tx: SignedOrderTx, state: State, Order): ResponseDe
         // Begin state modification
         state.posters[poster].limit -= 1;
         state.orderCounter += 1;
+        state.round.limitUsed += 1;
         // End state modification
 
         // add tags (for stream/search)

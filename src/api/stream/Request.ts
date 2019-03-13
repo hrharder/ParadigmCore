@@ -2,14 +2,12 @@
  * ===========================
  * ParadigmCore: Blind Star
  * @name Request.ts
- * @module src/api/stream
+ * @module api/stream
  * ===========================
  *
  * @author Henry Harder
  * @date (initial)  05-February-2019
- * @date (modified) 20-February-2018
- * 
- * TODO: fix this local version
+ * @date (modified) 13-March-2018
 **/
 
 // request/response schemas
@@ -21,9 +19,9 @@ import * as _ from "lodash";
 
 /**
  * JSON-RPC 2.0 compliant implementation of the Stream API request messages.
- * 
+ *
  * A work in progress as of 06 Feb. 2019
- * 
+ *
  * See: https://www.jsonrpc.org/specification
  */
 export class Request {
@@ -38,35 +36,35 @@ export class Request {
     private static errors: IErrors = errors;
 
     /**
-     * Raw input string, deleted after parsing.
-     */
-    private raw:    string;
-
-    /**
      * Parsed request object.
      */
     public parsed: IParsedRequest;
 
     /**
+     * Raw input string, deleted after parsing.
+     */
+    private raw: string;
+
+    /**
      * The first validation error encountered, if any.
      */
-    private err:   ValidationError;
+    private err: ValidationError;
 
     /**
      * Set to true or false depending on result of `JsonRequest.prototype.
      * validate()`, and set to `null` beforehand.
      */
-    private valid:  boolean;
+    private valid: boolean;
 
     /**
      * Create a new JSONRPC request instance.
-     * 
+     *
      * @param input raw input JSONRPC request string.
      */
     constructor(input: any) {
         this.raw = input;
         this.err = null;
-        this.valid = null; // null until set by `validate()` 
+        this.valid = null; // null until set by `validate()`
     }
 
     /**
@@ -79,12 +77,12 @@ export class Request {
 
     /**
      * Trigger validation steps.
-     * 
+     *
      * @todo expand doc of this function.
      */
     public validate(): ValidationError {
         // return immediately if already validated
-        if (this.valid !== null) return;
+        if (this.valid !== null) { return; }
 
         // check valid json by parsing
         try {
@@ -109,17 +107,15 @@ export class Request {
             } else if (_.isUndefined(methods[method])) {
                 this.addValErr(-32601, "invalid method, please check request.");
             } else if (methods[method].params) {
-                const { required, properties} = methods[method].params; 
+                const { required, properties} = methods[method].params;
                 // iterate over required params and check
-                for (let i = 0; i < required.length; i++) {
-                    const name = required[i];
+                for (let name of required) {
                     this.validateRequiredParam(properties[name], params[name], name);
                 }
             }
         } catch (error) {
             this.addValErr(-32603);
         }
-        
 
         // return validation error (if any)
         if (this.valid === null) { this.close(); }
@@ -150,12 +146,12 @@ export class Request {
 
     /**
      * Add a newly detected validation error to the array of detected errors.
-     * 
+     *
      * @param key error code key of detected validation error
      * @param msg the additional validation error log
      */
     private addValErr(code: number, msg?: string) {
-        if (this.valid !== null) return;
+        if (this.valid !== null) { return; }
         const suffix = msg ? msg : "";
         const message = `${Request.errors[code].info}${suffix}`;
         this.close({ code, message });
@@ -163,8 +159,8 @@ export class Request {
     }
 
     /**
-     * Finish a validation and set the result to prevent future testing. 
-     * 
+     * Finish a validation and set the result to prevent future testing.
+     *
      * @param errs the final set of validation errors
      */
     private close(err?: ValidationError): any {

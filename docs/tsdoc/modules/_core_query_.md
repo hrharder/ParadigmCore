@@ -16,13 +16,13 @@
 
 ###  queryWrapper
 
-▸ **queryWrapper**(state: *`State`*): `function`
+▸ **queryWrapper**(state: *[State](../classes/_state_state_.state.md)*): `function`
 
-*Defined in [core/query.ts:29](https://github.com/paradigmfoundation/paradigmcore/blob/adc87ed/src/core/query.ts#L29)*
+*Defined in [core/query.ts:33](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/core/query.ts#L33)*
 
 Return information about the state and software.
 
-THe `request.path` field is used to direct a query towards a particular state object. Currently, query requests can return information about
+The `request.path` field is used to direct a query towards a particular state object. Currently, query requests can return information about
 
 *__todo__*: parse path, support multiple query paths and options, util functions for buffering req/res objects
 
@@ -30,7 +30,7 @@ THe `request.path` field is used to direct a query towards a particular state ob
 
 | Name | Type |
 | ------ | ------ |
-| state | `State` |
+| state | [State](../classes/_state_state_.state.md) |
 
 **Returns:** `function`
 

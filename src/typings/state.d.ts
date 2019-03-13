@@ -16,7 +16,7 @@
  * Outer level datastructure representing the state of the network, including
  * poster staked balances, poster rate limit, validator set, etc.
  */
-interface State {
+interface IState {
     /**
      * Contains data necessary to track and update the rebalance rounds.
      */
@@ -126,6 +126,7 @@ interface Validator {
     power:          number; // vote power on tendermint chain
     publicKey:      Buffer; // raw 32 byte public key 
     ethAccount:     string;
+    firstVote:      number;
     lastVoted:      number;
     lastProposed:   number;
     totalVotes:     number;
@@ -143,6 +144,7 @@ interface RoundInfo {
     startsAt:   number;
     endsAt:     number;
     limit:      number;
+    limitUsed:  number,
 }
 
 /**

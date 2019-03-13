@@ -7,9 +7,11 @@
  *
  * @author Henry Harder
  * @date (initial)  12-September-2018
- * @date (modified) 21-January-2019
+ * @date (modified) 12-March-2019
  *
- * Startup script for ParadigmCore. Provide configuration through environment.
+ * Main startup script for ParadigmCore.
+ *
+ * Provide configuration through environment variables or `.env` file.
 */
 
 // Load configuration from environment
@@ -19,36 +21,32 @@ require("dotenv").config();
 import * as Paradigm from "paradigm-connect";
 
 // Standard lib and 3rd party NPM modules
-import Web3 = require("web3");
 import * as tendermint from "../lib/tendermint";
+const Web3 = require("web3");
 
 // ParadigmCore classes
-import { Witness } from "./witness/Witness";
 import { TxGenerator } from "./core/util/TxGenerator";
+import { Witness } from "./witness/Witness";
 
 // JSONRPC API server and method definitions
-import { StreamServer } from "./api/stream/StreamServer";
 import { methods } from "./api/stream/methods";
-
-// State object templates
-import { commitState as cState } from "./state/commitState";
-import { deliverState as dState } from "./state/deliverState";
+import { StreamServer } from "./api/stream/StreamServer";
 
 // Initialization functions
 import { start as startAPIserver } from "./api/post/HttpServer";
 import { start as startMain } from "./core/main";
 
 // General utilities and misc.
-import { err, log, logStart, warn } from "./common/log";
+import { err, log, logStart } from "./common/log";
 import { messages as msg } from "./common/static/messages";
 
 // validator-only modules
-let witness:        Witness;
-let generator:      TxGenerator;    // construct and sign paradigm-core tx's
+let witness: Witness;
+let generator: TxGenerator;    // construct and sign paradigm-core tx's
 
 // FULL-NODE (and validator) modules
-let web3:       Web3;           // web3 instance
-let server:     StreamServer;   // JSONRPC stream-server
+let web3: any;           // web3 instance
+let server: StreamServer;   // JSONRPC stream-server
 let paradigm;   // paradigm instance (paradigm-connect)
 let node;       // tendermint node child process instance
 
@@ -90,12 +88,18 @@ let node;       // tendermint node child process instance
         // create tendermint subprocess
         node = tendermint.node(env.TM_HOME, options);
 
+        // temporary
+        node.on("error", (e) => {
+            console.log(`\n\nFatal error in tendermint: ${e} at ${Date.now()}\n\n`);
+            process.exit(1);
+        });
+
         // if in debug mode, pipe tendermint logs to STDOUT
-        if (env.DEBUG) node.stdout.pipe(process.stdout);
+        if (env.DEBUG) { node.stdout.pipe(process.stdout); }
     } catch (error) {
         err("tm", "tendermint may not be installed or configured.");
         err("tm", "use `npm i` to configure tendermint and set up paradigmcore.");
-        throw { 
+        throw {
             message: error.message,
             info: `unable to start tendermint-core`,
             comp: "tm"
@@ -108,12 +112,12 @@ let node;       // tendermint node child process instance
         web3 = new Web3(env.WEB3_PROVIDER);
         paradigm = new Paradigm({ provider: web3.currentProvider });
     } catch (error) {
-        throw { 
+        throw {
             message: error.message,
             info: "failed creating paradigm-connect instance",
             comp: "api"
         };
-        
+
     }
 
     log("tx", "setting up validator transaction signer...");
@@ -124,7 +128,7 @@ let node;       // tendermint node child process instance
             publicKey: env.PUB_KEY,
         });
     } catch (error) {
-        throw { 
+        throw {
             message: error.message,
             info: "failed to construct transaction generator",
             comp: "tx"
@@ -140,7 +144,7 @@ let node;       // tendermint node child process instance
             port: parseInt(env.STREAM_PORT, 10)
         });
     } catch (error) {
-        throw { 
+        throw {
             message: error.message,
             info: "failed initializing the stream-api server",
             comp: "api"
@@ -155,7 +159,7 @@ let node;       // tendermint node child process instance
 
             // validator rxx generator
             generator,
-            
+
             // tendermint rpc config
             tendermintHost: env.TENDERMINT_HOST,
             tendermintPort: env.TENDERMINT_PORT,
@@ -168,14 +172,14 @@ let node;       // tendermint node child process instance
             port: parseInt(env.POST_PORT, 10)
         });
     } catch (error) {
-        throw { 
+        throw {
             message: error.message,
             info: "failed initializing api server.",
             comp: "api"
         };
     }
 
-    log("witness", "creating witness instance...");
+    log("peg", "creating witness instance...");
     try {
         witness = await Witness.create({
             // validator signer/transaction generator
@@ -183,8 +187,8 @@ let node;       // tendermint node child process instance
 
             // tendermint rpc config
             tendermintRpcUrl: "ws://localhost:26657",
-            reconnAttempts: 20,
-            reconnInterval: 1000,
+            reconnAttempts: 50,
+            reconnInterval: 2000,
 
             // web3 provider url and contract config
             provider: env.WEB3_PROVIDER,
@@ -196,7 +200,7 @@ let node;       // tendermint node child process instance
         });
         log("peg", "waiting to start new witness instance...");
     } catch (error) {
-        throw { 
+        throw {
             message: error.message,
             info: "failed initializing witness component.",
             comp: "witness"
@@ -213,8 +217,6 @@ let node;       // tendermint node child process instance
 
             // ABCI configuration options
             abciServPort: parseInt(env.ABCI_PORT, 10),
-            commitState: cState,
-            deliverState: dState,
             version: env.npm_package_version,
 
             // Rebalancer and consensus options
@@ -230,7 +232,7 @@ let node;       // tendermint node child process instance
         await node.synced();
         log("tm", "tendermint initialized and synchronized");
     } catch (error) {
-        throw { 
+        throw {
             message: error.message,
             info: "failed initializing abci application",
             comp: "state"
@@ -241,8 +243,8 @@ let node;       // tendermint node child process instance
     log("peg", "starting witness component...");
     const witRes = await witness.start();
     if (witRes !== 0) {
-        throw { 
-            message:"failed to start witness.",
+        throw {
+            message: "failed to start witness.",
             info: "failed initializing abci application",
             comp: "peg"
         };

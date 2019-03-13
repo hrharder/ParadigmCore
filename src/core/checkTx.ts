@@ -2,7 +2,7 @@
  * ===========================
  * ParadigmCore: Blind Star
  * @name checkTx.ts
- * @module src/core
+ * @module core
  * ===========================
  *
  * @author Henry Harder
@@ -17,18 +17,18 @@ import { ResponseCheckTx } from "../typings/abci";
 
 // utils
 import { warn } from "../common/log";
-import { messages } from "../common/static/messages"
-import { decodeTx, preVerifyTx, invalidTx } from "./util/utils";
+import { messages } from "../common/static/messages";
+import { decodeTx, invalidTx, preVerifyTx } from "./util/utils";
 
 // tx handlers
 import { checkOrder } from "./handlers/order";
-import { checkWitness } from "./handlers/witness";
 import { checkRebalance } from "./handlers/rebalance";
+import { checkWitness } from "./handlers/witness";
 
 /**
  * Perform light verification on incoming transactions, accept valid
  * transactions to the mempool, and reject invalid ones.
- * 
+ *
  * Currently, all transaction types are checked before mempool/gossip by:
  * - encoding according to spec/implementation of TxGenerator and TxBroadcaster
  * - zlib compression
@@ -37,7 +37,7 @@ import { checkRebalance } from "./handlers/rebalance";
  *
  * @param request {object} raw transaction as delivered by Tendermint core.
  */
-export function checkTxWrapper(state: State, Order: any): (r) => ResponseCheckTx {
+export function checkTxWrapper(state: IState, Order: any): (r) => ResponseCheckTx {
     return (request) => {
         // load transaction from request
         const rawTx: Buffer = request.tx;   // Encoded/compressed tx object

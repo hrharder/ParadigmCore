@@ -16,9 +16,9 @@
 
 ###  checkTxWrapper
 
-▸ **checkTxWrapper**(state: *`State`*, Order: *`any`*): `function`
+▸ **checkTxWrapper**(state: *`IState`*, Order: *`any`*): `function`
 
-*Defined in [core/checkTx.ts:40](https://github.com/paradigmfoundation/paradigmcore/blob/adc87ed/src/core/checkTx.ts#L40)*
+*Defined in [core/checkTx.ts:40](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/core/checkTx.ts#L40)*
 
 Perform light verification on incoming transactions, accept valid transactions to the mempool, and reject invalid ones.
 
@@ -33,7 +33,7 @@ Currently, all transaction types are checked before mempool/gossip by:
 
 | Name | Type |
 | ------ | ------ |
-| state | `State` |
+| state | `IState` |
 | Order | `any` |
 
 **Returns:** `function`

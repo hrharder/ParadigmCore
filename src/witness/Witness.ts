@@ -2,12 +2,12 @@
  * ===========================
  * ParadigmCore: Blind Star
  * @name Witness.ts
- * @module src/async
+ * @module witness
  * ===========================
  *
  * @author Henry Harder
  * @date (initial)  15-October-2018
- * @date (modified) 12-February-2019
+ * @date (modified) 13-March-2019
  *
  * The Witness class implements a one-way (read only) peg to Ethereum,
  * and adds a "finality gadget" via a block maturity requirement for events
@@ -17,12 +17,11 @@
  */
 
 // Third party and stdlib imports
+import { EventEmitter } from "events";
 import * as _ from "lodash";
 import * as TruffleContract from "truffle-contract";
 import { URL } from "url";
-import { WebsocketProvider } from "web3/providers";
-import { EventEmitter } from "events";
-import Web3 = require("web3");
+const Web3 = require("web3");
 
 // ParadigmCore modules/classes
 import { contracts, eventDecoder } from "paradigm-contracts";
@@ -34,6 +33,10 @@ import { default as codes } from "../common/Codes";
 import { err, log, warn } from "../common/log";
 import { messages as msg } from "../common/static/messages";
 import { TendermintRPC } from "../common/TendermintRPC";
+
+// supporting type definition(s)
+// import * as W3 from "web3";
+// import { WebsocketProvider } from "web3-providers/types";
 
 /**
  * A Witness supports a one way peg-zone between Ethereum and the OrderStream to
@@ -101,8 +104,8 @@ export class Witness {
         Object.keys(bals).forEach((k, v) => {
             if (bals.hasOwnProperty(k) && typeof(bals[k]) === "bigint") {
                 // Compute proportional order limit
-                const balNum = parseInt(bals[k].toString());
-                const totNum = parseInt(total.toString());
+                const balNum = parseInt(bals[k].toString(), 10);
+                const totNum = parseInt(total.toString(), 10);
                 const lim = (balNum / totNum) * limit;
 
                 // Create limit for each address
@@ -141,9 +144,9 @@ export class Witness {
      * The `web3.js` provider instance, configured when assigned based on
      * witness configuration options.
      */
-    private web3: Web3;
+    private web3: any;
 
-    // ETHEREUM-RELATED 
+    // ETHEREUM-RELATED
 
     /**
      * THe currently agreed up block-maturation threshold for Ethereum events.
@@ -152,7 +155,7 @@ export class Witness {
     private finalityThreshold: number;
 
     /**
-     * The height of the Ethereum blockchain when this `Witness` instance was 
+     * The height of the Ethereum blockchain when this `Witness` instance was
      * started. Used to check if historical events (before witness started) are
      * confirmed or not.
      */
@@ -164,11 +167,11 @@ export class Witness {
     // STAKING PERIOD PARAMETERS
 
     /** The incremental number tracking the current rebalance period. */
-    private periodNumber: number;   
+    private periodNumber: number;
 
     /** The length of the current period (in Ethereum blocks). */
     private periodLength: number;
-    
+
     /** The number of transactions accepted in a period. Used for rebalance. */
     private periodLimit: number;
 
@@ -178,21 +181,21 @@ export class Witness {
     /** The block at which current period ends. */
     private periodEnd: number;
 
-    /**  
+    /**
      * Event emitter triggered when a rebalance TX is included in a block.
-     * 
+     *
      * @todo better doc
      */
     private rebalanceEmitter: EventEmitter;
 
-    /** 
+    /**
      * The `web3.Contract` instance of the EventEmitter contract, used to
      * interface with the paradigm contract system.
      */
     private eventEmitterContract: any;
 
     /** Witness class's connection to the Tendermint RPC server. */
-    private tmRpc: TendermintRPC //TxBroadcaster;
+    private tmRpc: TendermintRPC; // TxBroadcaster;
 
     /** Node URL object of provided Tendermint RPC URl. */
     private tmRpcUrl: URL;
@@ -212,9 +215,8 @@ export class Witness {
     /** Mapping that tracks poster balances. Used to submit proposals. */
     private posterBalances: PosterBalances;
 
+    /** Emitter used to support async tx broadcast */
     private txEmitter: EventEmitter;
-
-    private txQueue: SignedTransaction[];
 
     /**
      * PRIVATE constructor. Do not use. Create new `witness` instances with
@@ -244,7 +246,6 @@ export class Witness {
         // Local TX generator (and validator signer)
         this.generator = opts.generator;
         this.txEmitter = new EventEmitter();
-        this.txQueue = [];
 
         // Create dedicated Tendermint RPC connection for the Witness instance
         this.tmRpc = new TendermintRPC(
@@ -256,10 +257,10 @@ export class Witness {
         // attach tx handlers (for interface with TendermintRPC)
         this.txEmitter.on("tx", (inTx?: SignedTransaction) => {
             this.tmRpc.submitTx(inTx).then((res: any) => {
-                log("peg", `successfully executed tx: ${res.log}`);
-            }).catch((err) => {
-                warn("peg", `failed sending tx: ${err}`);
-            })
+                log("peg", `successfully executed tx: ${res.log} at ${Date.now()}`);
+            }).catch((error) => {
+                warn("peg", `failed sending tx: ${error}`);
+            });
         });
 
         // Finality threshold
@@ -304,9 +305,9 @@ export class Witness {
 
         // Create staking contract instance via TruffleContract
         try {
-            const EventEmitter = TruffleContract(contracts.EventEmitter);
-            EventEmitter.setProvider(this.web3.currentProvider);
-            this.eventEmitterContract = await EventEmitter.deployed();
+            const EventEmitterContract = TruffleContract(contracts.EventEmitter);
+            EventEmitterContract.setProvider(this.web3.currentProvider);
+            this.eventEmitterContract = await EventEmitterContract.deployed();
         } catch (error) {
             err("peg", error.message);
             return codes.CONTRACT; // Unable to initialize staking contract
@@ -328,7 +329,15 @@ export class Witness {
         try {
             await this.tmRpc.connect(this.reconnAttempts, this.reconnInterval);
             log("peg", "connected to the tendermint RPC server");
-        } catch(error) {
+
+            // handle case where this is a restart
+            const roundNo = parseInt((await this.tmRpc.query("round/number")).info, 10);
+            if (roundNo > 0) {
+                const startsAt = parseInt((await this.tmRpc.query("round/startsAt")).info, 10);
+                const endsAt = parseInt((await this.tmRpc.query("round/endsAt")).info, 10);
+                this.synchronize(roundNo, startsAt, endsAt);
+            }
+        } catch (error) {
             err("peg", error.message);
             return codes.NO_ABCI;
         }
@@ -353,9 +362,9 @@ export class Witness {
     public synchronize(round: number, startsAt: number, endsAt: number): void {
         // Check that new round is the next round
         if (round !== (this.periodNumber + 1)) {
-            err("peg", "new round is not one greater than current...");
-            console.log(`round: ${round}, in-mem: ${this.periodNumber}`);
-            err("peg", "this witness may be out of sync with peers...");
+            err("peg", "new round is not one greater than current.");
+            err("peg", "this witness may be out of sync with peers.");
+            err("peg", "this message will also show after a restart and can be ignored.");
         }
 
         // Update parameters
@@ -369,8 +378,8 @@ export class Witness {
      * Used to connect to Web3 provider. Called during initialization, and
      * if a web3 disconnect is detected.
      */
-    private getProvider(): WebsocketProvider {
-        let provider: WebsocketProvider;
+    private getProvider(): any {
+        let providerInst;
 
         // Pull provider URL and protocol from instance
         const { protocol, href } = this.web3provider;
@@ -378,7 +387,7 @@ export class Witness {
         // Supports WS providers only
         try {
             if (protocol === "ws:" || protocol === "wss:") {
-                provider = new Web3.providers.WebsocketProvider(href);
+                providerInst = new Web3.providers.WebsocketProvider(href);
             } else {
                 throw new Error("invalid provider URI, must be ws/wss");
             }
@@ -387,12 +396,12 @@ export class Witness {
         }
 
         // Log connection message
-        provider.on("connect", () => {
+        providerInst.on("connect", () => {
             log("peg", "successfully connected to web3 provider");
         });
 
         // Attempt to reconnect on termination
-        provider.on("end", () => {
+        providerInst.on("end", () => {
             err("peg", "web3 connection closed, attempting to reconnect...");
             try {
                 this.web3.setProvider(this.getProvider());
@@ -402,7 +411,7 @@ export class Witness {
         });
 
         // Attempt to reconnect on any error
-        provider.on("error", () => {
+        providerInst.on("error", () => {
             err("peg", "web3 provider error, attempting to reconnect...");
             try {
                 this.web3.setProvider(this.getProvider());
@@ -411,7 +420,7 @@ export class Witness {
             }
         });
 
-        return provider;
+        return providerInst;
     }
 
     /**
@@ -456,17 +465,17 @@ export class Witness {
             let { tags } = data.TxResult.result;
             let params: any = {};
             tags.forEach((tag) => {
-                const key = Buffer.from(tag["key"], "base64").toString();
-                const value = Buffer.from(tag["value"], "base64").toString();
+                const key = Buffer.from(tag.key, "base64").toString();
+                const value = Buffer.from(tag.value, "base64").toString();
 
                 const [ tagSubject, tagParam ] = key.split(".");
-                if (tagSubject !== "round") return;
+                if (tagSubject !== "round") { return; }
                 params[tagParam] = value;
             });
             const { number, start, end } = params;
             log("peg", `detected rebalance tx in block, now on round ${number}`);
             this.synchronize(parseInt(number, 10), start, end);
-        })
+        });
 
         // Success
         return codes.OK;
@@ -496,7 +505,7 @@ export class Witness {
         );
 
         // ignore irrelevant events from contract system
-        if(witnessEvent === undefined) return;
+        if (witnessEvent === undefined) { return; }
 
         // See if this is a historical event that has already matured
         if ((this.initHeight - block) > this.finalityThreshold) {
@@ -585,7 +594,7 @@ export class Witness {
         if (event.subject !== "poster") {
             return;
         }
-        
+
         // set balance of account to event
         const { address, amount } = event;
         this.posterBalances[event.address] = BigInt(amount);

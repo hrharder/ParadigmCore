@@ -2,28 +2,28 @@
  * ===========================
  * ParadigmCore: Blind Star
  * @name deliverTx.ts
- * @module src/core
+ * @module core
  * ===========================
  *
  * @author Henry Harder
  * @date (initial)  21-January-2019
- * @date (modified) 22-January-2019
+ * @date (modified) 13-March-2019
  *
  * ABCI deliverTx implementation.
-*/
+**/
 
 // custom typings
 import { ResponseDeliverTx } from "../typings/abci";
 
 // util functions/vars
 import { warn } from "../common/log";
-import { decodeTx, preVerifyTx, invalidTx } from "./util/utils";
-import { messages } from "../common/static/messages"
+import { messages } from "../common/static/messages";
+import { decodeTx, invalidTx, preVerifyTx } from "./util/utils";
 
 // tx handlers
 import { deliverOrder } from "./handlers/order";
-import { deliverWitness } from "./handlers/witness";
 import { deliverRebalance } from "./handlers/rebalance";
+import { deliverWitness } from "./handlers/witness";
 
 /**
  * Execute a transaction in full: perform state modification, and verify
@@ -31,7 +31,7 @@ import { deliverRebalance } from "./handlers/rebalance";
  *
  * @param request {object} raw transaction as delivered by Tendermint core.
  */
-export function deliverTxWrapper(state: State, Order: any): (r) => ResponseDeliverTx {
+export function deliverTxWrapper(state: IState, Order: any): (r) => ResponseDeliverTx {
     return (request) => {
         // load transaction from request
         const rawTx: Buffer = request.tx;   // Encoded/compressed tx object

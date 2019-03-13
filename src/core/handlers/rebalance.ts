@@ -2,12 +2,12 @@
  * ===========================
  * ParadigmCore: Blind Star
  * @name rebalance.ts
- * @module src/core/handlers
+ * @module core/handlers
  * ===========================
  *
  * @author Henry Harder
  * @date (initial)  23-October-2018
- * @date (modified) 22-January-2019
+ * @date (modified) 12-March-2019
  *
  * Handler functions for verifying ABCI Rebalance transactions, originating
  * from validator nodes. Implements state transition logic as specified in the
@@ -20,10 +20,10 @@ import { isEqual } from "lodash";
 // ParadigmCore utilities
 import { log, warn } from "../../common/log";
 import { messages as msg } from "../../common/static/messages";
-import { genLimits, newKVPair, invalidTx, validTx } from "../util/utils";
+import { genLimits, invalidTx, newKVPair, validTx } from "../util/utils";
 
 // ParadigmCore type defs
-import { ResponseDeliverTx, ResponseCheckTx } from "../../typings/abci";
+import { ResponseCheckTx, ResponseDeliverTx } from "../../typings/abci";
 
 /**
  * Verify a Rebalance proposal before accepting it into the local mempool.
@@ -31,7 +31,7 @@ import { ResponseDeliverTx, ResponseCheckTx } from "../../typings/abci";
  * @param tx    {SignedRebalanceTx} decoded transaction body
  * @param state {State}             current round state
  */
-export function checkRebalance(tx: SignedRebalanceTx, state: State): ResponseCheckTx {
+export function checkRebalance(tx: SignedRebalanceTx, state: IState): ResponseCheckTx {
     // Load proposal from rebalance tx
     const proposal: RebalanceData = tx.data;
 
@@ -66,7 +66,7 @@ export function checkRebalance(tx: SignedRebalanceTx, state: State): ResponseChe
  * @param state {State}             current round state
  * @param rb    {StakeRebalancer}   the current rebalancer instance
  */
-export function deliverRebalance(tx: SignedRebalanceTx, state: State): ResponseDeliverTx {
+export function deliverRebalance(tx: SignedRebalanceTx, state: IState): ResponseDeliverTx {
     // unpack proposal from transaction
     const proposal: RebalanceData = tx.data;
     let tags: KVPair[] = [];
@@ -95,7 +95,7 @@ export function deliverRebalance(tx: SignedRebalanceTx, state: State): ResponseD
                 const rNumber = newKVPair("round.number", state.round.number);
                 const rStartBlock = newKVPair("round.start", state.round.startsAt);
                 const rEndBlock = newKVPair("round.end", state.round.endsAt);
-                
+
                 // add tags to be included in ABCI response
                 tags.push(txType, rNumber, rStartBlock, rEndBlock);
 
@@ -126,6 +126,8 @@ export function deliverRebalance(tx: SignedRebalanceTx, state: State): ResponseD
                     state.round.number += 1;
                     state.round.startsAt = proposal.round.startsAt;
                     state.round.endsAt = proposal.round.endsAt;
+                    state.round.limit = proposal.round.limit;
+                    state.round.limitUsed = 0;
 
                     // copy limits from proposal to each balance
                     Object.keys(propLimits).forEach((i) => {
@@ -138,7 +140,7 @@ export function deliverRebalance(tx: SignedRebalanceTx, state: State): ResponseD
                     const rNumber = newKVPair("round.number", state.round.number);
                     const rStartBlock = newKVPair("round.start", state.round.startsAt);
                     const rEndBlock = newKVPair("round.end", state.round.endsAt);
-                    
+
                     // add tags to be included in ABCI response
                     tags.push(txType, rNumber, rStartBlock, rEndBlock);
 

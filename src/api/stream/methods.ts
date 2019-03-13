@@ -11,13 +11,13 @@
 **/
 
 // using for type definition
-import * as WebSocket from "ws";
 import * as uuid from "uuid/v4";
+import * as WebSocket from "ws";
 
 // stream server and related classes
-import { StreamServer } from "./StreamServer";
 import { Request } from "./Request";
 import { Response } from "./Response";
+import { StreamServer } from "./StreamServer";
 
 /**
  * Method implementations for the JSONRPC StreamAPI server (StreamServer)
@@ -90,4 +90,4 @@ export const methods = {
         // create and return response object
         return new Response({ id, result: { response }});
     },
-}
+};

@@ -16,15 +16,15 @@
 
 ###  endBlockWrapper
 
-▸ **endBlockWrapper**(state: *`State`*): `function`
+▸ **endBlockWrapper**(state: *`IState`*): `function`
 
-*Defined in [core/endBlock.ts:20](https://github.com/paradigmfoundation/paradigmcore/blob/adc87ed/src/core/endBlock.ts#L20)*
+*Defined in [core/endBlock.ts:19](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/core/endBlock.ts#L19)*
 
 **Parameters:**
 
 | Name | Type |
 | ------ | ------ |
-| state | `State` |
+| state | `IState` |
 
 **Returns:** `function`
 

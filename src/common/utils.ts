@@ -12,12 +12,12 @@
 
 /**
  * Convert an ISO date-time string to UNIX timestamp.
- * 
+ *
  * @param dateTime an ISO-8601 date-time string to be converted to unix time
  */
-export function convertIsoTimeToUnix(dateTime: string): number {
+export function convertIsoTimeToUnixMs(dateTime: string): number {
     const date = new Date(dateTime);
     const dateMs = date.getTime();
-    const timestamp = Math.floor(dateMs / 1000)
+    const timestamp = Math.floor(dateMs);
     return timestamp;
 }

@@ -7,10 +7,7 @@ import { Witness } from "src/witness/Witness";
  */
 interface ParadigmCoreOptions {
     version:            string;
-    //tracker:            OrderTracker;
     witness:            Witness;
-    deliverState:       State;
-    commitState:        State;
     abciServPort:       number;
     txGenerator:        TxGenerator;    
     finalityThreshold:  number;
@@ -88,6 +85,15 @@ interface ResponseEndBlock {
  */
 interface ResponseCommit {
     data: string | Buffer;
+}
+
+interface ResponseQuery {
+    code: number;
+    log?: string;
+    info?: string;
+    key?: Buffer;
+    value?: Buffer;
+    proof?: any;
 }
 
 // END RESPONSE TYPES

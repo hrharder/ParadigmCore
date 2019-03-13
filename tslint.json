@@ -1,6 +1,8 @@
 {
     "extends":"tslint:recommended",
     "rules":{
+        "jsdoc-format": false,
+        "variable-name": false,
         "no-angle-bracket-type-assertion": false,
         "no-var-requires":false,
         "trailing-comma":[false],
@@ -8,6 +10,6 @@
         "object-literal-sort-keys": false,
         "no-console": false,
         "interface-name": false,
-        "one-variable-per-declaration": false,
+        "one-variable-per-declaration": false
     }
 }

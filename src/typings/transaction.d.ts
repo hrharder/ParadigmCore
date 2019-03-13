@@ -163,7 +163,24 @@ interface WitnessData extends TransactionData {
  */
 interface RebalanceData extends TransactionData {
     limits: Limits;
-    round:  RoundInfo;
+    round:  TxRoundInfo;
+}
+
+/**
+ * Round information in each rebalance proposal.
+ */
+interface TxRoundInfo {
+    /** Proposed round number (should be 1 + current) */
+    number: number;
+
+    /** Proposed number of orders to accept per period */
+    limit: number;
+
+    /** Proposed round starting block (Ethereum height) */
+    startsAt: number;
+
+    /** Proposed round ending block (Ethereum height) */
+    endsAt: number;
 }
 
 /**

@@ -7,18 +7,18 @@
  *
  * @author Henry Harder
  * @date (initial)  15-October-2018
- * @date (modified) 12-February-2019
+ * @date (modified) 12-March-2019
 **/
 
 // stdlib and third-party imports
-import { RpcClient } from "tendermint";
 import { EventEmitter } from "events";
+import { RpcClient } from "tendermint";
 import * as uniqueId from "uuid/v4";
 
 // ParadigmCore local utilities/typings
-import { log, warn, err } from "./log";
-import { encodeTx } from "../core/util/utils";
 import { ResponseBroadcastTx } from "src/typings/abci";
+import { encodeTx } from "../core/util/utils";
+import { err, log as Log, warn } from "./log";
 
 /**
  * Defines the object passed into `TendermintRPC.prototype.queue`
@@ -26,7 +26,7 @@ import { ResponseBroadcastTx } from "src/typings/abci";
 interface TransactionConfig {
     /** The transaction to submit via RPC */
     tx: SignedTransaction;
-    
+
     /** The broadcast mode to use for this transaction */
     method: "sync" | "async" | "commit";
 
@@ -43,12 +43,12 @@ interface TxResponse {
 }
 
 /**
- * A wrapper class facilitating a WebSocket connection to the Tendermint RPC 
+ * A wrapper class facilitating a WebSocket connection to the Tendermint RPC
  * server.
- * 
- * @description The `Tendermint` class is primarily a wrapper for the NPM 
+ *
+ * @description The `Tendermint` class is primarily a wrapper for the NPM
  * `tendermint` library, which facilitates access to the Tendermint RPC server.
- * This class adds additional functionality to simplify the management of an 
+ * This class adds additional functionality to simplify the management of an
  * RPC connection, and will eventually support automatic re-connection in the
  * case of network drop.
  */
@@ -94,7 +94,7 @@ export class TendermintRPC extends EventEmitter {
      * received by the instance.
      */
     private latestBlockData: any;
-    
+
     /**
      * Used to enable re-connections upon connection loss between the instance
      * and the Tendermint RPC server.
@@ -112,14 +112,14 @@ export class TendermintRPC extends EventEmitter {
     private queue: TransactionConfig[];
 
     /**
-     * Boolean status used to track if broadcast via RPC is in progress, or 
+     * Boolean status used to track if broadcast via RPC is in progress, or
      * completed/not-started.
      */
     private sending: boolean;
 
     /**
      * Create a new Tendermint RPC instance.
-     * 
+     *
      * @param endpoint the full URI for the target tendermint rpc server
      * @param maxRetries the maximum number of times to try reconnect before timeout
      * @param interval the delay (in ms) between each reconnect attempt
@@ -146,13 +146,13 @@ export class TendermintRPC extends EventEmitter {
 
     /**
      * Initialize connection to Tendermint RPC server.
-     * 
-     * @returns a promise that resolves (to void) upon successful connection, 
+     *
+     * @returns a promise that resolves (to void) upon successful connection,
      * and rejects on (and to) any error encountered.
      */
     public connect(maxTries: number, intervalMs: number): Promise<void> {
         // don't try if already connected
-        if (this.connected) return;
+        if (this.connected) { return; }
 
         // required parameters
         if (!maxTries || !intervalMs) {
@@ -166,7 +166,7 @@ export class TendermintRPC extends EventEmitter {
         this.connecting = true;
 
         // attempt connection
-        log("tm", "attempting to connect to tendermint rpc server...");
+        Log("tm", "attempting to connect to tendermint rpc server...");
         return new Promise((resolve, reject) => {
             let timer = setInterval(async () => {
                 this.connected = false;
@@ -174,7 +174,7 @@ export class TendermintRPC extends EventEmitter {
                 // reject on timeout
                 if (++counter >= maxTries) {
                     this.connecting = false;
-                    err("tm", "timeout while attempting to re-connect to tendermint")
+                    err("tm", "timeout while attempting to re-connect to tendermint");
                     reject();
                     clearInterval(timer);
                     return;
@@ -184,8 +184,8 @@ export class TendermintRPC extends EventEmitter {
                 this.conn = RpcClient(this.url.href);
 
                 // attach handlers upon successful connection
-                this.conn.once("close", this.connectionCloseHandler(this));
-                this.conn.on("error", this.connectionErrorHandler(this));
+                this.conn.once("close", this.connectionCloseHandler());
+                this.conn.on("error", this.connectionErrorHandler());
 
                 // see if connection is active by querying
                 const res = await this.abciInfo(true);
@@ -199,7 +199,7 @@ export class TendermintRPC extends EventEmitter {
                 this.emit("open");
 
                 // end cycle and resolve promise
-                log("tm", `connected to server after ${counter} attempts`);
+                Log("tm", `connected to server after ${counter} attempts`);
                 resolve();
                 clearInterval(timer);
             }, intervalMs);
@@ -207,93 +207,9 @@ export class TendermintRPC extends EventEmitter {
     }
 
     /**
-     * Generate a handler function for connection closure.
-     * 
-     * @returns a function to be used as an event handler for the Tendermint
-     * RPC connection.
-     * 
-     * @todo implement actual error/close handling.
-     * 
-     * @param _this `this` reference for calling class.
-     */
-    private connectionErrorHandler(_this: TendermintRPC): (e) => void {
-        return (e: Error) => {
-            switch (e.message) {
-                case "websocket disconnected": {
-                    this.conn.emit("close", e.message);
-                    break;
-                }
-                default: {
-                    if (!this.connecting) err("tm", `CONNECTION ERROR: ${e.message}`);
-                    break;
-                }
-            }
-            return;
-        }
-    }
-
-    /**
-     * Generate a handler function for connection closure.
-     * 
-     * @returns a function to be used as an event handler for the Tendermint
-     * RPC connection.
-     * 
-     * @todo implement actual error/close handling.
-     * 
-     * @param _this `this` reference for calling class.
-     */
-    private connectionCloseHandler(_this: TendermintRPC): (m) => void {
-        return (m) => {
-            if (!this.connecting) err("tm", `CONNECTION CLOSE: ${m}`);
-            _this.connected = false;
-
-            // attempt to reconnect
-            if (this.shouldRetry === true && this.connecting === false) {
-                this.shouldRetry = false;
-                this.conn = null;
-                log("tm", `connection lost, attempting reconnect ${this.maxRetries} time(s)..`);
-                this.connect(this.maxRetries, this.retryInterval);
-            } else if (this.connecting === true ){
-                return;
-            } else {
-                throw Error("Connection fatally closed, not retrying.");
-            }
-            
-        }
-    }
-
-    /**
-     * (Internal) Submit a transaction to Tendermint via RPC. Use the public 
-     * `TendermintRPC.prototype.submitTx` method to add transactions to the
-     * broadcast queue.
-     */
-    private async internalSubmitTx(): Promise<any> {
-        // don't try to sub if not connected
-        if (!this.connected || this.connecting) throw Error("Not connected to Tendermint RPC.");
-
-        // send every tx in the queue
-        this.sending = true;
-        for (let i = 0; i < this.queue.length; i++) {
-            const { tx, method, id } = this.queue.pop();
-            try {
-                const payload = encodeTx(tx);
-                const res = await this.conn[method]({ tx: payload });
-                this.emit(id, { ok: true, res});
-            } catch (error) {
-                this.emit(id, {
-                    ok: false,
-                    res: `Failed to submit tx: ${error.message}`
-                });
-            }
-        }
-        this.sending = false;
-        return;
-    }
-
-    /**
      * Query the ABCI `info` method.
-     * 
-     * @description A wrapper for the Tendermint RPC method `abci_info`, for 
+     *
+     * @description A wrapper for the Tendermint RPC method `abci_info`, for
      * more details, see https://tendermint.com/rpc and type definition.
      */
     public async abciInfo(override?: boolean): Promise<ResponseInfo> {
@@ -314,17 +230,17 @@ export class TendermintRPC extends EventEmitter {
 
     /**
      * Subscribe to an event in the Tendermint chain.
-     * 
+     *
      * @description Wrapper for the `tendermint` JS library that allows
      * subscription to various Tendermint and ParadigmCore events. See the full
      * syntax for the 'subscribe' method at https://tendermint.com/rpc
-     * 
+     *
      * @param eventName the string of the event to subscribe to.
      * @param cb callback function to be executed upon each event.
      */
-    public async subscribe(eventName: string, cb: Function): Promise<void> {
+    public async subscribe(eventName: string, cb: (...args) => any): Promise<void> {
         // don't try to sub if not connected
-        if (!this.connected) throw Error("Not connected to Tendermint RPC.");
+        if (!this.connected) { throw Error("Not connected to Tendermint RPC."); }
 
         // check for valid event
         if (eventName.split("=").length < 2) {
@@ -341,17 +257,17 @@ export class TendermintRPC extends EventEmitter {
 
     /**
      * Unsubscribe from an event in the Tendermint chain.
-     * 
+     *
      * @description Wrapper for the `tendermint` JS library that allows
      * subscription to various Tendermint and ParadigmCore events. See the full
      * syntax for the 'unsubscribe' method at https://tendermint.com/rpc
-     * 
+     *
      * @param eventName the string of the event to subscribe to.
      * @param cb callback function to be executed upon each event.
      */
     public async unsubscribe(query: string): Promise<void> {
         // don't try to sub if not connected
-        if (!this.connected) throw Error("Not connected to Tendermint RPC.");
+        if (!this.connected) { throw Error("Not connected to Tendermint RPC."); }
 
         // check for valid event
         if (query.split("=").length < 2) {
@@ -368,20 +284,20 @@ export class TendermintRPC extends EventEmitter {
 
     /**
      * Submit
-     * 
-     * @description Accepts a [SignedTransaction] as the first argument, which 
-     * gets compressed/encoded using the [PayloadCipher] class. The second 
+     *
+     * @description Accepts a [SignedTransaction] as the first argument, which
+     * gets compressed/encoded using the [PayloadCipher] class. The second
      * (optional) parameter can be used to specify a broadcast mode, which can
-     * be any of `sync`, `async`, or `commit`. See https://tendermint.com/rpc 
+     * be any of `sync`, `async`, or `commit`. See https://tendermint.com/rpc
      * for more details.
-     * 
-     * @param tx 
+     *
+     * @param tx
      */
     public submitTx(tx: SignedTransaction, mode?: "sync" | "async" | "commit"): Promise<ResponseBroadcastTx> {
         // use a specific broadcast method for this tx
         let method;
-        const methodBuilder = m => `broadcastTx${m}`;
-        const parsed = mode ? mode.toLowerCase(): null;
+        const methodBuilder = (m) => `broadcastTx${m}`;
+        const parsed = mode ? mode.toLowerCase() : null;
 
         // check for/set broadcast connection mode
         if (parsed && ["sync", "async", "commit"].indexOf(parsed) >= 0) {
@@ -411,29 +327,116 @@ export class TendermintRPC extends EventEmitter {
 
             // trigger broadcast, if needed
             if (!this.sending) {
-                this.internalSubmitTx();
+                this.internalSubmitTx().catch((error) => {
+                    warn("tm", "failed to send ABCI tx");
+                    reject(error.message);
+                });
             }
         });
     }
 
     /**
      * (in-progress)
-     * 
+     *
      * @todo expand
-     * 
+     *
      * @param path the path to submit to the ABCI query method
      */
     public async query(path: string): Promise<any> {
         const res = await this.conn.abciQuery({path});
         const { code, info, log, key, value } = res.response;
-        return { code, info, log, key, value }
+        return { code, info, log, key, value };
     }
     /**
-     * Public getter method to check connection status. 
-     * 
+     * Public getter method to check connection status.
+     *
      * @returns `true` if connected to Tendermint RPC, and `false` otherwise.
      */
     public isConnected(): boolean {
         return this.connected;
+    }
+
+    /**
+     * Generate a handler function for connection closure.
+     *
+     * @returns a function to be used as an event handler for the Tendermint
+     * RPC connection.
+     *
+     * @todo implement actual error/close handling.
+     */
+    private connectionErrorHandler(): (e) => void {
+        return (e: Error) => {
+            switch (e.message) {
+                case "websocket disconnected": {
+                    this.conn.emit("close", e.message);
+                    break;
+                }
+                default: {
+                    if (!this.connecting) { err("tm", `CONNECTION ERROR: ${e.message}`); }
+                    break;
+                }
+            }
+            return;
+        };
+    }
+
+    /**
+     * Generate a handler function for connection closure.
+     *
+     * @returns a function to be used as an event handler for the Tendermint
+     * RPC connection.
+     *
+     * @todo implement actual error/close handling.
+     *
+     * @param _this `this` reference for calling class.
+     */
+    private connectionCloseHandler(): (m) => void {
+        return (m) => {
+            if (!this.connecting) { err("tm", `CONNECTION CLOSE: ${m}`); }
+            this.connected = false;
+
+            // attempt to reconnect
+            if (this.shouldRetry === true && this.connecting === false) {
+                this.shouldRetry = false;
+                this.conn = null;
+                Log("tm", `connection lost, attempting reconnect ${this.maxRetries} time(s)..`);
+                this.connect(this.maxRetries, this.retryInterval);
+            } else if (this.connecting === true ) {
+                return;
+            } else {
+                console.log("killing process (L259 TendermintRPC)");
+                process.exit(1);
+                throw Error("Connection fatally closed, not retrying.");
+            }
+
+        };
+    }
+
+    /**
+     * (Internal) Submit a transaction to Tendermint via RPC. Use the public
+     * `TendermintRPC.prototype.submitTx` method to add transactions to the
+     * broadcast queue.
+     */
+    private async internalSubmitTx(): Promise<any> {
+        // don't try to sub if not connected
+        if (!this.connected || this.connecting) { throw Error("Not connected to Tendermint RPC."); }
+
+        // send every tx in the queue
+        this.sending = true;
+        while (this.queue.length > 0) {
+            const { tx, method, id } = this.queue.shift();
+            try {
+                const payload = encodeTx(tx);
+                const res = await this.conn[method]({ tx: payload });
+                this.emit(id, { ok: true, res});
+            } catch (error) {
+                this.emit(id, {
+                    ok: false,
+                    res: `Failed to submit tx: ${error.message}`
+                });
+            }
+        }
+        this.sending = false;
+        return;
     }
 }

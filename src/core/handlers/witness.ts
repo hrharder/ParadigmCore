@@ -2,12 +2,12 @@
  * ===========================
  * ParadigmCore: Blind Star
  * @name witness.ts
- * @module src/core/handlers
+ * @module core/handlers
  * ===========================
  *
  * @author Henry Harder
  * @date (initial)  23-October-2018
- * @date (modified) 23-January-2019
+ * @date (modified) 13-March-2019
  *
  * Handler functions for verifying ABCI event Witness transactions,
  * originating from validator nodes. Implements state transition logic as
@@ -15,17 +15,17 @@
  */
 
  // ParadigmCore classes
-import { log, warn, err } from "../../common/log";
+import { err, log, warn } from "../../common/log";
 
 // ParadigmCore utilities/types
 import { ParsedWitnessData, ResponseCheckTx, ResponseDeliverTx } from "../../typings/abci";
 import {
-    parseWitness,
-    createWitnessEventHash,
-    addNewEvent,
     addConfMaybeApplyEvent,
-    validTx, 
-    invalidTx
+    addNewEvent,
+    createWitnessEventHash,
+    invalidTx,
+    parseWitness,
+    validTx
 } from "../util/utils";
 
 /**
@@ -35,7 +35,7 @@ import {
  * @param tx    {object} decoded transaction body
  * @param state {object} current round state
  */
-export function checkWitness(tx: SignedWitnessTx, state: State): ResponseCheckTx {
+export function checkWitness(tx: SignedWitnessTx, state: IState): ResponseCheckTx {
     try {
         parseWitness(tx.data);
         log("mem", "stake witness transaction accepted");
@@ -53,10 +53,10 @@ export function checkWitness(tx: SignedWitnessTx, state: State): ResponseCheckTx
  * @param tx    {object} decoded transaction body
  * @param state {object} current round state
  */
-export function deliverWitness(tx: SignedWitnessTx, state: State): ResponseDeliverTx {
+export function deliverWitness(tx: SignedWitnessTx, state: IState): ResponseDeliverTx {
     // will store parsed event data (after validation)
     let parsedTx: ParsedWitnessData;
-    
+
     // unique eventId, hash of event contents
     let eventId: string;
 
@@ -73,7 +73,7 @@ export function deliverWitness(tx: SignedWitnessTx, state: State): ResponseDeliv
             address: tx.data.address,
             publicKey: tx.data.publicKey
         });
-       
+
         // confirm id in event matches hash of event data
         if (eventId !== tx.data.id) {
             throw new Error("reported eventId does not match actual");
@@ -85,7 +85,7 @@ export function deliverWitness(tx: SignedWitnessTx, state: State): ResponseDeliv
 
     // unpack/parse event data after id is confirmed
     const { subject, block, id } = parsedTx;
-    
+
     // will be true if transaction is ultimately valid
     let accepted: boolean;
 
@@ -106,6 +106,12 @@ export function deliverWitness(tx: SignedWitnessTx, state: State): ResponseDeliv
         // create new event block, and add event to block
         state.events[block] = {};
         accepted = addNewEvent(state, parsedTx);
+
+        // delete the empty block entry we created if empty
+        // @todo move somewhere else
+        if (!accepted && Object.keys(state.events[block]).length === 0) {
+            delete state.events[block];
+        }
     }
 
     // so explicit because of possibility accepted never gets set

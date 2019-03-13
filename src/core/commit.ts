@@ -2,26 +2,22 @@
  * ===========================
  * ParadigmCore: Blind Star
  * @name commit.ts
- * @module src/core
+ * @module core
  * ===========================
  *
  * @author Henry Harder
  * @date (initial)  21-January-2019
- * @date (modified) 21-January-2019
+ * @date (modified) 12-March-2019
  *
  * ABCI commit implementation.
 */
 
 // paradigmcore classes/types
-import { Witness } from "../witness/Witness";
-import { Hasher } from "../crypto/Hasher";
-
-// custom typings
+import { State } from "../state/State";
 import { ResponseCommit } from "../typings/abci";
 
 // util functions
-import { syncStates } from "./util/utils";
-import { log, err, warn } from "../common/log";
+import { err, log } from "../common/log";
 import { bigIntReplacer } from "../common/static/bigIntUtils";
 
 /**
@@ -44,8 +40,10 @@ export function commitWrapper(
             deliverState.lastBlockHeight += 1;
 
             // Generate new state hash and update
-            stateHash = Hasher.hashState(deliverState);
-            deliverState.lastBlockAppHash = stateHash;
+            stateHash = deliverState.generateAppHash();
+
+            // @todo should the line below be here or in beginBlock?
+            // deliverState.lastBlockAppHash = stateHash;
 
             // temporarily log state if a rebalance event occurred
             // Round diff === 1 means rebalance tx included in block
@@ -55,12 +53,15 @@ export function commitWrapper(
             }
 
             // Synchronize commit state from delivertx state
-            syncStates(deliverState, commitState);
+            commitState.acceptNew(deliverState.toJSON());
+
+            // write state contents to disk
+            commitState.writeToDisk();
 
             log(
                 "state",
-                `new state hash: ` + 
-                `${stateHash.toString("hex").slice(0,5)}...` +
+                `new state hash: ` +
+                `${stateHash.toString("hex").slice(0, 5)}...` +
                 `${stateHash.toString("hex").slice(-5)}`,
                 commitState.lastBlockHeight,
                 stateHash.toString("hex").toUpperCase()
