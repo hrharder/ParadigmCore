@@ -2,7 +2,7 @@
  * ===========================
  * ParadigmCore: Blind Star
  * @name TxGenerator.ts
- * @module src/core
+ * @module core/util
  * ===========================
  *
  * @author Henry Harder

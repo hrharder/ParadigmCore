@@ -2,7 +2,7 @@
  * ===========================
  * ParadigmCore: Blind Star
  * @name main.ts
- * @module src/core
+ * @module core
  * ===========================
  *
  * @author Henry Harder
@@ -16,9 +16,11 @@
 // 3rd party and STDLIB imports
 const abci: any = require("abci");
 
-// general utilities
+// general utilities/classes/types
 import { log } from "../common/log";
-import { messages as templates } from "../common/static/messages";
+import { State } from "../state/State";
+import { ParadigmCoreOptions } from "../typings/abci";
+import { queryWrapper } from "./query";
 
 // abci handler implementations
 import { beginBlockWrapper } from "./beginBlock";
@@ -28,11 +30,6 @@ import { deliverTxWrapper } from "./deliverTx";
 import { endBlockWrapper } from "./endBlock";
 import { infoWrapper } from "./info";
 import { initChainWrapper } from "./initChain";
-
-// custom types
-import { State } from "../state/State";
-import { ParadigmCoreOptions } from "../typings/abci";
-import { queryWrapper } from "./query";
 
 /**
  * Initialize and start the ABCI application.
@@ -55,8 +52,8 @@ export async function start(options: ParadigmCoreOptions): Promise<null> {
         let Order = options.paradigm.Order;
 
         // Load state objects (performs initial write, if necessary)
-        let dState = new State(true);
-        let cState = new State(false);
+        let dState = new State(true);  // deliverState is read-only
+        let cState = new State(false); // only commit state can write to disk
 
         // Load initial consensus params
         let consensusParams: ConsensusParams = {

@@ -2,7 +2,7 @@
  * ===========================
  * ParadigmCore: Blind Star
  * @name HttpServer.ts
- * @module src/api/post
+ * @module api/post
  * ===========================
  *
  * @author Henry Harder

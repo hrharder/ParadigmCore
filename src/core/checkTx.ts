@@ -2,7 +2,7 @@
  * ===========================
  * ParadigmCore: Blind Star
  * @name checkTx.ts
- * @module src/core
+ * @module core
  * ===========================
  *
  * @author Henry Harder

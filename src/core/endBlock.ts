@@ -2,12 +2,12 @@
  * ===========================
  * ParadigmCore: Blind Star
  * @name endBlock.ts
- * @module src/core
+ * @module core
  * ===========================
  *
  * @author Henry Harder
  * @date (initial)  21-January-2019
- * @date (modified) 22-January-2019
+ * @date (modified) 13-March-2019
  *
  * ABCI endBlock implementation.
 */
@@ -16,6 +16,13 @@
 import { ResponseEndBlock } from "../typings/abci";
 import { doForEachValidator } from "./util/valFunctions";
 
+/**
+ * Implementation of the ABCI `EndBlock` method. Will enable dynamic updates to
+ * the active validator set based on the state of the ValidatorRegistry smart
+ * contract. Currently disabled/incomplete.
+ *
+ * @param state the current deliverState object
+ */
 export function endBlockWrapper(state: IState): (r) => ResponseEndBlock {
     return (request) => {
         /**

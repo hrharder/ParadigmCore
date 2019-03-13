@@ -2,7 +2,7 @@
  * ===========================
  * ParadigmCore: Blind Star
  * @name utils.ts
- * @module src/core/util
+ * @module core/util
  * ===========================
  *
  * @author Henry Harder
@@ -457,6 +457,9 @@ export function applyPosterEvent(state: IState, tx: ParsedWitnessData): boolean 
     // remove event block if none left pending
     if (Object.keys(state.events[block]).length === 0) {
         delete state.events[block];
+        console.log(`\is zero\n`);
+    } else {
+        console.log(`\nnot zero\n ${Object.keys(state.events[block])}\n`);
     }
 
     // when removing, also check if balance is now 0

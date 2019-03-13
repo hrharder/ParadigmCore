@@ -7,7 +7,7 @@
  *
  * @author Henry Harder
  * @date (initial)  15-October-2018
- * @date (modified) 12-March-2019
+ * @date (modified) 13-March-2019
  *
  * The Witness class implements a one-way (read only) peg to Ethereum,
  * and adds a "finality gadget" via a block maturity requirement for events
@@ -21,8 +21,7 @@ import { EventEmitter } from "events";
 import * as _ from "lodash";
 import * as TruffleContract from "truffle-contract";
 import { URL } from "url";
-import Web3 = require("web3");
-import { WebsocketProvider } from "web3/providers";
+const Web3 = require("web3");
 
 // ParadigmCore modules/classes
 import { contracts, eventDecoder } from "paradigm-contracts";
@@ -34,6 +33,10 @@ import { default as codes } from "../common/Codes";
 import { err, log, warn } from "../common/log";
 import { messages as msg } from "../common/static/messages";
 import { TendermintRPC } from "../common/TendermintRPC";
+
+// supporting type definition(s)
+import * as W3 from "web3";
+import { WebsocketProvider } from "web3-providers/types";
 
 /**
  * A Witness supports a one way peg-zone between Ethereum and the OrderStream to
@@ -141,7 +144,7 @@ export class Witness {
      * The `web3.js` provider instance, configured when assigned based on
      * witness configuration options.
      */
-    private web3: Web3;
+    private web3: W3.default;
 
     // ETHEREUM-RELATED
 
@@ -212,9 +215,8 @@ export class Witness {
     /** Mapping that tracks poster balances. Used to submit proposals. */
     private posterBalances: PosterBalances;
 
+    /** Emitter used to support async tx broadcast */
     private txEmitter: EventEmitter;
-
-    private txQueue: SignedTransaction[];
 
     /**
      * PRIVATE constructor. Do not use. Create new `witness` instances with
@@ -244,7 +246,6 @@ export class Witness {
         // Local TX generator (and validator signer)
         this.generator = opts.generator;
         this.txEmitter = new EventEmitter();
-        this.txQueue = [];
 
         // Create dedicated Tendermint RPC connection for the Witness instance
         this.tmRpc = new TendermintRPC(
@@ -293,7 +294,7 @@ export class Witness {
 
         // Connect to Web3 provider
         const code = this.connectWeb3();
-        if (code !== codes.OK) { return code; }
+        if (code !== codes.OK) { console.log("huy"); return code; }
 
         // Get current Ethereum height
         try {
@@ -306,7 +307,9 @@ export class Witness {
         try {
             const EventEmitterContract = TruffleContract(contracts.EventEmitter);
             EventEmitterContract.setProvider(this.web3.currentProvider);
+            console.log("contract initializing");
             this.eventEmitterContract = await EventEmitterContract.deployed();
+            console.log("contract initialized");
         } catch (error) {
             err("peg", error.message);
             return codes.CONTRACT; // Unable to initialize staking contract
@@ -314,6 +317,7 @@ export class Witness {
 
         // Only returns OK (0) upon successful initialization
         this.initialized = true;
+        console.log("leaving initialize");
         return codes.OK;
     }
 
@@ -378,7 +382,7 @@ export class Witness {
      * if a web3 disconnect is detected.
      */
     private getProvider(): WebsocketProvider {
-        let provider: WebsocketProvider;
+        let providerInst: WebsocketProvider;
 
         // Pull provider URL and protocol from instance
         const { protocol, href } = this.web3provider;
@@ -386,7 +390,7 @@ export class Witness {
         // Supports WS providers only
         try {
             if (protocol === "ws:" || protocol === "wss:") {
-                provider = new Web3.providers.WebsocketProvider(href);
+                providerInst = new Web3.providers.WebsocketProvider(href);
             } else {
                 throw new Error("invalid provider URI, must be ws/wss");
             }
@@ -395,12 +399,12 @@ export class Witness {
         }
 
         // Log connection message
-        provider.on("connect", () => {
+        providerInst.on("connect", () => {
             log("peg", "successfully connected to web3 provider");
         });
 
         // Attempt to reconnect on termination
-        provider.on("end", () => {
+        providerInst.on("end", () => {
             err("peg", "web3 connection closed, attempting to reconnect...");
             try {
                 this.web3.setProvider(this.getProvider());
@@ -410,7 +414,7 @@ export class Witness {
         });
 
         // Attempt to reconnect on any error
-        provider.on("error", () => {
+        providerInst.on("error", () => {
             err("peg", "web3 provider error, attempting to reconnect...");
             try {
                 this.web3.setProvider(this.getProvider());
@@ -419,7 +423,7 @@ export class Witness {
             }
         });
 
-        return provider;
+        return providerInst;
     }
 
     /**

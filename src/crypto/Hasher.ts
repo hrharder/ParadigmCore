@@ -2,12 +2,12 @@
  * ===========================
  * ParadigmCore: Blind Star
  * @name Hasher.ts
- * @module src/crypto
+ * @module crypto
  * ===========================
  *
  * @author Henry Harder
  * @date (initial)  19-August-2018
- * @date (modified) 21-January-2019
+ * @date (modified) 13-March-2019
  *
  * Hashing class to allow creation of state hashes. Also used to generate
  * ID's (orderID) for valid orders.
@@ -18,9 +18,11 @@
 // Object hashing library (3rd party)
 import * as hash from "object-hash";
 
-// ParadigmCore utility
-import { bigIntReplacer } from "../common/static/bigIntUtils";
-
+/**
+ * Currently only used to generate the `orderId` for `order` transactions.
+ *
+ * Should be nuked and replaced with a real hashing algorithm.
+ */
 export class Hasher {
 
   /**

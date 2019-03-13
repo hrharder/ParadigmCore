@@ -7,9 +7,11 @@
  *
  * @author Henry Harder
  * @date (initial)  12-September-2018
- * @date (modified) 21-January-2019
+ * @date (modified) 12-March-2019
  *
- * Startup script for ParadigmCore. Provide configuration through environment.
+ * Main startup script for ParadigmCore.
+ *
+ * Provide configuration through environment variables or `.env` file.
 */
 
 // Load configuration from environment
@@ -19,8 +21,9 @@ require("dotenv").config();
 import * as Paradigm from "paradigm-connect";
 
 // Standard lib and 3rd party NPM modules
-import Web3 = require("web3");
+import * as W3 from "web3";
 import * as tendermint from "../lib/tendermint";
+const Web3 = require("web3");
 
 // ParadigmCore classes
 import { TxGenerator } from "./core/util/TxGenerator";
@@ -35,7 +38,7 @@ import { start as startAPIserver } from "./api/post/HttpServer";
 import { start as startMain } from "./core/main";
 
 // General utilities and misc.
-import { err, log, logStart, warn } from "./common/log";
+import { err, log, logStart } from "./common/log";
 import { messages as msg } from "./common/static/messages";
 
 // validator-only modules
@@ -43,7 +46,7 @@ let witness: Witness;
 let generator: TxGenerator;    // construct and sign paradigm-core tx's
 
 // FULL-NODE (and validator) modules
-let web3: Web3;           // web3 instance
+let web3: W3.default;           // web3 instance
 let server: StreamServer;   // JSONRPC stream-server
 let paradigm;   // paradigm instance (paradigm-connect)
 let node;       // tendermint node child process instance
@@ -110,6 +113,7 @@ let node;       // tendermint node child process instance
         web3 = new Web3(env.WEB3_PROVIDER);
         paradigm = new Paradigm({ provider: web3.currentProvider });
     } catch (error) {
+        console.log(error);
         throw {
             message: error.message,
             info: "failed creating paradigm-connect instance",
@@ -177,7 +181,7 @@ let node;       // tendermint node child process instance
         };
     }
 
-    log("witness", "creating witness instance...");
+    log("peg", "creating witness instance...");
     try {
         witness = await Witness.create({
             // validator signer/transaction generator

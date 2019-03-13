@@ -2,14 +2,12 @@
  * ===========================
  * ParadigmCore: Blind Star
  * @name Request.ts
- * @module src/api/stream
+ * @module api/stream
  * ===========================
  *
  * @author Henry Harder
  * @date (initial)  05-February-2019
- * @date (modified) 20-February-2018
- *
- * TODO: fix this local version
+ * @date (modified) 13-March-2018
 **/
 
 // request/response schemas

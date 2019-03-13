@@ -7,7 +7,7 @@
  *
  * @author Henry Harder
  * @date (initial)  21-February-2019
- * @date (modified) 011-March-2019
+ * @date (modified) 13-March-2019
  *
  * ABCI query implementation.
 */
