@@ -39,20 +39,16 @@ export function commitWrapper(
             // Generate new state hash and update
             stateHash = deliverState.generateAppHash();
 
-            // @todo should the line below be here or in beginBlock?
-            // deliverState.lastBlockAppHash = stateHash;
-
             // temporarily log state if a rebalance event occurred
             // Round diff === 1 means rebalance tx included in block
             const roundDiff = deliverState.round.number - commitState.round.number;
             if (roundDiff === 1) {
                 console.log(`\nLATEST STATE:\n${JSON.stringify(deliverState, bigIntReplacer)}\n`);
             }
-            // update state with last commit
-            deliverState.lastBlockAppHash = stateHash;
-            deliverState.lastBlockHeight++;
 
             // Synchronize commit state from delivertx state
+            deliverState.lastBlockHeight++;
+            deliverState.lastBlockAppHash = stateHash;
             commitState.acceptNew(deliverState.toJSON());
 
             // write state contents to disk
