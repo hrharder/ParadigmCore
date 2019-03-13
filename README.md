@@ -39,7 +39,7 @@ For more information about ParadigmCore and the protocol as a whole:
 
 ## Quick Start
 
-Complete install instructions can be found [here](./docs/install.md), and an even more in-depth tutorial can be found [here](./docs/tutorial.md).
+Complete install instructions can be found [here](./docs/install.md), and a more in-depth tutorial can be found [here](./docs/tutorial.md).
 
 ### Prerequisites
 
