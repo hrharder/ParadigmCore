@@ -2,12 +2,12 @@
  * ===========================
  * ParadigmCore: Blind Star
  * @name beginBlock.ts
- * @module src/core
+ * @module core
  * ===========================
  *
  * @author Henry Harder
  * @date (initial)  21-January-2019
- * @date (modified) 22-January-2019
+ * @date (modified) 12-March-2019
  *
  * ABCI beginBlock implementation.
 */
@@ -16,9 +16,9 @@
 import { ResponseBeginBlock } from "../typings/abci";
 
 // util functions
+import { log } from "../common/log";
+import { State } from "../state/State";
 import { computeConf } from "./util/utils";
-import { bigIntReplacer } from "../util/static/bigIntUtils";
-import { log } from "../util/log";
 import { doForEachValidator } from "./util/valFunctions";
 
 /**
@@ -28,6 +28,10 @@ import { doForEachValidator } from "./util/valFunctions";
  */
 export function beginBlockWrapper(state: State): (r) => ResponseBeginBlock {
     return (request) => {
+        // load last AppHash into state
+        const lastAppHash = Buffer.from(request.header.appHash, "base64");
+        state.lastBlockAppHash = lastAppHash;
+
         // parse height and proposer from header
         const currHeight: number = Number(request.header.height);
         const proposer: string = request.header.proposerAddress.toString("hex");
@@ -42,7 +46,7 @@ export function beginBlockWrapper(state: State): (r) => ResponseBeginBlock {
                 const nodeId = vote.validator.address.toString("hex");
                 const power = Number(vote.validator.power);
 
-                // TODO: sould we check for new validators here?
+                // TODO: should we check for new validators here?
 
                 // update vote and height trackers
                 if (vote.signedLastBlock) {
@@ -60,6 +64,11 @@ export function beginBlockWrapper(state: State): (r) => ResponseBeginBlock {
 
                 // update (or re-record) validator vote power
                 state.validators[nodeId].power = power;
+
+                // update (or skip) first vote
+                if (!state.validators[nodeId].firstVote) {
+                    state.validators[nodeId].firstVote = currHeight;
+                }
 
                 /**
                  * TEMPORARY
@@ -93,7 +102,7 @@ export function beginBlockWrapper(state: State): (r) => ResponseBeginBlock {
         // Indicate new round, return no indexing tags
         log(
             "state",
-            `current proposer: ${proposer.slice(0,5)}...${proposer.slice(-5)}`,
+            `current proposer: ${proposer.slice(0, 5)}...${proposer.slice(-5)}`,
             currHeight
         );
         return {};

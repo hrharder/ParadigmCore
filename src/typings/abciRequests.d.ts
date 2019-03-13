@@ -18,3 +18,9 @@ interface int64 {
 }
 
 interface uint64 extends int64 {}
+
+
+interface KVPair {
+    key: Buffer;
+    value: Buffer;
+}

@@ -2,30 +2,28 @@
  * ===========================
  * ParadigmCore: Blind Star
  * @name deliverTx.ts
- * @module src/core
+ * @module core
  * ===========================
  *
  * @author Henry Harder
  * @date (initial)  21-January-2019
- * @date (modified) 22-January-2019
+ * @date (modified) 13-March-2019
  *
  * ABCI deliverTx implementation.
-*/
+**/
 
 // custom typings
 import { ResponseDeliverTx } from "../typings/abci";
-import { OrderTracker } from "../async/OrderTracker";
 
-// util functions
-import { Vote } from "./util/Vote";
-import { warn } from "../util/log";
-import { decodeTx, preVerifyTx } from "./util/utils";
+// util functions/vars
+import { warn } from "../common/log";
+import { messages } from "../common/static/messages";
+import { decodeTx, invalidTx, preVerifyTx } from "./util/utils";
 
 // tx handlers
 import { deliverOrder } from "./handlers/order";
-import { deliverStream } from "./handlers/stream";
-import { deliverWitness } from "./handlers/witness";
 import { deliverRebalance } from "./handlers/rebalance";
+import { deliverWitness } from "./handlers/witness";
 
 /**
  * Execute a transaction in full: perform state modification, and verify
@@ -33,12 +31,7 @@ import { deliverRebalance } from "./handlers/rebalance";
  *
  * @param request {object} raw transaction as delivered by Tendermint core.
  */
-export function deliverTxWrapper(
-    state: State,
-    msg: LogTemplates,
-    tracker: OrderTracker,
-    Order: any
-): (r) => ResponseDeliverTx {
+export function deliverTxWrapper(state: IState, Order: any): (r) => ResponseDeliverTx {
     return (request) => {
         // load transaction from request
         const rawTx: Buffer = request.tx;   // Encoded/compressed tx object
@@ -48,27 +41,21 @@ export function deliverTxWrapper(
         try {
             tx = decodeTx(rawTx);
         } catch (error) {
-            warn("state", msg.abci.errors.decompress);
-            return Vote.invalid(msg.abci.errors.decompress);
+            warn("state", messages.abci.errors.decompress);
+            return invalidTx(messages.abci.errors.decompress);
         }
 
         // verify the transaction came from a validator
         if (!preVerifyTx(tx, state)) {
-            warn("state", msg.abci.messages.badSig);
-            return Vote.invalid(msg.abci.messages.badSig);
+            warn("state", messages.abci.messages.badSig);
+            return invalidTx(messages.abci.messages.badSig);
         }
 
         // select the proper handler verification logic based on the tx type.
         switch (tx.type) {
-            // sumbission of an 'order' tx (external)
+            // sumbmission of an 'order' tx (external)
             case "order": {
-                return deliverOrder(tx as SignedOrderTx, state, tracker, Order);
-            }
-
-            // sumbission of a 'stream' tx (external)
-            // @TODO implement
-            case "stream": {
-                return deliverStream(tx, state, tracker);
+                return deliverOrder(tx as SignedOrderTx, state, Order);
             }
 
             // validator reporting witness to Ethereum event (internal)
@@ -83,8 +70,8 @@ export function deliverTxWrapper(
 
             // invalid/unknown transaction type
             default: {
-                warn("state", msg.abci.errors.txType);
-                return Vote.invalid(msg.abci.errors.txType);
+                warn("state", messages.abci.errors.txType);
+                return invalidTx(messages.abci.errors.txType);
             }
         }
     };

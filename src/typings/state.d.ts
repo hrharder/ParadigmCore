@@ -16,7 +16,7 @@
  * Outer level datastructure representing the state of the network, including
  * poster staked balances, poster rate limit, validator set, etc.
  */
-interface State {
+interface IState {
     /**
      * Contains data necessary to track and update the rebalance rounds.
      */
@@ -42,7 +42,7 @@ interface State {
      * Stores the height of the Ethereum blockchain at which the last event was
      * applied in-state.
      */
-    lastEvent:          EventInfo;
+    lastEvent:          number;
     
     /**
      * Parameters affecting consensus logic (separate from Tendermint consensus
@@ -103,9 +103,8 @@ interface PosterInfo {
  * 'stream' transaction limits.
  */
 interface Poster {
-    balance:        bigint;
-    orderLimit:     number;
-    streamLimit:    number;
+    balance:    bigint;
+    limit:      number;
 }
 
 /**
@@ -127,6 +126,7 @@ interface Validator {
     power:          number; // vote power on tendermint chain
     publicKey:      Buffer; // raw 32 byte public key 
     ethAccount:     string;
+    firstVote:      number;
     lastVoted:      number;
     lastProposed:   number;
     totalVotes:     number;
@@ -144,6 +144,7 @@ interface RoundInfo {
     startsAt:   number;
     endsAt:     number;
     limit:      number;
+    limitUsed:  number,
 }
 
 /**
@@ -153,11 +154,19 @@ interface RoundInfo {
  */
 interface WitnessEvent {
     subject:    string;
-    type:       string;
     amount:     bigint;
     address:    string;
     publicKey:  string;
     conf:       number;
+}
+
+interface ParadigmEvent {
+    eventType: string;
+    poster: string;
+    stake: string;
+    tendermintPublicKey: string;
+    applicationBlockNumber: string;
+    owner: string;
 }
 
 /**
@@ -175,23 +184,15 @@ interface PosterBalances {
  * stored in `state.limits`, with stakers Ethereum address as the keys.
  */
 interface Limits {
-    [key: string]:  LimitObject;
-}
-
-/**
- * Each staker is allocated a network throughput limit (for Order transactions)
- * proportional to stake size, and all stakers are allocated one (1) Stream
- * transaction per period, regardless of stake size.  
- */
-interface LimitObject {
-    orderLimit:     number;
-    streamLimit:    number;
+    [key: string]:  number;
 }
 
 /**
  * The network must keep track of the Ethereum height of the latest event that
  * was applied to the networks state, to avoid replaying events already adopted
  * in-state. 
+ * 
+ * @deprecated as of 0.8
  */
 interface EventInfo {
     add:    number;

@@ -2,7 +2,7 @@
  * ===========================
  * ParadigmCore: Blind Star
  * @name HttpMessage.ts
- * @module src/api/post
+ * @module api/post
  * ===========================
  *
  * @author Henry Harder

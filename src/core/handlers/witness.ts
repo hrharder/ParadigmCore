@@ -2,12 +2,12 @@
  * ===========================
  * ParadigmCore: Blind Star
  * @name witness.ts
- * @module src/core/handlers
+ * @module core/handlers
  * ===========================
  *
  * @author Henry Harder
  * @date (initial)  23-October-2018
- * @date (modified) 23-January-2019
+ * @date (modified) 13-March-2019
  *
  * Handler functions for verifying ABCI event Witness transactions,
  * originating from validator nodes. Implements state transition logic as
@@ -15,16 +15,17 @@
  */
 
  // ParadigmCore classes
-import { log, warn, err } from "../../util/log";
-import { Vote } from "../util/Vote";
+import { err, log, warn } from "../../common/log";
 
 // ParadigmCore utilities/types
-import { ParsedWitnessData } from "../../typings/abci";
+import { ParsedWitnessData, ResponseCheckTx, ResponseDeliverTx } from "../../typings/abci";
 import {
-    parseWitness,
-    createWitnessEventHash,
+    addConfMaybeApplyEvent,
     addNewEvent,
-    addConfMaybeApplyEvent
+    createWitnessEventHash,
+    invalidTx,
+    parseWitness,
+    validTx
 } from "../util/utils";
 
 /**
@@ -34,14 +35,14 @@ import {
  * @param tx    {object} decoded transaction body
  * @param state {object} current round state
  */
-export function checkWitness(tx: SignedWitnessTx, state: State): Vote {
+export function checkWitness(tx: SignedWitnessTx, state: IState): ResponseCheckTx {
     try {
         parseWitness(tx.data);
         log("mem", "stake witness transaction accepted");
-        return Vote.valid("stake witness transaction accepted");
+        return validTx("stake witness transaction accepted");
     } catch (error) {
         warn("mem", `invalid witness event rejected: ${error.message}`);
-        return Vote.invalid("invalid witness event rejected");
+        return invalidTx("invalid witness event rejected");
     }
 }
 
@@ -52,10 +53,10 @@ export function checkWitness(tx: SignedWitnessTx, state: State): Vote {
  * @param tx    {object} decoded transaction body
  * @param state {object} current round state
  */
-export function deliverWitness(tx: SignedWitnessTx, state: State): Vote {
+export function deliverWitness(tx: SignedWitnessTx, state: IState): ResponseDeliverTx {
     // will store parsed event data (after validation)
     let parsedTx: ParsedWitnessData;
-    
+
     // unique eventId, hash of event contents
     let eventId: string;
 
@@ -72,26 +73,26 @@ export function deliverWitness(tx: SignedWitnessTx, state: State): Vote {
             address: tx.data.address,
             publicKey: tx.data.publicKey
         });
-       
+
         // confirm id in event matches hash of event data
         if (eventId !== tx.data.id) {
             throw new Error("reported eventId does not match actual");
         }
     } catch (error) {
         warn("mem", `invalid witness event rejected: ${error.message}`);
-        return Vote.invalid();
+        return invalidTx();
     }
 
     // unpack/parse event data after id is confirmed
-    const { block, id, type } = parsedTx;
-    
+    const { subject, block, id } = parsedTx;
+
     // will be true if transaction is ultimately valid
     let accepted: boolean;
 
-    // immediatley invalidate if event is older than most recent update
-    if (state.lastEvent[type] >= block) {
+    // immediately invalidate if event is older than most recent update
+    if (state.lastEvent >= block) {
         warn("state", "ignoring existing event that may have been applied");
-        return Vote.invalid();
+        return invalidTx();
     }
 
     if (state.events.hasOwnProperty(block)) {
@@ -105,18 +106,24 @@ export function deliverWitness(tx: SignedWitnessTx, state: State): Vote {
         // create new event block, and add event to block
         state.events[block] = {};
         accepted = addNewEvent(state, parsedTx);
+
+        // delete the empty block entry we created if empty
+        // @todo move somewhere else
+        if (!accepted && Object.keys(state.events[block]).length === 0) {
+            delete state.events[block];
+        }
     }
 
     // so explicit because of possibility accepted never gets set
     if (accepted === true) {
         log("state", "accepting witness transaction");
-        return Vote.valid();
+        return validTx();
     } else if (accepted === false) {
         log("state", "rejecting witness transaction");
-        return Vote.invalid();
+        return invalidTx();
     } else if (accepted === undefined) {
         // this block is temporary
         warn("state", "no reported status on witness transaction");
-        return Vote.invalid();
+        return invalidTx();
     }
 }

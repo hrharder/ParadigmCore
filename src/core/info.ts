@@ -2,17 +2,21 @@
  * ===========================
  * ParadigmCore: Blind Star
  * @name info.ts
- * @module src/core
+ * @module core
  * ===========================
  *
  * @author Henry Harder
  * @date (initial)  21-January-2019
- * @date (modified) 21-January-2019
+ * @date (modified) 12-March-2019
  *
  * ABCI info implementation.
 */
 
+// common imports
+import { warn } from "../common/log";
+
 // custom typings
+import { State } from "src/state/State";
 import { ResponseInfo } from "../typings/abci";
 
 /**
@@ -20,13 +24,19 @@ import { ResponseInfo } from "../typings/abci";
  *
  * @param request {RequestInfo}    info request
  */
-export function infoWrapper(state: State, version: string): (r) => ResponseInfo {
-    return (request) => {
+export function infoWrapper(state: State, version: string): (r) => Promise<ResponseInfo> {
+    return async (request) => {
+        try {
+            await state.readFromDisk();
+        } catch (error) {
+            warn("api", "failed to load state from disk during info");
+            warn("api", `provided error message: ${error.message}`);
+        }
         return {
             data: "ParadigmCore (alpha)",
             lastBlockAppHash: state.lastBlockAppHash,
-            lastBlockHeight: parseInt(state.lastBlockHeight.toString(), 10),
-            version
+            lastBlockHeight: state.lastBlockHeight,
+            version,
         };
     };
 }

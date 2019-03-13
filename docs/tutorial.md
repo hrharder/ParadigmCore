@@ -323,6 +323,8 @@ If you want to run a full node on the existing test-network, but don't have or w
 WEB3_PROVIDER="wss://ropsten.infura.io/ws"
 ```
 
+Get the `genesis.json` file for the OrderStream test-network in its repository, [found here.](https://github.com/ParadigmFoundation/blind-star-testnet)
+
 **b) Single local development node**
 
 Use this configuration if you wish to run a single instance of ParadigmCore locally for development or testing purposes. With this config, you will be the only node on your "network" and will act as a validator.
@@ -346,11 +348,9 @@ WEB3_PROVIDER="ws://localhost:8546"
 SEEDS="AB96D9C6ACA18EE587A5DC24783CFBA20636D0E8@bs1.paradigm.market:26656"
 ```
 
-A local Ethereum client is required for OrderStream validators. See previous lesson for parity install instructions. 
+A local Ethereum client is required for OrderStream validators. See previous lesson for parity install instructions.
 
-### Add genesis file
-
-Validators and full nodes intending to join the active OrderStream test-network will also need to obtain the [current `genesis.json`](https://github.com/ParadigmFoundation/blind-star-testnet) that the OrderStream testnet was initialized with. You will need to place that file at `lib/tendermint/config/genesis.json` and delete the file generated after the next step.
+Again, all information required to join the current "blind-star" test network can be [found in its repository here](https://github.com/ParadigmFoundation/blind-star-testnet).
 
 ## Install dependencies
 After adding the required fields to your configuration file, you can run npm i to perform various configuration steps. It will handle the following primary steps, among other setup and validation.
@@ -390,6 +390,10 @@ Start your node with `yarn launch` or `npm run launch`.
 ```
 
 If the output tells you to change something in your environment file, make that change and running npm i again.
+
+## Add genesis file
+
+Validators and full nodes intending to join the active OrderStream test-network will also need to obtain the [current `genesis.json`](https://github.com/ParadigmFoundation/blind-star-testnet) that the OrderStream testnet was initialized with. You will need to place that file at `lib/tendermint/config/genesis.json` and delete the file generated after the next step.
 
 ## Build and run ParadigmCore
 

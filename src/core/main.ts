@@ -2,12 +2,12 @@
  * ===========================
  * ParadigmCore: Blind Star
  * @name main.ts
- * @module src/core
+ * @module core
  * ===========================
  *
  * @author Henry Harder
  * @date (initial)  15-October-2018
- * @date (modified) 22-January-2019
+ * @date (modified) 12-March-2019
  *
  * ParadigmCore primary state machine (via imported handlers) and ABCI
  * application.
@@ -16,31 +16,26 @@
 // 3rd party and STDLIB imports
 const abci: any = require("abci");
 
-// general utilities
-import { log } from "../util/log";
-import { messages as templates } from "../util/static/messages";
+// general utilities/classes/types
+import { log } from "../common/log";
+import { State } from "../state/State";
+import { ParadigmCoreOptions } from "../typings/abci";
+import { queryWrapper } from "./query";
 
 // abci handler implementations
 import { beginBlockWrapper } from "./beginBlock";
 import { checkTxWrapper } from "./checkTx";
-import { deliverTxWrapper } from "./deliverTx";
-import { initChainWrapper } from "./initChain";
 import { commitWrapper } from "./commit";
-import { infoWrapper } from "./info";
+import { deliverTxWrapper } from "./deliverTx";
 import { endBlockWrapper } from "./endBlock";
-
-// custom types
-import { ParadigmCoreOptions } from "src/typings/abci";
+import { infoWrapper } from "./info";
+import { initChainWrapper } from "./initChain";
 
 /**
  * Initialize and start the ABCI application.
  *
  * @param options {object} Options object with parameters:
  *  - options.version       {string}        paradigmcore version string
- *  - options.tracker       {OrderTracker}  tracks valid orders
- *  - options.witness       {Witness}       witness instance (tracks Ethereum)
- *  - options.deliverState  {object}        deliverTx state object
- *  - options.commitState   {object}        commit state object
  *  - options.abciServPort  {number}        local ABCI server port
  *  - options.finalityThreshold {number}    Ethereum block finality threshold
  *  - options.maxOrderBytes {number}        maximum order size in bytes
@@ -56,15 +51,9 @@ export async function start(options: ParadigmCoreOptions): Promise<null> {
         // Load paradigm Order constructor
         let Order = options.paradigm.Order;
 
-        // Load state objects
-        let dState = options.deliverState;
-        let cState = options.commitState;
-
-        // Queue for valid broadcast transactions (order/stream)
-        let tracker = options.tracker;
-
-        // witness instance
-        let witness = options.witness;
+        // Load state objects (performs initial write, if necessary)
+        let dState = new State(true);  // deliverState is read-only
+        let cState = new State(false); // only commit state can write to disk
 
         // Load initial consensus params
         let consensusParams: ConsensusParams = {
@@ -76,25 +65,26 @@ export async function start(options: ParadigmCoreOptions): Promise<null> {
 
         // Establish ABCI handler functions
         let handlers = {
-            // query state hash, height, version
+            // query, info, w/ state hash, height, version
             info: infoWrapper(cState, version),
-            
+            query: queryWrapper(cState),
+
             // called at genesis
             initChain: initChainWrapper(dState, cState, consensusParams),
 
-            // mempool verifiction, pre-gossip
+            // mempool verification, pre-gossip
             checkTx: checkTxWrapper(cState, Order),
 
             // roundstep: [ beginBlock, deliverTx[, ...], endBlock, commit ]
             beginBlock: beginBlockWrapper(dState),
-            deliverTx: deliverTxWrapper(dState, templates, tracker, Order),
+            deliverTx: deliverTxWrapper(dState, Order),
             endBlock: endBlockWrapper(dState),
-            commit: commitWrapper(dState, cState, tracker, templates, witness),
+            commit: commitWrapper(dState, cState),
         };
 
         // Start ABCI server (connection to Tendermint core)
         await abci(handlers).listen(options.abciServPort);
-        log("state", `abci server connected on port ${options.abciServPort}`)
+        log("state", `abci server connected on port ${options.abciServPort}`);
     } catch (error) {
         throw new Error(`initializing abci application: ${error.message}`);
     }

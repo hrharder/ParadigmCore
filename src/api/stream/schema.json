@@ -1,0 +1,293 @@
+{
+	"$schema": "https://rawgit.com/mzernetsch/jrgen/master/jrgen-spec.schema.json",
+	"jrgen": "1.1",
+	"jsonrpc": "2.0",
+	"info": {
+		"title": "StreamAPI Reference",
+		"description": [
+			"The StreamAPI enables interaction with ParadigmCore via JSONRPC/WebSocket.\n",
+			"The API is served by the `StreamServer`, an optional component included as part of the `api` module in ParadigmCore.\n",
+            "StreamAPI follows the JSONRPC-2.0 specification. More information available at http://www.jsonrpc.org/specification."
+        ],
+		"version": "0.1-rc-3"
+	},
+	"definitions": {},
+	"methods": {
+		"subscription.start": {
+			"summary": "Subscribe to a specific ParadigmCore event.",
+			"description": [
+				"Initiate a subscription to an OrderStream node for specific blockchain and state-related events.\n",
+				"The `eventName` parameter is used to subscribe to specific blockchain events. Currently, you can subscribe to `block` events, or `orders`.\n",
+				"A `block` subscription (with no filters) will push various blockchain and header data to the client upon a new block being committed. The `filters` parameter can be used to filter out irrelevant data.\n",
+				"If no strings are included in the `filters` parameter, all block data will be returned.\n",
+				"The `orders` subscription will alert the client with an array of all accepted `order` transactions for each new block. By default, a notification is sent to the client every block, even if there were no `order` transactions in that block."
+			],
+			"tags": [
+                "subscription"
+            ],
+			"params": {
+				"type": "object",
+				"properties": {
+					"eventName": {
+						"description": "The name of the event you are subscribing to. Can be 'orders' or 'block' currently.",
+                        "default": "block",
+                        "enum": ["orders", "block"],
+						"type": "string",
+						"minLength": 1
+					},
+					"filters": {
+						"description": "An array of strings to be used as response filters. If present, only the keys in the filter array will be included in the response.",
+						"type": "array",
+						"default": ["height", "time"]
+					}
+				},
+				"required": ["eventName"]
+			},
+			"result": {
+				"type": "object",
+				"properties": {
+					"response": {
+						"description": "The server's response to the subscription-start request.",
+						"default": "Successfully started subscription",
+						"type": "string"
+					},
+					"subscriptionId": {
+						"description": "A unique ID that can be used for filtering many event subscriptions.",
+						"default": "84a55ba0-7f87-4430-b921-738f84857889",
+						"type": "string"
+					}
+				},
+				"required": ["response"]
+			},
+			"errors": [
+				{
+					"description": "The provided parameters are invalid.",
+					"code": -32602,
+					"message": "Invalid Parameters",
+					"data": {}
+				},
+				{
+					"description": "The request object is invalid.",
+					"code": -32600,
+					"message": "Parse Error",
+					"data": {}
+				},
+				{
+					"description": "The server encountered an error processing the request.",
+					"code": -32603,
+					"message": "Internal Error",
+					"data": {}
+				}
+			]
+        },
+        "subscription.end": {
+			"summary": "Unsubscribe from a specific ParadigmCore event.",
+			"description": "Immediately end a subscription to a certain event, and stop receiving notifications.",
+			"tags": [
+                "subscription"
+            ],
+			"params": {
+				"type": "object",
+				"properties": {
+					"subscriptionId": {
+						"description": "A unique ID provided by the server upon an event subscription.",
+						"default": "84a55ba0-7f87-4430-b921-738f84857889",
+						"type": "string"
+					}
+				},
+				"required": ["subscriptionId"]
+			},
+			"result": {
+				"type": "object",
+				"properties": {
+					"response": {
+						"description": "The server's response to the subscription-end request.",
+						"default": "Successfully ended event subscription.",
+						"type": "string"
+					}
+				},
+				"required": ["response"]
+			},
+			"errors": [
+				{
+					"description": "The provided parameters are invalid.",
+					"code": -32602,
+					"message": "Invalid Parameters",
+					"data": {}
+				},
+				{
+					"description": "The request object is invalid.",
+					"code": -32600,
+					"message": "Parse Error",
+					"data": {}
+				},
+				{
+					"description": "The server encountered an error processing the request.",
+					"code": -32603,
+					"message": "Internal Error",
+					"data": {}
+				}
+			]
+		},
+		"state.latestHeight": {
+			"summary": "Return the height of the best known block.",
+			"description": "The `block.latestHeight` method will return the integer height of the latest block committed to the blockchain.",
+			"tags": [
+				"state",
+				"blockchain"
+            ],
+			"result": {
+				"type": "object",
+				"properties": {
+					"height": {
+						"description": "The integer height of the latest committed block.",
+						"default": 42341,
+						"type": "number"
+					}
+				},
+				"required": ["height"]
+			},
+			"errors": [
+				{
+					"description": "The provided parameters are invalid.",
+					"code": -32602,
+					"message": "Invalid Parameters",
+					"data": {}
+				},
+				{
+					"description": "The request object is invalid.",
+					"code": -32600,
+					"message": "Parse Error",
+					"data": {}
+				},
+				{
+					"description": "The server encountered an error processing the request.",
+					"code": -32603,
+					"message": "Internal Error",
+					"data": {}
+				}
+			]
+		},
+		"state.orderCounter": {
+			"summary": "Query the `state.orderCounter` field.",
+			"description": "Return the incremental counter that tracks the in-state number of total `order` transactions.",
+			"tags": [
+                "state"
+            ],
+			"result": {
+				"type": "object",
+				"properties": {
+					"response": {
+						"description": "The result of the query, as a number. Counts the number of total orders processed by the network since genesis.",
+						"default": 113415,
+						"type": "number"
+					}
+				},
+				"required": ["response"]
+			},
+			"errors": [
+				{
+					"description": "The provided parameters are invalid.",
+					"code": -32602,
+					"message": "Invalid Parameters",
+					"data": {}
+				},
+				{
+					"description": "The request object is invalid.",
+					"code": -32600,
+					"message": "Parse Error",
+					"data": {}
+				},
+				{
+					"description": "The server encountered an error processing the request.",
+					"code": -32603,
+					"message": "Internal Error",
+					"data": {}
+				}
+			]
+		},
+		"state.query": {
+			"summary": "Query the permitted fields of an OrderStream node's state.",
+			"description": [
+				"The `state.query` method allows RPCs to return information about the node (and a connected network's) public state.",
+				"The `params.path` field can be used to direct a query to a particular path of the current state. The `path` is passed to ParadigmCore's ABCI `query` method, and the result of that function is returned."
+			],
+			"tags": [
+				"state",
+				"query"
+            ],
+			"params": {
+				"type": "object",
+				"properties": {
+					"path": {
+						"description": "The `path` string is passed to the `abci_query` method and directs a query towards a particular state account object.",
+						"default": "posters/0xaa554d0c5ff879387fc234de5d22ec02983baa27/limit",
+						"type": "string"
+					}
+				},
+				"required": ["path"]
+			},
+			"result": {
+				"type": "object",
+				"properties": {
+					"response": {
+						"description": "The result of the query, as a string (more documentation coming soon).",
+						"default": "12000",
+						"type": "number"
+					}
+				},
+				"required": ["response"]
+			},
+			"errors": [
+				{
+					"description": "The provided parameters are invalid.",
+					"code": -32602,
+					"message": "Invalid Parameters",
+					"data": {}
+				},
+				{
+					"description": "The request object is invalid.",
+					"code": -32600,
+					"message": "Parse Error",
+					"data": {}
+				},
+				{
+					"description": "The server encountered an error processing the request.",
+					"code": -32603,
+					"message": "Internal Error",
+					"data": {}
+				}
+			]
+		},
+		"session.end": {
+			"summary": "End a StreamAPI session.",
+			"description": [
+				"Terminate a StreamAPI session immediately.\n ",
+				"Calling this method will cancel all subscriptions, and immediately close the client/server connection."
+			],
+			"tags": [
+                "session"
+			],
+			"errors": [
+				{
+					"description": "The provided parameters are invalid.",
+					"code": -32602,
+					"message": "Invalid Parameters",
+					"data": {}
+				},
+				{
+					"description": "The request object is invalid.",
+					"code": -32600,
+					"message": "Parse Error",
+					"data": {}
+				},
+				{
+					"description": "The server encountered an error processing the request.",
+					"code": -32603,
+					"message": "Internal Error",
+					"data": {}
+				}
+			]
+        }
+	}
+}

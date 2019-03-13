@@ -1,19 +1,13 @@
 import { EventEmitter } from "events";
 import { TxGenerator } from "src/core/util/TxGenerator";
-import { TxBroadcaster } from "src/core/util/TxBroadcaster";
-import { OrderTracker } from "src/async/OrderTracker";
-import { Witness } from "src/async/Witness";
-import { Vote } from "src/core/util/Vote";
+import { Witness } from "src/witness/Witness";
 
 /**
  * Configuration options for main ParadigmCore state machine.
  */
 interface ParadigmCoreOptions {
     version:            string;
-    tracker:            OrderTracker;
     witness:            Witness;
-    deliverState:       State;
-    commitState:        State;
     abciServPort:       number;
     txGenerator:        TxGenerator;    
     finalityThreshold:  number;
@@ -36,9 +30,24 @@ interface ResponseInfo {
 }
 
 /**
+ * ABCI resposne to a submitTx request
+ */
+interface ResponseBroadcastTx {
+    code: number;
+    data: any;
+    log: string;
+    hash: string;
+}
+
+/**
  * ABCI response to initChain() - currently null
  */
 interface ResponseInitChain {}
+
+/**
+ * ABCI response to query()
+ */
+interface ResponseQuery {}
 
 /**
  * ABCI response to beginBlock() - currently null
@@ -46,14 +55,23 @@ interface ResponseInitChain {}
 interface ResponseBeginBlock {}
 
 /**
+ * Interface that defines the generic tx response type.
+ */
+interface ResponseTx {
+    code?: number;
+    log: string;
+    tags?: KVPair;
+}
+
+/**
  * ABCI response to checkTx() - a vote
  */
-interface ResponseCheckTx extends Vote {}
+interface ResponseCheckTx extends ResponseTx {}
 
 /**
  * ABCI response to deliverTx() - a vote
  */
-interface ResponseDeliverTx extends Vote {}
+interface ResponseDeliverTx extends ResponseTx {}
 
 /**
  * ABCI response to endBlock(), includes validator updates
@@ -67,6 +85,15 @@ interface ResponseEndBlock {
  */
 interface ResponseCommit {
     data: string | Buffer;
+}
+
+interface ResponseQuery {
+    code: number;
+    log?: string;
+    info?: string;
+    key?: Buffer;
+    value?: Buffer;
+    proof?: any;
 }
 
 // END RESPONSE TYPES
@@ -85,7 +112,6 @@ interface PubKey {
 
 interface ParsedWitnessData {
     subject:    string;
-    type:       string;
     amount:     bigint;
     block:      number;
     address:    string;

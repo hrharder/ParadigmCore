@@ -2,7 +2,7 @@
  * ===========================
  * ParadigmCore: Blind Star
  * @name utils.ts
- * @module src/core/util
+ * @module core/util
  * ===========================
  *
  * @author Henry Harder
@@ -11,20 +11,20 @@
  *
  * ParadigmCore state machine (ABCI) utility functions – pure and non state-
  * modifying.
- */
+**/
 
-// ParadigmCore classes
-import { PayloadCipher } from "../../crypto/PayloadCipher";
-import { err, log, warn } from "../../util/log";
+// ParadigmCore imports
+import { err, log as Log, warn } from "../../common/log";
+import { pubToAddr } from "./valFunctions";
 
 // ParadigmCore types
-import { ParsedWitnessData } from "src/typings/abci";
+import { ParsedWitnessData, ResponseCheckTx, ResponseDeliverTx } from "src/typings/abci";
 
 // Other
-import { cloneDeep, isInteger } from "lodash";
 import { createHash } from "crypto";
 import { Verify } from "ed25519";
-import { bigIntReplacer } from "../../util/static/bigIntUtils";
+import { cloneDeep, isInteger } from "lodash";
+import * as zlib from "zlib";
 
 /**
  * Verify validator signature, and confirm transaction originated from an
@@ -33,28 +33,30 @@ import { bigIntReplacer } from "../../util/static/bigIntUtils";
  * @param tx    {SignedTransaction} signed transaction object (decoded)
  * @param state {State}             current state
  */
-export function preVerifyTx(tx: SignedTransaction, state: State): boolean {
+export function preVerifyTx(tx: SignedTransaction, state: IState): boolean {
     // result of verification
     let isValid: boolean;
+
+    // computed hex nodeID from validator tx
+    let valNodeId: string;
 
     // attempt to verify
     try {
         const msg = Buffer.from(JSON.stringify(tx.data), "utf8");
         const sig = Buffer.from(tx.proof.signature, "hex");
-        const pub = Buffer.from(tx.proof.from, "hex");
+        const pub = Buffer.from(tx.proof.valPubKey, "hex");
 
         // verify message
         isValid = Verify(msg, sig, pub);
 
-        // verify computed id matches reported "fromAddr"
-        const idRaw = createHash("sha256").update(pub).digest("hex").slice(0, 40);
-        if (idRaw !== tx.proof.fromAddr) return false;
+        // compute nodeId
+        valNodeId = pubToAddr(pub).toString("hex");
     } catch (error) {
         return false;
     }
 
     // check that signing party is an active validator
-    if (!state.validators.hasOwnProperty(tx.proof.fromAddr)) {
+    if (!state.validators.hasOwnProperty(valNodeId)) {
         return false;
     }
 
@@ -69,7 +71,7 @@ export function preVerifyTx(tx: SignedTransaction, state: State): boolean {
  * @param source {State} the state to copy FROM
  * @param target {State} the state to copy TO
  */
-export function syncStates(source: State, target: State): void {
+export function syncStates(source: IState, target: IState): void {
     Object.keys(source).forEach((key) => {
         if (typeof source[key] !== "object") {
             target[key] = source[key].valueOf();
@@ -80,14 +82,76 @@ export function syncStates(source: State, target: State): void {
 }
 
 /**
- * Decode and decompress input transaction. Wrapper for PayloadCipher class.
- * 
- * @todo implement logic directly in this function
+ * Decode and decompress input transaction.
+ *
+ * @todo better document
+ * @todo deterministic stringify/buffer
  *
  * @param raw {Buffer} encoded/compressed raw transaction
  */
 export function decodeTx(raw: Buffer): SignedTransaction {
-    return PayloadCipher.ABCIdecode(raw);
+    let dcBuff: Buffer; // decompressed buffer
+    let outStr: string; // decoded string
+    let outObj: SignedTransaction; // output object
+
+    try {
+        dcBuff = zlib.inflateSync(raw);
+        outStr = dcBuff.toString("utf8");
+    } catch (error) {
+        throw new Error(`error decoding payload: ${error.message}`);
+    }
+
+    try {
+        outObj = JSON.parse(outStr);
+    } catch (error) {
+        throw new Error(`error parsing json: ${error.message}`);
+    }
+
+    return outObj;
+}
+
+/**
+ * Encode and compress input transaction.
+ *
+ * @todo better document
+ * @todo deterministic stringify/buffer
+ *
+ * @param raw {Buffer} encoded/compressed raw transaction
+ */
+export function encodeTx(raw: SignedTransaction): string {
+    let rawStr: string; // raw input string
+    let inBuff: Buffer; // raw input buffer
+    let cpBuff: Buffer; // compressed buffer
+    let outStr: string; // encoded output string
+
+    try {
+        rawStr = JSON.stringify(raw, (_, v) => {
+            // Replace BigInt with custom strings
+            if (typeof(v) === "bigint") {
+                return `${v.toString()}n`;
+            } else {
+                return v;
+            }
+        });
+        inBuff = Buffer.from(rawStr, "utf8");
+        cpBuff = zlib.deflateSync(inBuff);
+        outStr = cpBuff.toString("base64");
+    } catch (error) {
+        throw new Error(`error encoding payload: ${error.message}`);
+    }
+    return outStr;
+}
+
+/**
+ * Returns an ABCI transaction/event tag (as in ResponseDelverTx)
+ *
+ * @param _key key string (to be encoded)
+ * @param _value value (must be string or number) to be encoded
+ */
+export function newKVPair(keyStr: string, val: string | number): KVPair {
+    const key = Buffer.from(keyStr);
+    const value = Buffer.from(val.toString());
+    return { key, value };
 }
 
 /**
@@ -108,14 +172,14 @@ export function computeConf(active: number): number {
 }
 
 /**
- * Compute and apply the value of 2/3 the active validators as the required 
- * confirmation threshold for pending events. Essentially a wrapper (that 
+ * Compute and apply the value of 2/3 the active validators as the required
+ * confirmation threshold for pending events. Essentially a wrapper (that
  * applies transition) of `computeConf()`.
- * 
+ *
  * @param state {State} current network state object
- * @param last {Array} array of 'lastVotes' (from RequestBeginBlock) 
+ * @param last {Array} array of 'lastVotes' (from RequestBeginBlock)
  */
-export function stateUpdateConfThreshold(state: State, last: object[]): void {
+export function stateUpdateConfThreshold(state: IState, last: object[]): void {
     state.consensusParams.confirmationThreshold = computeConf(last.length);
 }
 
@@ -126,7 +190,7 @@ export function stateUpdateConfThreshold(state: State, last: object[]): void {
  *
  * @todo make size parameter an in-state parameter
  */
-export function verifyOrder(order: any, state: State): boolean {
+export function verifyOrder(order: any, state: IState): boolean {
     // Convert order => string => buffer and count bytes
     let orderBuf: Buffer = Buffer.from(JSON.stringify(order), "utf8");
     let maxSize: number = state.consensusParams.maxOrderBytes;
@@ -157,18 +221,12 @@ export function genLimits(posters: PosterInfo, limit: number): Limits {
     Object.keys(posters).forEach((k, v) => {
         if (posters.hasOwnProperty(k)) {
             // Compute proportional order limit
-            const balNum = parseInt(posters[k].balance.toString());
-            const totNum = parseInt(total.toString());
+            const balNum = parseInt(posters[k].balance.toString(), 10);
+            const totNum = parseInt(total.toString(), 10);
             const lim = (balNum / totNum) * limit;
-            
-            // Create limit object for each address
-            output[k] = {
-                // orderLimit is proportional to stake size
-                orderLimit: parseInt(lim.toString(), 10),
 
-                // streamLimit is always 1, regardless of stake size
-                streamLimit: 1,
-            };
+            // Create limit object for each address
+            output[k] = parseInt(lim.toString(), 10);
         }
     });
 
@@ -179,24 +237,19 @@ export function genLimits(posters: PosterInfo, limit: number): Limits {
 /**
  * Parses and validates a `witness` transaction from a validator's witness
  * module.
- * 
+ *
  * @param data raw witness event transaction (from Witness module)
  */
 export function parseWitness(data: WitnessData): ParsedWitnessData {
     // raw vals
-    const { subject, type, block, amount, publicKey, address, id } = data;
+    const { subject, block, amount, publicKey, address, id } = data;
 
     // parsed vals
     let intAmount, parsedAddress, parsedPublicKey;
 
     // validate subject is validator or poster
     if (subject !== "validator" && subject !== "poster") {
-        throw new Error("invlalid witness subject");
-    }
-
-    // validate state operation
-    if (type !== "add" && type !== "remove") {
-        throw new Error("invalid witness state operation");
+        throw new Error("invalid witness subject");
     }
 
     // ensure block is integer number
@@ -204,8 +257,10 @@ export function parseWitness(data: WitnessData): ParsedWitnessData {
         throw new Error("invalid target block");
     }
 
-    // ensure amount is a bigint
-    // TODO: figure out this check
+    // ensure amount is an integers, then create bigint
+    if (!/^\d*$/.test(amount)) {
+        throw new Error("invalid value for 'amount', should be integer");
+    }
     intAmount = BigInt(amount);
 
     // ensure address is valid eth address and remove checksum
@@ -226,35 +281,41 @@ export function parseWitness(data: WitnessData): ParsedWitnessData {
         throw new Error("expected publicKey for validator witnesses");
     } else if (subject === "validator" && publicKey !== null) {
         const pubKeyBuff = Buffer.from(publicKey, "base64");
-        if (pubKeyBuff.length !== 32) throw new Error("bad validator pubKey");
+        if (pubKeyBuff.length !== 32) { throw new Error("bad validator pubKey"); }
         parsedPublicKey = pubKeyBuff.toString("base64");
     }
 
     // valid if this point reached
     return {
         subject,
-        type,
         block,
         amount: intAmount,
         address: parsedAddress,
         publicKey: parsedPublicKey,
         id
-    }
+    };
 }
 
 /**
  * Add a new witness event to state, or add confirmation to existing
  * @todo: move logic from witness.ts to here
- * 
+ *
  * @param state {State} current state object
  * @param tx {ParsedWitnessData} the witness attestation tx being executed
  */
-export function addNewEvent(state: State, tx: ParsedWitnessData): boolean {
+export function addNewEvent(state: IState, tx: ParsedWitnessData): boolean {
     // destructure event data
-    const { subject, type, amount, block, address, publicKey, id } = tx;
+    const { subject, amount, block, address, publicKey, id } = tx;
+
+    // @todo
+    // temporarily ignore validator events
+    if (subject !== "poster") {
+        err("state", "TEMPORARY ignoring unsupported validator event attestation");
+        return false;
+    }
 
     // new events should have block > lastEvent
-    if (state.lastEvent[type] >= block) {
+    if (state.lastEvent >= block) {
         warn("state", "ignoring new event that may have been applied");
         return false;
     }
@@ -262,76 +323,68 @@ export function addNewEvent(state: State, tx: ParsedWitnessData): boolean {
     // if this is a new accepted event, 1 conf is added (for first report)
     state.events[block][id] = {
         subject,
-        type,
         address,
         amount,
-        publicKey: subject === "validator" ? publicKey : undefined,
+        publicKey: null, // subject === "validator" ? publicKey : null,
         conf: 1
     };
 
-    // if there is only one validator, immediatley apply event
+    // if there is only one validator, immediately apply event
     if (state.consensusParams.confirmationThreshold === 1) {
-        log("state", "immediately applying event in development mode");
+        Log("state", "immediately applying event in development mode");
 
-        switch(subject) {
-            case "poster": { 
+        switch (subject) {
+            case "poster": {
                 return applyPosterEvent(state, tx);
             }
-    
+
+            // @todo un-comment once implemented
+            /*
             case "validator": {
-                // temporary
-                err("state", "VALIDATOR TYPE NOT SUPPORTED YET");
                 return applyValidatorEvent(state, tx);
-            }
-    
+            }*/
+
             default: {
                 err("state", "unknown witness event subject");
-                return false; 
+                return false;
             }
         }
     }
 
-    log("state", "added vote for event (new)");
+    Log("state", "added vote for event (new)");
     return true;
 }
 
 /**
  * Used in `witness` transaction execution. Responsible for increasing the conf
- * conuter on pending events, and deterministically applying the event to state
+ * counter on pending events, and deterministically applying the event to state
  * if the required confirmation threshold (enough attestations) is reached.
- * 
+ *
  * @param state {State} the current deliverState object
  * @param tx {ParsedWitnessData} the witness transaction being executed
  */
 export function addConfMaybeApplyEvent(
-    state: State,
+    state: IState,
     tx: ParsedWitnessData
 ): boolean {
     // destructure event data
-    const { subject, type, block, id } = tx;
+    const { subject, block, id } = tx;
 
-    // will be true if sucessfully completed transition
+    // will be true if successfully completed transition
     let accepted: boolean;
-
-    // @todo does validator and poster subjects need to be tracked separately?
-    // todo: remove? move up the stack?
-    // if (state.lastEvent[type] >= block) {
-    //    err("state", "ignoring existing event that may have been applied");
-    //    return false;
-    //}
 
     // add a confirmation to the pending event
     state.events[block][id].conf += 1;
 
     // exit if the event hasn't received enough confirmations
     if (state.consensusParams.confirmationThreshold > state.events[block][id].conf) {
-        log("state", "added vote for event (existing)");
+        Log("state", "added vote for event (existing)");
         return true;
     }
 
     // otherwise, apply the confirmed event to state
-    switch(subject) {
-        case "poster": { 
+    switch (subject) {
+        case "poster": {
             accepted = applyPosterEvent(state, tx);
             break;
         }
@@ -345,7 +398,7 @@ export function addConfMaybeApplyEvent(
 
         default: {
             err("state", "unknown witness event subject");
-            accepted = false; 
+            accepted = false;
         }
     }
 
@@ -355,16 +408,16 @@ export function addConfMaybeApplyEvent(
 }
 
 /**
- * Used in `witness` transaction execution, where `witness.subject` is "poster". 
- * This function "applies" a pending, and recently confirmed witness event to 
+ * Used in `witness` transaction execution, where `witness.subject` is "poster".
+ * This function "applies" a pending, and recently confirmed witness event to
  * state, by updating the poster's balance in-state depending on the event type.
- * 
+ *
  * @param state {State} the current deliverState object
  * @param tx {ParsedWitnessData} the witness transaction being executed
  */
-export function applyPosterEvent(state: State, tx: ParsedWitnessData): boolean {
+export function applyPosterEvent(state: IState, tx: ParsedWitnessData): boolean {
     // destructure necessary event data
-    const { type, amount, block, address, id } = tx;
+    const { amount, block, address, id } = tx;
 
     // will be true if event is applied
     let accepted: boolean;
@@ -372,41 +425,33 @@ export function applyPosterEvent(state: State, tx: ParsedWitnessData): boolean {
     // check if poster already has an account
     if (state.posters.hasOwnProperty(address)) {
         // poster already has account, increase or decrease balance
-        switch (type) {
-            case "add": { state.posters[address].balance += amount; break; }
-            case "remove": { state.posters[address].balance -= amount; break; }
-            default: {
-                err("state", "recieved uknown type for poster subject");
-                return false; 
-            }
-        }
+        state.posters[address].balance = amount;
 
         // report what was done
-        log("state", "confirmed and applied event to state (existing poster)");
+        Log("state", "confirmed and applied event to state (existing poster)");
         accepted = true;
-    } else if (!state.posters.hasOwnProperty(address) && type === "add") {
+    } else if (!state.posters.hasOwnProperty(address)) {
         // create new account for poster
         state.posters[address] = {
             balance: BigInt(0),
-            orderLimit: null,
-            streamLimit: null
+            limit: null,
         };
 
         // add amount from event to balance
-        state.posters[address].balance += amount;
+        state.posters[address].balance = amount;
         // report what was done
-        log("state", "confirmed and applied event to state (new poster)");
+        Log("state", "confirmed and applied event to state (new poster)");
         accepted = true;
     } else {
         // unexpected case, for now will exit process
-        err("state", "unexpected: no poster account, but requesting withdrawl");
+        err("state", "unexpected: no poster account, but requesting withdrawal");
         accepted = false;
     }
 
     // don't prune events if no event accepted
-    if (!accepted) return false;
+    if (!accepted) { return false; }
 
-    // remove the pending event that was just appled
+    // remove the pending event that was just applied
     delete state.events[block][id];
 
     // remove event block if none left pending
@@ -415,45 +460,45 @@ export function applyPosterEvent(state: State, tx: ParsedWitnessData): boolean {
     }
 
     // when removing, also check if balance is now 0
-    if (type === "remove" && state.posters[address].balance === 0n) {
+    if (amount === 0n && state.posters[address].balance === 0n) {
         delete state.posters[address];
     }
 
     // update latest event, if update was applied
-    if (accepted) state.lastEvent[type] = block;
+    if (accepted) { state.lastEvent = block; }
 
     // if reached, accepted should be true
     return accepted;
 }
 
 /**
- * Used in `witness` transaction execution, where `witness.subject` is 
- * "validator". This function "applies" a pending, and recently confirmed 
- * witness event to state, by updating the validator's balance in-state 
+ * Used in `witness` transaction execution, where `witness.subject` is
+ * "validator". This function "applies" a pending, and recently confirmed
+ * witness event to state, by updating the validator's balance in-state
  * depending on the event type (add vs remove).
- * 
+ *
  * @param state {State} the current deliverState object
  * @param tx {ParsedWitnessData} the witness transaction being executed
  */
 export function applyValidatorEvent(
-    state: State,
+    state: IState,
     tx: ParsedWitnessData
 ): boolean {
     // destructure necessary event data
-    const { type, amount, block, address, id } = tx;
+    const { amount, block, address, id } = tx;
     return false;
 }
 
 /**
  * Creates a hash of a witness event, for validation inside state machine
- * 
+ *
  * @param tx a raw witness transaction
  */
 export function createWitnessEventHash(tx: WitnessData): string {
     const hashVals =
-        `${tx.subject}-${tx.type}-${tx.amount}-${tx.block}-` +
+        `${tx.subject}-${tx.amount}-${tx.block}-` +
         `${tx.address}-${tx.publicKey === null ? "null" : tx.publicKey}`;
-    
+
     // buffer input and create hash
     const hashBuffer = Buffer.from(hashVals);
     const hash = createHash("sha256").update(hashBuffer).digest("hex").slice(0, 16);
@@ -464,7 +509,7 @@ export function createWitnessEventHash(tx: WitnessData): string {
 
 /**
  * Creates a witness tx object from raw input data.
- * 
+ *
  * @param subject state modification subject (validator or poster)
  * @param type state modification type (add or remove)
  * @param amount amount of tokens (added or removed) to modify by
@@ -473,15 +518,12 @@ export function createWitnessEventHash(tx: WitnessData): string {
  * @param publicKey tendermint public key (only for validator witness tx's)
  */
 export function createWitnessEventObject(
-    subject: string,
-    type: string,
-    amount: string,
-    block: number,
-    address: string,
-    publicKey?: string
+    eventData: ParadigmEvent,
+    block: number
 ): WitnessData {
+    const { eventType } = eventData;
     // should never occur where subject is validator and key is blank
-    if (subject === "validator" && publicKey === undefined) {
+    if (eventType === "ValidatorRegistryUpdate" && eventData.tendermintPublicKey === undefined) {
         throw new Error("expected publicKey for validator witness event");
     }
 
@@ -489,27 +531,25 @@ export function createWitnessEventObject(
     let outputEvent: WitnessData;
 
     // check if poster or validator
-    switch (subject) {
-        case "poster": {
+    switch (eventType) {
+        case "PosterRegistryUpdate": {
             outputEvent = {
-                subject,
-                type,
-                amount,
+                subject: "poster",
+                amount: eventData.stake,
                 block,
-                address,
+                address: eventData.poster,
                 publicKey: null
-            }
+            };
             break;
         }
-        case "validator": {
+        case "ValidatorRegistryUpdate": {
             outputEvent = {
-                subject,
-                type,
-                amount,
+                subject: "validator",
+                amount: eventData.stake,
                 block,
-                address,
-                publicKey
-            }
+                address: eventData.owner,
+                publicKey: eventData.tendermintPublicKey
+            };
             break;
         }
         default: { return; }
@@ -517,8 +557,71 @@ export function createWitnessEventObject(
 
     // compute and add eventId to witness event
     const eventId = createWitnessEventHash(outputEvent);
-    outputEvent["id"] = eventId;
+    outputEvent.id = eventId;
 
     // return parsed and completed event object
     return outputEvent;
+}
+
+/**
+ * Generate a response for a valid ABCI tx
+ *
+ * This function returns an object that conforms to the `ResponseDeliverTx`
+ * and/or `ResponseCheckTx` interfaces.
+ *
+ * @param log string output from the tx execution function
+ * @param tags tags to be included in the tendermint chain
+ */
+export function validTx(
+    log?: string,
+    tags?: KVPair[]
+): ResponseDeliverTx | ResponseCheckTx {
+    const res: any = { code: 0, log, };
+
+    // add tags to response object, if included
+    if (tags && tags.length > 0) {
+        res.tags = tags;
+    }
+
+    // return constructed response object
+    return res;
+}
+
+/**
+ * Generate a response for an invalid ABCI tx.
+ *
+ * This function returns an object that conforms to the `ResponseDeliverTx`
+ * and/or `ResponseCheckTx` interfaces.
+ *
+ * Optionally, pass a third `code` parameter to override the default `invalid`
+ * code (1). If a 0 (the valid code) is passed in, the function will throw.
+ *
+ * @param logMsg string output from the tx execution function
+ * @param tags tags to be included in the tendermint chain
+ * @param code an optional non-0 code to override the default invalid code with
+ */
+export function invalidTx(
+    logMsg?: string,
+    tags?: KVPair[],
+    code?: number
+): ResponseDeliverTx | ResponseCheckTx {
+    // generate raw transaction object
+    const res: any = { log: logMsg };
+
+    // check for custom code
+    if (code && code === 0) {
+        throw Error("Cannot accept code '0' for invalid tx response.");
+    } else if (code && code !== 0) {
+        res.code = code;
+    } else {
+        res.code = 1;
+    }
+
+    // add tags to response object, if included
+    if (tags && tags.length > 0) {
+        res.tags = tags;
+    }
+
+    // return constructed response object
+    return res;
 }

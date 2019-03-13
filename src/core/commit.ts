@@ -2,28 +2,23 @@
  * ===========================
  * ParadigmCore: Blind Star
  * @name commit.ts
- * @module src/core
+ * @module core
  * ===========================
  *
  * @author Henry Harder
  * @date (initial)  21-January-2019
- * @date (modified) 21-January-2019
+ * @date (modified) 12-March-2019
  *
  * ABCI commit implementation.
 */
 
 // paradigmcore classes/types
-import { OrderTracker } from "../async/OrderTracker";
-import { Witness } from "../async/Witness";
-import { Hasher } from "../crypto/Hasher";
-
-// custom typings
+import { State } from "../state/State";
 import { ResponseCommit } from "../typings/abci";
 
 // util functions
-import { syncStates } from "./util/utils";
-import { log, err, warn } from "../util/log";
-import { bigIntReplacer } from "../util/static/bigIntUtils";
+import { err, log } from "../common/log";
+import { bigIntReplacer } from "../common/static/bigIntUtils";
 
 /**
  * Persist application state, synchronize commit and deliver states, and
@@ -33,10 +28,7 @@ import { bigIntReplacer } from "../util/static/bigIntUtils";
  */
 export function commitWrapper(
     deliverState: State,
-    commitState: State,
-    tracker: OrderTracker,
-    msg: LogTemplates,
-    witness: Witness
+    commitState: State
 ): () => ResponseCommit {
     return () => {
         // store string encoded state hash
@@ -44,59 +36,38 @@ export function commitWrapper(
 
         // perform commit responsibilities
         try {
-            // Calculate difference between cState and dState round height
-            const roundDiff = deliverState.round.number - commitState.round.number;
-
-            switch (roundDiff) {
-                // No rebalance proposal accepted in this round
-                case 0: { break; }
-
-                // Rebalance proposal accepted in this round
-                case 1: {
-                    // Load round parameters from state
-                    const newRound = deliverState.round.number;
-                    const newStart = deliverState.round.startsAt;
-                    const newEnd = deliverState.round.endsAt;
-
-                    // Synchronize staking period parameters
-                    // todo: this can't be a functino call from within SM
-                    witness.synchronize(newRound, newStart, newEnd);
-
-                    // Temporary
-                    console.log(`\n... current state: ${JSON.stringify(deliverState, bigIntReplacer)}\n`);
-                    break;
-                }
-
-                default: {
-                    // Commit state is more than 1 round ahead of deliver state
-                    warn("state", msg.abci.messages.roundDiff);
-                    break;
-                }
-            }
-
             // Increase last block height
             deliverState.lastBlockHeight += 1;
 
             // Generate new state hash and update
-            stateHash = Hasher.hashState(deliverState);
-            deliverState.lastBlockAppHash = stateHash;
+            stateHash = deliverState.generateAppHash();
 
-            // Trigger broadcast of orders and streams
-            // todo: this can't be a function call from SM
-            tracker.triggerBroadcast();
+            // @todo should the line below be here or in beginBlock?
+            // deliverState.lastBlockAppHash = stateHash;
+
+            // temporarily log state if a rebalance event occurred
+            // Round diff === 1 means rebalance tx included in block
+            const roundDiff = deliverState.round.number - commitState.round.number;
+            if (roundDiff === 1) {
+                console.log(`\nLATEST STATE:\n${JSON.stringify(deliverState, bigIntReplacer)}\n`);
+            }
 
             // Synchronize commit state from delivertx state
-            syncStates(deliverState, commitState);
+            commitState.acceptNew(deliverState.toJSON());
+
+            // write state contents to disk
+            commitState.writeToDisk();
 
             log(
                 "state",
-                `new state hash: ` + 
-                `${stateHash.toString("hex").slice(0,5)}...` +
+                `new state hash: ` +
+                `${stateHash.toString("hex").slice(0, 5)}...` +
                 `${stateHash.toString("hex").slice(-5)}`,
-                commitState.lastBlockHeight
+                commitState.lastBlockHeight,
+                stateHash.toString("hex").toUpperCase()
             );
         } catch (error) {
-            err("state", `${msg.abci.errors.broadcast}: ${error.message}`);
+            err("state", `commit failed for block #${deliverState.lastBlockHeight }: ${error.message}`);
         }
 
         // Return state's hash to be included in next block header

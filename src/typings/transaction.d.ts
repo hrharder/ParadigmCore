@@ -98,8 +98,7 @@ interface SignedStreamTx extends SignedTransaction {
  * transaction origin.
  */
 interface Proof {
-    from:       string;
-    fromAddr:   string;
+    valPubKey:  string; // base64 decoded bytes
     signature:  string;
 }
 
@@ -152,7 +151,6 @@ interface OrderPosterSignature {
  */
 interface WitnessData extends TransactionData {
     subject:    string; // 'poster' or 'validator'
-    type:       string; // 'add' or 'remove'
     amount:     string; // stringified bigint
     block:      number; // block number of event
     address:    string; // ethereum address of validator/poster
@@ -165,7 +163,24 @@ interface WitnessData extends TransactionData {
  */
 interface RebalanceData extends TransactionData {
     limits: Limits;
-    round:  RoundInfo;
+    round:  TxRoundInfo;
+}
+
+/**
+ * Round information in each rebalance proposal.
+ */
+interface TxRoundInfo {
+    /** Proposed round number (should be 1 + current) */
+    number: number;
+
+    /** Proposed number of orders to accept per period */
+    limit: number;
+
+    /** Proposed round starting block (Ethereum height) */
+    startsAt: number;
+
+    /** Proposed round ending block (Ethereum height) */
+    endsAt: number;
 }
 
 /**

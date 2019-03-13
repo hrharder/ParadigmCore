@@ -2,7 +2,7 @@
  * ===========================
  * ParadigmCore: Blind Star
  * @name order.ts
- * @module src/core/handlers
+ * @module core/handlers
  * ===========================
  *
  * @author Henry Harder
@@ -15,14 +15,13 @@
  */
 
 // ParadigmCore classes
-import { OrderTracker } from "../../async/OrderTracker";
 import { Hasher } from "../../crypto/Hasher";
-import { err, log, warn } from "../../util/log";
-import { Vote } from "../util/Vote";
 
 // ParadigmCore utilities
-import { messages as msg } from "../../util/static/messages";
-import { verifyOrder } from "../util/utils";
+import { ResponseCheckTx, ResponseDeliverTx } from "src/typings/abci";
+import { err, log, warn } from "../../common/log";
+import { messages as msg } from "../../common/static/messages";
+import { invalidTx, newKVPair, validTx, verifyOrder } from "../util/utils";
 
 /**
  * Performs light verification of OrderBroadcast transactions before accepting
@@ -31,7 +30,7 @@ import { verifyOrder } from "../util/utils";
  * @param tx    {SignedOrderTx} decoded transaction body
  * @param state {State}         current round state
  */
-export function checkOrder(tx: SignedOrderTx, state: State, Order) {
+export function checkOrder(tx: SignedOrderTx, state: IState, Order): ResponseCheckTx {
     let order: Order;   // Paradigm order object
     let poster: string; // Recovered poster address from signature
 
@@ -43,26 +42,26 @@ export function checkOrder(tx: SignedOrderTx, state: State, Order) {
         // Verify order size
         if (!verifyOrder(order, state)) {
             warn("mem", "rejected order that exceeds maximum size");
-            return Vote.invalid("order exceeds maximum size");
+            return invalidTx("order exceeds maximum size");
         }
 
         // Recover poster address
         poster = order.recoverPoster().toLowerCase();
     } catch (err) {
         warn("mem", msg.abci.errors.format);
-        return Vote.invalid(msg.abci.errors.format);
+        return invalidTx(msg.abci.errors.format);
     }
 
     // Does poster have a staked balance?
     if (
         state.posters.hasOwnProperty(poster) &&
-        state.posters[poster].orderLimit > 0n
+        state.posters[poster].limit > 0n
     ) {
         log("mem", msg.abci.messages.mempool);
-        return Vote.valid(`(unconfirmed) orderID: ${Hasher.hashOrder(order)}`);
+        return validTx(`(unconfirmed) orderID: ${Hasher.hashOrder(order)}`);
     } else {
         warn("mem", msg.abci.messages.noStake);
-        return Vote.invalid(msg.abci.messages.noStake);
+        return invalidTx(msg.abci.messages.noStake);
     }
 }
 
@@ -74,9 +73,10 @@ export function checkOrder(tx: SignedOrderTx, state: State, Order) {
  * @param state {State}         current round state
  * @param q     {OrderTracker}  valid order queue
  */
-export function deliverOrder(tx: SignedOrderTx, state: State, q: OrderTracker, Order) {
+export function deliverOrder(tx: SignedOrderTx, state: IState, Order): ResponseDeliverTx {
     let order: Order;   // Paradigm order object
     let poster: string; // Recovered poster address from signature
+    let tags: KVPair[] = [];
 
     // Construct order object, and recover poster signature
     try {
@@ -84,31 +84,33 @@ export function deliverOrder(tx: SignedOrderTx, state: State, q: OrderTracker, O
         poster = order.recoverPoster().toLowerCase();
     } catch (err) {
         warn("state", msg.abci.errors.format);
-        return Vote.invalid(msg.abci.errors.format);
+        return invalidTx(msg.abci.errors.format);
     }
 
     // Verify poster balance and modify state
     if (
         state.posters.hasOwnProperty(poster) &&
-        state.posters[poster].orderLimit > 0n
+        state.posters[poster].limit > 0n
     ) {
         // Hash order to generate orderID
-        const orderCopy = order.toJSON();
-        orderCopy.id = Hasher.hashOrder(order);
+        order.id = Hasher.hashOrder(order);
 
         // Begin state modification
-        state.posters[poster].orderLimit -= 1;
+        state.posters[poster].limit -= 1;
         state.orderCounter += 1;
+        state.round.limitUsed += 1;
         // End state modification
 
-        // Add order to block's broadcast queue
-        q.add(orderCopy);
+        // add tags (for stream/search)
+        const tag = newKVPair("order.id", order.id);
+        tags.push(tag);
 
+        // validate with OK res
         log("state", msg.abci.messages.verified);
-        return Vote.valid(`(confirmed) orderID: ${orderCopy.id}`);
+        return validTx(`orderID: ${order.id}`, tags);
     } else {
         // No stake or insufficient quota remaining
         warn("state", msg.abci.messages.noStake);
-        return Vote.invalid(msg.abci.messages.noStake);
+        return invalidTx(msg.abci.messages.noStake);
     }
 }
