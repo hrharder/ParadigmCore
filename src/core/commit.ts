@@ -2,7 +2,7 @@
  * ===========================
  * ParadigmCore: Blind Star
  * @name commit.ts
- * @module src/core
+ * @module core
  * ===========================
  *
  * @author Henry Harder
@@ -13,17 +13,12 @@
 */
 
 // paradigmcore classes/types
-import { Hasher } from "../crypto/Hasher";
 import { State } from "../state/State";
-import { Witness } from "../witness/Witness";
-
-// custom typings
 import { ResponseCommit } from "../typings/abci";
 
 // util functions
-import { err, log, warn } from "../common/log";
+import { err, log } from "../common/log";
 import { bigIntReplacer } from "../common/static/bigIntUtils";
-import { syncStates } from "./util/utils";
 
 /**
  * Persist application state, synchronize commit and deliver states, and
@@ -46,7 +41,9 @@ export function commitWrapper(
 
             // Generate new state hash and update
             stateHash = deliverState.generateAppHash();
-            deliverState.lastBlockAppHash = stateHash;
+
+            // @todo should the line below be here or in beginBlock?
+            // deliverState.lastBlockAppHash = stateHash;
 
             // temporarily log state if a rebalance event occurred
             // Round diff === 1 means rebalance tx included in block

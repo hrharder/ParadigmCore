@@ -18,7 +18,6 @@ import { Response as Res } from "./Response";
 
 // third party and stdlib
 import * as _ from "lodash";
-import { ResponseQuery } from "src/typings/abci";
 import * as WebSocket from "ws";
 
 /**
@@ -88,6 +87,12 @@ export function createResponse(result?: any, id?: string, error?: ValidationErro
     return res;
 }
 
+/**
+ * Filters non-`order` type transactions from an array of string JSON transactions
+ * and returns an array of parsed (objects) `order` transactions.
+ *
+ * @param txs an array of JSON tx strings
+ */
 export function parseOrdersForSubscription(txs: string[]): OrderData[] {
     const orders = [];
     txs.forEach((tx) => {

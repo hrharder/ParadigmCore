@@ -2,7 +2,7 @@
  * ===========================
  * ParadigmCore: Blind Star
  * @name utils.ts
- * @module src/core/util
+ * @module core/util
  * ===========================
  *
  * @author Henry Harder

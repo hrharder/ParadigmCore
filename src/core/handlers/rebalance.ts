@@ -2,7 +2,7 @@
  * ===========================
  * ParadigmCore: Blind Star
  * @name rebalance.ts
- * @module src/core/handlers
+ * @module core/handlers
  * ===========================
  *
  * @author Henry Harder

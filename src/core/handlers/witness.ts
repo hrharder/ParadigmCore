@@ -2,12 +2,12 @@
  * ===========================
  * ParadigmCore: Blind Star
  * @name witness.ts
- * @module src/core/handlers
+ * @module core/handlers
  * ===========================
  *
  * @author Henry Harder
  * @date (initial)  23-October-2018
- * @date (modified) 23-January-2019
+ * @date (modified) 13-March-2019
  *
  * Handler functions for verifying ABCI event Witness transactions,
  * originating from validator nodes. Implements state transition logic as
@@ -106,6 +106,12 @@ export function deliverWitness(tx: SignedWitnessTx, state: IState): ResponseDeli
         // create new event block, and add event to block
         state.events[block] = {};
         accepted = addNewEvent(state, parsedTx);
+
+        // delete the empty block entry we created if empty
+        // @todo move somewhere else
+        if (!accepted && Object.keys(state.events[block]).length === 0) {
+            delete state.events[block];
+        }
     }
 
     // so explicit because of possibility accepted never gets set

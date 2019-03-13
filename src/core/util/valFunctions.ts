@@ -1,8 +1,8 @@
 /**
  * ===========================
  * ParadigmCore: Blind Star
- * @name main.ts
- * @module src/util/static
+ * @name valFunctions.ts
+ * @module core/util
  * ===========================
  *
  * @author Henry Harder

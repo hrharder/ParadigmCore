@@ -12,15 +12,11 @@
  * Log message templates and statuses for various modules.
  */
 
-/* tslint:disable */
-
-const { WS_PORT, ABCI_PORT, API_PORT } = process.env;
-
 export let messages  = {
     general: {
         messages: {
             start:  "initialization complete, starting new block production"
-        }, 
+        },
         errors: {
             fatal:  "fatal error detected, exiting"
         }
@@ -31,10 +27,6 @@ export let messages  = {
             connect:    "failed establishing websocket connection",
             message:    "failed sending websocket message",
             fatal:      "fatal error starting websocket server, exiting"
-        },
-        messages: {
-            // connected:  `Connected to the OrderStream network at ${new Date().toLocaleString()}`,
-            // servStart:  `websocket server started on port ${WS_PORT}`,
         }
     },
     abci: {
@@ -45,7 +37,7 @@ export let messages  = {
             tmFatal:    "fatal error starting Tendermint core, exiting",
             broadcast:  "failed broadcasting orders (may require process termination)",
             txType:     "invalid transaction type rejected",
-            signature:  "error encountered recovering validator signature" 
+            signature:  "error encountered recovering validator signature"
         },
         messages: {
             incoming:   {
@@ -55,7 +47,6 @@ export let messages  = {
             mempool:    "new order passed mempool verification",
             noStake:    "new order rejected: invalid poster or no poster stake",
             verified:   "new order verified and added to OrderStream queue",
-            // servStart:  `abci server started on port ${ABCI_PORT}`,
             roundDiff:  "this round deliverTx state is more than 1 period ahead of committed state",
             badSig:     "rejected ABCI transaction with invalid validator signature"
         }
@@ -66,10 +57,6 @@ export let messages  = {
             parsing:    "failed parsing order, check format and try again",
             response:   "failed sending http response",
             fatal:      "fatal error starting API server, exiting"
-        },
-        messages: {
-            // starting:   "starting http api server...",
-            // servStart:  `api server started on port ${API_PORT}`
         }
     },
     rebalancer: {
@@ -88,4 +75,4 @@ export let messages  = {
             badBlockEvent:  "bad block event"
         }
     }
-}
+};

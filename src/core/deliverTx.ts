@@ -2,12 +2,12 @@
  * ===========================
  * ParadigmCore: Blind Star
  * @name deliverTx.ts
- * @module src/core
+ * @module core
  * ===========================
  *
  * @author Henry Harder
  * @date (initial)  21-January-2019
- * @date (modified) 22-January-2019
+ * @date (modified) 13-March-2019
  *
  * ABCI deliverTx implementation.
 **/
