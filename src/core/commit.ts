@@ -36,9 +36,6 @@ export function commitWrapper(
 
         // perform commit responsibilities
         try {
-            // Generate new state hash and update
-            stateHash = deliverState.generateAppHash();
-
             // temporarily log state if a rebalance event occurred
             // Round diff === 1 means rebalance tx included in block
             const roundDiff = deliverState.round.number - commitState.round.number;
@@ -46,9 +43,14 @@ export function commitWrapper(
                 console.log(`\nLATEST STATE:\n${JSON.stringify(deliverState, bigIntReplacer)}\n`);
             }
 
-            // Synchronize commit state from delivertx state
+            // increment in-state height
             deliverState.lastBlockHeight++;
+
+            // Generate new state hash and update
+            stateHash = deliverState.generateAppHash();
             deliverState.lastBlockAppHash = stateHash;
+
+            // sync states
             commitState.acceptNew(deliverState.toJSON());
 
             // write state contents to disk
