@@ -36,9 +36,6 @@ export function commitWrapper(
 
         // perform commit responsibilities
         try {
-            // Increase last block height
-            deliverState.lastBlockHeight += 1;
-
             // Generate new state hash and update
             stateHash = deliverState.generateAppHash();
 
@@ -51,6 +48,9 @@ export function commitWrapper(
             if (roundDiff === 1) {
                 console.log(`\nLATEST STATE:\n${JSON.stringify(deliverState, bigIntReplacer)}\n`);
             }
+            // update state with last commit
+            deliverState.lastBlockAppHash = stateHash;
+            deliverState.lastBlockHeight++;
 
             // Synchronize commit state from delivertx state
             commitState.acceptNew(deliverState.toJSON());

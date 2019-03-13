@@ -28,10 +28,6 @@ import { doForEachValidator } from "./util/valFunctions";
  */
 export function beginBlockWrapper(state: State): (r) => ResponseBeginBlock {
     return (request) => {
-        // load last AppHash into state
-        const lastAppHash = Buffer.from(request.header.appHash, "base64");
-        state.lastBlockAppHash = lastAppHash;
-
         // parse height and proposer from header
         const currHeight: number = Number(request.header.height);
         const proposer: string = request.header.proposerAddress.toString("hex");
