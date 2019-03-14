@@ -7,7 +7,7 @@ steps:
     '-t',
     'gcr.io/paradigmcore/paradigmcore:base-$SHORT_SHA',
     '-f',
-    './pcrsc/docker/Dockerfile',
+    './pcsrc/docker/Dockerfile',
     './pcsrc'
   ]
 - name: 'gcr.io/cloud-builders/docker'
