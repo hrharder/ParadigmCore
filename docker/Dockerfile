@@ -15,7 +15,6 @@ COPY . .
 
 # install deps
 RUN yarn global add node-gyp scrypt typescript
-RUN tree
 RUN yarn
 
 # build source to executable js
