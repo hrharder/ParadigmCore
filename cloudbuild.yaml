@@ -2,7 +2,7 @@ steps:
 - name: "gcr.io/cloud-builders/git"
   args: ["clone", "https://github.com/ParadigmFoundation/ParadigmCore", "./pcsrc"]
 - name: "ubuntu"
-  args: ["mv", "./pcsrc/* ../"]
+  args: ["mv", "./pcsrc/*",  "../"]
 - name: "ubuntu"
   args: ["rm", "-r", "./pcsrc"]
 - name: 'gcr.io/cloud-builders/docker'
