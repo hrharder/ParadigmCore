@@ -1,8 +1,10 @@
 steps:
-- name: "ubuntu"
-  args: ['rm',  '-rf',  './*']
 - name: "gcr.io/cloud-builders/git"
-  args: ["clone", "https://github.com/ParadigmFoundation/ParadigmCore", "."]
+  args: ["clone", "https://github.com/ParadigmFoundation/ParadigmCore", "./pcsrc"]
+- name: "ubuntu"
+  args: ["mv", "./pcsrc/* ../"]
+- name: "ubuntu"
+  args: ["rm", "-r", "./pcsrc"]
 - name: 'gcr.io/cloud-builders/docker'
   args: [
     'build',
