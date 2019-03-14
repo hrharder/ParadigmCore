@@ -21,7 +21,7 @@ RUN yarn
 RUN yarn build
 
 # update tendermint binary for correct architecture
-RUN node ./lib/tendermint/bin/download.js $TENDERMINT_VERSION
+RUN node ./lib/tendermint/bin/download.js ${TENDERMINT_VERSION}
 
 # ensure chain is in genesis state
 RUN yarn reset
