@@ -21,6 +21,7 @@ import { pubToAddr } from "./util/valFunctions";
 
 import * as _ from "lodash";
 import { State } from "../state/State";
+import { bigIntReplacer } from "../common/static/bigIntUtils";
 
 /**
  * Called once upon chain initialization. Sets initial validators and consensus
@@ -79,6 +80,7 @@ export function initChainWrapper(
 
         // synchronize states upon network genesis
         commitState.acceptNew(deliverState.toJSON());
+
         // Do not change any other parameters here
         return {};
     };
