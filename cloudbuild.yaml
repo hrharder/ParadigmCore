@@ -1,18 +1,14 @@
 steps:
 - name: "gcr.io/cloud-builders/git"
   args: ["clone", "https://github.com/ParadigmFoundation/ParadigmCore", "./pcsrc"]
-- name: "ubuntu"
-  args: ["mv", "./pcsrc/*",  "../"]
-- name: "ubuntu"
-  args: ["rm", "-r", "./pcsrc"]
 - name: 'gcr.io/cloud-builders/docker'
   args: [
     'build',
     '-t',
     'gcr.io/paradigmcore/paradigmcore:base-$SHORT_SHA',
     '-f',
-    './docker/Dockerfile',
-    '.'
+    './pcrsc/docker/Dockerfile',
+    './pcsrc'
   ]
 - name: 'gcr.io/cloud-builders/docker'
   args: [
@@ -20,7 +16,7 @@ steps:
     '-t',
     'gcr.io/paradigmcore/paradigmcore:testnet-$SHORT_SHA',
     '-f',
-    './docker/Testnet.Dockerfile',
-    '.'
+    './pcsrc/docker/Testnet.Dockerfile',
+    './pcsrc'
   ]
 images: ['gcr.io/paradigmcore/paradigmcore:base-$SHORT_SHA', 'gcr.io/paradigmcore/paradigmcore:testnet-$SHORT_SHA']
