@@ -199,7 +199,8 @@ function fail(msg, error, missing) {
                     "\tTry starting with a template from $PCHOME/lib"
                 );
             } else if (!env.TM_HOME || env.TM_HOME === "") {
-                appendFileSync(".env", `\nTM_HOME="${tmhome}"\n`);
+                appendFileSync(".env", `TM_HOME="${tmhome}"\n`);
+                appendFileSync(".env", `PC_HOME="${pchome}"\n`);
             } else {
                 write("TM_HOME already set, skipping.");
             }
@@ -213,7 +214,7 @@ function fail(msg, error, missing) {
         write("No tendermint install found, downloading...");
         try {
             let upV = readFileSync(`${tmhome}/bin/version`).toString("utf8");
-            execSync(`node ${tmhome}/bin/download.js`);
+            execSync(`node ${tmhome}/bin/download.js`, { stdio: "ignore"});
             execSync(`node ${tmhome}/bin/update.js ${upV}`);
             write("Successfully downloaded and updated tendermint.");
         } catch (error) {
