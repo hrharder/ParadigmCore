@@ -1,0 +1,20 @@
+steps:
+- name: 'gcr.io/cloud-builders/git'
+  args: ['clone', 'https://github.com/ParadigmFoundation/ParadigmCore', "./paradigmcore"]
+- name: 'gcr.io/cloud-builders/docker'
+  args: [
+    'build',
+    '-t',
+    'gcr.io/paradigmcore/paradigmcore:base-$SHORT_SHA',
+    '-f docker/Dockerfile',
+    '.'
+  ]
+- name: 'gcr.io/cloud-builders/docker'
+  args: [
+    'build',
+    '-t',
+    'gcr.io/paradigmcore/paradigmcore:testnet-$SHORT_SHA',
+    '-f docker/Testnet.Dockerfile',
+    '.'
+  ]
+images: ['gcr.io/paradigmcore/paradigmcore:base-$SHORT_SHA', 'gcr.io/paradigmcore/paradigmcore:testnet-$SHORT_SHA']

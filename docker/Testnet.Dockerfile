@@ -29,10 +29,6 @@ RUN node ./lib/tendermint/bin/download.js ${TENDERMINT_VERSION}
 # get genesis file for correct test network
 RUN curl ${GENESIS_PATH} > ./lib/tendermint/config/genesis.json
 
-# debug
-RUN ls -la
-RUN cat ./lib/tendermint/config/genesis.json
-
 # ensure chain is in genesis state
 RUN yarn reset
 
