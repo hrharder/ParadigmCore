@@ -29,8 +29,12 @@ import { doForEachValidator } from "./util/valFunctions";
 export function beginBlockWrapper(state: State): (r) => ResponseBeginBlock {
     return (request) => {
         // parse height and proposer from header
+
         const currHeight: number = Number(request.header.height);
         const proposer: string = request.header.proposerAddress.toString("hex");
+
+        state.lastBlockAppHash = request.header.appHash;
+        state.lastBlockHeight = currHeight - 1;
 
         // store array of last votes
         const lastVotes: object[] | undefined = request.lastCommitInfo.votes;

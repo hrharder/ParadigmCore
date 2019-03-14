@@ -43,12 +43,10 @@ export function commitWrapper(
                 console.log(`\nLATEST STATE:\n${JSON.stringify(deliverState, bigIntReplacer)}\n`);
             }
 
-            // increment in-state height
-            deliverState.lastBlockHeight++;
-
             // Generate new state hash and update
             stateHash = deliverState.generateAppHash();
-            deliverState.lastBlockAppHash = stateHash;
+            // deliverState.lastBlockAppHash = stateHash;
+            // state.lastBlockHeight++;
 
             // sync states
             commitState.acceptNew(deliverState.toJSON());
@@ -61,7 +59,7 @@ export function commitWrapper(
                 `new state hash: ` +
                 `${stateHash.toString("hex").slice(0, 5)}...` +
                 `${stateHash.toString("hex").slice(-5)}`,
-                commitState.lastBlockHeight,
+                commitState.lastBlockHeight + 1,
                 stateHash.toString("hex").toUpperCase()
             );
         } catch (error) {
