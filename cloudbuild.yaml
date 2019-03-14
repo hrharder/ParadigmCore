@@ -5,7 +5,7 @@ steps:
   args: [
     'build',
     '-t',
-    'gcr.io/paradigmcore/paradigmcore:base-$BRANCH_NAME-$SHORT_SHA',
+    'gcr.io/paradigmcore/base:$BRANCH_NAME-$SHORT_SHA',
     '-f',
     './pcsrc/docker/Dockerfile',
     './pcsrc'
@@ -14,9 +14,9 @@ steps:
   args: [
     'build',
     '-t',
-    'gcr.io/paradigmcore/paradigmcore:testnet-$BRANCH_NAME-$SHORT_SHA',
+    'gcr.io/paradigmcore/testnet:$BRANCH_NAME-$SHORT_SHA',
     '-f',
     './pcsrc/docker/Testnet.Dockerfile',
     './pcsrc'
   ]
-images: ['gcr.io/paradigmcore/paradigmcore:base-$BRANCH_NAME-$SHORT_SHA', 'gcr.io/paradigmcore/paradigmcore:testnet-$BRANCH_NAME-$SHORT_SHA']
+images: [ 'gcr.io/paradigmcore/base:$BRANCH_NAME-$SHORT_SHA', 'gcr.io/paradigmcore/testnet-$BRANCH_NAME-$SHORT_SHA' ]
