@@ -1,6 +1,6 @@
 steps:
 - name: "gcr.io/cloud-builders/git"
-  args: ["init"]
+  args: ["clone", "https://github.com/ParadigmFoundation/ParadigmCore", "."]
 - name: 'gcr.io/cloud-builders/docker'
   args: [
     'build',
