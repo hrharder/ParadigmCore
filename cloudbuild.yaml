@@ -6,7 +6,8 @@ steps:
     'build',
     '-t',
     'gcr.io/paradigmcore/paradigmcore:base-$SHORT_SHA',
-    '-f ./docker/Dockerfile',
+    '-f',
+    './docker/Dockerfile',
     '.'
   ]
 - name: 'gcr.io/cloud-builders/docker'
@@ -14,7 +15,8 @@ steps:
     'build',
     '-t',
     'gcr.io/paradigmcore/paradigmcore:testnet-$SHORT_SHA',
-    '-f ./docker/Testnet.Dockerfile',
+    '-f',
+    './docker/Testnet.Dockerfile',
     '.'
   ]
 images: ['gcr.io/paradigmcore/paradigmcore:base-$SHORT_SHA', 'gcr.io/paradigmcore/paradigmcore:testnet-$SHORT_SHA']
