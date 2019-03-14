@@ -1,6 +1,8 @@
 steps:
+- name: "ubuntu"
+  args: ["if", '[ "$BRANCH_NAME" != "master" ];', 'then exit 1;', 'fi']
 - name: "gcr.io/cloud-builders/git"
-  args: ["clone", "-b", "v0.8-finalize", "https://github.com/ParadigmFoundation/ParadigmCore", "./pcsrc"]
+  args: ["clone", "-b", "$BRANCH_NAME", "https://github.com/ParadigmFoundation/ParadigmCore", "./pcsrc"]
 - name: 'gcr.io/cloud-builders/docker'
   args: [
     'build',
