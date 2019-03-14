@@ -1,6 +1,6 @@
 steps:
 - name: "ubuntu"
-  args: ['rm -rf ./*']
+  args: ['rm',  '-rf',  './*']
 - name: "gcr.io/cloud-builders/git"
   args: ["clone", "https://github.com/ParadigmFoundation/ParadigmCore", "."]
 - name: 'gcr.io/cloud-builders/docker'
