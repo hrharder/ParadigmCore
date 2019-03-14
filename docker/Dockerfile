@@ -10,7 +10,7 @@ WORKDIR /usr/src/paradigmcore
 # copy source
 COPY package.json ./
 COPY yarn.lock ./
-COPY Docker.env .env
+COPY docker/Docker.env .env
 COPY . .
 
 # install deps
