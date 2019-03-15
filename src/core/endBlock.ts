@@ -65,6 +65,9 @@ export function endBlockWrapper(state: IState): (r) => ResponseEndBlock {
             if (!validator.applied) { needToUpdate = true; }
         });
 
+        // update height
+        state.lastBlockHeight = parseInt(request.height.toString(), 10);
+
         // return validator updates, if any
         return {
             validatorUpdates: []
