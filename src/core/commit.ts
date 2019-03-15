@@ -44,10 +44,12 @@ export function commitWrapper(
             }
 
             // Generate new state hash and update
-            deliverState.lastBlockAppHash = deliverState.generateAppHash();
+            // deliverState.lastBlockAppHash = deliverState.generateAppHash();
 
             // sync states
             commitState.acceptNew(deliverState.toJSON());
+
+            commitState.lastBlockAppHash = commitState.generateAppHash();
 
             // write state contents to disk
             commitState.writeToDisk();

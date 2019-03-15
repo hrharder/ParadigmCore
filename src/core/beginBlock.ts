@@ -31,8 +31,10 @@ export function beginBlockWrapper(state: State): (r) => ResponseBeginBlock {
         // parse height and proposer from header
         const currHeight: number = Number(request.header.height);
         const proposer: string = request.header.proposerAddress.toString("hex");
+        const appHash: Buffer = Buffer.from(request.header.appHash, "base64");
 
         // set current height in deliverState;
+        state.lastBlockAppHash = appHash;
         state.lastBlockHeight = currHeight;
 
         // store array of last votes
