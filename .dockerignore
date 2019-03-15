@@ -1,5 +1,13 @@
 node_modules
-.env
+docker
 dist
+docs
+test
+
+.env
 state.json
+cloudbuild.yaml
+README.md
+LICENSE
+
 lib/tendermint

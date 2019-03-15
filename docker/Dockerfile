@@ -7,9 +7,7 @@ ENV TENDERMINT_VERSION=0.29.0
 # set homedir
 WORKDIR /usr/src/paradigmcore
 
-# copy source
-COPY package.json ./
-COPY yarn.lock ./
+# copy source and supporting files
 COPY docker/Docker.env .env
 COPY . .
 

@@ -44,7 +44,6 @@ export function commitWrapper(
             }
 
             // Generate new state hash and update
-            deliverState.lastBlockHeight++;
             deliverState.lastBlockAppHash = deliverState.generateAppHash();
 
             // sync states
