@@ -30,7 +30,6 @@ import { State } from "../state/State";
  */
 export function initChainWrapper(
     deliverState: State,
-    commitState: State,
     params: ConsensusParams
 ): (r) => ResponseInitChain {
     // destructure initial consensus parameters
@@ -76,9 +75,6 @@ export function initChainWrapper(
             maxOrderBytes,
             confirmationThreshold: computeConf(request.validators.length),
         };
-
-        // synchronize states upon network genesis
-        commitState.acceptNew(deliverState.toJSON());
 
         // Do not change any other parameters here
         return {};

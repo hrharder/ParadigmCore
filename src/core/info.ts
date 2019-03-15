@@ -24,7 +24,9 @@ import { ResponseInfo } from "../typings/abci";
  *
  * @param request {RequestInfo}    info request
  */
-export function infoWrapper(state: State, version: string): (r) => Promise<ResponseInfo> {
+export function infoWrapper(state: State, inVersion: string): (r) => Promise<ResponseInfo> {
+    const data = "ParadigmCore";
+    const version = inVersion;
     return async (request) => {
         try {
             await state.readFromDisk();
@@ -32,11 +34,10 @@ export function infoWrapper(state: State, version: string): (r) => Promise<Respo
             warn("api", "failed to load state from disk during info");
             warn("api", `provided error message: ${error.message}`);
         }
-        return {
-            data: "ParadigmCore (alpha)",
-            lastBlockAppHash: state.lastBlockAppHash,
-            lastBlockHeight: state.lastBlockHeight,
-            version,
-        };
+        let { lastBlockAppHash, lastBlockHeight } = state;
+        if (lastBlockHeight === null) {
+            lastBlockHeight = 0;
+        }
+        return { data, version, lastBlockAppHash, lastBlockHeight };
     };
 }

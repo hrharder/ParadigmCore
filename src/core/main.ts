@@ -52,8 +52,8 @@ export async function start(options: ParadigmCoreOptions): Promise<null> {
         let Order = options.paradigm.Order;
 
         // Load state objects (performs initial write, if necessary)
-        let dState = new State(true);  // deliverState is read-only
-        let cState = new State(false); // only commit state can write to disk
+        let dState = new State(false);
+        let cState = new State(true); // commit state is read-only
 
         // Load initial consensus params
         let consensusParams: ConsensusParams = {
@@ -70,10 +70,10 @@ export async function start(options: ParadigmCoreOptions): Promise<null> {
             query: queryWrapper(cState),
 
             // called at genesis
-            initChain: initChainWrapper(dState, cState, consensusParams),
+            initChain: initChainWrapper(dState, consensusParams),
 
             // mempool verification, pre-gossip
-            checkTx: checkTxWrapper(cState, Order),
+            checkTx: checkTxWrapper(dState, Order),
 
             // roundstep: [ beginBlock, deliverTx[, ...], endBlock, commit ]
             beginBlock: beginBlockWrapper(dState),

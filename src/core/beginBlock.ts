@@ -34,11 +34,12 @@ export function beginBlockWrapper(state: State): (r) => ResponseBeginBlock {
         const appHash: Buffer = Buffer.from(request.header.appHash, "base64");
 
         // set current height in deliverState;
-        state.lastBlockAppHash = appHash;
+        // state.lastBlockAppHash = appHash;
         state.lastBlockHeight = currHeight;
 
         // store array of last votes
         const lastVotes: object[] | undefined = request.lastCommitInfo.votes;
+        console.log(JSON.stringify(request.lastCommitInfo));
 
         // parse validators that voted on the last block, update values
         if (lastVotes !== undefined && lastVotes.length > 0) {
