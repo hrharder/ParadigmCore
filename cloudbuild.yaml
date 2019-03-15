@@ -19,4 +19,21 @@ steps:
     './pcsrc/docker/Testnet.Dockerfile',
     './pcsrc'
   ]
-images: [ 'gcr.io/paradigmcore/base:$BRANCH_NAME-$SHORT_SHA', 'gcr.io/paradigmcore/testnet:$BRANCH_NAME-$SHORT_SHA' ]
+- name: "gcr.io/cloud-builders/docker"
+  args: [
+    "tag",
+    'gcr.io/paradigmcore/testnet:$BRANCH_NAME-$SHORT_SHA',
+    'gcr.io/paradigmcore/testnet:latest',
+  ]
+- name: "gcr.io/cloud-builders/docker"
+  args: [
+    "tag",
+    'gcr.io/paradigmcore/base:$BRANCH_NAME-$SHORT_SHA',
+    'gcr.io/paradigmcore/base:latest',
+  ]
+images: [
+  'gcr.io/paradigmcore/base:$BRANCH_NAME-$SHORT_SHA',
+  'gcr.io/paradigmcore/testnet:$BRANCH_NAME-$SHORT_SHA',
+  'gcr.io/paradigmcore/base:latest',
+  'gcr.io/paradigmcore/testnet:latest'
+]
