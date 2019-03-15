@@ -33,6 +33,9 @@ export function beginBlockWrapper(state: State): (r) => ResponseBeginBlock {
         const proposer: string = request.header.proposerAddress.toString("hex");
         const appHash: Buffer = Buffer.from(request.header.appHash, "base64");
 
+        state.lastBlockHeight = currHeight;
+        state.lastBlockAppHash = appHash; // Buffer.alloc(0);
+
         // store array of last votes
         const lastVotes: object[] | undefined = request.lastCommitInfo.votes;
 

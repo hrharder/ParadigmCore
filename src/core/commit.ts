@@ -48,7 +48,6 @@ export function commitWrapper(
 
             // generate state hash
             stateHash = deliverState.generateAppHash();
-            deliverState.lastBlockAppHash = stateHash;
 
             // write state contents to disk
             deliverState.writeToDisk();

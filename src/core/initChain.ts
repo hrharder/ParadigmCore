@@ -29,7 +29,7 @@ import { State } from "../state/State";
  * @param request {RequestInitChain}    genesis information
  */
 export function initChainWrapper(
-    deliverState: State,
+    state: State,
     params: ConsensusParams
 ): (r) => ResponseInitChain {
     // destructure initial consensus parameters
@@ -50,8 +50,8 @@ export function initChainWrapper(
             const power: number = Number(validator.power);
 
             // Create entry if validator has not voted yet
-            if (!(deliverState.validators.hasOwnProperty(nodeId))) {
-                deliverState.validators[nodeId] = {
+            if (!(state.validators.hasOwnProperty(nodeId))) {
+                state.validators[nodeId] = {
                     balance: BigInt(-1),
                     power,
                     publicKey: pubKey,
@@ -68,7 +68,7 @@ export function initChainWrapper(
         });
 
         // set initial consensus parameters
-        deliverState.consensusParams = {
+        state.consensusParams = {
             finalityThreshold,
             periodLength,
             periodLimit,
