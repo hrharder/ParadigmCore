@@ -139,7 +139,7 @@ export class State {
         this.validators = {};
         this.lastEvent = null;
         this.orderCounter = null;
-        this.lastBlockHeight = null;
+        this.lastBlockHeight = 0;
         this.lastBlockAppHash = null;
 
         // after setting genesis state, read from disk if file present
