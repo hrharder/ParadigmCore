@@ -1,14 +1,12 @@
 steps:
-- name: "gcr.io/cloud-builders/git"
-  args: ["clone", "-b", "$BRANCH_NAME", "https://github.com/ParadigmFoundation/ParadigmCore", "./pcsrc"]
 - name: 'gcr.io/cloud-builders/docker'
   args: [
     'build',
     '-t',
     'gcr.io/paradigmcore/base:$BRANCH_NAME-$SHORT_SHA',
     '-f',
-    './pcsrc/docker/Dockerfile',
-    './pcsrc'
+    './docker/Dockerfile',
+    './'
   ]
 - name: 'gcr.io/cloud-builders/docker'
   args: [
@@ -16,8 +14,8 @@ steps:
     '-t',
     'gcr.io/paradigmcore/testnet:$BRANCH_NAME-$SHORT_SHA',
     '-f',
-    './pcsrc/docker/Testnet.Dockerfile',
-    './pcsrc'
+    './docker/Testnet.Dockerfile',
+    './'
   ]
 - name: "gcr.io/cloud-builders/docker"
   args: [
