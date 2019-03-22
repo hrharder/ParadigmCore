@@ -1,3 +1,7 @@
+---
+title: Rebalance overview
+---
+
 # ParadigmCore `rebalance` overview
 
 This document exists to outline and explain the `rebalance` transaction, its purpose within ParadigmCore, and the mechanism of it's implementation.
