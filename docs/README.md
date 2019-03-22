@@ -12,6 +12,7 @@ Jump into ParadigmCore by following one of the links below:
 - [Quick start (install/setup)](./install.md)
 - [Run a full node (tutorial)](./tutorial.md)
 - [Source code (on GitHub)](https://github.com/ParadigmFoundation/ParadigmCore)
+- [JSONRPC/WebSocket API reference](./stream-api-reference.md)
 
 ## Current features
 
