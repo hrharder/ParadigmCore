@@ -17,8 +17,11 @@ COPY docker/base.env ./.env
 RUN yarn global add node-gyp scrypt typescript
 RUN yarn
 
+# compile source files
+RUN yarn build
+
 # allow API traffic
 EXPOSE 4242
 EXPOSE 4243
 
-CMD ["yarn", "setup"]
+CMD ["yarn", "launch"]

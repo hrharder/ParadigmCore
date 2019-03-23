@@ -149,6 +149,11 @@ function checkReqs(reqs, env){
 
 // only called if all setup completes
 function done() {
+    console.log(c.bgWhite.black.bold(`\n\t~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ IMPORTANT NODE INFO ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n`))
+    console.log(`\t${c.bgRed.black("PRIVATE KEY: ")}\t${c.redBright(process.env.PRIV_KEY)}\n`)
+    console.log(`\t${c.bgBlack.underline.white("PUBLIC KEY: ")}\t${c.greenBright(process.env.PUB_KEY)}\n`)
+    console.log(`\t${c.bgBlack.underline.white("NODE ID/ADDR: ")}\t${c.greenBright(process.env.NODE_ID)}`)
+    console.log(c.bgWhite.black.bold(`\n\t~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n`))
     console.log(c.green.bold("\n\tParadigmCore setup completed!"));
     console.log(c.green.bold("\n\tStart your node with `yarn launch` or `npm run launch`.\n"));
     process.exit(0);
