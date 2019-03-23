@@ -9,4 +9,5 @@ cloudbuild.yaml
 README.md
 LICENSE
 
-lib/tendermint
+lib/config
+lib/data

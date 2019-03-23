@@ -51,7 +51,6 @@
   "devDependencies": {
     "@types/jest": "^23.3.9",
     "jest": "^23.6.0",
-    "json-schema-to-typescript": "^6.1.1",
     "ts-jest": "^23.10.4",
     "typedoc": "^0.14.2",
     "typedoc-plugin-markdown": "^1.1.26"

@@ -4,33 +4,30 @@ FROM node:latest
 # tendermint version (duh)
 ENV TENDERMINT_VERSION=0.29.0
 
-# net path to current genesis file
-ENV GENESIS_PATH=https://raw.githubusercontent.com/ParadigmFoundation/blind-star-testnet/master/genesis.json
-
 # set homedir
 WORKDIR /usr/src/paradigmcore
 
 # copy source
 COPY package.json ./
 COPY yarn.lock ./
-COPY docker/Docker.testnet.env .env
 COPY . .
-
-# install deps
+COPY docker/testnet.env ./.env
+    
+# install global and package deps
 RUN yarn global add node-gyp scrypt typescript
 RUN yarn
+
+# copy blind-star test-net genesis file and node config
+COPY docker/testnet.config.toml ./lib/tendermint/config/config.toml
+COPY docker/testnet.genesis.json ./lib/tendermint/config/genesis.json
 
 # build source to executable js
 RUN yarn build
 
-# update tendermint binary for correct architecture
-RUN node ./lib/tendermint/bin/download.js ${TENDERMINT_VERSION}
-
-# get genesis file for correct test network
-RUN curl ${GENESIS_PATH} > ./lib/tendermint/config/genesis.json
-
-# ensure chain is in genesis state
-RUN yarn reset
+# log the node's public key 
+RUN echo && echo "~~~~~~~~ NODE KEY BELOW ~~~~~~~~" && \
+    cat ./lib/tendermint/config/priv_validator_key.json && \
+    echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" && echo 
 
 # allow API traffic
 EXPOSE 4242

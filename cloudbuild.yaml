@@ -5,7 +5,7 @@ steps:
     '-t',
     'gcr.io/paradigmcore/base:$BRANCH_NAME-$SHORT_SHA',
     '-f',
-    './docker/Dockerfile',
+    './docker/base.dockerfile',
     './'
   ]
 - name: 'gcr.io/cloud-builders/docker'
@@ -14,7 +14,16 @@ steps:
     '-t',
     'gcr.io/paradigmcore/testnet:$BRANCH_NAME-$SHORT_SHA',
     '-f',
-    './docker/Testnet.Dockerfile',
+    './docker/testnet.dockerfile',
+    './'
+  ]
+- name: 'gcr.io/cloud-builders/docker'
+  args: [
+    'build',
+    '-t',
+    'gcr.io/paradigmcore/testnet-seed:$BRANCH_NAME-$SHORT_SHA',
+    '-f',
+    './docker/testnet-seed.dockerfile',
     './'
   ]
 - name: "gcr.io/cloud-builders/docker"

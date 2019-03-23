@@ -21,7 +21,7 @@ require("dotenv").config();
 import * as Paradigm from "paradigm-connect";
 
 // Standard lib and 3rd party NPM modules
-import * as tendermint from "../lib/tendermint";
+import * as tendermint from "tendermint-node";
 const Web3 = require("web3");
 
 // ParadigmCore classes
