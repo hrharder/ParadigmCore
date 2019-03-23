@@ -57,6 +57,8 @@ export function preVerifyTx(tx: SignedTransaction, state: IState): boolean {
 
     // check that signing party is an active validator
     if (!state.validators.hasOwnProperty(valNodeId)) {
+        console.log(`${JSON.stringify(state.validators, null, 2)}`);
+        console.log(valNodeId);
         return false;
     }
 
@@ -307,13 +309,6 @@ export function addNewEvent(state: IState, tx: ParsedWitnessData): boolean {
     // destructure event data
     const { subject, amount, block, address, publicKey, id } = tx;
 
-    // @todo
-    // temporarily ignore validator events
-    if (subject !== "poster") {
-        err("state", "TEMPORARY ignoring unsupported validator event attestation");
-        return false;
-    }
-
     // new events should have block > lastEvent
     if (state.lastEvent >= block) {
         warn("state", "ignoring new event that may have been applied");
@@ -339,10 +334,9 @@ export function addNewEvent(state: IState, tx: ParsedWitnessData): boolean {
             }
 
             // @todo un-comment once implemented
-            /*
             case "validator": {
                 return applyValidatorEvent(state, tx);
-            }*/
+            }
 
             default: {
                 err("state", "unknown witness event subject");
@@ -367,8 +361,8 @@ export function addConfMaybeApplyEvent(
     state: IState,
     tx: ParsedWitnessData
 ): boolean {
-    // destructure event data
-    const { subject, block, id } = tx;
+    // destructure event data needed
+    const { subject, block, id, address, amount, publicKey } = tx;
 
     // will be true if successfully completed transition
     let accepted: boolean;
@@ -377,7 +371,7 @@ export function addConfMaybeApplyEvent(
     state.events[block][id].conf += 1;
 
     // exit if the event hasn't received enough confirmations
-    if (state.consensusParams.confirmationThreshold > state.events[block][id].conf) {
+    if (state.consensusParams.confirmationThreshold >= state.events[block][id].conf) {
         Log("state", "added vote for event (existing)");
         return true;
     }
@@ -391,7 +385,7 @@ export function addConfMaybeApplyEvent(
 
         case "validator": {
             // temporary
-            err("state", "VALIDATOR TYPE NOT SUPPORTED YET");
+            console.log(`\n\nvalidator event guys ${publicKey} \n\n`)
             accepted = applyValidatorEvent(state, tx);
             break;
         }
@@ -402,8 +396,7 @@ export function addConfMaybeApplyEvent(
         }
     }
 
-    // update latest event, if update was applied
-    // if (accepted) state.lastEvent[type] = block;
+    // if reached, accepted should be true
     return accepted;
 }
 
@@ -449,7 +442,9 @@ export function applyPosterEvent(state: IState, tx: ParsedWitnessData): boolean 
     }
 
     // don't prune events if no event accepted
-    if (!accepted) { return false; }
+    if (!accepted) {
+        return false;
+    }
 
     // remove the pending event that was just applied
     delete state.events[block][id];
@@ -459,15 +454,15 @@ export function applyPosterEvent(state: IState, tx: ParsedWitnessData): boolean 
         delete state.events[block];
     }
 
-    // when removing, also check if balance is now 0
+    // update latest event, if update was applied
+    if (accepted) {
+        state.lastEvent = block;
+    }
+
+    // when removing, check if balance is now 0
     if (amount === 0n && state.posters[address].balance === 0n) {
         delete state.posters[address];
     }
-
-    // update latest event, if update was applied
-    if (accepted) { state.lastEvent = block; }
-
-    // if reached, accepted should be true
     return accepted;
 }
 
@@ -477,6 +472,8 @@ export function applyPosterEvent(state: IState, tx: ParsedWitnessData): boolean 
  * witness event to state, by updating the validator's balance in-state
  * depending on the event type (add vs remove).
  *
+ * The updates take effect after they are included in an EndBlock response.
+ *
  * @param state {State} the current deliverState object
  * @param tx {ParsedWitnessData} the witness transaction being executed
  */
@@ -485,8 +482,77 @@ export function applyValidatorEvent(
     tx: ParsedWitnessData
 ): boolean {
     // destructure necessary event data
-    const { amount, block, address, id } = tx;
-    return false;
+    const { amount, block, address, id, publicKey } = tx;
+
+    // will be true if event is applied
+    let accepted: boolean;
+
+    // compute validator node_id from publicKey
+    const publicKeyBytes = Buffer.from(publicKey, "base64");
+    const nodeIdBytes = pubToAddr(publicKeyBytes);
+    const nodeId = nodeIdBytes.toString("hex");
+
+    // check if poster already has an account
+    if (state.validators.hasOwnProperty(nodeId)) {
+        // poster already has account, increase or decrease balance
+        state.validators[nodeId].balance = amount;
+        state.validators[nodeId].ethAccount = address;
+
+        // indicate this validator needs to be updated in endBlock
+        state.validators[nodeId].applied = false;
+
+        // report what was done
+        Log("state", "confirmed and applied event to state (update validator)");
+        accepted = true;
+    } else if (!state.validators.hasOwnProperty(nodeId)) {
+        // create new account for poster
+        state.validators[nodeId] = {
+            // new account values from Ethereum event (via witness Tx)
+            balance: amount,
+            publicKey: publicKeyBytes,
+            ethAccount: address,
+
+            // state of the account
+            active: false,
+            genesis: false,
+            applied: false,
+            totalVotes: 0,
+
+            // null values set later
+            firstVote: null,
+            power: null,
+            lastVoted: null,
+            lastProposed: null,
+        };
+
+        // report what was done
+        Log("state", "confirmed and applied event to state (new validator)");
+        accepted = true;
+    } else {
+        // unexpected case, for now will exit process
+        err("state", "unexpected: no validator account, but requesting withdrawal");
+        accepted = false;
+    }
+
+    // don't prune events if no event accepted
+    if (!accepted) {
+        return false;
+    }
+
+    // remove the pending event that was just applied
+    delete state.events[block][id];
+
+    // remove event block if none left pending
+    if (Object.keys(state.events[block]).length === 0) {
+        delete state.events[block];
+    }
+
+    // update latest event, if update was applied
+    if (accepted) {
+        state.lastEvent = block;
+    }
+
+    return accepted;
 }
 
 /**
