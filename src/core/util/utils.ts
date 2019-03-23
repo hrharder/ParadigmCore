@@ -57,8 +57,6 @@ export function preVerifyTx(tx: SignedTransaction, state: IState): boolean {
 
     // check that signing party is an active validator
     if (!state.validators.hasOwnProperty(valNodeId)) {
-        console.log(`${JSON.stringify(state.validators, null, 2)}`);
-        console.log(valNodeId);
         return false;
     }
 
@@ -384,8 +382,6 @@ export function addConfMaybeApplyEvent(
         }
 
         case "validator": {
-            // temporary
-            console.log(`\n\nvalidator event guys ${publicKey} \n\n`)
             accepted = applyValidatorEvent(state, tx);
             break;
         }

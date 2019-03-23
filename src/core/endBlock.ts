@@ -66,9 +66,6 @@ export function endBlockWrapper(state: IState): (r) => ResponseEndBlock {
             }
         });
 
-        // TEMP
-        console.log(`\nAPPLYING THE FOLLOWING VALIDATOR UPDATES: ${JSON.stringify(validatorUpdates, null, 2)}\n`);
-
         // return validator update array
         return {
             validatorUpdates
