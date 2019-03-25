@@ -25,6 +25,7 @@ import { createHash } from "crypto";
 import { Verify } from "ed25519";
 import { cloneDeep, isInteger } from "lodash";
 import * as zlib from "zlib";
+import { bigIntReplacer } from "../../common/static/bigIntUtils";
 
 /**
  * Verify validator signature, and confirm transaction originated from an
