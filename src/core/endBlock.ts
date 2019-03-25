@@ -60,7 +60,7 @@ export function endBlockWrapper(state: IState): (r) => ResponseEndBlock {
             if (!validator.applied) {
                 const { publicKey, balance } = validator;
                 const update = validatorUpdate(publicKey, balance);
-                validator.power = Math.round(Number(balance) / Math.pow(10, 18));
+                validator.power = update.power;
                 validator.applied = true;
                 validatorUpdates.push(update);
             }

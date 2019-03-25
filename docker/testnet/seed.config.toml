@@ -115,7 +115,7 @@ external_address = ""
 seeds = ""
 
 # Comma separated list of nodes to keep persistent connections to
-persistent_peers = "AB96D9C6ACA18EE587A5DC24783CFBA20636D0E8@bs1.paradigm.market:26656,FF3D88FE6AA2047748DC5A9A2BD73F735B854F5E@bs2.paradigm.market:26656,FF3D88FE6AA2047748DC5A9A2BD73F735B854F5E@bs3.paradigm.market:26656,E0142BD772F2B25DCC7491DFEDF19941BDCDB1C3@bs4.paradigm.market:26656,3204A04E2C91CB860DAA6BCC891719479E1CAEA5@bs5.paradigm.market"
+persistent_peers = "FF3D88FE6AA2047748DC5A9A2BD73F735B854F5E@bs3.paradigm.market:26656"
 
 # UPNP port forwarding
 upnp = false

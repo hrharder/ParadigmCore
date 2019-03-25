@@ -57,13 +57,13 @@ export function privToPub(input: Buffer): Buffer {
  * @param pubKey {Buffer} raw 32 byte public key
  * @param power {bigint} desired power for validator
  */
-export function validatorUpdate(pubKey: Buffer, power: bigint): ValidatorUpdate {
+export function validatorUpdate(pubKey: Buffer, balance: bigint): ValidatorUpdate {
     return {
         pubKey : {
             type: "ed25519",
             data: pubKey
         },
-        power: parseInt(power.toString(), 10),
+        power: Math.round(Number(balance) / Math.pow(10, 18))
     };
 }
 
