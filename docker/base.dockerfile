@@ -10,18 +10,19 @@ WORKDIR /usr/src/paradigmcore
 # copy source
 COPY . .
 
-# copy default environment config for docker container
-COPY docker/base.env ./.env
-    
 # install global and package deps
 RUN yarn global add node-gyp scrypt typescript
 RUN yarn
 
-# compile source files
+# copy template environment file (optional)
+COPY docker/base.env ./.env
+
+# build source to executable js
 RUN yarn build
 
 # allow API traffic
 EXPOSE 4242
 EXPOSE 4243
 
+# normal start command
 CMD ["yarn", "launch"]

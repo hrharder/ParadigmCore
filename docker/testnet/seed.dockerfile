@@ -10,14 +10,16 @@ WORKDIR /usr/src/paradigmcore
 # copy source
 COPY . .
 
-# copy blind-star test-net genesis file and seed node config
-COPY docker/testnet/genesis.json ./lib/tendermint/config/genesis.json
-COPY docker/testnet/seed.config.toml ./lib/tendermint/config/config.toml
-COPY docker/testnet/seed.env ./.env
-    
 # install global and package deps
 RUN yarn global add node-gyp scrypt typescript
 RUN yarn
+
+# copy template environment file
+COPY docker/testnet/seed.env ./.env
+
+# copy blind-star test-net genesis file and seed node config
+COPY docker/testnet/genesis.json ./lib/config/genesis.json
+COPY docker/testnet/seed.config.toml ./lib/config/config.toml
 
 # build source to executable js
 RUN yarn build
