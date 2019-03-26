@@ -800,7 +800,7 @@ export class StreamServer extends EventEmitter {
             req = new Req(msg);
             error = req.validate();
 
-            if (error.code === -32600) {
+            if (error && error.code === -32600) {
                 const batchRes = await this.handleBatchRequest(msg, connId);
                 this.sendMessageToClient(connId, batchRes);
                 return;
