@@ -496,7 +496,12 @@ export function applyValidatorEvent(
         state.validators[nodeId].ethAccount = address;
 
         // indicate this validator needs to be updated in endBlock
-        state.validators[nodeId].applied = false;
+        // deals with possibility of more than one update per block (@todo)
+        if (state.validators[nodeId].applied === false) {
+            state.validators[nodeId].applied = true;
+        } else {
+            state.validators[nodeId].applied = false;
+        }
 
         // report what was done
         Log("state", "confirmed and applied event to state (update validator)");
