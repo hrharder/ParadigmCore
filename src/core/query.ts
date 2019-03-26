@@ -17,6 +17,7 @@ import { get, isArray, isBuffer, isUndefined } from "lodash";
 
 // custom typings
 import { State } from "src/state/State";
+import { bigIntReplacer } from "../common/static/bigIntUtils";
 import { ResponseQuery } from "../typings/abci";
 
 /**
@@ -67,6 +68,8 @@ export function queryWrapper(state: State): (r) => ResponseQuery {
             case "object": {
                 if (isBuffer(result)) {
                     info = `0x${result.toString("hex")}`;
+                } else if (!result) {
+                    return;
                 } else {
                     info = `[${Object.keys(result).toString()}]`;
                 }

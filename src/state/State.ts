@@ -138,7 +138,7 @@ export class State {
         this.posters = {};
         this.validators = {};
         this.lastEvent = null;
-        this.orderCounter = null;
+        this.orderCounter = 0;
         this.lastBlockHeight = 0;
         this.lastBlockAppHash = null;
 

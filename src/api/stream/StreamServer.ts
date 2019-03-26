@@ -753,7 +753,7 @@ export class StreamServer extends EventEmitter {
      * @param id the server-side client ID string
      * @param res a JsonResponse object
      */
-    private sendMessageToClient(id: string, res: Res) {
+    private sendMessageToClient(id: string, res: Res | Res[]) {
         // @todo make sure to properly handle disconnects
         const conn = this.connectionMap[id];
         if (!conn) { return; }
@@ -800,6 +800,12 @@ export class StreamServer extends EventEmitter {
             req = new Req(msg);
             error = req.validate();
 
+            if (error.code === -32600) {
+                const batchRes = await this.handleBatchRequest(msg, connId);
+                this.sendMessageToClient(connId, batchRes);
+                return;
+            }
+
             // terminate execution on validation error
             if (error) {
                 res = createResponse(null, null, error);
@@ -824,5 +830,51 @@ export class StreamServer extends EventEmitter {
             this.sendMessageToClient(connId, res);
             return;
         };
+    }
+
+    private async handleBatchRequest(msg: WebSocket.Data, connId: string): Promise<Res[] | Res> {
+        let wasFailure = false;
+        let responses: Res[] = [];
+        let requests: Req[] = [];
+        try {
+            const parsed = JSON.parse(msg.toString());
+            if (!_.isArray(parsed)) { return []; }
+
+            // parse each request
+            parsed.forEach((unknownRequest) => {
+                const reqStr = JSON.stringify(unknownRequest);
+                const req = new Req(reqStr);
+                const error = req.validate();
+                if (error) {
+                    wasFailure = true;
+                } else {
+                    requests.push(req);
+                }
+            });
+        } catch (err) {
+            wasFailure = true;
+        }
+
+        for (let req of requests) {
+            let res: Res;
+            const { method } = req.parsed;
+            try {
+                res = await this.methods[method](this, this.connectionMap[connId], req);
+            } catch (err) {
+                wasFailure = true;
+            }
+            responses.push(res);
+        }
+
+        if (responses.length === 0) {
+            wasFailure = true;
+        }
+
+        if (wasFailure) {
+            const valErr = createValError(-32700, "error handling batch request");
+            return createResponse(null, null, valErr);
+        } else {
+            return responses;
+        }
     }
 }
