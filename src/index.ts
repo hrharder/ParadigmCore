@@ -73,16 +73,26 @@ let node;       // tendermint node child process instance
     log("tm", "starting tendermint core...");
     try {
         // todo: define options object
-        let options: any  = {
+        const p2pOpts: { seeds?: string, persistent_peers?: string} = {};
+        const options: any  = {
             moniker: env.MONIKER,
             rpc: {
                 laddr: `tcp://${env.TENDERMINT_HOST}:${env.TENDERMINT_PORT}`,
             },
         };
-        if (env.SEEDS !== "0" && env.SEEDS !== undefined) {
-            options.p2p = {
-                seeds: env.SEEDS
-            };
+
+        // set seeds if included
+        if (env.SEEDS !== "" && env.SEEDS !== undefined) {
+            p2pOpts.seeds = env.SEEDS;
+        }
+
+        // set persistent peers if included
+        if (env.PERSISTENT_PEERS !== "" && env.PERSISTENT_PEERS !== undefined) {
+            p2pOpts.persistent_peers = env.PERSISTENT_PEERS;
+        }
+
+        if (Object.keys(p2pOpts).length > 0) {
+            options.p2p = p2pOpts;
         }
 
         // create tendermint subprocess
