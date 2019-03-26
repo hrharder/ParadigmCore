@@ -15,7 +15,7 @@ RUN yarn global add node-gyp scrypt typescript
 RUN yarn
 
 # copy template environment file
-COPY docker/testnet/seed.env ./.env
+COPY docker/testnet/testnet.env ./.env
 
 # copy blind-star test-net genesis file and seed node config
 COPY docker/testnet/genesis.json ./lib/config/genesis.json
