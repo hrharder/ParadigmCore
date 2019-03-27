@@ -46,6 +46,9 @@ export function beginBlockWrapper(state: State): (r) => ResponseBeginBlock {
                 // pull/parse nodeId and current vote power
                 const nodeId = vote.validator.address.toString("hex");
                 const power = Number(vote.validator.power);
+                const validator = state.validators[nodeId];
+
+                if (!validator) { return; }
 
                 // TODO: should we check for new validators here?
 
@@ -56,7 +59,7 @@ export function beginBlockWrapper(state: State): (r) => ResponseBeginBlock {
                 }
 
                 // record if validator was active last round
-                console.log('here1');
+                console.log('here1' + vote.validator.address.toString('hex'));
                 state.validators[nodeId].active = vote.signedLastBlock;
 
                 // record if they are proposer this round
