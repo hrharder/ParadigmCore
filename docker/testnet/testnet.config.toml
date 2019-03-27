@@ -167,8 +167,8 @@ dial_timeout = "3s"
 ##### mempool configuration options #####
 [mempool]
 
-recheck = true
-broadcast = true
+recheck = false
+broadcast = false
 wal_dir = ""
 
 # size of the mempool
