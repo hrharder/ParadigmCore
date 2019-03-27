@@ -90,7 +90,10 @@ export function queryWrapper(state: State): (r) => ResponseQuery {
                 break;
             }
             case "undefined": {
-                return;
+                code = 1;
+                log = "Failed query: bad result.";
+                info = null;
+                break;
             }
             default: {
                 code = 1;
