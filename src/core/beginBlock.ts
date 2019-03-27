@@ -20,7 +20,6 @@ import { log } from "../common/log";
 import { State } from "../state/State";
 import { computeConf } from "./util/utils";
 import { doForEachValidator } from "./util/valFunctions";
-import { bigIntReplacer } from "../common/static/bigIntUtils";
 
 /**
  * Called at the beginning of each new block. Updates proposer and block height.
@@ -30,7 +29,6 @@ import { bigIntReplacer } from "../common/static/bigIntUtils";
 export function beginBlockWrapper(state: State): (r) => ResponseBeginBlock {
     return (request) => {
         // parse height and proposer from header
-        console.log(` \npre: ${JSON.stringify(Object.keys(state.validators))}\n`);
         const currHeight: number = Number(request.header.height);
         const proposer: string = request.header.proposerAddress.toString("hex");
         const appHash: Buffer = Buffer.from(request.header.appHash, "base64");
@@ -59,7 +57,6 @@ export function beginBlockWrapper(state: State): (r) => ResponseBeginBlock {
                 }
 
                 // record if validator was active last round
-                console.log('here1' + vote.validator.address.toString('hex'));
                 state.validators[nodeId].active = vote.signedLastBlock;
 
                 // record if they are proposer this round
@@ -91,10 +88,8 @@ export function beginBlockWrapper(state: State): (r) => ResponseBeginBlock {
 
                 // mark active if vote recorded on last block
                 if ((validator.lastVoted + 1) === currHeight) {
-                    console.log('here2', JSON.stringify(validator, bigIntReplacer), validator);
                     validator.active = true;
                 } else {
-                    console.log('here3', JSON.stringify(validator, bigIntReplacer), validator);
                     validator.active = false;
                 }
             });
@@ -113,7 +108,6 @@ export function beginBlockWrapper(state: State): (r) => ResponseBeginBlock {
                 delete state.validators[id];
             });
         }
-        console.log(` \nposts: ${JSON.stringify(Object.keys(state.validators))}\n`);
 
         // update confirmation threshold based on number of active validators
         // confirmation threshold is >=2/3 active validators, unless there is
