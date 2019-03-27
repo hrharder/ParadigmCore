@@ -63,6 +63,10 @@ export function endBlockWrapper(state: IState): (r) => ResponseEndBlock {
                 validator.power = update.power;
                 validator.applied = true;
                 validatorUpdates.push(update);
+
+                if (validator.balance === 0n) {
+                    delete state.validators[nodeId];
+                }
             }
         });
 
