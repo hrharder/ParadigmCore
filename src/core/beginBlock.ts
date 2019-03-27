@@ -39,19 +39,6 @@ export function beginBlockWrapper(state: State): (r) => ResponseBeginBlock {
         // store array of last votes
         const lastVotes: object[] | undefined = request.lastCommitInfo.votes;
 
-        // parse validators that voted on the last block, update values
-        const toDelete = [];
-        doForEachValidator(state, (nodeId) => {
-            const validator = state.validators[nodeId];
-            if (validator.balance === 0n && validator.applied === true) {
-                toDelete.push(nodeId);
-            }
-        });
-
-        toDelete.forEach((id) => {
-            delete state.validators[id];
-        });
-
         if (lastVotes !== undefined && lastVotes.length > 0) {
             lastVotes.forEach((vote: any) => {
                 // pull/parse nodeId and current vote power
@@ -102,6 +89,20 @@ export function beginBlockWrapper(state: State): (r) => ResponseBeginBlock {
                 } else {
                     validator.active = false;
                 }
+            });
+
+            // parse validators that voted on the last block, update values
+            const toDelete = [];
+
+            doForEachValidator(state, (nodeId) => {
+                const validator = state.validators[nodeId];
+                if (validator.balance === 0n && validator.applied === true) {
+                    toDelete.push(nodeId);
+                }
+            });
+
+            toDelete.forEach((id) => {
+                delete state.validators[id];
             });
         }
 
