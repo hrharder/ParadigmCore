@@ -800,17 +800,16 @@ export class StreamServer extends EventEmitter {
             req = new Req(msg);
             error = req.validate();
 
-            if (error && error.code === -32600) {
-                const batchRes = await this.handleBatchRequest(msg, connId);
-                this.sendMessageToClient(connId, batchRes);
-                return;
-            }
-
-            // terminate execution on validation error
             if (error) {
-                res = createResponse(null, null, error);
-                this.sendMessageToClient(connId, res);
-                return;
+                if (error.code === -32600) {
+                    const batchRes = await this.handleBatchRequest(msg, connId);
+                    this.sendMessageToClient(connId, batchRes);
+                    return;
+                } else {
+                    res = createResponse(null, null, error);
+                    this.sendMessageToClient(connId, res);
+                    return;
+                }
             }
 
             // if this point is reached, we will handle the request (or fail)
