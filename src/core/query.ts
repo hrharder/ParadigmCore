@@ -69,7 +69,9 @@ export function queryWrapper(state: State): (r) => ResponseQuery {
                 if (isBuffer(result)) {
                     info = `0x${result.toString("hex")}`;
                 } else if (!result) {
-                    return;
+                    code = 1;
+                    log = "Failed query: nil result view.";
+                    info = null;
                 } else {
                     info = `[${Object.keys(result).toString()}]`;
                 }
