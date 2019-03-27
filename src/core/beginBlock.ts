@@ -20,6 +20,7 @@ import { log } from "../common/log";
 import { State } from "../state/State";
 import { computeConf } from "./util/utils";
 import { doForEachValidator } from "./util/valFunctions";
+import { bigIntReplacer } from "../common/static/bigIntUtils";
 
 /**
  * Called at the beginning of each new block. Updates proposer and block height.
@@ -87,10 +88,10 @@ export function beginBlockWrapper(state: State): (r) => ResponseBeginBlock {
 
                 // mark active if vote recorded on last block
                 if ((validator.lastVoted + 1) === currHeight) {
-                    console.log('here2', JSON.stringify(validator), validator);
+                    console.log('here2', JSON.stringify(validator, bigIntReplacer), validator);
                     validator.active = true;
                 } else {
-                    console.log('here3', JSON.stringify(validator), validator);
+                    console.log('here3', JSON.stringify(validator, bigIntReplacer), validator);
                     validator.active = false;
                 }
             });
