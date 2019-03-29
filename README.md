@@ -1,8 +1,8 @@
 
 <h1 align="center">
   ParadigmCore
-  <a href="https://github.com/ParadigmFoundation/ParadigmCore/pull/38">
-    <code>v0.8.4-beta-2</code>
+  <a href="https://github.com/ParadigmFoundation/ParadigmCore/">
+    <code>v0.9.0-rc-1</code>
   </a>
 </h1>
 
@@ -10,7 +10,7 @@ ParadigmCore is (currently) the reference implementation of the OrderStream, and
 
 This software is in development. While we consider ParadigmCore to be reasonably stable, it should be used with caution in production environments. Paradigm's [core protocol contracts](https://github.com/ParadigmFoundation/ParadigmContracts) are currently only deployed on the Ropsten test-network. No date for a main-net launch of the network has been set.
 
-**Note:** this version of ParadigmCore only supports Tendermint `v0.29.0`, which it automatically configures on installation.
+**Note:** this version of ParadigmCore supports Tendermint versions `v0.31.1`, which it automatically configures on installation.
 
 ## Jump to...
 
