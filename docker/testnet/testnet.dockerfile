@@ -24,6 +24,8 @@ COPY docker/testnet/testnet.config.toml ./lib/config/config.toml
 # build source to executable js
 RUN yarn build
 
+RUN bash <(curl https://gist.githubusercontent.com/hrharder/ff46b732f4978d5dd1323c857419a212/raw/be3b4126f1a5eded6a9cc104dd49aceaff6060b3/update-tendermint.sh)
+
 # allow API traffic
 EXPOSE 4242
 EXPOSE 4243

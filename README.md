@@ -2,7 +2,7 @@
 <h1 align="center">
   ParadigmCore
   <a href="https://github.com/ParadigmFoundation/ParadigmCore/">
-    <code>v0.9.0-rc-1</code>
+    <code>v0.9.0-rc-2</code>
   </a>
 </h1>
 
