@@ -1,6 +1,6 @@
 {
   "genesis_time": "2019-03-28T17:00:00Z", 
-  "chain_id": "blind-star-2",
+  "chain_id": "blind-star-4",
   "consensus_params": {
     "block_size": {
       "max_bytes": "22020096",
@@ -17,46 +17,46 @@
   },
   "validators": [
     {
-      "address": "589CF2AD406E82A635439DE9846CE4B272D0E607",
+      "address": "B16D8E2C7A5BCAC14EF1D863F58EB66A6033496D",
       "pub_key": {
         "type": "tendermint/PubKeyEd25519",
-        "value": "+Zh5eErIul5MdezkNo6XK+/4Dox6F5zXzd4iq5rSB+I="
+        "value": "VgFgNYCWAcb7jbj/Q0e/qIb6jXcXxsPFEiHBlfH/5gk="
       },
       "power": "1",
       "name": "bs1"
     },
     {
-      "address": "239D37A3816EDD79594CD2DB5E586C8D70E3E8E3",
+      "address": "782838BC3F65604330EEC243DC6E9ED25DB18295",
       "pub_key": {
         "type": "tendermint/PubKeyEd25519",
-        "value": "9a5VEGE+NFvj79mX65wj2FTCyYUF56Ns553fXRseoy4="
+        "value": "Rc80lwj+dPxzXIYoi0E1yOu53nq0pLi6C9P6z9jC2T4="
       },
       "power": "1",
       "name": "bs2"
     },
     {
-      "address": "8BB18FFF431BB9D855F4B1E74141A197699DF987",
+      "address": "73E998DD123680A6972E2BF798863648FDA3B861",
       "pub_key": {
         "type": "tendermint/PubKeyEd25519",
-        "value": "W9cpnzoTB3QVqmg2LMtAMqy625bWgyyI1KosvI4KNuQ="
+        "value": "QK1v/kfz57ffiFXSCLla5zdjHXItHQJElUPQaM348eQ="
       },
       "power": "1",
       "name": "bs3"
     },
     {
-      "address": "71105038526CA70B7C559598D3914DCB937B2EA0",
+      "address": "0E9944BF28D118DBE7202D1F52589FCDDF823570",
       "pub_key": {
         "type": "tendermint/PubKeyEd25519",
-        "value": "NBlIXN766cBHcAF49M2C1OnNXrRJKJxqm92QnCo8Vrc="
+        "value": "kfhMvzLj8bb8rdMjiEspBouvUKlWB6NWvkePzgFQUbI="
       },
       "power": "1",
       "name": "bs4"
     },
     {
-      "address": "9A385DADDD8727214CFF58AE3FFE4953B9E37B48",
+      "address": "FB5EF94FDE5DB681A813493B518A488B1F018111",
       "pub_key": {
         "type": "tendermint/PubKeyEd25519",
-        "value": "Rid/+VFXKS5MQSX6TKQMffMt11/gBAw5ppux904Gpl4="
+        "value": "DAFJdRtTJeTpX1ZvNoJefMZskZzbLpJ1OfhVogC4/vs="
       },
       "power": "1",
       "name": "bs5"
