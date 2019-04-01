@@ -20,6 +20,9 @@ import { TendermintRPC } from "../../common/TendermintRPC.js";
 import { convertIsoTimeToUnixMs } from "../../common/utils";
 import { decodeTx } from "../../core/util/utils";
 
+// validator signer
+import { TxGenerator } from "../../core/util/TxGenerator";
+
 // stream server utils
 import {createResponse, createValError, parseOrdersForSubscription } from "./utils.js";
 
@@ -47,6 +50,13 @@ interface IOptions {
 
     /** Network host to bind StreamAPI server. */
     host?: string;
+
+    /**
+     * Set to true if validator and want to accept order txs.
+     *
+     * If set to true, provide `PUB_KEY` and `PRIV_KEY` environment variables.
+     */
+    validator: boolean;
 
     /** Optional pre-defined method implementations. */
     methods?: {
@@ -258,6 +268,11 @@ export class StreamServer extends EventEmitter {
     private methods: IMethods;
 
     /**
+     * Transaction generator/signer for validators running the JSONRPC server.
+     */
+    private signer: TxGenerator;
+
+    /**
      * Tendermint RPC client instance.
      *
      * @description Instance of `TendermintRPC`, the custom wrapper used to
@@ -355,7 +370,7 @@ export class StreamServer extends EventEmitter {
      *
      * @param options see [[IOptions]] interface definition
      */
-    constructor(options: IOptions = {}) {
+    constructor(options: IOptions) {
         // inherit this from EventEmitter
         super();
 
@@ -390,6 +405,16 @@ export class StreamServer extends EventEmitter {
         // if pre-defined methods provided, bind each
         if (options.methods) {
             this.bindMethods(options.methods);
+        }
+
+        // setup transaction signer (if configured)
+        if (options.validator === true) {
+            this.signer = new TxGenerator({
+                publicKey: process.env.PUB_KEY,
+                privateKey: process.env.PRIV_KEY,
+            });
+        } else {
+            this.signer = null;
         }
 
         // set initial status
@@ -493,6 +518,25 @@ export class StreamServer extends EventEmitter {
      */
     public async executeTendermintQuery(path: string): Promise<any> {
         return await this.rpcClient.query(path);
+    }
+
+    /**
+     * Wrapper function that allows validators running the JSONRPC server to
+     * accept and propose order transactions.
+     *
+     * @param tx the Paradigm order transaction data
+     * @param mode the broadcast mode to use for the Tendermint RPC
+     */
+    public async submitTx(tx: OrderData, mode: "sync" | "async" | "commit"): Promise<any> {
+        if (!this.signer) {
+            throw Error("order transaction submission disabled.");
+        }
+        const signedTx = this.signer.create({
+            data: tx,
+            type: "order"
+        });
+        const result = await this.rpcClient.submitTx(signedTx, mode);
+        return result;
     }
 
     // END public methods
@@ -790,9 +834,6 @@ export class StreamServer extends EventEmitter {
      */
     private createConnMessageHandler(connId: string): (d: WebSocket.Data) => void {
         return async (msg: WebSocket.Data) => {
-            // TEMPORARY
-            log("api", `Message from connection '${connId}': '${msg}'`);
-
             // scope eventual response/request objects
             let res: Res, req: Req, error: ValidationError;
 
@@ -824,7 +865,13 @@ export class StreamServer extends EventEmitter {
             }
 
             // defer to bound method for execution
-            res = await this.methods[method](this, this.connectionMap[connId], req);
+            try {
+                res = await this.methods[method](this, this.connectionMap[connId], req);
+            } catch (error) {
+                const resErr = createValError(-32603, `unable to process: ${error.message}`);
+                res = createResponse(null, null, resErr);
+            }
+
             // res = createResponse(result, id, null);
             this.sendMessageToClient(connId, res);
             return;

@@ -18,6 +18,10 @@ import * as WebSocket from "ws";
 import { Request } from "./Request";
 import { Response } from "./Response";
 import { StreamServer } from "./StreamServer";
+import {
+    createResponse,
+    createValError
+} from "./utils";
 
 /**
  * Method implementations for the JSONRPC StreamAPI server (StreamServer)
@@ -90,4 +94,17 @@ export const methods = {
         // create and return response object
         return new Response({ id, result: { response }});
     },
+
+    "order.submit": async (server: StreamServer, client: WebSocket, req: Request) => {
+        // destructure id and params
+        const { id, params } = req.parsed;
+        const { order, mode } = params;
+        try {
+            const response = await server.submitTx(order, mode ? mode : "sync");
+            return new Response({id, result: { response }});
+        } catch (error) {
+            const resErr = createValError(-32602, "error signing transaction, check properties.");
+            return createResponse(null, null, resErr);
+        }
+    }
 };
