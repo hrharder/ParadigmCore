@@ -2,6 +2,10 @@
 
 # Class: Hasher
 
+Currently only used to generate the `orderId` for `order` transactions.
+
+Should be nuked and replaced with a real hashing algorithm.
+
 ## Hierarchy
 
 **Hasher**
@@ -22,7 +26,7 @@
 
 ▸ **hashOrder**(order: *`Order`*): `string`
 
-*Defined in [crypto/Hasher.ts:31](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/crypto/Hasher.ts#L31)*
+*Defined in [crypto/Hasher.ts:33](https://github.com/paradigmfoundation/paradigmcore/blob/96d110b/src/crypto/Hasher.ts#L33)*
 
 Generate the hash of an order to be used as the OrderID.
 

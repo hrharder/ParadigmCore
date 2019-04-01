@@ -27,7 +27,7 @@ Defines the object type used to represent an event subscription.
 
 **● clientId**: *`string`*
 
-*Defined in [api/stream/StreamServer.ts:119](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/api/stream/StreamServer.ts#L119)*
+*Defined in [api/stream/StreamServer.ts:129](https://github.com/paradigmfoundation/paradigmcore/blob/96d110b/src/api/stream/StreamServer.ts#L129)*
 
 ___
 <a id="connection"></a>
@@ -36,7 +36,7 @@ ___
 
 **● connection**: *`WebSocket`*
 
-*Defined in [api/stream/StreamServer.ts:120](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/api/stream/StreamServer.ts#L120)*
+*Defined in [api/stream/StreamServer.ts:130](https://github.com/paradigmfoundation/paradigmcore/blob/96d110b/src/api/stream/StreamServer.ts#L130)*
 
 ___
 <a id="params"></a>
@@ -45,7 +45,7 @@ ___
 
 **● params**: *`object`*
 
-*Defined in [api/stream/StreamServer.ts:121](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/api/stream/StreamServer.ts#L121)*
+*Defined in [api/stream/StreamServer.ts:131](https://github.com/paradigmfoundation/paradigmcore/blob/96d110b/src/api/stream/StreamServer.ts#L131)*
 
 #### Type declaration
 
@@ -60,7 +60,7 @@ ___
 
 **● subscriptionId**: *`string`*
 
-*Defined in [api/stream/StreamServer.ts:118](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/api/stream/StreamServer.ts#L118)*
+*Defined in [api/stream/StreamServer.ts:128](https://github.com/paradigmfoundation/paradigmcore/blob/96d110b/src/api/stream/StreamServer.ts#L128)*
 
 ___
 

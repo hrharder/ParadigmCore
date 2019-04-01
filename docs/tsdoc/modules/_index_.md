@@ -6,24 +6,34 @@
 
 ### Variables
 
+* [Web3](_index_.md#web3)
 * [generator](_index_.md#generator)
 * [node](_index_.md#node)
 * [paradigm](_index_.md#paradigm)
 * [server](_index_.md#server)
-* [web3](_index_.md#web3)
+* [web3](_index_.md#web3-1)
 * [witness](_index_.md#witness)
 
 ---
 
 ## Variables
 
+<a id="web3"></a>
+
+### `<Const>` Web3
+
+**● Web3**: *`any`* =  require("web3")
+
+*Defined in [index.ts:25](https://github.com/paradigmfoundation/paradigmcore/blob/96d110b/src/index.ts#L25)*
+
+___
 <a id="generator"></a>
 
 ### `<Let>` generator
 
 **● generator**: *[TxGenerator](../classes/_core_util_txgenerator_.txgenerator.md)*
 
-*Defined in [index.ts:43](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/index.ts#L43)*
+*Defined in [index.ts:45](https://github.com/paradigmfoundation/paradigmcore/blob/96d110b/src/index.ts#L45)*
 
 ___
 <a id="node"></a>
@@ -32,7 +42,7 @@ ___
 
 **● node**: *`any`*
 
-*Defined in [index.ts:49](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/index.ts#L49)*
+*Defined in [index.ts:51](https://github.com/paradigmfoundation/paradigmcore/blob/96d110b/src/index.ts#L51)*
 
 ___
 <a id="paradigm"></a>
@@ -41,7 +51,7 @@ ___
 
 **● paradigm**: *`any`*
 
-*Defined in [index.ts:48](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/index.ts#L48)*
+*Defined in [index.ts:50](https://github.com/paradigmfoundation/paradigmcore/blob/96d110b/src/index.ts#L50)*
 
 ___
 <a id="server"></a>
@@ -50,16 +60,16 @@ ___
 
 **● server**: *[StreamServer](../classes/_api_stream_streamserver_.streamserver.md)*
 
-*Defined in [index.ts:47](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/index.ts#L47)*
+*Defined in [index.ts:49](https://github.com/paradigmfoundation/paradigmcore/blob/96d110b/src/index.ts#L49)*
 
 ___
-<a id="web3"></a>
+<a id="web3-1"></a>
 
 ### `<Let>` web3
 
-**● web3**: *`Web3`*
+**● web3**: *`any`*
 
-*Defined in [index.ts:46](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/index.ts#L46)*
+*Defined in [index.ts:48](https://github.com/paradigmfoundation/paradigmcore/blob/96d110b/src/index.ts#L48)*
 
 ___
 <a id="witness"></a>
@@ -68,7 +78,7 @@ ___
 
 **● witness**: *[Witness](../classes/_witness_witness_.witness.md)*
 
-*Defined in [index.ts:42](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/index.ts#L42)*
+*Defined in [index.ts:44](https://github.com/paradigmfoundation/paradigmcore/blob/96d110b/src/index.ts#L44)*
 
 ___
 

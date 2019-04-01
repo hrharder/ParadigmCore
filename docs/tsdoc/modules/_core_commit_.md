@@ -18,7 +18,7 @@
 
 ▸ **commitWrapper**(deliverState: *[State](../classes/_state_state_.state.md)*, commitState: *[State](../classes/_state_state_.state.md)*): `function`
 
-*Defined in [core/commit.ts:34](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/core/commit.ts#L34)*
+*Defined in [core/commit.ts:29](https://github.com/paradigmfoundation/paradigmcore/blob/96d110b/src/core/commit.ts#L29)*
 
 Persist application state, synchronize commit and deliver states, and trigger the broadcast of valid orders in that block.
 
