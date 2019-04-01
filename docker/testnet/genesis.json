@@ -1,10 +1,11 @@
 {
-  "genesis_time": "2019-03-28T17:00:00Z", 
-  "chain_id": "blind-star-5",
+  "genesis_time": "2019-04-01T20:00:00.00Z",
+  "chain_id": "blind-star-6",
   "consensus_params": {
-    "block_size": {
+    "block": {
       "max_bytes": "22020096",
-      "max_gas": "-1"
+      "max_gas": "-1",
+      "time_iota_ms": "1000"
     },
     "evidence": {
       "max_age": "100000"
@@ -17,46 +18,46 @@
   },
   "validators": [
     {
-      "address": "B16D8E2C7A5BCAC14EF1D863F58EB66A6033496D",
+      "address": "65E351676D8A13156CF480AFE4F3B3C1BA02A380",
       "pub_key": {
         "type": "tendermint/PubKeyEd25519",
-        "value": "VgFgNYCWAcb7jbj/Q0e/qIb6jXcXxsPFEiHBlfH/5gk="
+        "value": "Zm0In8jeRQvOI7BPKtPm4f4TuKWOf3stZGRzICKIECE="
       },
       "power": "1",
       "name": "bs1"
     },
     {
-      "address": "782838BC3F65604330EEC243DC6E9ED25DB18295",
+      "address": "4CC150C7A7270F2E174278F7537D143D09931F55",
       "pub_key": {
         "type": "tendermint/PubKeyEd25519",
-        "value": "Rc80lwj+dPxzXIYoi0E1yOu53nq0pLi6C9P6z9jC2T4="
+        "value": "wq4B8+Wt2lW1TxTRvvFDB+OG5GS+vabx0MITi9ZP8SE="
       },
       "power": "1",
       "name": "bs2"
     },
     {
-      "address": "73E998DD123680A6972E2BF798863648FDA3B861",
+      "address": "3AA8A0B2D1FF819E1F24E42D2E97081770949969",
       "pub_key": {
         "type": "tendermint/PubKeyEd25519",
-        "value": "QK1v/kfz57ffiFXSCLla5zdjHXItHQJElUPQaM348eQ="
+        "value": "qE+kHYflThWU/buwOjRn2msQCSJ7vGOk7rE8oISmOHI="
       },
       "power": "1",
       "name": "bs3"
     },
     {
-      "address": "0E9944BF28D118DBE7202D1F52589FCDDF823570",
+      "address": "22D4D501A5EA03D5D3218EC925E2879DA2607BD3",
       "pub_key": {
         "type": "tendermint/PubKeyEd25519",
-        "value": "kfhMvzLj8bb8rdMjiEspBouvUKlWB6NWvkePzgFQUbI="
+        "value": "+AHXYfv0F79v1VDbQIFFkqorIJ4CvTvptxBob0TFv4E="
       },
       "power": "1",
       "name": "bs4"
     },
     {
-      "address": "FB5EF94FDE5DB681A813493B518A488B1F018111",
+      "address": "919196A643B278E085BFA958CCBCDCC41BABCB90",
       "pub_key": {
         "type": "tendermint/PubKeyEd25519",
-        "value": "DAFJdRtTJeTpX1ZvNoJefMZskZzbLpJ1OfhVogC4/vs="
+        "value": "xYtpr50ci/ja+zz5MZW+03q/3ii2e2tHTVdC4kLHRkw="
       },
       "power": "1",
       "name": "bs5"
