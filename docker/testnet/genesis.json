@@ -1,6 +1,6 @@
 {
   "genesis_time": "2019-04-02T00:00:00.00Z",
-  "chain_id": "blind-star-7",
+  "chain_id": "blind-star-8",
   "consensus_params": {
     "block": {
       "max_bytes": "22020096",
@@ -24,43 +24,7 @@
         "value": "Zm0In8jeRQvOI7BPKtPm4f4TuKWOf3stZGRzICKIECE="
       },
       "power": "1",
-      "name": "bs1"
-    },
-    {
-      "address": "4CC150C7A7270F2E174278F7537D143D09931F55",
-      "pub_key": {
-        "type": "tendermint/PubKeyEd25519",
-        "value": "wq4B8+Wt2lW1TxTRvvFDB+OG5GS+vabx0MITi9ZP8SE="
-      },
-      "power": "1",
-      "name": "bs2"
-    },
-    {
-      "address": "3AA8A0B2D1FF819E1F24E42D2E97081770949969",
-      "pub_key": {
-        "type": "tendermint/PubKeyEd25519",
-        "value": "qE+kHYflThWU/buwOjRn2msQCSJ7vGOk7rE8oISmOHI="
-      },
-      "power": "1",
-      "name": "bs3"
-    },
-    {
-      "address": "22D4D501A5EA03D5D3218EC925E2879DA2607BD3",
-      "pub_key": {
-        "type": "tendermint/PubKeyEd25519",
-        "value": "+AHXYfv0F79v1VDbQIFFkqorIJ4CvTvptxBob0TFv4E="
-      },
-      "power": "1",
-      "name": "bs4"
-    },
-    {
-      "address": "919196A643B278E085BFA958CCBCDCC41BABCB90",
-      "pub_key": {
-        "type": "tendermint/PubKeyEd25519",
-        "value": "xYtpr50ci/ja+zz5MZW+03q/3ii2e2tHTVdC4kLHRkw="
-      },
-      "power": "1",
-      "name": "bs5"
+      "name": "paradigm-genesis-validator"
     }
   ],
   "app_hash": ""
