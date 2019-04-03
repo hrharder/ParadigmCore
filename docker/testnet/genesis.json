@@ -1,5 +1,5 @@
 {
-  "genesis_time": "2019-04-02T00:00:00.00Z",
+  "genesis_time": "2019-04-02T00:00:00Z",
   "chain_id": "blind-star-8",
   "consensus_params": {
     "block": {
@@ -18,10 +18,10 @@
   },
   "validators": [
     {
-      "address": "65E351676D8A13156CF480AFE4F3B3C1BA02A380",
+      "address": "380252CF47E34A6160FAE68C36AB269421574FD4",
       "pub_key": {
         "type": "tendermint/PubKeyEd25519",
-        "value": "Zm0In8jeRQvOI7BPKtPm4f4TuKWOf3stZGRzICKIECE="
+        "value": "5nAhz5v2QCu/i38IFqXMKTSbuFNHErRR0SWal+8qKk0="
       },
       "power": "1",
       "name": "paradigm-genesis-validator"
