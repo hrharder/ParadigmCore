@@ -1,6 +1,6 @@
 {
   "genesis_time": "2019-04-02T00:00:00.00Z",
-  "chain_id": "blind-star-9",
+  "chain_id": "blind-star-10",
   "consensus_params": {
     "block": {
       "max_bytes": "22020096",
