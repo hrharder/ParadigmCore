@@ -4961,17 +4961,7 @@ paradigm-connect@^0.1.12:
     web3 "1.0.0-beta.37"
     ws "^6.1.4"
 
-paradigm-contracts@^0.2.1:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/paradigm-contracts/-/paradigm-contracts-0.2.1.tgz#81ed9032e028cb0e54b59b8e5938b760fca61b7b"
-  integrity sha512-LK5e7jeaYiFjf4paw12wGxfhjhNuCMoZP4dEnryLYjDN0WT+nvr5kJmh7MnoUzbaLqhQMshXwvN5Oez8F2A7Ug==
-  dependencies:
-    openzeppelin-solidity "^2.1.2"
-    paradigm-subcontract-sdk "0.0.4"
-    web3-eth-abi "^1.0.0-beta.46"
-    web3-utils "^1.0.0-beta.46"
-
-paradigm-contracts@^0.2.3:
+paradigm-contracts@^0.2.1, paradigm-contracts@^0.2.3:
   version "0.2.3"
   resolved "https://registry.yarnpkg.com/paradigm-contracts/-/paradigm-contracts-0.2.3.tgz#ac2886f541b296fe3a845dbb01f206f5d04d6b59"
   integrity sha512-KhrotQH1MPCXV+pfxiS6XxPOEE0Maul+XY0ypGCTMAsQ6/DQ+lIUkfZ7Ih5wgAfj0F42u/Syrd3vOiCVra5+vg==
@@ -7008,7 +6998,7 @@ web3-eth-abi@1.0.0-beta.37:
     underscore "1.8.3"
     web3-utils "1.0.0-beta.37"
 
-web3-eth-abi@1.0.0-beta.52:
+web3-eth-abi@1.0.0-beta.52, web3-eth-abi@^1.0.0-beta.46:
   version "1.0.0-beta.52"
   resolved "https://registry.yarnpkg.com/web3-eth-abi/-/web3-eth-abi-1.0.0-beta.52.tgz#88dc2d36e2f99dfe255f8f64b6f613bad82779d8"
   integrity sha512-c03sH6y7ncp9tBPt0EZEcyFyou4kyYdr72VJMY8ip0JAfZgl4WI9XcGpD207z0lR4Ki1PSCfkh+ZigoXxggouw==
@@ -7017,16 +7007,6 @@ web3-eth-abi@1.0.0-beta.52:
     ethers "^4.0.27"
     lodash "^4.17.11"
     web3-utils "1.0.0-beta.52"
-
-web3-eth-abi@^1.0.0-beta.46:
-  version "1.0.0-beta.51"
-  resolved "https://registry.yarnpkg.com/web3-eth-abi/-/web3-eth-abi-1.0.0-beta.51.tgz#1ca1415529869b5a6598f6246aff409c3891ae05"
-  integrity sha512-mTcMpIihZECzZ5oWUh9Jg7x5pVhPv6xPTPWxY9007QKbbBH01GwPogoxBz1X7RfWOwGqZABfxFgXow5NkL0T3A==
-  dependencies:
-    "@babel/runtime" "^7.3.1"
-    ethers "^4.0.27"
-    lodash "^4.17.11"
-    web3-utils "1.0.0-beta.51"
 
 web3-eth-accounts@1.0.0-beta.37:
   version "1.0.0-beta.37"
@@ -7301,22 +7281,6 @@ web3-utils@1.0.0-beta.37:
     number-to-bn "1.7.0"
     randomhex "0.1.5"
     underscore "1.8.3"
-    utf8 "2.1.1"
-
-web3-utils@1.0.0-beta.51:
-  version "1.0.0-beta.51"
-  resolved "https://registry.yarnpkg.com/web3-utils/-/web3-utils-1.0.0-beta.51.tgz#6b0767289be4f27b14895b011bcb5fa6c707fca5"
-  integrity sha512-c9sRSscu0NIjD96X4ToDOgTxGyJevppuB+uHOgWkziaLGqlw/Li1l24nGkvr0Zqpt9SufvfPcWf8EEC92pnwKg==
-  dependencies:
-    "@babel/runtime" "^7.3.1"
-    "@types/bn.js" "^4.11.4"
-    "@types/node" "^10.12.18"
-    bn.js "4.11.8"
-    eth-lib "0.2.8"
-    ethjs-unit "^0.1.6"
-    lodash "^4.17.11"
-    number-to-bn "1.7.0"
-    randomhex "0.1.5"
     utf8 "2.1.1"
 
 web3-utils@1.0.0-beta.52, web3-utils@^1.0.0-beta.46:
