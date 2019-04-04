@@ -503,6 +503,7 @@ export class Witness {
             block = res.blockNumber;
         } catch (err) {
             console.log(`\nevent decode error\n`);
+            return;
         }
 
         // will store witness event object
