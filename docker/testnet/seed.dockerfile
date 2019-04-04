@@ -1,9 +1,6 @@
 # using latest node, v11.x
 FROM node:latest
 
-# tendermint version (duh)
-ENV TENDERMINT_VERSION=0.29.0
-
 # set homedir
 WORKDIR /usr/src/paradigmcore
 
