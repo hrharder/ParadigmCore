@@ -288,7 +288,7 @@ export class State {
         const initialHashString = hashObject(
             thisCopy,
             {
-                replacer: v => typeof v === "bigint" ? v.toString() : v,
+                replacer: (v) => typeof v === "bigint" ? v.toString() : v,
                 unorderedArrays: true
             }
         );
