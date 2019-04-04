@@ -249,7 +249,8 @@ export function parseWitness(data: WitnessData): ParsedWitnessData {
     let intAmount, parsedAddress, parsedPublicKey;
 
     // validate subject is validator or poster
-    if (subject !== "validator" && subject !== "poster") {
+    // ignore to stabilize
+    if (/*subject !== "validator" &&*/ subject !== "poster") {
         throw new Error("invalid witness subject");
     }
 
@@ -278,12 +279,12 @@ export function parseWitness(data: WitnessData): ParsedWitnessData {
         parsedPublicKey = null;
     } else if (subject === "poster" && publicKey !== null) {
         throw new Error("expected no publicKey for poster witnesses");
-    } else if (subject === "validator" && publicKey === null) {
+    /*} else if (subject === "validator" && publicKey === null) {
         throw new Error("expected publicKey for validator witnesses");
     } else if (subject === "validator" && publicKey !== null) {
         const pubKeyBuff = Buffer.from(publicKey, "base64");
         if (pubKeyBuff.length !== 32) { throw new Error("bad validator pubKey"); }
-        parsedPublicKey = pubKeyBuff.toString("base64");
+        parsedPublicKey = pubKeyBuff.toString("base64");*/
     }
 
     // valid if this point reached

@@ -61,7 +61,6 @@ export function endBlockWrapper(state: IState): (r) => ResponseEndBlock {
                 const { publicKey, balance } = validator;
                 const update = validatorUpdate(publicKey, balance);
                 validator.power = update.power;
-                validator.applied = true;
                 validatorUpdates.push(update);
             }
         });
