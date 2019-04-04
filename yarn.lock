@@ -4961,7 +4961,7 @@ paradigm-connect@^0.1.12:
     web3 "1.0.0-beta.37"
     ws "^6.1.4"
 
-paradigm-contracts@^0.2.1, paradigm-contracts@^0.2.3:
+paradigm-contracts@^0.2.3:
   version "0.2.3"
   resolved "https://registry.yarnpkg.com/paradigm-contracts/-/paradigm-contracts-0.2.3.tgz#ac2886f541b296fe3a845dbb01f206f5d04d6b59"
   integrity sha512-KhrotQH1MPCXV+pfxiS6XxPOEE0Maul+XY0ypGCTMAsQ6/DQ+lIUkfZ7Ih5wgAfj0F42u/Syrd3vOiCVra5+vg==
