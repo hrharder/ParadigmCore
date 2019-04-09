@@ -2,9 +2,14 @@
 <h1 align="center">
   ParadigmCore
   <a href="https://github.com/ParadigmFoundation/ParadigmCore/">
-    <code>v0.9.0-rc-3</code>
+    <code>v0.9.0</code>
   </a>
 </h1>
+
+### _THIS SOFTWARE IS DEPRECATED AND NO LONGER SUPPORTED._
+
+### _A link will to the reference implementation will be added when it is made public._
+
 
 ParadigmCore is (currently) the reference implementation of the OrderStream, and the first network client. It is built on [Tendermint](https://www.tendermint.com/), which is used for networking and BFT consensus.
 
