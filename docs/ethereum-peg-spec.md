@@ -2,9 +2,7 @@
 title: Ethereum Peg
 ---
 
-# OrderStream/Ethereum Peg Zone and Finality Gadget
-
-_NOTE: this project is currently a WIP, so details of the implementation are likely to change. I'll strive to keep this doc up to date with changes. Last updated: 27 December 2018._
+# OrderStream <- Ethereum Peg Zone and Finality Gadget
 
 A one-way "peg zone" implementation is necessary for the OrderStream network to: 
 1) Establish "true" finality for Ethereum events that otherwise only have weak (probabilistic) finality guarantee.
@@ -13,8 +11,9 @@ A one-way "peg zone" implementation is necessary for the OrderStream network to:
 
 The solution this document outlines implements a shared security model, where OrderStream validators are also full Ethereum nodes that act as witnesses to events from a specific contract address.
 
-### UPDATE (12/21/18):
 The implementation of this spec can be found at [`src/async/Witness.ts`](../src/async/Witness.ts).
+
+_The current implementation differs slightly with regards to the specific data structures, properties, and state transitions outlined here, however the general concepts remain accurate. Check the ParadigmCore-TS source code for the current implementation._
 
 ## Background/Terminology
 - The finality threshold is an arbitrary maturity that blocks must reach before events within that block can modify the OrderStream’s state.

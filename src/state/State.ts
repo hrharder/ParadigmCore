@@ -14,6 +14,7 @@
 import { createHash, Hash } from "crypto";
 import { readdir, readFile, writeFile } from "fs";
 import { clone, cloneDeep, isBuffer, isString } from "lodash";
+import * as hashObject from "object-hash";
 
 /**
  * A class representing the OrderStream network state.
@@ -138,8 +139,8 @@ export class State {
         this.posters = {};
         this.validators = {};
         this.lastEvent = null;
-        this.orderCounter = null;
-        this.lastBlockHeight = null;
+        this.orderCounter = 0;
+        this.lastBlockHeight = 0;
         this.lastBlockAppHash = null;
 
         // after setting genesis state, read from disk if file present
@@ -283,8 +284,17 @@ export class State {
         const thisCopy: State = clone(this);
         const rawHash = createHash("sha256");
 
-        // hash all values recursively of state copy
-        this.updateHashObject(rawHash, thisCopy);
+        // generate initial hex string
+        const initialHashString = hashObject(
+            thisCopy,
+            {
+                replacer: (v) => typeof v === "bigint" ? v.toString() : v,
+                unorderedArrays: true
+            }
+        );
+
+        // generate the SHA256 hash of the object hash
+        rawHash.update(initialHashString);
 
         // generate the hashed value
         const hash = rawHash.digest();
@@ -341,107 +351,5 @@ export class State {
                 }
             });
         };
-    }
-
-    /* Begin internal hashing methods */
-
-    /**
-     * Iterates over an objects enumerable properties and defers to the correct
-     * logic for generating a hash of all the object's values.
-     *
-     * @param hash the hash object being operated on
-     * @param obj the object whose properties should be included in a hash
-     */
-    private updateHashObject(hash: Hash, obj: object): void {
-        for (let key in obj) {
-            if (obj.hasOwnProperty(key)) {
-                const value = obj[key];
-                if (isBuffer(value)) {
-                    hash.update(value);
-                } else {
-                    this.updateHashValue(hash, value);
-                }
-            }
-        }
-        return;
-    }
-
-    /**
-     * Selects the correct method of serialization to binary data for a given
-     * type to be included in a `Hash` object.
-     *
-     * @param hash the hash object to update with a given value
-     * @param value the value to include in the provided hash
-     */
-    private updateHashValue(hash: Hash, value: any): void {
-        const type = typeof value;
-        switch (type) {
-            case "bigint": return this.updateHashNumber(hash, value as any);
-            case "boolean": return this.updateHashBoolean(hash, value as any);
-            case "number": return this.updateHashNumber(hash, value as any);
-            case "object": return this.updateHashObject(hash, value as any);
-            case "string": return this.updateHashString(hash, value as any);
-            case "undefined": return this.updateHashUndefined(hash);
-            case "function": return;
-            case "symbol": return;
-            default: {
-                throw Error(`Invalid type: don't know how to hash ${type}`);
-            }
-        }
-    }
-
-    /**
-     * Converts a string to a `Buffer` object to update a hash object with.
-     *
-     * @param hash the hash being operated on
-     * @param string a string to include in the hash
-     */
-    private updateHashString(hash: Hash, string: string): void {
-        const stringBuffer = Buffer.from(string);
-        hash.update(stringBuffer);
-    }
-
-    /**
-     * Converts a number value (either `bigint` or `number` type) to a
-     * hexadecimal string value to be included in the hash.
-     *
-     * @param hash the hash being operated on
-     * @param number a number value (`bigint` or `number`) to include
-     */
-    private updateHashNumber(hash: Hash, number: number | bigint): void {
-        const hexNumberString = number.toString(16);
-        this.updateHashString(hash, hexNumberString);
-        return ;
-    }
-
-    /**
-     * Defines a manner to hash null or 0 values. For `null`, `undefined` or
-     * 0 (including `false`) values, simply append a `00` byte to the binary
-     * has input (prior to digestion).
-     *
-     * @param hash the hash being operated on
-     * @param nullVal a null or 0 value to include in the hash
-     */
-    private updateHashUndefined(hash: Hash) {
-        const zeroedBuffer = Buffer.from("00", "hex");
-        hash.update(zeroedBuffer);
-        return;
-    }
-
-    /**
-     * Defines a method of hashing a boolean value. Values that are `true` are
-     * included as a `ff` byte in the raw hash input, and `false` values are
-     * included as a `00` byte. Both appended prior to digestion.
-     *
-     * @param hash the hash being operated on
-     * @param bool a boolean value ot include in the hash
-     */
-    private updateHashBoolean(hash: Hash, bool: boolean): void {
-        if (bool) {
-            hash.update(Buffer.from("ff", "hex"));
-        } else {
-            hash.update(Buffer.from("00", "hex"));
-        }
-        return;
     }
 }

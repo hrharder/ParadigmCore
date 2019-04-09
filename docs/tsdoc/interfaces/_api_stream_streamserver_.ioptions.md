@@ -18,6 +18,7 @@ Defines the object provided to the `StreamServer` constructor.
 * [retryInterval](_api_stream_streamserver_.ioptions.md#retryinterval)
 * [retryMax](_api_stream_streamserver_.ioptions.md#retrymax)
 * [tendermintRpcUrl](_api_stream_streamserver_.ioptions.md#tendermintrpcurl)
+* [validator](_api_stream_streamserver_.ioptions.md#validator)
 
 ---
 
@@ -29,7 +30,7 @@ Defines the object provided to the `StreamServer` constructor.
 
 **● host**: *`string`*
 
-*Defined in [api/stream/StreamServer.ts:49](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/api/stream/StreamServer.ts#L49)*
+*Defined in [api/stream/StreamServer.ts:52](https://github.com/paradigmfoundation/paradigmcore/blob/96d110b/src/api/stream/StreamServer.ts#L52)*
 
 Network host to bind StreamAPI server.
 
@@ -40,7 +41,7 @@ ___
 
 **● methods**: *`object`*
 
-*Defined in [api/stream/StreamServer.ts:52](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/api/stream/StreamServer.ts#L52)*
+*Defined in [api/stream/StreamServer.ts:62](https://github.com/paradigmfoundation/paradigmcore/blob/96d110b/src/api/stream/StreamServer.ts#L62)*
 
 Optional pre-defined method implementations.
 
@@ -67,7 +68,7 @@ ___
 
 **● port**: *`number`*
 
-*Defined in [api/stream/StreamServer.ts:46](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/api/stream/StreamServer.ts#L46)*
+*Defined in [api/stream/StreamServer.ts:49](https://github.com/paradigmfoundation/paradigmcore/blob/96d110b/src/api/stream/StreamServer.ts#L49)*
 
 Port to bind the StreamAPI server to.
 
@@ -78,7 +79,7 @@ ___
 
 **● retryInterval**: *`number`*
 
-*Defined in [api/stream/StreamServer.ts:40](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/api/stream/StreamServer.ts#L40)*
+*Defined in [api/stream/StreamServer.ts:43](https://github.com/paradigmfoundation/paradigmcore/blob/96d110b/src/api/stream/StreamServer.ts#L43)*
 
 Interval between connection attempts (in ms).
 
@@ -89,7 +90,7 @@ ___
 
 **● retryMax**: *`number`*
 
-*Defined in [api/stream/StreamServer.ts:43](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/api/stream/StreamServer.ts#L43)*
+*Defined in [api/stream/StreamServer.ts:46](https://github.com/paradigmfoundation/paradigmcore/blob/96d110b/src/api/stream/StreamServer.ts#L46)*
 
 The maximum number of times to retry connection before throwing.
 
@@ -100,9 +101,22 @@ ___
 
 **● tendermintRpcUrl**: *`string`*
 
-*Defined in [api/stream/StreamServer.ts:37](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/api/stream/StreamServer.ts#L37)*
+*Defined in [api/stream/StreamServer.ts:40](https://github.com/paradigmfoundation/paradigmcore/blob/96d110b/src/api/stream/StreamServer.ts#L40)*
 
 URL of the local Tendermint RPC server.
+
+___
+<a id="validator"></a>
+
+###  validator
+
+**● validator**: *`boolean`*
+
+*Defined in [api/stream/StreamServer.ts:59](https://github.com/paradigmfoundation/paradigmcore/blob/96d110b/src/api/stream/StreamServer.ts#L59)*
+
+Set to true if validator and want to accept order txs.
+
+If set to true, provide `PUB_KEY` and `PRIV_KEY` environment variables.
 
 ___
 

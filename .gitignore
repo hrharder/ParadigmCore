@@ -8,4 +8,5 @@ dist
 
 state.json
 
-# lib/tendermint
+lib/config
+lib/data

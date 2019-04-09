@@ -18,7 +18,7 @@
 
 ▸ **queryWrapper**(state: *[State](../classes/_state_state_.state.md)*): `function`
 
-*Defined in [core/query.ts:33](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/core/query.ts#L33)*
+*Defined in [core/query.ts:34](https://github.com/paradigmfoundation/paradigmcore/blob/96d110b/src/core/query.ts#L34)*
 
 Return information about the state and software.
 

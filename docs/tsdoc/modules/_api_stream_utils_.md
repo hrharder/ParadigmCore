@@ -21,7 +21,7 @@
 
 ▸ **createResponse**(result?: *`any`*, id?: *`string`*, error?: *`ValidationError`*): `Res`
 
-*Defined in [api/stream/utils.ts:72](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/api/stream/utils.ts#L72)*
+*Defined in [api/stream/utils.ts:71](https://github.com/paradigmfoundation/paradigmcore/blob/96d110b/src/api/stream/utils.ts#L71)*
 
 Generate a JSONRPC response.
 
@@ -44,7 +44,7 @@ ___
 
 ▸ **createValError**(code: *`number`*, message: *`string`*): `ValidationError`
 
-*Defined in [api/stream/utils.ts:52](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/api/stream/utils.ts#L52)*
+*Defined in [api/stream/utils.ts:51](https://github.com/paradigmfoundation/paradigmcore/blob/96d110b/src/api/stream/utils.ts#L51)*
 
 Build a JSONRPC validation object.
 
@@ -66,13 +66,15 @@ ___
 
 ▸ **parseOrdersForSubscription**(txs: *`string`[]*): `OrderData`[]
 
-*Defined in [api/stream/utils.ts:91](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/api/stream/utils.ts#L91)*
+*Defined in [api/stream/utils.ts:96](https://github.com/paradigmfoundation/paradigmcore/blob/96d110b/src/api/stream/utils.ts#L96)*
+
+Filters non-`order` type transactions from an array of string JSON transactions and returns an array of parsed (objects) `order` transactions.
 
 **Parameters:**
 
-| Name | Type |
-| ------ | ------ |
-| txs | `string`[] |
+| Name | Type | Description |
+| ------ | ------ | ------ |
+| txs | `string`[] |  an array of JSON tx strings |
 
 **Returns:** `OrderData`[]
 
@@ -83,7 +85,7 @@ ___
 
 ▸ **validateMessage**(message: *`WebSocket.Data`*): `ValidationError`
 
-*Defined in [api/stream/utils.ts:32](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/api/stream/utils.ts#L32)*
+*Defined in [api/stream/utils.ts:31](https://github.com/paradigmfoundation/paradigmcore/blob/96d110b/src/api/stream/utils.ts#L31)*
 
 Validate an incoming client message
 

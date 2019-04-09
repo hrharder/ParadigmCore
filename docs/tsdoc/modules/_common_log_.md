@@ -28,7 +28,7 @@
 
 **● level**: *`number`* =  process.env.LOG_LEVEL ? parseInt(process.env.LOG_LEVEL, 10) : 0
 
-*Defined in [common/log.ts:5](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/common/log.ts#L5)*
+*Defined in [common/log.ts:21](https://github.com/paradigmfoundation/paradigmcore/blob/96d110b/src/common/log.ts#L21)*
 
 ___
 <a id="version"></a>
@@ -37,7 +37,7 @@ ___
 
 **● version**: *`string`* =  process.env.npm_package_version
 
-*Defined in [common/log.ts:6](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/common/log.ts#L6)*
+*Defined in [common/log.ts:22](https://github.com/paradigmfoundation/paradigmcore/blob/96d110b/src/common/log.ts#L22)*
 
 ___
 
@@ -49,14 +49,16 @@ ___
 
 ▸ **err**(mod: *`string`*, msg: *`string`*): `void`
 
-*Defined in [common/log.ts:69](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/common/log.ts#L69)*
+*Defined in [common/log.ts:119](https://github.com/paradigmfoundation/paradigmcore/blob/96d110b/src/common/log.ts#L119)*
+
+General error log function.
 
 **Parameters:**
 
-| Name | Type |
-| ------ | ------ |
-| mod | `string` |
-| msg | `string` |
+| Name | Type | Description |
+| ------ | ------ | ------ |
+| mod | `string` |  module reporting error |
+| msg | `string` |  error message |
 
 **Returns:** `void`
 
@@ -67,16 +69,18 @@ ___
 
 ▸ **log**(mod: *`string`*, msg: *`string`*, height?: *`number`*, hash?: *`string`*): `void`
 
-*Defined in [common/log.ts:39](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/common/log.ts#L39)*
+*Defined in [common/log.ts:77](https://github.com/paradigmfoundation/paradigmcore/blob/96d110b/src/common/log.ts#L77)*
+
+General info log function.
 
 **Parameters:**
 
-| Name | Type |
-| ------ | ------ |
-| mod | `string` |
-| msg | `string` |
-| `Optional` height | `number` |
-| `Optional` hash | `string` |
+| Name | Type | Description |
+| ------ | ------ | ------ |
+| mod | `string` |  module reporting information |
+| msg | `string` |  the reported information message |
+| `Optional` height | `number` |  optional block height for core messages |
+| `Optional` hash | `string` |  optional appHash for commit messages |
 
 **Returns:** `void`
 
@@ -87,13 +91,15 @@ ___
 
 ▸ **logStart**(msg?: *`any`*): `void`
 
-*Defined in [common/log.ts:19](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/common/log.ts#L19)*
+*Defined in [common/log.ts:49](https://github.com/paradigmfoundation/paradigmcore/blob/96d110b/src/common/log.ts#L49)*
+
+Logger used during startup, with special case for very first message.
 
 **Parameters:**
 
-| Name | Type |
-| ------ | ------ |
-| `Optional` msg | `any` |
+| Name | Type | Description |
+| ------ | ------ | ------ |
+| `Optional` msg | `any` |  startup message |
 
 **Returns:** `void`
 
@@ -104,14 +110,16 @@ ___
 
 ▸ **print**(msg: *`any`*, lvl: *`any`*): `void`
 
-*Defined in [common/log.ts:13](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/common/log.ts#L13)*
+*Defined in [common/log.ts:38](https://github.com/paradigmfoundation/paradigmcore/blob/96d110b/src/common/log.ts#L38)*
+
+Output log message (formatted) to stdout.
 
 **Parameters:**
 
-| Name | Type |
-| ------ | ------ |
-| msg | `any` |
-| lvl | `any` |
+| Name | Type | Description |
+| ------ | ------ | ------ |
+| msg | `any` |  message to write to stdout |
+| lvl | `any` |  log level of message |
 
 **Returns:** `void`
 
@@ -122,7 +130,9 @@ ___
 
 ▸ **ts**(): `string`
 
-*Defined in [common/log.ts:8](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/common/log.ts#L8)*
+*Defined in [common/log.ts:27](https://github.com/paradigmfoundation/paradigmcore/blob/96d110b/src/common/log.ts#L27)*
+
+Creates a pretty timestamp string.
 
 **Returns:** `string`
 
@@ -133,14 +143,16 @@ ___
 
 ▸ **warn**(mod: *`string`*, msg: *`string`*): `void`
 
-*Defined in [common/log.ts:56](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/common/log.ts#L56)*
+*Defined in [common/log.ts:100](https://github.com/paradigmfoundation/paradigmcore/blob/96d110b/src/common/log.ts#L100)*
+
+General warning log function.
 
 **Parameters:**
 
-| Name | Type |
-| ------ | ------ |
-| mod | `string` |
-| msg | `string` |
+| Name | Type | Description |
+| ------ | ------ | ------ |
+| mod | `string` |  module reporting warning |
+| msg | `string` |  warning message |
 
 **Returns:** `void`
 

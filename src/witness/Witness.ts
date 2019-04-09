@@ -494,9 +494,17 @@ export class Witness {
             return;
         }
 
+        //
+        let decodedEventData, block;
+
         // use decoder utils from ParadigmContract library
-        const decodedEventData = eventDecoder(res.returnValues);
-        const block = res.blockNumber;
+        try {
+            decodedEventData = eventDecoder(res.returnValues);
+            block = res.blockNumber;
+        } catch (err) {
+            console.log(`\nevent decode error\n`);
+            return;
+        }
 
         // will store witness event object
         const witnessEvent: WitnessData = createWitnessEventObject(

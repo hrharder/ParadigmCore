@@ -1,0 +1,56 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: [
+    'build',
+    '-t',
+    'gcr.io/paradigmcore/base:$BRANCH_NAME-$SHORT_SHA',
+    '-f',
+    './docker/base.dockerfile',
+    './'
+  ]
+- name: "gcr.io/cloud-builders/docker"
+  args: [
+    "tag",
+    'gcr.io/paradigmcore/base:$BRANCH_NAME-$SHORT_SHA',
+    'gcr.io/paradigmcore/base:latest',
+  ]
+- name: 'gcr.io/cloud-builders/docker'
+  args: [
+    'build',
+    '-t',
+    'gcr.io/paradigmcore/testnet-seed:$BRANCH_NAME-$SHORT_SHA',
+    '-f',
+    './docker/testnet/seed.dockerfile',
+    './'
+  ]
+- name: "gcr.io/cloud-builders/docker"
+  args: [
+    "tag",
+    'gcr.io/paradigmcore/testnet-seed:$BRANCH_NAME-$SHORT_SHA',
+    'gcr.io/paradigmcore/testnet-seed:latest',
+  ]
+- name: 'gcr.io/cloud-builders/docker'
+  args: [
+    'build',
+    '-t',
+    'gcr.io/paradigmcore/testnet:$BRANCH_NAME-$SHORT_SHA',
+    '-f',
+    './docker/testnet/testnet.dockerfile',
+    './'
+  ]
+- name: "gcr.io/cloud-builders/docker"
+  args: [
+    "tag",
+    'gcr.io/paradigmcore/testnet:$BRANCH_NAME-$SHORT_SHA',
+    'gcr.io/paradigmcore/testnet:latest',
+  ]
+images: [
+  'gcr.io/paradigmcore/base:$BRANCH_NAME-$SHORT_SHA',
+  'gcr.io/paradigmcore/base:latest',
+
+  'gcr.io/paradigmcore/testnet-seed:$BRANCH_NAME-$SHORT_SHA',
+  'gcr.io/paradigmcore/testnet-seed:latest',
+
+  'gcr.io/paradigmcore/testnet:$BRANCH_NAME-$SHORT_SHA',
+  'gcr.io/paradigmcore/testnet:latest',
+]

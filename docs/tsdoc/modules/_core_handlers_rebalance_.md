@@ -19,7 +19,7 @@
 
 ▸ **checkRebalance**(tx: *`SignedRebalanceTx`*, state: *`IState`*): `ResponseCheckTx`
 
-*Defined in [core/handlers/rebalance.ts:34](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/core/handlers/rebalance.ts#L34)*
+*Defined in [core/handlers/rebalance.ts:34](https://github.com/paradigmfoundation/paradigmcore/blob/96d110b/src/core/handlers/rebalance.ts#L34)*
 
 Verify a Rebalance proposal before accepting it into the local mempool.
 
@@ -39,7 +39,7 @@ ___
 
 ▸ **deliverRebalance**(tx: *`SignedRebalanceTx`*, state: *`IState`*): `ResponseDeliverTx`
 
-*Defined in [core/handlers/rebalance.ts:69](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/core/handlers/rebalance.ts#L69)*
+*Defined in [core/handlers/rebalance.ts:69](https://github.com/paradigmfoundation/paradigmcore/blob/96d110b/src/core/handlers/rebalance.ts#L69)*
 
 Execute a Rebalance transaction and adopt the new mapping in state.
 

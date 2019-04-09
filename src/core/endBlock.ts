@@ -14,7 +14,7 @@
 
 // custom types
 import { ResponseEndBlock } from "../typings/abci";
-import { doForEachValidator } from "./util/valFunctions";
+import { doForEachValidator, validatorUpdate } from "./util/valFunctions";
 
 /**
  * Implementation of the ABCI `EndBlock` method. Will enable dynamic updates to
@@ -51,23 +51,23 @@ export function endBlockWrapper(state: IState): (r) => ResponseEndBlock {
         // begin example implementation
 
         const validatorUpdates = [];    // validator updates to apply
-        let totalStake = BigInt(0);     // total at stake
-        let needToUpdate = false;       // true if any new validators added
 
         doForEachValidator(state, (nodeId) => {
             // current validator
             const validator = state.validators[nodeId];
 
-            // add balance to total for non genesis validators
-            if (!validator.genesis) { totalStake += validator.balance; }
-
             // need to recompute power if any new validator is present
-            if (!validator.applied) { needToUpdate = true; }
+            if (!validator.applied) {
+                const { publicKey, balance } = validator;
+                const update = validatorUpdate(publicKey, balance);
+                validator.power = update.power;
+                validatorUpdates.push(update);
+            }
         });
 
-        // return validator updates, if any
+        // return validator update array
         return {
-            validatorUpdates: []
+            validatorUpdates
         };
     };
 }

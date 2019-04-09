@@ -1,12 +1,12 @@
 
-ParadigmCore [`v0.8.3-rc-1`](https://github.com/ParadigmFoundation/ParadigmCore/pull/38)
-========================================================================================
+ParadigmCore [`v0.9.0-rc-3`](https://github.com/ParadigmFoundation/ParadigmCore/)
+=================================================================================
 
 ParadigmCore is (currently) the reference implementation of the OrderStream, and the first network client. It is built on [Tendermint](https://www.tendermint.com/), which is used for networking and BFT consensus.
 
 This software is in development. While we consider ParadigmCore to be reasonably stable, it should be used with caution in production environments. Paradigm's [core protocol contracts](https://github.com/ParadigmFoundation/ParadigmContracts) are currently only deployed on the Ropsten test-network. No date for a main-net launch of the network has been set.
 
-**Note:** this version of ParadigmCore only supports Tendermint `v0.29.0`, which it automatically configures on installation.
+**Note:** this version of ParadigmCore supports Tendermint versions `v0.31.1`, which it automatically configures on installation.
 
 Jump to...
 ----------
@@ -39,7 +39,7 @@ For more information about ParadigmCore and the protocol as a whole:
 Quick Start
 -----------
 
-Complete install instructions can be found [here](./docs/install.md), and an even more in-depth tutorial can be found [here](./docs/tutorial.md).
+Complete install instructions can be found [here](./docs/install.md), and a more in-depth tutorial can be found [here](./docs/tutorial.md).
 
 ### Prerequisites
 

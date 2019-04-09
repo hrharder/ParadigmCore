@@ -2,6 +2,8 @@
 
 # Class: KVPair
 
+Represents a tendermint `KVPair`. Used in ABCI response messages.
+
 ## Hierarchy
 
 **KVPair**
@@ -31,7 +33,7 @@
 
 ⊕ **new KVPair**(key: *`string`*, value: *`string` \| `number`*): [KVPair](_core_util_kvpair_.kvpair.md)
 
-*Defined in [core/util/KVPair.ts:3](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/core/util/KVPair.ts#L3)*
+*Defined in [core/util/KVPair.ts:18](https://github.com/paradigmfoundation/paradigmcore/blob/96d110b/src/core/util/KVPair.ts#L18)*
 
 **Parameters:**
 
@@ -52,7 +54,7 @@ ___
 
 **● key**: *`Buffer`*
 
-*Defined in [core/util/KVPair.ts:2](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/core/util/KVPair.ts#L2)*
+*Defined in [core/util/KVPair.ts:17](https://github.com/paradigmfoundation/paradigmcore/blob/96d110b/src/core/util/KVPair.ts#L17)*
 
 ___
 <a id="value"></a>
@@ -61,7 +63,7 @@ ___
 
 **● value**: *`Buffer`*
 
-*Defined in [core/util/KVPair.ts:3](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/core/util/KVPair.ts#L3)*
+*Defined in [core/util/KVPair.ts:18](https://github.com/paradigmfoundation/paradigmcore/blob/96d110b/src/core/util/KVPair.ts#L18)*
 
 ___
 
@@ -73,7 +75,7 @@ ___
 
 ▸ **toJSON**(): `object`
 
-*Defined in [core/util/KVPair.ts:8](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/core/util/KVPair.ts#L8)*
+*Defined in [core/util/KVPair.ts:23](https://github.com/paradigmfoundation/paradigmcore/blob/96d110b/src/core/util/KVPair.ts#L23)*
 
 **Returns:** `object`
 

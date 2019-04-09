@@ -17,6 +17,7 @@ import { get, isArray, isBuffer, isUndefined } from "lodash";
 
 // custom typings
 import { State } from "src/state/State";
+import { bigIntReplacer } from "../common/static/bigIntUtils";
 import { ResponseQuery } from "../typings/abci";
 
 /**
@@ -67,6 +68,10 @@ export function queryWrapper(state: State): (r) => ResponseQuery {
             case "object": {
                 if (isBuffer(result)) {
                     info = `0x${result.toString("hex")}`;
+                } else if (!result) {
+                    code = 1;
+                    log = "Failed query: nil result view.";
+                    info = null;
                 } else {
                     info = `[${Object.keys(result).toString()}]`;
                 }
@@ -85,7 +90,10 @@ export function queryWrapper(state: State): (r) => ResponseQuery {
                 break;
             }
             case "undefined": {
-                return;
+                code = 1;
+                log = "Failed query: bad result.";
+                info = null;
+                break;
             }
             default: {
                 code = 1;

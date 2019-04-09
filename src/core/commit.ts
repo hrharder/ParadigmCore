@@ -44,31 +44,32 @@ export function commitWrapper(
             }
 
             // Generate new state hash and update
-            deliverState.lastBlockHeight++;
-            deliverState.lastBlockAppHash = deliverState.generateAppHash();
+            // deliverState.lastBlockAppHash = deliverState.generateAppHash();
+
+            // generate state hash
+            stateHash = deliverState.generateAppHash();
+
+            // write state contents to disk
+            deliverState.lastBlockAppHash = stateHash;
+            deliverState.writeToDisk();
 
             // sync states
             commitState.acceptNew(deliverState.toJSON());
-
-            // write state contents to disk
-            commitState.writeToDisk();
-
-            // load state hash
-            stateHash = commitState.lastBlockAppHash;
-
-            log(
-                "state",
-                `new state hash: ` +
-                `${stateHash.toString("hex").slice(0, 5)}...` +
-                `${stateHash.toString("hex").slice(-5)}`,
-                commitState.lastBlockHeight,
-                stateHash.toString("hex").toUpperCase()
-            );
         } catch (error) {
             err("state", `commit failed for block #${deliverState.lastBlockHeight }: ${error.message}`);
         }
 
+        // print some info about commit
+        log(
+            "state",
+            `new state hash: ` +
+            `${stateHash.toString("hex").slice(0, 5)}...` +
+            `${stateHash.toString("hex").slice(-5)}`,
+            commitState.lastBlockHeight,
+            stateHash.toString("hex").toUpperCase()
+        );
+
         // Return state's hash to be included in next block header
-        return { data: commitState.lastBlockAppHash };
+        return { data: stateHash };
     };
 }

@@ -18,7 +18,7 @@
 
 ▸ **deliverTxWrapper**(state: *`IState`*, Order: *`any`*): `function`
 
-*Defined in [core/deliverTx.ts:34](https://github.com/paradigmfoundation/paradigmcore/blob/e540330/src/core/deliverTx.ts#L34)*
+*Defined in [core/deliverTx.ts:34](https://github.com/paradigmfoundation/paradigmcore/blob/96d110b/src/core/deliverTx.ts#L34)*
 
 Execute a transaction in full: perform state modification, and verify transaction validity.
 

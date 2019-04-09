@@ -31,17 +31,22 @@ export function beginBlockWrapper(state: State): (r) => ResponseBeginBlock {
         // parse height and proposer from header
         const currHeight: number = Number(request.header.height);
         const proposer: string = request.header.proposerAddress.toString("hex");
-        const appHash: Buffer = Buffer.from(request.header.appHash);
+        const appHash: Buffer = Buffer.from(request.header.appHash, "base64");
+
+        state.lastBlockHeight = currHeight;
+        state.lastBlockAppHash = appHash; // Buffer.alloc(0);
 
         // store array of last votes
         const lastVotes: object[] | undefined = request.lastCommitInfo.votes;
 
-        // parse validators that voted on the last block, update values
         if (lastVotes !== undefined && lastVotes.length > 0) {
             lastVotes.forEach((vote: any) => {
                 // pull/parse nodeId and current vote power
                 const nodeId = vote.validator.address.toString("hex");
                 const power = Number(vote.validator.power);
+                const validator = state.validators[nodeId];
+
+                if (!validator) { return; }
 
                 // TODO: should we check for new validators here?
 
@@ -87,6 +92,20 @@ export function beginBlockWrapper(state: State): (r) => ResponseBeginBlock {
                 } else {
                     validator.active = false;
                 }
+            });
+
+            // parse validators that voted on the last block, update values
+            const toDelete = [];
+
+            doForEachValidator(state, (nodeId) => {
+                const validator = state.validators[nodeId];
+                if (validator.balance === 0n && validator.applied === true) {
+                    toDelete.push(nodeId);
+                }
+            });
+
+            toDelete.forEach((id) => {
+                delete state.validators[id];
             });
         }
 

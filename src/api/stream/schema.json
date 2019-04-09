@@ -9,7 +9,7 @@
 			"The API is served by the `StreamServer`, an optional component included as part of the `api` module in ParadigmCore.\n",
             "StreamAPI follows the JSONRPC-2.0 specification. More information available at http://www.jsonrpc.org/specification."
         ],
-		"version": "0.1-rc-3"
+		"version": "0.1-rc-4"
 	},
 	"definitions": {},
 	"methods": {
@@ -129,6 +129,211 @@
 				}
 			]
 		},
+		"order.submit": {
+			"summary": "Propose an order to be broadcast to the network.",
+			"description": [
+				"Submit a signed Paradigm order object to a validator to be broadcast to the network.\n",
+				"Allows selection of `mode` which can be set to `async`, in which case the RPC will respond immediately without waiting for the order to be verified by the node.\n",
+				"The mode can also be set to `sync` where the RPC will respond after the order has been accepted or rejected by the node's local mempool.\n",
+				"To wait for the order to be included in a block (up to 3 seconds), set the mode to `commit`.\n",
+				"Orders can be created and signed with the ParadigmConnect library."
+			],
+			"tags": [
+                "order"
+            ],
+			"params": {
+				"type": "object",
+				"properties": {
+					"order": {
+						"type": "object",
+						"description": "The signed Paradigm order object (in object notation) to be submitted.\n The example shows a 0x order wrapped for the 0x SubContract.",
+						"default": {
+							"subContract":"0x0afd97c4548d6a5db854d6b1b4b18138327f944c",
+							"maker":"0x8b366a3d4e46ac5406f12766ad33e6482ce4f081",
+							"makerArguments":[
+								{"dataType":"address","name":"makerAddress"},
+								{"dataType":"address","name":"takerAddress"},
+								{"dataType":"address","name":"feeRecipientAddress"},
+								{"dataType":"address","name":"senderAddress"},
+								{"dataType":"uint","name":"makerAssetAmount"},
+								{"dataType":"uint","name":"takerAssetAmount"},
+								{"dataType":"uint","name":"makerFee"},
+								{"dataType":"uint","name":"takerFee"},
+								{"dataType":"uint","name":"expirationTimeSeconds"},
+								{"dataType":"uint","name":"salt"},
+								{"dataType":"bytes32","name":"makerAssetData0"},
+								{"dataType":"bytes32","name":"makerAssetData1"},
+								{"dataType":"bytes32","name":"takerAssetData0"},
+								{"dataType":"bytes32","name":"takerAssetData1"},
+								{"dataType":"bytes32","name":"signature0"},
+								{"dataType":"bytes32","name":"signature1"},
+								{"dataType":"bytes32","name":"signature2"},
+								{"dataType":"address","name":"exchangeAddress"}
+							],
+							"takerArguments":[
+								{"dataType":"address","name":"taker"},
+								{"dataType":"uint","name":"takerAssetAmount"}
+							],
+							"makerValues":{
+								"exchangeAddress":"0x4f833a24e1f95d70f028921e27040ca56e09ab0b",
+								"senderAddress":"0x0000000000000000000000000000000000000000",
+								"makerAddress":"0x8734d61afaf109b7e52bd44acf0f5eb9cfb06b75",
+								"takerAddress":"0x0000000000000000000000000000000000000000",
+								"makerAssetData":"0xf47261b00000000000000000000000009f8f72aa9304c8b593d555f12ef6589cc3a579a2",
+								"takerAssetData":"0xf47261b000000000000000000000000089d24a6b4ccb1b6faa2625fe562bdd9a23260359",
+								"feeRecipientAddress":"0xa258b39954cef5cb142fd567a46cddb31a670124",
+								"makerAssetAmount":"15000000000000000000",
+								"takerAssetAmount":"6357025538520683977620",
+								"makerFee":"0",
+								"takerFee":"0",
+								"expirationTimeSeconds":"1549395903",
+								"signature":"0x1bb05bc6f77453bdfbb2e1c39e88926ea473060d3b21608708cab05116864d3eb92f0e1d2ee572c2e7a452a4e3f82dfdc69e6949fa46a35569fbcce414d422c8d803",
+								"salt":"1549395303502",
+								"makerAssetData0":"0xf47261b00000000000000000000000009f8f72aa9304c8b593d555f12ef6589c",
+								"makerAssetData1":"0xc3a579a2",
+								"takerAssetData0":"0xf47261b000000000000000000000000089d24a6b4ccb1b6faa2625fe562bdd9a",
+								"takerAssetData1":"0x23260359",
+								"signature0":"0x1bb05bc6f77453bdfbb2e1c39e88926ea473060d3b21608708cab05116864d3e",
+								"signature1":"0xb92f0e1d2ee572c2e7a452a4e3f82dfdc69e6949fa46a35569fbcce414d422c8",
+								"signature2":"0xd803"
+							},
+							"posterSignature":{
+								"v":27,
+								"r":"0x2d2fe7b26745921e015453c43eafd11e057dcf632b036537721a4a0b1a13800a",
+								"s":"0x418f5379937780a12c5c6407f962dde81efb688b26977709a2d102487b6e8ed3"
+							}
+						},
+						"required": ["subContract", "maker", "makerValues", "posterSignature"],
+						"properties": {
+							"subContract": {
+								"description": "The Ethereum address of the Paradigm SubContract the order is for.",
+								"default": "0x0afd97c4548d6a5db854d6b1b4b18138327f944c",
+								"type": "string",
+								"minLength": 42
+							},
+							"maker": {
+								"description": "The Ethereum address of the order's maker and signing party.",
+								"default": "0xdbffce76e8ab7b64b8d4400778bf514b92facb66",
+								"type": "string",
+								"minLength": 42
+							},
+							"makerArguments": {
+								"description": "An array of objects that define the order's required maker arguments",
+								"default": [{
+									"dataType": "address",
+									"name": "orderMaker"
+								}, {
+									"dataType": "address",
+									"name": "orderTaker"
+								}, {
+									"dataType": "address",
+									"name": "orderMakerTokenAddress"
+								}, {
+									"dataType": "address",
+									"name": "orderTakerTokenAddress"
+								}, {
+									"dataType": "address",
+									"name": "orderFeeRecipient"
+								}],
+								"type": "array"
+							},
+							"takerArguments": {
+								"description": "An array of objects that define the order's required taker arguments",
+								"default": [{
+									"dataType": "address",
+									"name": "orderMaker"
+								}, {
+									"dataType": "address",
+									"name": "orderTaker"
+								}, {
+									"dataType": "address",
+									"name": "orderMakerTokenAddress"
+								}, {
+									"dataType": "address",
+									"name": "orderTakerTokenAddress"
+								}, {
+									"dataType": "address",
+									"name": "orderFeeRecipient"
+								}],
+								"type": "array"
+							},
+							"makerValues": {
+								"description": "An object that defines the order's maker values, as defined in the `makerArguments`.",
+								"type": "object",
+								"properties": {},
+								"default": {}
+							},
+							"makerSignature": {
+								"description": "An optional field that defines the order's maker signature, independent from the `makerValues`.",
+								"type": "object",
+								"properties": {},
+								"default": {}
+							},
+							"posterSignature": {
+								"description": "An object that contains the signature of the poster submitting the order. May also be signed by the maker.",
+								"type": "object",
+								"properties": {},
+								"default": {
+									"v":28,
+									"r":"0x6a8767350ba00b0beb9818d9e8abb89b3abb88ac074048c2af3898cc60a74e83",
+									"s":"0x043dbbe570f524d6222311bfdf447421aa67ebec3589753f22e830d159fbf95b",
+									"messageHex":"0xc6dd06b493ce1387032dd47d39e1f1544878396b97ae89f0b34475e2a711eac9"
+								}
+							}
+						}	
+					},
+					"mode": {
+						"description": "The broadcast mode to be used for the underlying Tendermint remote procedural call.",
+                        "default": "sync",
+                        "enum": ["sync", "async", "commit"],
+						"type": "string",
+						"minLength": 1
+					}
+				},
+				"required": ["order"]
+			},
+			"result": {
+				"type": "object",
+				"properties": {
+					"message": {
+						"description": "The response from the node to the order submission. Will include ID in some cases.",
+						"default": "new order rejected: invalid poster or no poster stake",
+						"type": "string"
+					},
+					"processed": {
+						"description": "The date and time at which the request was processed by the node.",
+						"default": "4/1/2019, 10:22:48 AM",
+						"type": "string"
+					},
+					"code": {
+						"description": "The raw response code returned by the ParadigmCore ABCI application. Only `0` indicates success.",
+						"default": 1,
+						"type": "number"
+					}
+				},
+				"required": ["message", "processed", "code"]
+			},
+			"errors": [
+				{
+					"description": "The provided parameters are invalid.",
+					"code": -32602,
+					"message": "Invalid Parameters",
+					"data": {}
+				},
+				{
+					"description": "The request object is invalid.",
+					"code": -32600,
+					"message": "Parse Error",
+					"data": {}
+				},
+				{
+					"description": "The server encountered an error processing the request.",
+					"code": -32603,
+					"message": "Internal Error",
+					"data": {}
+				}
+			]
+        },
 		"state.latestHeight": {
 			"summary": "Return the height of the best known block.",
 			"description": "The `block.latestHeight` method will return the integer height of the latest block committed to the blockchain.",

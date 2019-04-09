@@ -1,0 +1,67 @@
+{
+  "genesis_time": "2019-04-02T00:00:00.00Z",
+  "chain_id": "blind-star-rip",
+  "consensus_params": {
+    "block": {
+      "max_bytes": "22020096",
+      "max_gas": "-1",
+      "time_iota_ms": "1000"
+    },
+    "evidence": {
+      "max_age": "100000"
+    },
+    "validator": {
+      "pub_key_types": [
+        "ed25519"
+      ]
+    }
+  },
+  "validators": [
+    {
+      "address": "2CF1EED9C80ADEF59EB05E2B7CDB285B5DCCE3D3",
+      "pub_key": {
+        "type": "tendermint/PubKeyEd25519",
+        "value":"lL146BprQUo/3e4E2nbKJDlqrHrVsv5875C0JOJymQc="
+      },
+      "power": "1",
+      "name": "bs1"
+    },
+    {
+      "address": "380252CF47E34A6160FAE68C36AB269421574FD4",
+      "pub_key": {
+        "type": "tendermint/PubKeyEd25519",
+        "value": "5nAhz5v2QCu/i38IFqXMKTSbuFNHErRR0SWal+8qKk0="
+      },
+      "power": "1",
+      "name": "bs2"
+    },
+    {
+      "address": "3AA8A0B2D1FF819E1F24E42D2E97081770949969",
+      "pub_key": {
+        "type": "tendermint/PubKeyEd25519",
+        "value": "qE+kHYflThWU/buwOjRn2msQCSJ7vGOk7rE8oISmOHI="
+      },
+      "power": "1",
+      "name": "bs3"
+    },
+    {
+      "address": "22D4D501A5EA03D5D3218EC925E2879DA2607BD3",
+      "pub_key": {
+        "type": "tendermint/PubKeyEd25519",
+        "value": "+AHXYfv0F79v1VDbQIFFkqorIJ4CvTvptxBob0TFv4E="
+      },
+      "power": "1",
+      "name": "bs4"
+    },
+    {
+      "address": "919196A643B278E085BFA958CCBCDCC41BABCB90",
+      "pub_key": {
+        "type": "tendermint/PubKeyEd25519",
+        "value": "xYtpr50ci/ja+zz5MZW+03q/3ii2e2tHTVdC4kLHRkw="
+      },
+      "power": "1",
+      "name": "bs5"
+    }
+  ],
+  "app_hash": ""
+}

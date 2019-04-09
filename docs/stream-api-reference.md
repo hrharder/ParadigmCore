@@ -6,12 +6,13 @@ The API is served by the `StreamServer`, an optional component included as part 
 
 StreamAPI follows the JSONRPC-2.0 specification. More information available at http://www.jsonrpc.org/specification.
 
-<strong>Version 0.1-rc-3</strong>
+<strong>Version 0.1-rc-4</strong>
 
 ---
 
 - [subscription.start](#subscription.start)
 - [subscription.end](#subscription.end)
+- [order.submit](#order.submit)
 - [state.latestHeight](#state.latestHeight)
 - [state.orderCounter](#state.orderCounter)
 - [state.query](#state.query)
@@ -145,6 +146,137 @@ Immediately end a subscription to a certain event, and stop receiving notificati
   "id": "1234567890",
   "result": {
     "response": "Successfully ended event subscription."
+  }
+}
+```
+
+<a name="order.submit"></a>
+
+## order.submit
+
+Propose an order to be broadcast to the network.
+
+### Description
+
+Submit a signed Paradigm order object to a validator to be broadcast to the network.
+
+Allows selection of `mode` which can be set to `async`, in which case the RPC will respond immediately without waiting for the order to be verified by the node.
+
+The mode can also be set to `sync` where the RPC will respond after the order has been accepted or rejected by the node's local mempool.
+
+To wait for the order to be included in a block (up to 3 seconds), set the mode to `commit`.
+
+Orders can be created and signed with the ParadigmConnect library.
+
+### Parameters
+
+| Name                                                         | Type   | Description                                                                                                |
+| ------------------------------------------------------------ | ------ | ---------------------------------------------------------------------------------------------------------- |
+| params                                                       | object |                                                                                                            |
+| params.order                                                 | object | The signed Paradigm order object (in object notation) to be submitted.                                     |
+| The example shows a 0x order wrapped for the 0x SubContract. |
+| params.order.subContract                                     | string | The Ethereum address of the Paradigm SubContract the order is for.                                         |
+| params.order.maker                                           | string | The Ethereum address of the order's maker and signing party.                                               |
+| params.order?.makerArguments                                 | array  | An array of objects that define the order's required maker arguments                                       |
+| params.order?.takerArguments                                 | array  | An array of objects that define the order's required taker arguments                                       |
+| params.order.makerValues                                     | object | An object that defines the order's maker values, as defined in the `makerArguments`.                       |
+| params.order?.makerSignature                                 | object | An optional field that defines the order's maker signature, independent from the `makerValues`.            |
+| params.order.posterSignature                                 | object | An object that contains the signature of the poster submitting the order. May also be signed by the maker. |
+| params?.mode                                                 | string | The broadcast mode to be used for the underlying Tendermint remote procedural call.                        |
+
+### Result
+
+| Name             | Type   | Description                                                                                      |
+| ---------------- | ------ | ------------------------------------------------------------------------------------------------ |
+| result           | object |                                                                                                  |
+| result.message   | string | The response from the node to the order submission. Will include ID in some cases.               |
+| result.processed | string | The date and time at which the request was processed by the node.                                |
+| result.code      | number | The raw response code returned by the ParadigmCore ABCI application. Only `0` indicates success. |
+
+### Errors
+
+| Code   | Message            | Description                                             |
+| ------ | ------------------ | ------------------------------------------------------- |
+| -32602 | Invalid Parameters | The provided parameters are invalid.                    |
+| -32600 | Parse Error        | The request object is invalid.                          |
+| -32603 | Internal Error     | The server encountered an error processing the request. |
+
+### Examples
+
+#### Request
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": "1234567890",
+  "method": "order.submit",
+  "params": {
+    "order": {
+      "subContract": "0x0afd97c4548d6a5db854d6b1b4b18138327f944c",
+      "maker": "0xdbffce76e8ab7b64b8d4400778bf514b92facb66",
+      "makerArguments": [
+        {
+          "dataType": "address",
+          "name": "orderMaker"
+        },
+        {
+          "dataType": "address",
+          "name": "orderTaker"
+        },
+        {
+          "dataType": "address",
+          "name": "orderMakerTokenAddress"
+        },
+        {
+          "dataType": "address",
+          "name": "orderTakerTokenAddress"
+        },
+        {
+          "dataType": "address",
+          "name": "orderFeeRecipient"
+        }
+      ],
+      "takerArguments": [
+        {
+          "dataType": "address",
+          "name": "orderMaker"
+        },
+        {
+          "dataType": "address",
+          "name": "orderTaker"
+        },
+        {
+          "dataType": "address",
+          "name": "orderMakerTokenAddress"
+        },
+        {
+          "dataType": "address",
+          "name": "orderTakerTokenAddress"
+        },
+        {
+          "dataType": "address",
+          "name": "orderFeeRecipient"
+        }
+      ],
+      "makerValues": {},
+      "makerSignature": {},
+      "posterSignature": {}
+    },
+    "mode": "sync"
+  }
+}
+```
+
+#### Response
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": "1234567890",
+  "result": {
+    "message": "new order rejected: invalid poster or no poster stake",
+    "processed": "4/1/2019, 10:22:48 AM",
+    "code": 1
   }
 }
 ```
